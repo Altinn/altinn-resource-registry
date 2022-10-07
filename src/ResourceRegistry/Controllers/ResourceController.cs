@@ -1,10 +1,7 @@
-﻿using System.Net;
-using Altinn.Platform.Authorization.Helpers.Extensions;
-using Altinn.ResourceRegistry.Core;
+﻿using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Models;
-using Azure;
-using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -14,34 +11,28 @@ namespace ResourceRegistry.Controllers
     /// <summary>
     /// Controller responsible for all operations for managing resources in the resource registry
     /// </summary>
-    [Route("ResourceRegistry/api/[controller]")]
+    [Route("resourceregistry/api/v1/resource")]
     [ApiController]
     public class ResourceController : ControllerBase
     {
         private IResourceRegistry _resourceRegistry;
-        private IPolicyRepository _policyRepository;
         private readonly IObjectModelValidator _objectModelValidator;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private IPRP _prp;
         private readonly ILogger<ResourceController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceController"/> controller.
         /// </summary>
         /// <param name="resourceRegistry">Service implementation for operations on resources in the resource registry</param>
-        /// <param name="policyRepository">Repository implementation for operations on policies</param>
         /// <param name="objectModelValidator">Object model validator</param>
         /// <param name="httpContextAccessor">Http context accessor</param>
-        /// <param name="prp">Client implementation for policy retireval point</param>
         /// <param name="logger">Logger</param>
-        public ResourceController(IResourceRegistry resourceRegistry, IPolicyRepository policyRepository, IObjectModelValidator objectModelValidator, IHttpContextAccessor httpContextAccessor, IPRP prp, ILogger<ResourceController> logger)
+        public ResourceController(IResourceRegistry resourceRegistry, IObjectModelValidator objectModelValidator, IHttpContextAccessor httpContextAccessor, ILogger<ResourceController> logger)
         {
             _resourceRegistry = resourceRegistry;
-            _policyRepository = policyRepository;
             _objectModelValidator = objectModelValidator;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
-            _prp = prp;
         }
 
         /// <summary>
@@ -50,6 +41,7 @@ namespace ResourceRegistry.Controllers
         /// <param name="id">The resource identifier to retrieve</param>
         /// <returns>ServiceResource</returns>
         [HttpGet("{id}")]
+        [Produces("application/json")]
         public async Task<ServiceResource> Get(string id)
         {
             return await _resourceRegistry.GetResource(id);
@@ -62,6 +54,8 @@ namespace ResourceRegistry.Controllers
         /// <returns>ActionResult describing the result of the operation</returns>
         [SuppressModelStateInvalidFilter]
         [HttpPost]
+        [Produces("application/json")]
+        [Consumes("application/json")]
         public async Task<ActionResult> Post([ValidateNever] ServiceResource serviceResource)
         {
             if (serviceResource.IsComplete.HasValue && serviceResource.IsComplete.Value)
@@ -70,6 +64,15 @@ namespace ResourceRegistry.Controllers
                 {
                     return ValidationProblem(ModelState);
                 }
+            }
+
+            try
+            {
+                serviceResource.Identifier.AsFilePath();
+            }
+            catch
+            {
+                return BadRequest($"Invalid resource identifier. Cannot be empty or contain any of the characters: {string.Join(", ", Path.GetInvalidFileNameChars())}");
             }
 
             await _resourceRegistry.CreateResource(serviceResource);
@@ -84,6 +87,8 @@ namespace ResourceRegistry.Controllers
         /// <returns>ActionResult describing the result of the operation</returns>
         [SuppressModelStateInvalidFilter]
         [HttpPut]
+        [Produces("application/json")]
+        [Consumes("application/json")]
         public async Task<ActionResult> Put(ServiceResource serviceResource)
         {
             if (serviceResource.IsComplete.HasValue && serviceResource.IsComplete.Value)
@@ -112,13 +117,13 @@ namespace ResourceRegistry.Controllers
         {
             if (policyFile == null)
             {
-                throw new ArgumentException("The policy file can not be null");
+                return BadRequest("The policy file can not be null");
             }
 
             Stream fileStream = policyFile.OpenReadStream();
             if (fileStream == null)
             {
-                throw new ArgumentException("The file stream can not be null");
+                return BadRequest("The file stream can not be null");
             }
 
             if (string.IsNullOrWhiteSpace(id))
@@ -127,19 +132,15 @@ namespace ResourceRegistry.Controllers
             }
 
             ServiceResource resource = await _resourceRegistry.GetResource(id);
-
             if (resource == null)
             {
                 return BadRequest("Unknown resource");
             }
 
-            string filePath = $"{resource.Identifier.AsFileName()}/policy.xml";
-
             try
             {
-                Response<BlobContentInfo> response = await _policyRepository.WritePolicyAsync(filePath, fileStream);
-
-                bool successfullyStored = response?.GetRawResponse()?.Status == (int)HttpStatusCode.Created;
+                bool successfullyStored = await _resourceRegistry.StorePolicy(resource, fileStream);
+               
                 if (successfullyStored)
                 {
                     return Created(id + "/policy", null);
@@ -164,6 +165,7 @@ namespace ResourceRegistry.Controllers
         /// </summary>
         /// <param name="id">The resource identifier to delete</param>
         [HttpDelete("{id}")]
+        [Produces("application/json")]
         public async void Delete(string id)
         {
             await _resourceRegistry.Delete(id);
@@ -175,6 +177,7 @@ namespace ResourceRegistry.Controllers
         /// <param name="search">The search model defining the search filter criterias</param>
         /// <returns>A list of service resources found to match the search criterias</returns>
         [HttpGet("Search")]
+        [Produces("application/json")]
         public async Task<List<ServiceResource>> Search([FromQuery] ResourceSearch search)
         {
             return await _resourceRegistry.Search(search);

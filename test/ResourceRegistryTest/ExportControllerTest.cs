@@ -27,7 +27,7 @@ namespace ResourceRegistryTest
         public async Task Export_OK()
         {
             HttpClient client = SetupUtil.GetTestClient(_factory);
-            string requestUri = "ResourceRegistry/api/export";
+            string requestUri = "resourceregistry/api/v1/export";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
@@ -39,6 +39,5 @@ namespace ResourceRegistryTest
             // System.IO.File.WriteAllText("rdf.ttl", responseContent);
             Assert.NotNull(responseContent);
         }
-
     }
 }

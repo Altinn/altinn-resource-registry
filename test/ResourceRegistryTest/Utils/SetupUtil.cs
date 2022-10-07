@@ -1,4 +1,5 @@
-﻿using Altinn.ResourceRegistry.Controllers;
+﻿using Altinn.ResourceRegistry;
+using Altinn.ResourceRegistry.Controllers;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Persistence;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -25,6 +26,7 @@ namespace ResourceRegistryTest.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton<IResourceRegistryRepository, RegisterResourceRepositoryMock>();
+                    services.AddSingleton<IPolicyRepository, PolicyRepositoryMock>();
                     services.AddSingleton<IPRP, PRPMock>();
                 });
             });
@@ -41,6 +43,7 @@ namespace ResourceRegistryTest.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton<IResourceRegistryRepository, RegisterResourceRepositoryMock>();
+                    services.AddSingleton<IPolicyRepository, PolicyRepositoryMock>();
                     services.AddSingleton <IPRP, PRPMock>();
                 });
             });

@@ -24,5 +24,11 @@ namespace Altinn.ResourceRegistry.Core.Enums
 
         [EnumMember(Value = "DelegationScope")]
         DelegationScope = 5,
+        
+        [EnumMember(Value = "ServiceCode")]
+        ServiceCode = 6,
+
+        [EnumMember(Value = "ServiceEditionCode")]
+        ServiceEditionCode = 7,
     }
 }

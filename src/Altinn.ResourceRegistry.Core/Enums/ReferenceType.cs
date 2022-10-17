@@ -10,19 +10,13 @@ namespace Altinn.ResourceRegistry.Core.Enums
         [EnumMember(Value = "Default")]
         Default = 0,
 
-        [EnumMember(Value = "ServiceCodeVersion")]
-        ServiceCodeVersion = 1,
-
-        [EnumMember(Value = "OrgApp")]
-        OrgApp = 2,
-
         [EnumMember(Value = "Uri")]
         Uri = 3,
         
         [EnumMember(Value = "DelegationSchemeId")]
         DelegationSchemeId = 4,
 
-        [EnumMember(Value = "DelegationScope")]
+        [EnumMember(Value = "MaskinportenScope")]
         DelegationScope = 5,
         
         [EnumMember(Value = "ServiceCode")]

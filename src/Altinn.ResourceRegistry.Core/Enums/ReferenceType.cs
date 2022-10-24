@@ -11,18 +11,18 @@ namespace Altinn.ResourceRegistry.Core.Enums
         Default = 0,
 
         [EnumMember(Value = "Uri")]
-        Uri = 3,
+        Uri = 1,
         
         [EnumMember(Value = "DelegationSchemeId")]
-        DelegationSchemeId = 4,
+        DelegationSchemeId = 2,
 
         [EnumMember(Value = "MaskinportenScope")]
-        DelegationScope = 5,
+        MaskinportenScope = 3,
         
         [EnumMember(Value = "ServiceCode")]
-        ServiceCode = 6,
+        ServiceCode = 4,
 
         [EnumMember(Value = "ServiceEditionCode")]
-        ServiceEditionCode = 7,
+        ServiceEditionCode = 5,
     }
 }

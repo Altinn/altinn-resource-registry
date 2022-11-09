@@ -241,6 +241,50 @@ namespace ResourceRegistryTest
         }
 
         [Fact]
+        public async Task UpdateResource_Ok()
+        {
+            ServiceResource resource = new ServiceResource() { Identifier = "altinn_access_management" };
+            resource.IsComplete = false;
+
+            HttpClient client = SetupUtil.GetTestClient(_factory);
+            string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, requestUri)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+            };
+
+            httpRequestMessage.Headers.Add("Accept", "application/json");
+            httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateResource_BadRequest()
+        {
+            ServiceResource resource = new ServiceResource() { Identifier = "wrong_non_matcing_id" };
+            resource.IsComplete = false;
+
+            HttpClient client = SetupUtil.GetTestClient(_factory);
+            string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, requestUri)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+            };
+
+            httpRequestMessage.Headers.Add("Accept", "application/json");
+            httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
         public async Task CreateResource_Ok()
         {
             ServiceResource resource = new ServiceResource() { Identifier = "superdupertjenestene" };

@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Altinn.AccessGroups.Persistance;
 using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Core.Extensions;
 using Azure;
 using Azure.Storage;
 using Azure.Storage.Blobs;
@@ -40,25 +41,28 @@ namespace Altinn.ResourceRegistry.Persistence
         }
 
         /// <inheritdoc/>
-        public async Task<Stream> GetPolicyAsync(string filepath)
+        public async Task<Stream> GetPolicyAsync(string resourceId)
         {
-            BlobClient blobClient = CreateBlobClient(filepath);
+            string filePath = $"{resourceId.AsFilePath()}/resourcepolicy.xml";
+            BlobClient blobClient = CreateBlobClient(filePath);
 
             return await GetBlobStreamInternal(blobClient);
         }
 
         /// <inheritdoc/>
-        public async Task<Stream> GetPolicyVersionAsync(string filepath, string version)
+        public async Task<Stream> GetPolicyVersionAsync(string resourceId, string version)
         {
-            BlobClient blobClient = CreateBlobClient(filepath).WithVersion(version);
+            string filePath = $"{resourceId.AsFilePath()}/resourcepolicy.xml";
+            BlobClient blobClient = CreateBlobClient(filePath).WithVersion(version);
 
             return await GetBlobStreamInternal(blobClient);
         }
 
         /// <inheritdoc/>
-        public async Task<Response<BlobContentInfo>> WritePolicyAsync(string filepath, Stream fileStream)
+        public async Task<Response<BlobContentInfo>> WritePolicyAsync(string resourceid, Stream fileStream)
         {
-            BlobClient blobClient = CreateBlobClient(filepath);
+            string filePath = $"{resourceid.AsFilePath()}/resourcepolicy.xml";
+            BlobClient blobClient = CreateBlobClient(filePath);
 
             return await WriteBlobStreamInternal(blobClient, fileStream);
         }

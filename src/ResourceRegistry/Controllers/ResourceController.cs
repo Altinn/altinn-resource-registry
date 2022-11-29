@@ -105,6 +105,30 @@ namespace ResourceRegistry.Controllers
         }
 
         /// <summary>
+        /// Returns the XACML policy for a resource in resource registry.
+        /// </summary>
+        /// <param name="id">Resource Id</param>
+        /// <returns></returns>
+        [HttpGet("{id}/policy")]
+        public async Task<ActionResult> GetPolicy(string id)
+        {
+            ServiceResource resource = await _resourceRegistry.GetResource(id);
+            if (resource == null)
+            {
+                return NotFound("Unable to find resource");
+            }
+
+            Stream dataStream = await _resourceRegistry.GetPolicy(resource);
+
+            if (dataStream == null)
+            {
+                return NotFound("Unable to find requested policy");
+            }
+
+            return File(dataStream, "text/xml", "policy.xml");
+        }
+
+        /// <summary>
         /// Creates or overwrites the existing XACML policy for the resource, if it pass all validation checks.
         /// The XACML policy must define at least a subject and resource, and will be used to restrict access for the resource.
         /// </summary>

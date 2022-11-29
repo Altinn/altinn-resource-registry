@@ -83,14 +83,27 @@ namespace ResourceRegistry.Controllers
         /// <summary>
         /// Updates a service resource in the resource registry if it pass all validation checks
         /// </summary>
+        /// <param name="id">Resource ID</param>
         /// <param name="serviceResource">Service resource model for update in the resource registry</param>
         /// <returns>ActionResult describing the result of the operation</returns>
         [SuppressModelStateInvalidFilter]
-        [HttpPut]
+        [HttpPut("{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<ActionResult> Put(ServiceResource serviceResource)
+        public async Task<ActionResult> Put(string id, ServiceResource serviceResource)
         {
+            ServiceResource currentResource = await _resourceRegistry.GetResource(id);
+
+            if (currentResource == null)
+            {
+                return BadRequest();
+            }
+
+            if (id != serviceResource.Identifier)
+            {
+                return BadRequest();
+            }
+
             if (serviceResource.IsComplete.HasValue && serviceResource.IsComplete.Value)
             {
                 if (!ModelState.IsValid)

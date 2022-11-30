@@ -14,9 +14,9 @@ namespace Altinn.ResourceRegistry.Core
         /// <summary>
         /// Gets file stream for the policy file from blob storage, if it exists at the specified path.
         /// </summary>
-        /// <param name="filepath">The file path.</param>
+        /// <param name="resourceId">The resource id</param>
         /// <returns>File stream of the policy file</returns>
-        Task<Stream> GetPolicyAsync(string filepath);
+        Task<Stream> GetPolicyAsync(string resourceId);
 
         /// <summary>
         /// Gets file stream for the specified version of a policy file from blob storage, if it exists at the specified path.

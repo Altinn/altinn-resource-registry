@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Altinn.ResourceRegistry.Core.Models;
-using Altinn.ResourceRegistry.Models;
+﻿using Altinn.ResourceRegistry.Core.Models;
 
-namespace Altinn.ResourceRegistry.Core
+namespace Altinn.ResourceRegistry.Core.Services.Interfaces
 {
     /// <summary>
     /// Interface for the ResourceRegistryService implementation
@@ -54,5 +48,12 @@ namespace Altinn.ResourceRegistry.Core
         /// <param name="fileStream">The file stream to the policy file</param>
         /// <returns>Bool if storing the policy was successfull</returns>
         Task<bool> StorePolicy(ServiceResource serviceResource, Stream fileStream);
+
+        /// <summary>
+        /// Updates Access management with changes in recource registry
+        /// </summary>
+        /// <param name="serviceResource">The resource to add to access management</param>
+        /// <returns></returns>
+        Task<bool> UpdateResourceInAccessManagement(ServiceResource serviceResource);
     }
 }

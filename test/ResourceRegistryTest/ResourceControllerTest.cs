@@ -1,6 +1,4 @@
-using Altinn.ResourceRegistry.Models;
 using Microsoft.AspNetCore.Mvc;
-using ResourceRegistry.Controllers;
 using ResourceRegistryTest.Utils;
 using System;
 using System.Collections.Generic;
@@ -11,6 +9,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Altinn.ResourceRegistry.Controllers;
+using Altinn.ResourceRegistry.Core.Models;
 using Xunit;
 
 namespace ResourceRegistryTest

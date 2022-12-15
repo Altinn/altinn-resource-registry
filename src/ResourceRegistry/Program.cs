@@ -2,13 +2,20 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessGroups.Persistance;
 using Altinn.Common.AccessToken.Configuration;
+using Altinn.Common.AccessTokenClient.Services;
 using Altinn.ResourceRegistry.Configuration;
 using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Core.Clients;
+using Altinn.ResourceRegistry.Core.Clients.Interfaces;
+using Altinn.ResourceRegistry.Core.Configuration;
+using Altinn.ResourceRegistry.Core.Services;
+using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Health;
 using Altinn.ResourceRegistry.Integration.Clients;
 using Altinn.ResourceRegistry.Persistence;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Logging;
 using Npgsql.Logging;
 using Yuniql.AspNetCore;
@@ -28,7 +35,7 @@ await SetConfigurationProviders(builder.Configuration);
 ConfigureLogging(builder.Logging);
 
 // Add services to the container.
-ConfigureServices(builder.Services, builder.Configuration);
+ConfigureServices(builder.Services, builder.Configuration, builder.Environment );
 
 builder.Services.AddControllers();
 
@@ -42,7 +49,7 @@ Configure(builder.Configuration);
 
 app.Run();
 
-void ConfigureServices(IServiceCollection services, IConfiguration config)
+void ConfigureServices(IServiceCollection services, IConfiguration config, IWebHostEnvironment env)
 {
     services.AddControllers().AddJsonOptions(options =>
     {
@@ -60,8 +67,25 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IPRP, PRPClient>();
     services.AddSingleton<IPolicyRepository, PolicyRepository>();
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+    services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
+    services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
+    
     services.Configure<PostgreSQLSettings>(config.GetSection("PostgreSQLSettings"));
     services.Configure<AzureStorageConfiguration>(config.GetSection("AzureStorageConfiguration"));
+    services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
+    services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
+
+    SecretsSettings secretsSettings = new();
+    config.GetSection("SecretsSettings").Bind(secretsSettings);
+
+    if (env.IsDevelopment())
+    {
+        services.TryAddSingleton<IKeyVaultService, KeyVaultServiceLocal>();
+    }
+    else
+    {
+        services.TryAddSingleton<IKeyVaultService, KeyVaultService>();
+    }
 }
 
 void Configure(IConfiguration config)
@@ -203,7 +227,7 @@ void ConfigureSetupLogging()
         builder
             .AddFilter("Microsoft", LogLevel.Warning)
             .AddFilter("System", LogLevel.Warning)
-            .AddFilter("Altinn.ResourceRegistry.Program", LogLevel.Debug)
+            .AddFilter("Altinn.ResourceRegistryService.Program", LogLevel.Debug)
             .AddConsole();
     });
 

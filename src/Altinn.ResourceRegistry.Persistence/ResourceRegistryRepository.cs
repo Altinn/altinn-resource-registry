@@ -3,7 +3,6 @@ using Altinn.AccessGroups.Persistance;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
-using Altinn.ResourceRegistry.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;

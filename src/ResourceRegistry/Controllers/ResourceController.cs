@@ -1,12 +1,11 @@
-﻿using Altinn.ResourceRegistry.Core;
-using Altinn.ResourceRegistry.Core.Extensions;
+﻿using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
-using Altinn.ResourceRegistry.Models;
+using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace ResourceRegistry.Controllers
+namespace Altinn.ResourceRegistry.Controllers
 {
     /// <summary>
     /// Controller responsible for all operations for managing resources in the resource registry
@@ -77,7 +76,7 @@ namespace ResourceRegistry.Controllers
 
             await _resourceRegistry.CreateResource(serviceResource);
 
-            return Created("/ResourceRegistry/api/" + serviceResource.Identifier, null);
+            return Created("/ResourceRegistryService/api/" + serviceResource.Identifier, null);
         }
 
         /// <summary>

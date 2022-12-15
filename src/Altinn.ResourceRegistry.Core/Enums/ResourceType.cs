@@ -16,16 +16,7 @@ namespace Altinn.ResourceRegistry.Core.Enums
         [PgName("systemresource")]
         Systemresource = 1,
 
-        [PgName("altinn2")]
-        Altinn2 = 2,
-
-        [PgName("altinn3")]
-        Altinn3 = 3,
-
         [PgName("maskinportenschema")]
         MaskinportenSchema = 4,
-
-        [PgName("api")]
-        Api = 5
     }
 }

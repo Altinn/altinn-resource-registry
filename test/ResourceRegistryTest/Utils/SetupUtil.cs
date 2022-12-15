@@ -1,18 +1,15 @@
-﻿using Altinn.ResourceRegistry;
+﻿using System.Net.Http;
+
 using Altinn.ResourceRegistry.Controllers;
 using Altinn.ResourceRegistry.Core;
-using Altinn.ResourceRegistry.Persistence;
+using Altinn.ResourceRegistry.Core.Clients.Interfaces;
+
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using ResourceRegistry.Controllers;
 using ResourceRegistryTest.Mocks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+
+
 
 namespace ResourceRegistryTest.Utils
 {
@@ -28,6 +25,8 @@ namespace ResourceRegistryTest.Utils
                     services.AddSingleton<IResourceRegistryRepository, RegisterResourceRepositoryMock>();
                     services.AddSingleton<IPolicyRepository, PolicyRepositoryMock>();
                     services.AddSingleton<IPRP, PRPMock>();
+                    services.AddSingleton<IAccessManagementClient, AccessManagementMock>();
+
                 });
             });
             factory.Server.AllowSynchronousIO = true;

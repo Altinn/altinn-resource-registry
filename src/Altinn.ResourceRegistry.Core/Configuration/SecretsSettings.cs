@@ -1,8 +1,11 @@
-﻿namespace Altinn.ResourceRegistry.Core.Configuration
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Altinn.ResourceRegistry.Core.Configuration
 {
     /// <summary>
     /// Configuration object used to hold settings for the KeyVault.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class SecretsSettings
     {
         /// <summary>

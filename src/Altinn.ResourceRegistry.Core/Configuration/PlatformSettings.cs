@@ -1,8 +1,11 @@
-﻿namespace Altinn.ResourceRegistry.Core.Configuration
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Altinn.ResourceRegistry.Core.Configuration
 {
     /// <summary>
     /// Represents a set of configuration options when communicating with the platform API.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class PlatformSettings
     {
         /// <summary>

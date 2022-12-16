@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 using AltinnCore.Authentication.Constants;
 
 namespace Altinn.ResourceRegistry.Extensions
@@ -6,6 +7,7 @@ namespace Altinn.ResourceRegistry.Extensions
     /// <summary>
     /// Helper methods to extend ClaimsPrincipal. 
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class ClaimsPrincipalExtension
     {
         /// <summary>

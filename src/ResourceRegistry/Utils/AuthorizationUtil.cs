@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
 using Altinn.Common.PEP.Constants;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Models;
@@ -10,6 +11,7 @@ namespace Altinn.ResourceRegistry.Utils
     /// <summary>
     /// Custom authorization
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class AuthorizationUtil
     {
         private static readonly List<string> _resourceRgistryAdminScope = new List<string>()

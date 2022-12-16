@@ -1,6 +1,8 @@
 ﻿using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.ResourceRegistry.Controllers
@@ -9,10 +11,10 @@ namespace Altinn.ResourceRegistry.Controllers
     /// Controller responsible export of resources from the resource registry
     /// </summary>
     [Route("resourceregistry/api/v1/export")]
+    [Authorize(Policy = AuthzConstants.ALTINNII_AUTHORIZATION)]
     public class ExportController : Controller
     {
         private IResourceRegistry _resourceRegistry;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExportController"/> controller.

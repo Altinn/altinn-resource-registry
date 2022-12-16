@@ -2,14 +2,18 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessGroups.Persistance;
 using Altinn.Common.AccessToken.Configuration;
+using Altinn.Common.Authentication.Configuration;
 using Altinn.ResourceRegistry.Configuration;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Health;
 using Altinn.ResourceRegistry.Integration.Clients;
+using Altinn.ResourceRegistry.Integration.Configuration;
 using Altinn.ResourceRegistry.Persistence;
+using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql.Logging;
 using Yuniql.AspNetCore;
 using Yuniql.PostgreSql;
@@ -49,7 +53,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         options.JsonSerializerOptions.WriteIndented = true;
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-
     });
 
     services.AddSingleton(config);
@@ -60,8 +63,33 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IPRP, PRPClient>();
     services.AddSingleton<IPolicyRepository, PolicyRepository>();
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+    services.Configure<OidcProviderSettings>(config.GetSection("OidcProviders"));
     services.Configure<PostgreSQLSettings>(config.GetSection("PostgreSQLSettings"));
     services.Configure<AzureStorageConfiguration>(config.GetSection("AzureStorageConfiguration"));
+    services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
+    PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();
+
+    services.AddAuthentication(JwtCookieDefaults.AuthenticationScheme)
+    .AddJwtCookie(JwtCookieDefaults.AuthenticationScheme, options =>
+    {
+        options.JwtCookieName = platformSettings.JwtCookieName;
+        options.MetadataAddress = platformSettings.OpenIdWellKnownEndpoint;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            RequireExpirationTime = true,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+
+        if (builder.Environment.IsDevelopment())
+        {
+            options.RequireHttpsMetadata = false;
+        }
+    });
 }
 
 void Configure(IConfiguration config)

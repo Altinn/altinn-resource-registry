@@ -2,6 +2,7 @@
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -42,6 +43,7 @@ namespace ResourceRegistry.Controllers
         /// <returns>ServiceResource</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
+        [Authorize]
         public async Task<ServiceResource> Get(string id)
         {
             return await _resourceRegistry.GetResource(id);
@@ -56,6 +58,7 @@ namespace ResourceRegistry.Controllers
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
+        [Authorize]
         public async Task<ActionResult> Post([ValidateNever] ServiceResource serviceResource)
         {
             if (serviceResource.IsComplete.HasValue && serviceResource.IsComplete.Value)
@@ -89,6 +92,7 @@ namespace ResourceRegistry.Controllers
         [HttpPut]
         [Produces("application/json")]
         [Consumes("application/json")]
+        [Authorize]
         public async Task<ActionResult> Put(ServiceResource serviceResource)
         {
             if (serviceResource.IsComplete.HasValue && serviceResource.IsComplete.Value)
@@ -113,6 +117,7 @@ namespace ResourceRegistry.Controllers
         /// <returns>ActionResult describing the result of the operation</returns>
         [HttpPost("{id}/policy")]
         [HttpPut("{id}/policy")]
+        [Authorize]
         public async Task<ActionResult> WritePolicy(string id, IFormFile policyFile)
         {
             if (policyFile == null)
@@ -166,6 +171,7 @@ namespace ResourceRegistry.Controllers
         /// <param name="id">The resource identifier to delete</param>
         [HttpDelete("{id}")]
         [Produces("application/json")]
+        [Authorize]
         public async void Delete(string id)
         {
             await _resourceRegistry.Delete(id);
@@ -178,6 +184,7 @@ namespace ResourceRegistry.Controllers
         /// <returns>A list of service resources found to match the search criterias</returns>
         [HttpGet("Search")]
         [Produces("application/json")]
+        [Authorize]
         public async Task<List<ServiceResource>> Search([FromQuery] ResourceSearch search)
         {
             return await _resourceRegistry.Search(search);

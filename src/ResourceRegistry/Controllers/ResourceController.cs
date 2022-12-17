@@ -80,13 +80,9 @@ namespace ResourceRegistry.Controllers
                 return BadRequest($"Invalid resource identifier. Cannot be empty or contain any of the characters: {string.Join(", ", Path.GetInvalidFileNameChars())}");
             }
 
-            string orgClaim = User.GetOrgNumber();
-            if (orgClaim != null)
+            if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
             {
-                if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
-                {
-                    return Forbid();
-                }
+                return Forbid();
             }
 
             await _resourceRegistry.CreateResource(serviceResource);
@@ -114,13 +110,9 @@ namespace ResourceRegistry.Controllers
                 }
             }
 
-            string orgClaim = User.GetOrgNumber();
-            if (orgClaim != null)
+            if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
             {
-                if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
-                {
-                    return Forbid();
-                }
+                return Forbid();
             }
 
             await _resourceRegistry.UpdateResource(serviceResource);
@@ -162,13 +154,9 @@ namespace ResourceRegistry.Controllers
                 return BadRequest("Unknown resource");
             }
 
-            string orgClaim = User.GetOrgNumber();
-            if (orgClaim != null)
+            if (!AuthorizationUtil.HasWriteAccess(resource.HasCompetentAuthority?.Organization, User))
             {
-                if (!AuthorizationUtil.HasWriteAccess(resource.HasCompetentAuthority?.Organization, User))
-                {
-                    return Forbid();
-                }
+                return Forbid();
             }
 
             try

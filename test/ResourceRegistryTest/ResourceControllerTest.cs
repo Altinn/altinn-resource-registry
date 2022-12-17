@@ -39,7 +39,6 @@ namespace ResourceRegistryTest
         [Fact]
         public async Task GetResource_altinn_access_management_OK()
         {
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
@@ -58,7 +57,6 @@ namespace ResourceRegistryTest
         [Fact]
         public async Task Test_Nav_Get()
         {
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/Resource/nav_tiltakAvtaleOmArbeidstrening";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
@@ -111,7 +109,6 @@ namespace ResourceRegistryTest
             };
             resource.IsComplete = true;
 
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/Resource/";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
@@ -157,7 +154,6 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Post, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -185,7 +181,6 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Post, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
@@ -215,7 +210,6 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -241,7 +235,6 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
@@ -270,7 +263,6 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
@@ -379,6 +371,35 @@ namespace ResourceRegistryTest
         }
 
         [Fact]
+        public async Task CreateResource_UnAuthorized()
+        {
+            ServiceResource resource = new ServiceResource()
+            {
+                Identifier = "superdupertjenestene",
+                HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+                {
+                    Organization = "974761076",
+                    Orgcode = "skd",
+                }
+            };
+            resource.IsComplete = false;
+
+            string requestUri = "resourceregistry/api/v1/Resource/";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+            };
+
+            httpRequestMessage.Headers.Add("Accept", "application/json");
+            httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        [Fact]
         public async Task UpdateResourcePolicy_OK_AdminScope_NotResourceOwner()
         {
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
@@ -399,7 +420,6 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -426,10 +446,35 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateResourcePolicy_UnAuthorized()
+        {
+            string token = "Unauthorizedtoken";
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            ServiceResource resource = new ServiceResource() { Identifier = "altinn_access_management" };
+            string fileName = $"{resource.Identifier}.xml";
+            string filePath = $"Data/ResourcePolicies/{fileName}";
+
+            Uri requestUri = new Uri($"resourceregistry/api/v1/Resource/{resource.Identifier}/policy", UriKind.Relative);
+
+            ByteArrayContent fileContent = new ByteArrayContent(File.ReadAllBytes(filePath));
+            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("text/xml");
+
+            MultipartFormDataContent content = new();
+            content.Add(fileContent, "policyFile", fileName);
+
+            HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
+            httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
+
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
     }
 }

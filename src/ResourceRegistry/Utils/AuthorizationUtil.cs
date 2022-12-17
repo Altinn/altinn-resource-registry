@@ -14,21 +14,6 @@ namespace Altinn.ResourceRegistry.Utils
     [ExcludeFromCodeCoverage]
     public static class AuthorizationUtil
     {
-        private static readonly List<string> _resourceRgistryAdminScope = new List<string>()
-        {
-            "altinn:resourceregistry/resource.admin"
-        };
-
-        private static readonly List<string> _resourceRegistryWriteScope = new List<string>()
-        {
-            "altinn:resourceregistry/resource.write"
-        };
-
-        private static readonly List<string> _resourceRegistryReadScope = new List<string>()
-        {
-            "altinn:resourceregistry/resource.read"
-        };
-
         /// <summary>
         /// Verifies that org string matches org in user claims.
         /// </summary>

@@ -1,8 +1,11 @@
-﻿namespace Altinn.ResourceRegistry.Configuration
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Altinn.ResourceRegistry.Configuration
 {
     /// <summary>
     /// General configuration settings
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class PlatformSettings
     {
         /// <summary>

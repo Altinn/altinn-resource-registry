@@ -288,7 +288,6 @@ namespace ResourceRegistryTest
             };
             resource.IsComplete = false;
 
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/Resource/";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
@@ -321,7 +320,6 @@ namespace ResourceRegistryTest
             };
             resource.IsComplete = false;
 
-            //HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/Resource/";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
@@ -476,5 +474,99 @@ namespace ResourceRegistryTest
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
+
+        /// <summary>
+        /// Deletes a resource that user is authorized for
+        /// Expected result: Return httpStatus No content statuscode
+        /// </summary>
+        [Fact]
+        public async Task Delete_AuthorizedUser_ValidResource_ReturnsNoContent()
+        {
+            // Arrange            
+            string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string resourceId = "altinn_access_management_skd";
+            string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);            
+
+            // Act
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Deletes a resource that user is authorized for
+        /// Expected result: Return httpStatus nocontent statuscode
+        /// </summary>
+        [Fact]
+        public async Task Delete_AdminScope_ValidResource_ReturnsForbidden()
+        {
+            // Arrange            
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string resourceId = "altinn_access_management_skd";
+            string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
+
+            // Act
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+
+        /// <summary>
+        /// Deletes a resource that user is authorized for
+        /// Expected result: Return httpStatus unauthorized statuscode
+        /// </summary>
+        [Fact]
+        public async Task Delete_UnAuthorized_ValidResource_ReturnsUnauthorized()
+        {
+            // Arrange            
+            string token = "Unauthorizedtoken";
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string resourceId = "altinn_access_management_skd";
+            string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
+
+            // Act
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Deletes a resource that user is authorized for
+        /// Expected result: Return httpStatus forbidden statuscode
+        /// </summary>
+        [Fact]
+        public async Task Delete_Forbidden_ValidResource_ReturnsForbidden()
+        {
+            // Arrange            
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string resourceId = "altinn_access_management_skd";
+            string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
+
+            // Act
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        }
+
     }
 }

@@ -14,10 +14,10 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <param name="vaultUri">Placeholder for real service her ignored</param>
         /// <param name="secretId">Just because key vault needs it</param>
         /// <returns>string containing base64 certificate</returns>
-        public Task<string> GetCertificateAsync(string vaultUri, string secretId)
+        public Task<string?> GetCertificateAsync(string vaultUri, string secretId)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), @"secrets.json");
-            string tokenString = string.Empty;
+            string? tokenString = string.Empty;
 
             if (File.Exists(path))
             {

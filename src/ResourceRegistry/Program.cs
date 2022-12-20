@@ -35,7 +35,7 @@ await SetConfigurationProviders(builder.Configuration);
 ConfigureLogging(builder.Logging);
 
 // Add services to the container.
-ConfigureServices(builder.Services, builder.Configuration, builder.Environment );
+ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 
 builder.Services.AddControllers();
 

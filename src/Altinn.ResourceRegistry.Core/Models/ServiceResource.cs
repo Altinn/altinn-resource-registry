@@ -108,5 +108,14 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// The fallback language of the resource
         /// </summary>
         public string MainLanguage { get; set; } = "nb";
+
+        /// <summary>
+        /// Writes key information when this object is written to Log.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"Identifier: {Identifier}, ResourceType: {ResourceType}";
+        }
     }
 }

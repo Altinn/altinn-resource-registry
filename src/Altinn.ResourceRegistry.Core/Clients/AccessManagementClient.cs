@@ -16,11 +16,10 @@ namespace Altinn.ResourceRegistry.Core.Clients
     {
         private readonly IAccessTokenProvider _accessTokenProvider;
         private readonly ILogger<IAccessManagementClient> _logger;
-        private readonly PlatformSettings _settings;
-        private const string AccessManagmentEndpoint = "resources";
+        private const string AccessManagementEndpoint = "resources";
 
         /// <summary>
-        /// Gets an instance of httpclient from httpclientfactory
+        /// Gets an instance of http client from http client factory
         /// </summary>
         public HttpClient Client { get; }
 
@@ -35,9 +34,9 @@ namespace Altinn.ResourceRegistry.Core.Clients
         {
             _accessTokenProvider = accessTokenProvider;
             _logger = logger;
-            _settings = platformSettings.Value;
+            PlatformSettings settings = platformSettings.Value;
             Client = client;
-            Client.BaseAddress = new Uri(_settings.AccessManagementEndpoint);
+            Client.BaseAddress = new Uri(settings.AccessManagementEndpoint);
             Client.Timeout = new TimeSpan(0, 0, 30);
             Client.DefaultRequestHeaders.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -50,7 +49,7 @@ namespace Altinn.ResourceRegistry.Core.Clients
         /// <returns>A HTTP response message</returns>
         public async Task<HttpResponseMessage> AddResourceToAccessManagement(List<AccessManagementResource> resources)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Post, AccessManagmentEndpoint)
+            using var request = new HttpRequestMessage(HttpMethod.Post, AccessManagementEndpoint)
             {
                 Content = JsonContent.Create(resources),
                 

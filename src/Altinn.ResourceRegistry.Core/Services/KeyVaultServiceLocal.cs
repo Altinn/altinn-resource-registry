@@ -11,21 +11,24 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <summary>
         /// Returns a certificate from disk instead of from KeyVault
         /// </summary>
-        /// <param name="vaultUri">Just because keyvault needs it</param>
+        /// <param name="vaultUri">Placeholder for real service her ignored</param>
         /// <param name="secretId">Just because key vault needs it</param>
         /// <returns>string containing base64 certificate</returns>
-        public async Task<string> GetCertificateAsync(string vaultUri, string secretId)
+        public Task<string> GetCertificateAsync(string vaultUri, string secretId)
         {
             string path = Path.Combine(Directory.GetCurrentDirectory(), @"secrets.json");
+            string tokenString = string.Empty;
+
             if (File.Exists(path))
             {
                 string jsonString = File.ReadAllText(path);
                 JObject keyVault = JObject.Parse(jsonString);
                 keyVault.TryGetValue(secretId, out JToken? token);
-                return token != null ? token.ToString() : string.Empty;
+                
+                tokenString = token != null ? token.ToString() : string.Empty;
             }
 
-            return string.Empty;
+            return Task.FromResult(tokenString);
         }
     }
 }

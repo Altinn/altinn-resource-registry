@@ -11,11 +11,11 @@ namespace Altinn.ResourceRegistry.Core.Configuration
         /// <summary>
         /// Uri to keyVault
         /// </summary>
-        public string KeyVaultUri { get; set; }
+        public string? KeyVaultUri { get; set; }
 
         /// <summary>
         /// Name of the certificate secret
         /// </summary>
-        public string PlatformCertSecretId { get; set; } = "JWTCertificate";
+        public string? PlatformCertSecretId { get; set; } = "JWTCertificate";
     }
 }

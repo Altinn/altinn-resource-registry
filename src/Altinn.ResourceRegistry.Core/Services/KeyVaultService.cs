@@ -15,7 +15,7 @@ namespace Altinn.ResourceRegistry.Core.Services
     public class KeyVaultService : IKeyVaultService
     {
         /// <inheritdoc/>
-        public async Task<string?> GetCertificateAsync(string vaultUri, string secretId)
+        public async Task<string> GetCertificateAsync(string vaultUri, string secretId)
         {
             CertificateClient certificateClient = new CertificateClient(new Uri(vaultUri), new DefaultAzureCredential());
             AsyncPageable<CertificateProperties> certificatePropertiesPage = certificateClient.GetPropertiesOfCertificateVersionsAsync(secretId);
@@ -31,7 +31,7 @@ namespace Altinn.ResourceRegistry.Core.Services
                 }
             }
 
-            return null;
+            return string.Empty;
         }
     }
 }

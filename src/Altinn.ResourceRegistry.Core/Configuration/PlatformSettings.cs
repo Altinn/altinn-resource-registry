@@ -11,11 +11,11 @@ namespace Altinn.ResourceRegistry.Core.Configuration
         /// <summary>
         /// Base URL to Altinn Bridge
         /// </summary>
-        public string? AccessManagementEndpoint { get; set; }
+        public string AccessManagementEndpoint { get; set; }
 
         /// <summary>
-        /// Isser to use in the generated token that will be used in calling Bridge API
+        /// Issuer to use in the generated token that will be used in calling Bridge API
         /// </summary>
-        public string? AccessTokenIssuer { get; set; }
+        public string AccessTokenIssuer { get; set; }
     }
 }

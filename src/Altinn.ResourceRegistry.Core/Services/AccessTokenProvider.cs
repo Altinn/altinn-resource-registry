@@ -42,7 +42,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<string?> GetAccessToken()
+        public async Task<string> GetAccessToken()
         {
             await Semaphore.WaitAsync();
 
@@ -50,22 +50,19 @@ namespace Altinn.ResourceRegistry.Core.Services
             {
                 if (_accessToken == null || _cacheTokenUntil < DateTime.UtcNow)
                 {
-                    string? certBase64 = await _keyVaultService.GetCertificateAsync(_secretsSettings.KeyVaultUri, _secretsSettings.PlatformCertSecretId);
-                    if (certBase64 != null)
-                    {
-                        _accessToken = _accessTokenGenerator.GenerateAccessToken(
-                            _platformSettings.AccessTokenIssuer,
-                            "internal.authorization",
-                            new X509Certificate2(
-                                Convert.FromBase64String(certBase64),
-                                (string)null!,
-                                X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable));
-                    }
-
+                    string certBase64 = await _keyVaultService.GetCertificateAsync(_secretsSettings.KeyVaultUri, _secretsSettings.PlatformCertSecretId);
+                    _accessToken = _accessTokenGenerator.GenerateAccessToken(
+                        _platformSettings.AccessTokenIssuer,
+                        "internal.authorization",
+                        new X509Certificate2(
+                            Convert.FromBase64String(certBase64),
+                            (string)null!,
+                            X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable));
+                    
                     _cacheTokenUntil = DateTime.UtcNow.AddSeconds(_accessTokenSettings.TokenLifetimeInSeconds - 2); // Add some slack to avoid tokens expiring in transit
                 }
 
-                return _accessToken;
+                return _accessToken ?? string.Empty;
             }
             finally
             {

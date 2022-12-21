@@ -1,4 +1,5 @@
-﻿using Altinn.ResourceRegistry.Core.Services.Interfaces;
+﻿#nullable enable
+using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Newtonsoft.Json.Linq;
 
 namespace Altinn.ResourceRegistry.Core.Services

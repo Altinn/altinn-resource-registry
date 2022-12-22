@@ -39,7 +39,7 @@ namespace Altinn.ResourceRegistry.Tests.Utils
 
         private static SigningCredentials GetSigningCredentials()
         {
-            X509Certificate2 cert = new X509Certificate2("C:\\Repos\\altinn-resource-registry\\test\\ResourceRegistryTest\\selfSignedTestCertificate.pfx", "qwer1234");
+            X509Certificate2 cert = new X509Certificate2("selfSignedTestCertificate.pfx", "qwer1234");
             return new X509SigningCredentials(cert, SecurityAlgorithms.RsaSha256);
         }
     }

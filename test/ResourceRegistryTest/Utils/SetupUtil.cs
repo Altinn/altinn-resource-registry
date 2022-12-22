@@ -1,18 +1,17 @@
-﻿using Altinn.ResourceRegistry;
+﻿using Altinn.Common.Authentication.Configuration;
 using Altinn.ResourceRegistry.Controllers;
 using Altinn.ResourceRegistry.Core;
-using Altinn.ResourceRegistry.Persistence;
+using Altinn.ResourceRegistry.Tests.Mocks;
+using AltinnCore.Authentication.JwtCookie;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using ResourceRegistry.Controllers;
 using ResourceRegistryTest.Mocks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ResourceRegistryTest.Utils
 {
@@ -28,6 +27,8 @@ namespace ResourceRegistryTest.Utils
                     services.AddSingleton<IResourceRegistryRepository, RegisterResourceRepositoryMock>();
                     services.AddSingleton<IPolicyRepository, PolicyRepositoryMock>();
                     services.AddSingleton<IPRP, PRPMock>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                    services.AddSingleton<IPostConfigureOptions<OidcProviderSettings>, OidcProviderPostConfigureSettingsStub>();
                 });
             });
             factory.Server.AllowSynchronousIO = true;

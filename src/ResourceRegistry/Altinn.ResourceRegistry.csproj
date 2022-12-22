@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\altinn-authentication\src\jwtcookie\Authentication\Altinn.Common.Authentication.csproj" />
     <ProjectReference Include="..\Altinn.ResourceRegistry.Core\Altinn.ResourceRegistry.Core.csproj" />
     <ProjectReference Include="..\Altinn.ResourceRegistry.Integration\Altinn.ResourceRegistry.Integration.csproj" />
     <ProjectReference Include="..\Altinn.ResourceRegistry.Persistence\Altinn.ResourceRegistry.Persistence.csproj" />

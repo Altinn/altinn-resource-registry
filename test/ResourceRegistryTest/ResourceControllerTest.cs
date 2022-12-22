@@ -1,4 +1,5 @@
 using Altinn.ResourceRegistry.Models;
+using Altinn.ResourceRegistry.Tests.Util;
 using Microsoft.AspNetCore.Mvc;
 using ResourceRegistry.Controllers;
 using ResourceRegistryTest.Utils;
@@ -18,23 +19,28 @@ namespace ResourceRegistryTest
     public class ResourceControllerTest : IClassFixture<CustomWebApplicationFactory<ResourceController>>
     {
         private readonly CustomWebApplicationFactory<ResourceController> _factory;
+        private readonly HttpClient _client;
 
         public ResourceControllerTest(CustomWebApplicationFactory<ResourceController> factory)
         {
             _factory = factory;
+            _client = SetupUtil.GetTestClient(factory);
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            string token = PrincipalUtil.GetAccessToken("sbl.authorization");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
         [Fact]
         public async Task GetResource_altinn_access_management_OK()
         {
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
             };
 
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
@@ -46,14 +52,13 @@ namespace ResourceRegistryTest
         [Fact]
         public async Task Test_Nav_Get()
         {
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/Resource/nav_tiltakAvtaleOmArbeidstrening";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
             };
 
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
@@ -66,14 +71,13 @@ namespace ResourceRegistryTest
         [Fact]
         public async Task Search_Get()
         {
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/Resource/Search?SearchTerm=test";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
             };
 
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
@@ -88,7 +92,6 @@ namespace ResourceRegistryTest
             ServiceResource resource = new ServiceResource() { Identifier = "superdupertjenestene" };
             resource.IsComplete = true;
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/Resource/";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
@@ -99,7 +102,7 @@ namespace ResourceRegistryTest
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -128,8 +131,7 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Post, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -153,13 +155,12 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Post, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal("Unknown resource", responseContent);
+            Assert.Equal("\"Unknown resource\"", responseContent);
         }
 
         [Fact]
@@ -180,8 +181,7 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -204,13 +204,12 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal("Policy not accepted: Contains rules for a different registry resource", responseContent);
+            Assert.Equal("\"Policy not accepted: Contains rules for a different registry resource\"", responseContent);
         }
 
         [Fact]
@@ -231,13 +230,12 @@ namespace ResourceRegistryTest
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal("Policy not accepted: Contains rule without reference to registry resource id", responseContent);
+            Assert.Equal("\"Policy not accepted: Contains rule without reference to registry resource id\"", responseContent);
         }
 
         [Fact]
@@ -246,7 +244,6 @@ namespace ResourceRegistryTest
             ServiceResource resource = new ServiceResource() { Identifier = "superdupertjenestene" };
             resource.IsComplete = false;
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/Resource/";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
@@ -257,7 +254,7 @@ namespace ResourceRegistryTest
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }

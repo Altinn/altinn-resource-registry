@@ -3,29 +3,20 @@ using Moq.Protected;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Altinn.Common.AccessTokenClient.Configuration;
 using Altinn.ResourceRegistry.Core.Configuration;
 using Xunit;
 using Altinn.ResourceRegistry.Core.Clients;
 using Altinn.ResourceRegistry.Core.Extensions;
-using Altinn.ResourceRegistry.Core.Services;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
-using Altinn.Common.AccessTokenClient.Services;
 using Altinn.ResourceRegistry.Core.Models;
-using Microsoft.ApplicationInsights.Extensibility.Implementation;
-using Newtonsoft.Json;
 using ResourceRegistryTest.Mocks;
-using ResourceRegistryTest.Utils;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
-using System.Text.Json;
 
 namespace ResourceRegistryTest
 {
@@ -84,12 +75,9 @@ namespace ResourceRegistryTest
                 Assert.EndsWith("resources", requestMessage?.RequestUri?.ToString());
                 Assert.Equal(HttpStatusCode.Created, result.StatusCode);
 
-                JsonSerializerSettings setting = new JsonSerializerSettings
-                {
-                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
-                };
-
-                string jsonExpectedResult = JsonConvert.SerializeObject(responseData, setting);
+                var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+                string jsonExpectedResult = JsonSerializer.Serialize(responseData, options);
+                
                 string jsonContent = await result.Content.ReadAsStringAsync();
                 Assert.Equal(jsonExpectedResult, jsonContent);
             }

@@ -1,7 +1,7 @@
 ﻿#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Altinn.ResourceRegistry.Core.Services
 {

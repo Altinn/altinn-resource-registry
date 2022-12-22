@@ -1,12 +1,14 @@
 ﻿#nullable enable
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Altinn.ResourceRegistry.Core.Services
 {
     /// <summary>
     /// Local Dev version of the KeyVaultAccess to Provide data when not deployed to container
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class KeyVaultServiceLocal : IKeyVaultService
     {
         /// <summary>

@@ -86,13 +86,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             List<AccessManagementResource> convertedElementList = convertedElement.ElementToList();
             HttpResponseMessage response = await _accessManagementClient.AddResourceToAccessManagement(convertedElementList);
 
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
-                return true;
-            }
-
-            _logger.LogError("Failed to write Resource to Access Management {serviceResource}", serviceResource);
-            return false;
+            return response.StatusCode == HttpStatusCode.Created;
         }
     }
 }

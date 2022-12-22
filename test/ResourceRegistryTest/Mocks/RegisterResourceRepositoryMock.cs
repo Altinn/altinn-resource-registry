@@ -14,6 +14,11 @@ namespace ResourceRegistryTest.Mocks
             return await Task.FromResult<ServiceResource>(null);
         }
 
+        public async Task<ServiceResource> UpdateResource(ServiceResource resource)
+        {
+            return await Task.FromResult<ServiceResource>(resource);
+        }
+
         public async Task<ServiceResource> DeleteResource(string id)
         {
             throw new NotImplementedException();
@@ -59,11 +64,6 @@ namespace ResourceRegistryTest.Mocks
         private static string GetResourcePath(string id)
         {
             return Path.Combine(GetResourcePath(), id + ".json");
-        }
-
-        Task<ServiceResource> IResourceRegistryRepository.UpdateResource(ServiceResource resource)
-        {
-            throw new NotImplementedException();
         }
 
         private static string GetResourcePath()

@@ -88,7 +88,7 @@ namespace Altinn.ResourceRegistry.Persistence
         public async Task<string> TryAcquireBlobLease(string resourceId)
         {
             string filePath = $"{resourceId.AsFilePath()}/resourcepolicy.xml";
-            BlobClient blobClient = CreateBlobClient(resourceId);
+            BlobClient blobClient = CreateBlobClient(filePath);
             BlobLeaseClient blobLeaseClient = blobClient.GetBlobLeaseClient();
 
             try

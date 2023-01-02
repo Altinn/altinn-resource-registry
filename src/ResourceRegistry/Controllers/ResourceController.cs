@@ -96,12 +96,12 @@ namespace ResourceRegistry.Controllers
 
             if (currentResource == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             if (id != serviceResource.Identifier)
             {
-                return BadRequest();
+                return BadRequest("Id in path does not match ID in resource");
             }
 
             if (serviceResource.IsComplete.HasValue && serviceResource.IsComplete.Value)

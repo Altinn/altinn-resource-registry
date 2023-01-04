@@ -4,6 +4,7 @@ using Altinn.Common.PEP.Constants;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Models;
 using AltinnCore.Authentication.Constants;
+using Newtonsoft.Json;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace Altinn.ResourceRegistry.Utils
@@ -86,11 +87,13 @@ namespace Altinn.ResourceRegistry.Utils
         {
             Console.WriteLine($"AuthorizationUtil // IsOwnerOfResource // Checking organisation number in claims.");
 
-            string orgClaim = user?.Claims.Where(c => c.Type.Equals(AltinnCoreClaimTypes.OrgNumber)).Select(c => c.Value).FirstOrDefault();
+            string orgClaim = user?.Claims.Where(c => c.Type.Equals("consumer")).Select(c => c.Value).FirstOrDefault();
+
+            string orgNumber = GetOrganizationNumberFromClaim(orgClaim);
 
             Console.WriteLine($"AuthorizationUtil // IsOwnerOfResource // Org claim: {orgClaim}.");
 
-            if (resourceOwner.Equals(orgClaim, StringComparison.CurrentCultureIgnoreCase))
+            if (resourceOwner.Equals(orgNumber, StringComparison.CurrentCultureIgnoreCase))
             {
                 return true;
             }
@@ -112,6 +115,32 @@ namespace Altinn.ResourceRegistry.Utils
             }
 
             return true;
+        }
+
+        private static string GetOrganizationNumberFromClaim(string claim) 
+        {
+            ConsumerClaim consumerClaim;
+            try
+            {
+                consumerClaim = JsonConvert.DeserializeObject<ConsumerClaim>(claim);
+            }
+            catch (JsonReaderException)
+            {
+                throw new ArgumentException("Invalid consumer claim: invalid JSON");
+            }
+
+            if (consumerClaim.Authority != "iso6523-actorid-upis")
+            {
+                throw new ArgumentException("Invalid consumer claim: unexpected authority");
+            }
+
+            string[] identityParts = consumerClaim.Id.Split(':');
+            if (identityParts[0] != "0192")
+            {
+                throw new ArgumentException("Invalid consumer claim: unexpected ISO6523 identifier");
+            }
+
+            return identityParts[1];
         }
     }
 }

@@ -76,9 +76,10 @@ namespace Altinn.ResourceRgistryTest.Util
                 claims.Add(new Claim("urn:altinn:scope", scope, ClaimValueTypes.String, "maskinporten"));
             }
 
-            claims.Add(new Claim(AltinnCoreClaimTypesOrgNumber, orgNumber.ToString(), ClaimValueTypes.Integer32, issuer));
+            claims.Add(new Claim(AltinnCoreClaimTypes.OrgNumber, orgNumber.ToString(), ClaimValueTypes.Integer32, issuer));
             claims.Add(new Claim(AltinnCoreClaimTypes.AuthenticateMethod, "Mock", ClaimValueTypes.String, issuer));
             claims.Add(new Claim(AltinnCoreClaimTypes.AuthenticationLevel, "3", ClaimValueTypes.Integer32, issuer));
+            claims.Add(new Claim("consumer", GetOrgNoObject(orgNumber)));
 
             ClaimsIdentity identity = new ClaimsIdentity("mock-org");
             identity.AddClaims(claims);
@@ -93,6 +94,11 @@ namespace Altinn.ResourceRgistryTest.Util
             string token = JwtTokenMock.GenerateToken(principal, new TimeSpan(1, 1, 1));
 
             return token;
+        }
+
+        private static string GetOrgNoObject(string orgNo)
+        {
+            return $"{{ \"authority\":\"iso6523-actorid-upis\", \"ID\":\"0192:{orgNo}\"}}";
         }
     }
 }

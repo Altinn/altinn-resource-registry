@@ -99,22 +99,6 @@ namespace Altinn.ResourceRegistry.Utils
         }
 
         /// <summary>
-        /// Checks if authenticated user has read access to the resource
-        /// </summary>
-        /// <param name="resourceOwner">the organisation number that owns the resource</param>
-        /// <param name="user">the authenticated user claim</param>
-        /// <returns></returns>
-        public static bool HasReadAccess(string resourceOwner, ClaimsPrincipal user)
-        {
-            if (AuthorizationUtil.HasAdminAccess(user) || AuthorizationUtil.IsOwnerOfResource(resourceOwner, user))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Checks if authenticated user has write access
         /// </summary>
         /// <param name="resourceOwner">the organisation number that owns the resource</param>
@@ -122,14 +106,12 @@ namespace Altinn.ResourceRegistry.Utils
         /// <returns></returns>
         public static bool HasWriteAccess(string resourceOwner, ClaimsPrincipal user)
         {
-            List<string> requiredScopes = new List<string>();
-            requiredScopes.Add(AuthzConstants.SCOPE_RESOURCEREGISTRY_WRITE);
-            if (HasAdminAccess(user) || (IsOwnerOfResource(resourceOwner, user) && ContainsRequiredScope(requiredScopes, user)))
+            if (!HasAdminAccess(user) && !IsOwnerOfResource(resourceOwner, user))
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
     }
 }

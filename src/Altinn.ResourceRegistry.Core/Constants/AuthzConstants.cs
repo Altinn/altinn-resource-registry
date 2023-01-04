@@ -12,11 +12,6 @@ namespace Altinn.ResourceRegistry.Core.Constants
     public static class AuthzConstants
     {
         /// <summary>
-        /// Policy tag for authorizing admin  scope.
-        /// </summary>
-        public const string POLICY_SCOPE_RESOURCEREGISTRY_ADMIN = "ScopeResourceRegistryAdmin";
-
-        /// <summary>
         /// Policy tag for authorizing write scope.
         /// </summary>
         public const string POLICY_SCOPE_RESOURCEREGISTRY_WRITE = "ScopeResourceRegistryWrite";

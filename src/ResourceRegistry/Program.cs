@@ -67,24 +67,10 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<OidcProviderSettings>(config.GetSection("OidcProviders"));
     services.Configure<PostgreSQLSettings>(config.GetSection("PostgreSQLSettings"));
     services.Configure<AzureStorageConfiguration>(config.GetSection("AzureStorageConfiguration"));
-    services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
-    PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();
 
     services.AddAuthentication(JwtCookieDefaults.AuthenticationScheme)
     .AddJwtCookie(JwtCookieDefaults.AuthenticationScheme, options =>
     {
-        options.JwtCookieName = platformSettings.JwtCookieName;
-        options.MetadataAddress = platformSettings.OpenIdWellKnownEndpoint;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            RequireExpirationTime = true,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-
         if (builder.Environment.IsDevelopment())
         {
             options.RequireHttpsMetadata = false;

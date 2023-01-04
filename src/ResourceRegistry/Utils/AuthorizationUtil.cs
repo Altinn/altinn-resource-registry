@@ -16,28 +16,6 @@ namespace Altinn.ResourceRegistry.Utils
     public static class AuthorizationUtil
     {
         /// <summary>
-        /// Verifies that org string matches org in user claims.
-        /// </summary>
-        /// <param name="org">Organisation to match in claims.</param>
-        /// <param name="user">Claim principal from http context.</param>
-        /// <returns>true if the given ClaimsPrincipal contains the given org.</returns>
-        public static bool VerifyOrgInClaimPrincipal(string org, ClaimsPrincipal user)
-        {
-            Console.WriteLine($"AuthorizationUtil // VerifyOrg // Trying to verify org in claims.");
-
-            string orgClaim = user?.Claims.Where(c => c.Type.Equals(AltinnCoreClaimTypes.OrgNumber)).Select(c => c.Value).FirstOrDefault();
-
-            Console.WriteLine($"AuthorizationUtil // VerifyOrg // Org claim: {orgClaim}.");
-
-            if (org.Equals(orgClaim, StringComparison.CurrentCultureIgnoreCase))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
         /// Verifies a scope claim based on claimsprincipal.
         /// </summary>
         /// <param name="requiredScope">Requiered scope.</param>
@@ -81,13 +59,13 @@ namespace Altinn.ResourceRegistry.Utils
         /// Checks if resource owner organisation matches organisation in claim
         /// </summary>
         /// <param name="resourceOwner">the organisation number that owns the resource</param>
-        /// <param name="user">the authenticated user claim</param>
+        /// <param name="organisation">the authenticated organisation claim</param>
         /// <returns></returns>
-        public static bool IsOwnerOfResource(string resourceOwner, ClaimsPrincipal user) 
+        public static bool IsOwnerOfResource(string resourceOwner, ClaimsPrincipal organisation) 
         {
             Console.WriteLine($"AuthorizationUtil // IsOwnerOfResource // Checking organisation number in claims.");
 
-            string orgClaim = user?.Claims.Where(c => c.Type.Equals("consumer")).Select(c => c.Value).FirstOrDefault();
+            string orgClaim = organisation?.Claims.Where(c => c.Type.Equals("consumer")).Select(c => c.Value).FirstOrDefault();
 
             string orgNumber = GetOrganizationNumberFromClaim(orgClaim);
 

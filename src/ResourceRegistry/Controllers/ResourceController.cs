@@ -74,9 +74,15 @@ namespace Altinn.ResourceRegistry.Controllers
                 return BadRequest($"Invalid resource identifier. Cannot be empty or contain any of the characters: {string.Join(", ", Path.GetInvalidFileNameChars())}");
             }
 
-            await _resourceRegistry.CreateResource(serviceResource);
-
-            return Created("/ResourceRegistryService/api/" + serviceResource.Identifier, null);
+            try
+            {
+                await _resourceRegistry.CreateResource(serviceResource);
+                return Created("/resourceregistry/api/v1/resource/" + serviceResource.Identifier, null);
+            }
+            catch (Exception e)
+            {
+                return e.Message.Contains("duplicate key value violates unique constraint") ? BadRequest($"The Resource already exist: {serviceResource.Identifier}") : StatusCode(500, e.Message);
+            }
         }
 
         /// <summary>
@@ -98,9 +104,15 @@ namespace Altinn.ResourceRegistry.Controllers
                 }
             }
 
-            await _resourceRegistry.UpdateResource(serviceResource);
-
-            return Ok();
+            try
+            {
+                await _resourceRegistry.UpdateResource(serviceResource);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return e.Message.Contains("duplicate key value violates unique constraint") ? BadRequest($"The Resource already exist: {serviceResource.Identifier}") : StatusCode(500, e.Message);
+            }
         }
 
         /// <summary>

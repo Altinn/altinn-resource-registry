@@ -67,9 +67,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config, IWebH
     services.AddSingleton<IPRP, PRPClient>();
     services.AddSingleton<IPolicyRepository, PolicyRepository>();
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-    services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
-    
     services.Configure<PostgreSQLSettings>(config.GetSection("PostgreSQLSettings"));
     services.Configure<AzureStorageConfiguration>(config.GetSection("AzureStorageConfiguration"));
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
@@ -77,15 +75,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config, IWebH
 
     SecretsSettings secretsSettings = new();
     config.GetSection("SecretsSettings").Bind(secretsSettings);
-
-    if (env.IsDevelopment())
-    {
-        services.TryAddSingleton<IKeyVaultService, KeyVaultServiceLocal>();
-    }
-    else
-    {
-        services.TryAddSingleton<IKeyVaultService, KeyVaultService>();
-    }
 }
 
 void Configure(IConfiguration config)

@@ -92,12 +92,11 @@ namespace Altinn.ResourceRegistry.Persistence
             }
             catch (Exception e)
             {
-                if (e.Message.Contains("duplicate key value violates unique constraint"))
+                if (!e.Message.Contains("duplicate key value violates unique constraint"))
                 {
-                    return new ServiceResource();
+                    _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
                 }
-
-                _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
+                
                 throw;
             }
         }
@@ -177,12 +176,11 @@ namespace Altinn.ResourceRegistry.Persistence
             }
             catch (Exception e)
             {
-                if (e.Message.Contains("duplicate key value violates unique constraint"))
+                if (!e.Message.Contains("duplicate key value violates unique constraint"))
                 {
-                    return new ServiceResource();
+                    _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
                 }
 
-                _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
                 throw;
             }
         }

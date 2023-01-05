@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Altinn.ResourceRegistry.Core.Clients.Interfaces;
+using Altinn.ResourceRegistry.Core.Exceptions;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
@@ -40,10 +41,10 @@ namespace Altinn.ResourceRegistry.Core.Services
             bool result = await UpdateResourceInAccessManagement(serviceResource);
             if (!result)
             {
-                throw new ApplicationException("Updating Access management failed");
+                throw new AccessManagementUpdateException("Updating Access management failed");
             }
 
-            ServiceResource resultResource = await _repository.CreateResource(serviceResource);
+            await _repository.CreateResource(serviceResource);
         }
 
         /// <inheritdoc/>
@@ -52,10 +53,10 @@ namespace Altinn.ResourceRegistry.Core.Services
             bool result = await UpdateResourceInAccessManagement(serviceResource);
             if (!result)
             {
-                throw new ApplicationException("Updating Access management failed");
+                throw new AccessManagementUpdateException("Updating Access management failed");
             }
 
-            ServiceResource resultResource = await _repository.UpdateResource(serviceResource);
+            await _repository.UpdateResource(serviceResource);
         }
 
         /// <inheritdoc/>

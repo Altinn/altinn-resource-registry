@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.SqlTypes;
 using Altinn.AccessGroups.Persistance;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Enums;
@@ -88,7 +89,7 @@ namespace Altinn.ResourceRegistry.Persistence
                     return GetServiceResource(reader);
                 }
 
-                return null;
+                throw new SqlNullValueException("No result from database");
             }
             catch (Exception e)
             {
@@ -172,7 +173,7 @@ namespace Altinn.ResourceRegistry.Persistence
                     return GetServiceResource(reader);
                 }
 
-                return null;
+                throw new SqlNullValueException("No result from database");
             }
             catch (Exception e)
             {

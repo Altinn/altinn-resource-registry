@@ -30,7 +30,7 @@ namespace Altinn.ResourceRegistry.Core.Clients
         /// Initializes a new instance of the <see cref="AccessManagementClient"/> class
         /// </summary>
         /// <param name="client">httpClient</param>
-        /// <param name="accessTokenProvider">The token provider to create the token needed for comunication</param>
+        /// <param name="accessTokenGenerator">The token generator to create the token needed for comunication</param>
         /// <param name="platformSettings">The resource registry config settings</param>
         /// <param name="logger">Logger instance for this ResourceRegistryClient</param>
         public AccessManagementClient(HttpClient client, IAccessTokenGenerator accessTokenGenerator, IOptions<PlatformSettings> platformSettings, ILogger<AccessManagementClient> logger)

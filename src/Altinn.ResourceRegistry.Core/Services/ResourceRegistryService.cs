@@ -18,7 +18,6 @@ namespace Altinn.ResourceRegistry.Core.Services
         private readonly IResourceRegistryRepository _repository;
         private readonly IPolicyRepository _policyRepository;
         private readonly IAccessManagementClient _accessManagementClient;
-        private readonly ILogger<ResourceRegistryService> _logger;
 
         /// <summary>
         /// Creates a new instance of the <see cref="ResourceRegistryService"/> service.
@@ -32,7 +31,6 @@ namespace Altinn.ResourceRegistry.Core.Services
         {
             _repository = repository;
             _policyRepository = policyRepository;
-            _logger = logger;
             _accessManagementClient = accessManagementClient;
         }
 
@@ -42,10 +40,10 @@ namespace Altinn.ResourceRegistry.Core.Services
             bool result = await UpdateResourceInAccessManagement(serviceResource);
             if (!result)
             {
-                throw new Exception("Updating Access management failed");
+                throw new ApplicationException("Updating Access management failed");
             }
 
-            await _repository.CreateResource(serviceResource);
+            ServiceResource resultResource = await _repository.CreateResource(serviceResource);
         }
 
         /// <inheritdoc/>
@@ -54,10 +52,10 @@ namespace Altinn.ResourceRegistry.Core.Services
             bool result = await UpdateResourceInAccessManagement(serviceResource);
             if (!result)
             {
-                throw new Exception("Updating Access management failed");
+                throw new ApplicationException("Updating Access management failed");
             }
-            
-            await _repository.UpdateResource(serviceResource);
+
+            ServiceResource resultResource = await _repository.UpdateResource(serviceResource);
         }
 
         /// <inheritdoc/>

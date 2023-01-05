@@ -11,7 +11,7 @@ namespace Altinn.ResourceRegistry.Core.Clients.Interfaces
         /// Adds a resource to Access Management
         /// </summary>
         /// <param name="resources">input to store in Accerss Management</param>
-        /// <returns>The http responce/returns>
+        /// <returns>The http response</returns>
         Task<HttpResponseMessage> AddResourceToAccessManagement(List<AccessManagementResource> resources);
     }
 }

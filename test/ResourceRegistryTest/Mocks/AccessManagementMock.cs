@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -15,8 +16,11 @@ namespace ResourceRegistryTest.Mocks
     {
         public Task<HttpResponseMessage> AddResourceToAccessManagement(List<AccessManagementResource> resources)
         {
-            HttpResponseMessage responseMessage = new HttpResponseMessage();
-            responseMessage.Content = JsonContent.Create(resources);
+            HttpResponseMessage responseMessage = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.Created,
+                Content = JsonContent.Create(resources)
+            };
 
             return Task.FromResult(responseMessage);
         }

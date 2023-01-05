@@ -15,9 +15,9 @@ namespace Altinn.ResourceRegistry.Core.Services
     /// </summary>
     public class ResourceRegistryService : IResourceRegistry
     {
-        private IResourceRegistryRepository _repository;
-        private IPolicyRepository _policyRepository;
-        private IAccessManagementClient _accessManagementClient;
+        private readonly IResourceRegistryRepository _repository;
+        private readonly IPolicyRepository _policyRepository;
+        private readonly IAccessManagementClient _accessManagementClient;
         private readonly ILogger<ResourceRegistryService> _logger;
 
         /// <summary>
@@ -79,11 +79,11 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<bool> StorePolicy(ServiceResource serviceResources, Stream fileStream)
+        public async Task<bool> StorePolicy(ServiceResource serviceResource, Stream fileStream)
         {
-            PolicyHelper.IsValidResourcePolicy(serviceResources, fileStream);
+            PolicyHelper.IsValidResourcePolicy(serviceResource, fileStream);
 
-            string filePath = $"{serviceResources.Identifier.AsFilePath()}/resourcepolicy.xml";
+            string filePath = $"{serviceResource.Identifier.AsFilePath()}/resourcepolicy.xml";
             Response<BlobContentInfo> response = await _policyRepository.WritePolicyAsync(filePath, fileStream);
 
             return response?.GetRawResponse()?.Status == (int)HttpStatusCode.Created;
@@ -96,13 +96,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             List<AccessManagementResource> convertedElementList = convertedElement.ElementToList();
             HttpResponseMessage response = await _accessManagementClient.AddResourceToAccessManagement(convertedElementList);
 
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
-                return true;
-            }
-
-            return false;
-
+            return response.StatusCode == HttpStatusCode.Created;
         }
     }
 }

@@ -72,9 +72,9 @@ namespace Altinn.ResourceRegistry.Core
         }
 
         /// <inheritdoc/>
-        public async Task<Stream> GetPolicy(ServiceResource serviceResource)
+        public async Task<Stream> GetPolicy(string resourceId)
         {
-              return await _policyRepository.GetPolicyAsync(serviceResource.Identifier);
+              return await _policyRepository.GetPolicyAsync(resourceId);
         }
     }
 }

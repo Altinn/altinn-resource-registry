@@ -131,7 +131,7 @@ namespace ResourceRegistry.Controllers
                 return NotFound("Unable to find resource");
             }
 
-            Stream dataStream = await _resourceRegistry.GetPolicy(resource);
+            Stream dataStream = await _resourceRegistry.GetPolicy(resource.Identifier);
 
             if (dataStream == null)
             {

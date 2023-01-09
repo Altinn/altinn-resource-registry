@@ -58,8 +58,8 @@ namespace Altinn.ResourceRegistry.Core
         /// <summary>
         /// Returns the policy for a service resource
         /// </summary>
-        /// <param name="serviceResource">The resource</param>
+        /// <param name="resourceId">The resource id</param>
         /// <returns></returns>
-        Task<Stream> GetPolicy(ServiceResource serviceResource);
+        Task<Stream> GetPolicy(string resourceId);
     }
 }

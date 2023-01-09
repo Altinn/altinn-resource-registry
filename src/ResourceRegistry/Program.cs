@@ -1,25 +1,31 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessGroups.Persistance;
-using Altinn.Common.AccessToken.Configuration;
 using Altinn.Common.AccessTokenClient.Services;
+using Altinn.Common.PEP.Authorization;
 using Altinn.ResourceRegistry.Configuration;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Clients;
 using Altinn.ResourceRegistry.Core.Clients.Interfaces;
 using Altinn.ResourceRegistry.Core.Configuration;
+using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Services;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Health;
 using Altinn.ResourceRegistry.Integration.Clients;
 using Altinn.ResourceRegistry.Persistence;
+using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Npgsql.Logging;
+using Swashbuckle.AspNetCore.Filters;
 using Yuniql.AspNetCore;
 using Yuniql.PostgreSql;
+using KeyVaultSettings = Altinn.Common.AccessToken.Configuration.KeyVaultSettings;
 
 ILogger logger;
 
@@ -51,6 +57,7 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
+    PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();
     services.AddControllers().AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.WriteIndented = true;
@@ -66,15 +73,52 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IResourceRegistryRepository, ResourceRegistryRepository>();
     services.AddSingleton<IPRP, PRPClient>();
     services.AddSingleton<IPolicyRepository, PolicyRepository>();
+    services.AddSingleton<IAuthorizationHandler, ScopeAccessHandler>();
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.Configure<PostgreSQLSettings>(config.GetSection("PostgreSQLSettings"));
     services.Configure<AzureStorageConfiguration>(config.GetSection("AzureStorageConfiguration"));
+
+    services.AddAuthentication(JwtCookieDefaults.AuthenticationScheme)
+    .AddJwtCookie(JwtCookieDefaults.AuthenticationScheme, options =>
+    {
+        options.JwtCookieName = platformSettings.JwtCookieName;
+        options.MetadataAddress = platformSettings.OpenIdWellKnownEndpoint;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            RequireExpirationTime = true,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+
+        if (builder.Environment.IsDevelopment())
+        {
+            options.RequireHttpsMetadata = false;
+        }
+    });
+    string[] resourcWriteScope = new string[] { AuthzConstants.SCOPE_RESOURCEREGISTRY_ADMIN, AuthzConstants.SCOPE_RESOURCEREGISTRY_WRITE };
+
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy(AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE, policy => policy.Requirements.Add(new ScopeAccessRequirement(resourcWriteScope)));        
+    });
+
+    services.AddSwaggerGen(options =>
+    {
+        options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+        {
+            Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        });
+        options.OperationFilter<SecurityRequirementsOperationFilter>();
+    });
     services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
-
-    SecretsSettings secretsSettings = new();
-    config.GetSection("SecretsSettings").Bind(secretsSettings);
 }
 
 void Configure(IConfiguration config)

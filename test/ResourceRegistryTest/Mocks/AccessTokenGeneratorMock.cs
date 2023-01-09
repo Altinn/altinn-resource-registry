@@ -1,7 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 using Altinn.Common.AccessTokenClient.Services;
-using ResourceRegistryTest.Utils;
+using Altinn.ResourceRgistryTest.Util;
 
 namespace ResourceRegistryTest.Mocks
 {

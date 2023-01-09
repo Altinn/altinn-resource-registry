@@ -21,7 +21,7 @@ namespace ResourceRegistryTest.Mocks
 
         public async Task<ServiceResource> DeleteResource(string id)
         {
-            throw new NotImplementedException();
+            return await GetResource(id);
         }
 
         public async Task<ServiceResource> GetResource(string id)

@@ -50,6 +50,13 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         Task<bool> StorePolicy(ServiceResource serviceResource, Stream fileStream);
 
         /// <summary>
+        /// Returns the policy for a service resource
+        /// </summary>
+        /// <param name="resourceId">The resource id</param>
+        /// <returns></returns>
+        Task<Stream> GetPolicy(string resourceId);
+
+        /// <summary>
         /// Updates Access management with changes in recource registry
         /// </summary>
         /// <param name="serviceResource">The resource to add to access management</param>

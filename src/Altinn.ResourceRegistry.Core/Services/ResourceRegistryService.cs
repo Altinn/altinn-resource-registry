@@ -88,6 +88,12 @@ namespace Altinn.ResourceRegistry.Core.Services
             return response?.GetRawResponse()?.Status == (int)HttpStatusCode.Created;
         }
 
+        /// <inheritdoc/>
+        public async Task<Stream> GetPolicy(string resourceId)
+        {
+              return await _policyRepository.GetPolicyAsync(resourceId);
+        }
+
         /// <inheritdoc />
         public async Task<bool> UpdateResourceInAccessManagement(ServiceResource serviceResource)
         {

@@ -1,7 +1,10 @@
 ﻿using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
+using Altinn.ResourceRegistry.Extensions;
 using Altinn.ResourceRegistry.Models;
+using Altinn.ResourceRegistry.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -56,9 +59,9 @@ namespace ResourceRegistry.Controllers
         /// <returns>ActionResult describing the result of the operation</returns>
         [SuppressModelStateInvalidFilter]
         [HttpPost]
+        [Authorize(Policy = AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE)]
         [Produces("application/json")]
         [Consumes("application/json")]
-        [Authorize]
         public async Task<ActionResult> Post([ValidateNever] ServiceResource serviceResource)
         {
             if (serviceResource.IsComplete.HasValue && serviceResource.IsComplete.Value)
@@ -78,6 +81,11 @@ namespace ResourceRegistry.Controllers
                 return BadRequest($"Invalid resource identifier. Cannot be empty or contain any of the characters: {string.Join(", ", Path.GetInvalidFileNameChars())}");
             }
 
+            if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
+            {
+                return Forbid();
+            }
+
             await _resourceRegistry.CreateResource(serviceResource);
 
             return Created("/ResourceRegistry/api/" + serviceResource.Identifier, null);
@@ -86,15 +94,28 @@ namespace ResourceRegistry.Controllers
         /// <summary>
         /// Updates a service resource in the resource registry if it pass all validation checks
         /// </summary>
+        /// <param name="id">Resource ID</param>
         /// <param name="serviceResource">Service resource model for update in the resource registry</param>
         /// <returns>ActionResult describing the result of the operation</returns>
         [SuppressModelStateInvalidFilter]
-        [HttpPut]
+        [HttpPut("{id}")]
+        [Authorize(Policy = AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE)]
         [Produces("application/json")]
         [Consumes("application/json")]
-        [Authorize]
-        public async Task<ActionResult> Put(ServiceResource serviceResource)
+        public async Task<ActionResult> Put(string id, ServiceResource serviceResource)
         {
+            ServiceResource currentResource = await _resourceRegistry.GetResource(id);
+
+            if (currentResource == null)
+            {
+                return NotFound();
+            }
+
+            if (id != serviceResource.Identifier)
+            {
+                return BadRequest("Id in path does not match ID in resource");
+            }
+
             if (serviceResource.IsComplete.HasValue && serviceResource.IsComplete.Value)
             {
                 if (!ModelState.IsValid)
@@ -103,9 +124,38 @@ namespace ResourceRegistry.Controllers
                 }
             }
 
+            if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
+            {
+                return Forbid();
+            }
+
             await _resourceRegistry.UpdateResource(serviceResource);
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Returns the XACML policy for a resource in resource registry.
+        /// </summary>
+        /// <param name="id">Resource Id</param>
+        /// <returns></returns>
+        [HttpGet("{id}/policy")]
+        public async Task<ActionResult> GetPolicy(string id)
+        {
+            ServiceResource resource = await _resourceRegistry.GetResource(id);
+            if (resource == null)
+            {
+                return NotFound("Unable to find resource");
+            }
+
+            Stream dataStream = await _resourceRegistry.GetPolicy(resource.Identifier);
+
+            if (dataStream == null)
+            {
+                return NotFound("Unable to find requested policy");
+            }
+
+            return File(dataStream, "text/xml", "policy.xml");
         }
 
         /// <summary>
@@ -117,7 +167,7 @@ namespace ResourceRegistry.Controllers
         /// <returns>ActionResult describing the result of the operation</returns>
         [HttpPost("{id}/policy")]
         [HttpPut("{id}/policy")]
-        [Authorize]
+        [Authorize(Policy = AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE)]
         public async Task<ActionResult> WritePolicy(string id, IFormFile policyFile)
         {
             if (policyFile == null)
@@ -140,6 +190,11 @@ namespace ResourceRegistry.Controllers
             if (resource == null)
             {
                 return BadRequest("Unknown resource");
+            }
+
+            if (!AuthorizationUtil.HasWriteAccess(resource.HasCompetentAuthority?.Organization, User))
+            {
+                return Forbid();
             }
 
             try
@@ -170,11 +225,21 @@ namespace ResourceRegistry.Controllers
         /// </summary>
         /// <param name="id">The resource identifier to delete</param>
         [HttpDelete("{id}")]
-        [Produces("application/json")]
-        [Authorize]
-        public async void Delete(string id)
+        [Authorize(Policy = AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE)]
+        public async Task<ActionResult> Delete(string id)
         {
+            ServiceResource serviceResource = await _resourceRegistry.GetResource(id);
+            string orgClaim = User.GetOrgNumber();
+            if (orgClaim != null)
+            {
+                if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
+                {
+                    return Forbid();
+                }
+            }
+
             await _resourceRegistry.Delete(id);
+            return NoContent();
         }
 
         /// <summary>

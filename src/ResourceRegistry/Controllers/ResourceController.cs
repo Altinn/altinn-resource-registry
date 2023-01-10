@@ -46,7 +46,6 @@ namespace ResourceRegistry.Controllers
         /// <returns>ServiceResource</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
-        [Authorize]
         public async Task<ServiceResource> Get(string id)
         {
             return await _resourceRegistry.GetResource(id);
@@ -249,7 +248,6 @@ namespace ResourceRegistry.Controllers
         /// <returns>A list of service resources found to match the search criterias</returns>
         [HttpGet("Search")]
         [Produces("application/json")]
-        [Authorize]
         public async Task<List<ServiceResource>> Search([FromQuery] ResourceSearch search)
         {
             return await _resourceRegistry.Search(search);

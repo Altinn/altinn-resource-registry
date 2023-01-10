@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.IdentityModel.Tokens;
 
-namespace Altinn.ResourceRegistry.Tests.Utils
+namespace ResourceRegistryTest.Utils
 {
     /// <summary>
     /// Represents a mechanism for creating JSON Web tokens for use in integration tests.

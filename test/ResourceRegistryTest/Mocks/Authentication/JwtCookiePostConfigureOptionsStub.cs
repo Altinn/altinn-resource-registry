@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using ResourceRegistryTest.Mocks.Authentication;
 
-namespace Altinn.ResourceRgistryTest.Tests.Mocks.Authentication
+namespace Altinn.ResourceRegistryTest.Tests.Mocks.Authentication
 {
     /// <summary>
     /// Represents a stub for the <see cref="JwtCookiePostConfigureOptions"/> class to be used in integration tests.
@@ -35,7 +35,11 @@ namespace Altinn.ResourceRgistryTest.Tests.Mocks.Authentication
                 }
             }
 
-            options.MetadataAddress += ".well-known/openid-configuration";
+            if (options.MetadataAddress != ".well-known/openid-configuration/")
+            {
+                options.MetadataAddress += ".well-known/openid-configuration";
+            }
+            
             options.ConfigurationManager = new ConfigurationManagerStub();
         }
     }

@@ -22,6 +22,7 @@ using Npgsql.Logging;
 using Swashbuckle.AspNetCore.Filters;
 using Yuniql.AspNetCore;
 using Yuniql.PostgreSql;
+using KeyVaultSettings = Altinn.Common.AccessToken.Configuration.KeyVaultSettings;
 
 ILogger logger;
 
@@ -82,6 +83,13 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         {
             options.RequireHttpsMetadata = false;
         }
+    });
+
+    string[] resourceWriteScope = new string[] { AuthzConstants.SCOPE_RESOURCEREGISTRY_ADMIN, AuthzConstants.SCOPE_RESOURCEREGISTRY_WRITE };
+
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy(AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE, policy => policy.Requirements.Add(new ScopeAccessRequirement(resourceWriteScope)));
     });
 }
 

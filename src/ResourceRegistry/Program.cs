@@ -54,7 +54,6 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
-    //PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();
     services.AddControllers().AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.WriteIndented = true;

@@ -1,14 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+using Altinn.ResourceRegistry.Tests.Mocks;
 using AltinnCore.Authentication.Constants;
-using ResourceRegistryTest.Utils;
-using ResourceRegistryTest.Mocks;
 
-namespace Altinn.ResourceRgistryTest.Util
+namespace Altinn.ResourceRegistry.Tests.Utils
 {
     /// <summary>
     /// Utility class for usefull common operations for setup of authentication tokens for integration tests
@@ -16,8 +12,7 @@ namespace Altinn.ResourceRgistryTest.Util
     public static class PrincipalUtil
     {
         public static readonly string AltinnCoreClaimTypesOrg = "urn:altinn:org";
-        public static readonly string AltinnCoreClaimTypesOrgNumber = "urn:altinn:orgNumber";
-
+        
         /// <summary>
         /// Gets a user token
         /// </summary>

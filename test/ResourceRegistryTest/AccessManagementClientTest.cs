@@ -15,11 +15,10 @@ using Altinn.ResourceRegistry.Core.Configuration;
 using Xunit;
 using Altinn.ResourceRegistry.Core.Clients;
 using Altinn.ResourceRegistry.Core.Extensions;
-using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Core.Models;
-using ResourceRegistryTest.Mocks;
+using Altinn.ResourceRegistry.Tests.Mocks;
 
-namespace ResourceRegistryTest
+namespace Altinn.ResourceRegistry.Tests
 {
     public class AccessManagementClientTest
     {

@@ -1,11 +1,11 @@
-﻿using Altinn.ResourceRegistry.Core;
-using Altinn.ResourceRegistry.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Core.Models;
 
-namespace ResourceRegistryTest.Mocks
+namespace Altinn.ResourceRegistry.Tests.Mocks
 {
     public class RegisterResourceRepositoryMock : IResourceRegistryRepository
     {

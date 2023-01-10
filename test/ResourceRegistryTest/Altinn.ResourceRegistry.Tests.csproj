@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.8.0" />
-    <PackageReference Include="JWTCookieAuthentication" Version="2.4.2" />
+    <PackageReference Include="JWTCookieAuthentication" Version="3.0.0-alpha2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.12" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
     <PackageReference Include="Moq" Version="4.18.4" />
@@ -63,6 +63,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="selfSignedTestCertificate.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="selfSignedTestCertificatePublic.cer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

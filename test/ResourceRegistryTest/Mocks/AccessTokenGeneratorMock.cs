@@ -1,8 +1,9 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Altinn.Common.AccessTokenClient.Services;
-using Altinn.ResourceRgistryTest.Util;
+using Altinn.ResourceRegistry.Tests.Utils;
 
-namespace ResourceRegistryTest.Mocks
+namespace Altinn.ResourceRegistry.Tests.Mocks
+
 {
     public class AccessTokenGeneratorMock : IAccessTokenGenerator
     {

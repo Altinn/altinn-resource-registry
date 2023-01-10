@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessGroups.Persistance;
 using Altinn.Common.AccessTokenClient.Services;
+using Altinn.Common.Authentication.Configuration;
 using Altinn.Common.PEP.Authorization;
 using Altinn.ResourceRegistry.Configuration;
 using Altinn.ResourceRegistry.Core;
@@ -19,7 +20,6 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql.Logging;
 using Swashbuckle.AspNetCore.Filters;
@@ -57,13 +57,12 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
-    PlatformSettings platformSettings = config.GetSection("PlatformSettings").Get<PlatformSettings>();
+    services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.AddControllers().AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.WriteIndented = true;
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-
     });
 
     services.AddSingleton(config);
@@ -76,35 +75,21 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAuthorizationHandler, ScopeAccessHandler>();
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
+
+    services.Configure<OidcProviderSettings>(config.GetSection("OidcProviders"));
     services.Configure<PostgreSQLSettings>(config.GetSection("PostgreSQLSettings"));
     services.Configure<AzureStorageConfiguration>(config.GetSection("AzureStorageConfiguration"));
 
     services.AddAuthentication(JwtCookieDefaults.AuthenticationScheme)
     .AddJwtCookie(JwtCookieDefaults.AuthenticationScheme, options =>
     {
-        options.JwtCookieName = platformSettings.JwtCookieName;
-        options.MetadataAddress = platformSettings.OpenIdWellKnownEndpoint;
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            RequireExpirationTime = true,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-
         if (builder.Environment.IsDevelopment())
         {
             options.RequireHttpsMetadata = false;
         }
     });
-    string[] resourcWriteScope = new string[] { AuthzConstants.SCOPE_RESOURCEREGISTRY_ADMIN, AuthzConstants.SCOPE_RESOURCEREGISTRY_WRITE };
 
-    services.AddAuthorization(options =>
-    {
-        options.AddPolicy(AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE, policy => policy.Requirements.Add(new ScopeAccessRequirement(resourcWriteScope)));        
-    });
+    string[] resourceWriteScope = new string[] { AuthzConstants.SCOPE_RESOURCEREGISTRY_ADMIN, AuthzConstants.SCOPE_RESOURCEREGISTRY_WRITE };
 
     services.AddSwaggerGen(options =>
     {
@@ -117,8 +102,12 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         });
         options.OperationFilter<SecurityRequirementsOperationFilter>();
     });
-    services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
+
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy(AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE, policy => policy.Requirements.Add(new ScopeAccessRequirement(resourceWriteScope)));
+    });
 }
 
 void Configure(IConfiguration config)

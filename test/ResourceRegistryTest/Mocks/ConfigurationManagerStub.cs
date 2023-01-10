@@ -35,7 +35,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<SecurityKey>> GetSigningKeys()
+        public static async Task<ICollection<SecurityKey>> GetSigningKeys()
         {
             List<SecurityKey> signingKeys = new List<SecurityKey>();
 

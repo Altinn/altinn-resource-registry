@@ -17,6 +17,6 @@ namespace Altinn.ResourceRegistry.Core.Enums
         Systemresource = 1,
 
         [PgName("maskinportenschema")]
-        MaskinportenSchema = 4,
+        MaskinportenSchema = 2,
     }
 }

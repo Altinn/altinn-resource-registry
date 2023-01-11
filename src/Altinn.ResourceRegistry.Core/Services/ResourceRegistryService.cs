@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Altinn.ResourceRegistry.Core.Clients.Interfaces;
+using Altinn.ResourceRegistry.Core.Exceptions;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
@@ -18,7 +19,6 @@ namespace Altinn.ResourceRegistry.Core.Services
         private readonly IResourceRegistryRepository _repository;
         private readonly IPolicyRepository _policyRepository;
         private readonly IAccessManagementClient _accessManagementClient;
-        private readonly ILogger<ResourceRegistryService> _logger;
 
         /// <summary>
         /// Creates a new instance of the <see cref="ResourceRegistryService"/> service.
@@ -32,22 +32,31 @@ namespace Altinn.ResourceRegistry.Core.Services
         {
             _repository = repository;
             _policyRepository = policyRepository;
-            _logger = logger;
             _accessManagementClient = accessManagementClient;
         }
 
         /// <inheritdoc/>
         public async Task CreateResource(ServiceResource serviceResource)
         {
+            bool result = await UpdateResourceInAccessManagement(serviceResource);
+            if (!result)
+            {
+                throw new AccessManagementUpdateException("Updating Access management failed");
+            }
+
             await _repository.CreateResource(serviceResource);
-            await UpdateResourceInAccessManagement(serviceResource);
         }
 
         /// <inheritdoc/>
         public async Task UpdateResource(ServiceResource serviceResource)
         {
+            bool result = await UpdateResourceInAccessManagement(serviceResource);
+            if (!result)
+            {
+                throw new AccessManagementUpdateException("Updating Access management failed");
+            }
+
             await _repository.UpdateResource(serviceResource);
-            await UpdateResourceInAccessManagement(serviceResource);
         }
 
         /// <inheritdoc/>
@@ -77,6 +86,12 @@ namespace Altinn.ResourceRegistry.Core.Services
             Response<BlobContentInfo> response = await _policyRepository.WritePolicyAsync(filePath, fileStream);
 
             return response?.GetRawResponse()?.Status == (int)HttpStatusCode.Created;
+        }
+
+        /// <inheritdoc/>
+        public async Task<Stream> GetPolicy(string resourceId)
+        {
+              return await _policyRepository.GetPolicyAsync(resourceId);
         }
 
         /// <inheritdoc />

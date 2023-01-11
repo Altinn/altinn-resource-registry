@@ -1,25 +1,31 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Altinn.AccessGroups.Persistance;
-using Altinn.Common.AccessToken.Configuration;
 using Altinn.Common.AccessTokenClient.Services;
+using Altinn.Common.Authentication.Configuration;
+using Altinn.Common.PEP.Authorization;
 using Altinn.ResourceRegistry.Configuration;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Clients;
 using Altinn.ResourceRegistry.Core.Clients.Interfaces;
 using Altinn.ResourceRegistry.Core.Configuration;
+using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Services;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Health;
 using Altinn.ResourceRegistry.Integration.Clients;
 using Altinn.ResourceRegistry.Persistence;
+using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.OpenApi.Models;
 using Npgsql.Logging;
+using Swashbuckle.AspNetCore.Filters;
 using Yuniql.AspNetCore;
 using Yuniql.PostgreSql;
+using KeyVaultSettings = Altinn.Common.AccessToken.Configuration.KeyVaultSettings;
 
 ILogger logger;
 
@@ -35,7 +41,7 @@ await SetConfigurationProviders(builder.Configuration);
 ConfigureLogging(builder.Logging);
 
 // Add services to the container.
-ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+ConfigureServices(builder.Services, builder.Configuration);
 
 builder.Services.AddControllers();
 
@@ -49,14 +55,14 @@ Configure(builder.Configuration);
 
 app.Run();
 
-void ConfigureServices(IServiceCollection services, IConfiguration config, IWebHostEnvironment env)
+void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
+    services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
     services.AddControllers().AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.WriteIndented = true;
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-
     });
 
     services.AddSingleton(config);
@@ -66,26 +72,42 @@ void ConfigureServices(IServiceCollection services, IConfiguration config, IWebH
     services.AddSingleton<IResourceRegistryRepository, ResourceRegistryRepository>();
     services.AddSingleton<IPRP, PRPClient>();
     services.AddSingleton<IPolicyRepository, PolicyRepository>();
+    services.AddSingleton<IAuthorizationHandler, ScopeAccessHandler>();
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-    services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
-    
+
+    services.Configure<OidcProviderSettings>(config.GetSection("OidcProviders"));
     services.Configure<PostgreSQLSettings>(config.GetSection("PostgreSQLSettings"));
     services.Configure<AzureStorageConfiguration>(config.GetSection("AzureStorageConfiguration"));
-    services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
+
+    services.AddAuthentication(JwtCookieDefaults.AuthenticationScheme)
+    .AddJwtCookie(JwtCookieDefaults.AuthenticationScheme, options =>
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            options.RequireHttpsMetadata = false;
+        }
+    });
+
+    string[] resourceWriteScope = new string[] { AuthzConstants.SCOPE_RESOURCEREGISTRY_ADMIN, AuthzConstants.SCOPE_RESOURCEREGISTRY_WRITE };
+
+    services.AddSwaggerGen(options =>
+    {
+        options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+        {
+            Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        });
+        options.OperationFilter<SecurityRequirementsOperationFilter>();
+    });
     services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
 
-    SecretsSettings secretsSettings = new();
-    config.GetSection("SecretsSettings").Bind(secretsSettings);
-
-    if (env.IsDevelopment())
+    services.AddAuthorization(options =>
     {
-        services.TryAddSingleton<IKeyVaultService, KeyVaultServiceLocal>();
-    }
-    else
-    {
-        services.TryAddSingleton<IKeyVaultService, KeyVaultService>();
-    }
+        options.AddPolicy(AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE, policy => policy.Requirements.Add(new ScopeAccessRequirement(resourceWriteScope)));
+    });
 }
 
 void Configure(IConfiguration config)

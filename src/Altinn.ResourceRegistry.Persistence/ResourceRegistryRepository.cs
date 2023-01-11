@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.SqlTypes;
 using Altinn.AccessGroups.Persistance;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Enums;
@@ -48,7 +49,7 @@ namespace Altinn.ResourceRegistry.Persistence
                 pgcom.Parameters.AddWithValue("_id", resourceSearch.Id != null ? resourceSearch.Id : DBNull.Value);
                 pgcom.Parameters.AddWithValue("_title", resourceSearch.Title != null ? resourceSearch.Title : DBNull.Value);
                 pgcom.Parameters.AddWithValue("_description", resourceSearch.Description != null ? resourceSearch.Description : DBNull.Value);
-                pgcom.Parameters.AddWithValue("_resourcetype", resourceSearch.ResourceType != null ? resourceSearch.ResourceType : DBNull.Value);
+                pgcom.Parameters.AddWithValue("_resourcetype", resourceSearch.ResourceType != null ? resourceSearch.ResourceType.Value.ToString().ToLower() : DBNull.Value);
                 pgcom.Parameters.AddWithValue("_keyword", resourceSearch.Keyword != null ? resourceSearch.Keyword : DBNull.Value);
                 pgcom.Parameters.AddWithValue("_includeexpired", resourceSearch.IncludeExpired);
 
@@ -88,16 +89,15 @@ namespace Altinn.ResourceRegistry.Persistence
                     return GetServiceResource(reader);
                 }
 
-                return null;
+                throw new SqlNullValueException("No result from database");
             }
             catch (Exception e)
             {
-                if (e.Message.Contains("duplicate key value violates unique constraint"))
+                if (!e.Message.Contains("duplicate key value violates unique constraint"))
                 {
-                    return new ServiceResource();
+                    _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
                 }
-
-                _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
+                
                 throw;
             }
         }
@@ -173,16 +173,15 @@ namespace Altinn.ResourceRegistry.Persistence
                     return GetServiceResource(reader);
                 }
 
-                return null;
+                throw new SqlNullValueException("No result from database");
             }
             catch (Exception e)
             {
-                if (e.Message.Contains("duplicate key value violates unique constraint"))
+                if (!e.Message.Contains("duplicate key value violates unique constraint"))
                 {
-                    return new ServiceResource();
+                    _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
                 }
 
-                _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
                 throw;
             }
         }

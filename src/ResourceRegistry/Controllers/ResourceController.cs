@@ -1,6 +1,10 @@
-﻿using Altinn.ResourceRegistry.Core.Extensions;
+﻿using Altinn.ResourceRegistry.Core.Constants;
+using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
+using Altinn.ResourceRegistry.Extensions;
+using Altinn.ResourceRegistry.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -15,8 +19,6 @@ namespace Altinn.ResourceRegistry.Controllers
     public class ResourceController : ControllerBase
     {
         private IResourceRegistry _resourceRegistry;
-        private readonly IObjectModelValidator _objectModelValidator;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<ResourceController> _logger;
 
         /// <summary>
@@ -29,8 +31,6 @@ namespace Altinn.ResourceRegistry.Controllers
         public ResourceController(IResourceRegistry resourceRegistry, IObjectModelValidator objectModelValidator, IHttpContextAccessor httpContextAccessor, ILogger<ResourceController> logger)
         {
             _resourceRegistry = resourceRegistry;
-            _objectModelValidator = objectModelValidator;
-            _httpContextAccessor = httpContextAccessor;
             _logger = logger;
         }
 
@@ -53,6 +53,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <returns>ActionResult describing the result of the operation</returns>
         [SuppressModelStateInvalidFilter]
         [HttpPost]
+        [Authorize(Policy = AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE)]
         [Produces("application/json")]
         [Consumes("application/json")]
         public async Task<ActionResult> Post([ValidateNever] ServiceResource serviceResource)
@@ -71,25 +72,53 @@ namespace Altinn.ResourceRegistry.Controllers
             }
             catch
             {
-                return BadRequest($"Invalid resource identifier. Cannot be empty or contain any of the characters: {string.Join(", ", Path.GetInvalidFileNameChars())}");
+                return BadRequest(
+                    $"Invalid resource identifier. Cannot be empty or contain any of the characters: {string.Join(", ", Path.GetInvalidFileNameChars())}");
             }
 
-            await _resourceRegistry.CreateResource(serviceResource);
+            if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
+            {
+                return Forbid();
+            }
 
-            return Created("/ResourceRegistryService/api/" + serviceResource.Identifier, null);
+            try
+            {
+                await _resourceRegistry.CreateResource(serviceResource);
+                return Created("/resourceregistry/api/v1/resource/" + serviceResource.Identifier, null);
+            }
+            catch (Exception e)
+            {
+                return e.Message.Contains("duplicate key value violates unique constraint")
+                    ? BadRequest($"The Resource already exist: {serviceResource.Identifier}")
+                    : StatusCode(500, e.Message);
+            }
         }
 
         /// <summary>
         /// Updates a service resource in the resource registry if it pass all validation checks
         /// </summary>
+        /// <param name="id">Resource ID</param>
         /// <param name="serviceResource">Service resource model for update in the resource registry</param>
         /// <returns>ActionResult describing the result of the operation</returns>
         [SuppressModelStateInvalidFilter]
-        [HttpPut]
+        [HttpPut("{id}")]
+        [Authorize(Policy = AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE)]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<ActionResult> Put(ServiceResource serviceResource)
+        public async Task<ActionResult> Put(string id, ServiceResource serviceResource)
         {
+            ServiceResource currentResource = await _resourceRegistry.GetResource(id);
+
+            if (currentResource == null)
+            {
+                return NotFound();
+            }
+
+            if (id != serviceResource.Identifier)
+            {
+                return BadRequest("Id in path does not match ID in resource");
+            }
+
             if (serviceResource.IsComplete.HasValue && serviceResource.IsComplete.Value)
             {
                 if (!ModelState.IsValid)
@@ -98,9 +127,44 @@ namespace Altinn.ResourceRegistry.Controllers
                 }
             }
 
-            await _resourceRegistry.UpdateResource(serviceResource);
+            if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
+            {
+                return Forbid();
+            }
 
-            return Ok();
+            try
+            {
+                await _resourceRegistry.UpdateResource(serviceResource);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return e.Message.Contains("duplicate key value violates unique constraint") ? BadRequest($"The Resource already exist: {serviceResource.Identifier}") : StatusCode(500, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Returns the XACML policy for a resource in resource registry.
+        /// </summary>
+        /// <param name="id">Resource Id</param>
+        /// <returns></returns>
+        [HttpGet("{id}/policy")]
+        public async Task<ActionResult> GetPolicy(string id)
+        {
+            ServiceResource resource = await _resourceRegistry.GetResource(id);
+            if (resource == null)
+            {
+                return NotFound("Unable to find resource");
+            }
+
+            Stream dataStream = await _resourceRegistry.GetPolicy(resource.Identifier);
+
+            if (dataStream == null)
+            {
+                return NotFound("Unable to find requested policy");
+            }
+
+            return File(dataStream, "text/xml", "policy.xml");
         }
 
         /// <summary>
@@ -112,6 +176,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <returns>ActionResult describing the result of the operation</returns>
         [HttpPost("{id}/policy")]
         [HttpPut("{id}/policy")]
+        [Authorize(Policy = AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE)]
         public async Task<ActionResult> WritePolicy(string id, IFormFile policyFile)
         {
             if (policyFile == null)
@@ -134,6 +199,11 @@ namespace Altinn.ResourceRegistry.Controllers
             if (resource == null)
             {
                 return BadRequest("Unknown resource");
+            }
+
+            if (!AuthorizationUtil.HasWriteAccess(resource.HasCompetentAuthority?.Organization, User))
+            {
+                return Forbid();
             }
 
             try
@@ -164,10 +234,21 @@ namespace Altinn.ResourceRegistry.Controllers
         /// </summary>
         /// <param name="id">The resource identifier to delete</param>
         [HttpDelete("{id}")]
-        [Produces("application/json")]
-        public async void Delete(string id)
+        [Authorize(Policy = AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE)]
+        public async Task<ActionResult> Delete(string id)
         {
+            ServiceResource serviceResource = await _resourceRegistry.GetResource(id);
+            string orgClaim = User.GetOrgNumber();
+            if (orgClaim != null)
+            {
+                if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
+                {
+                    return Forbid();
+                }
+            }
+
             await _resourceRegistry.Delete(id);
+            return NoContent();
         }
 
         /// <summary>

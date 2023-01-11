@@ -1,10 +1,10 @@
 using Altinn.ResourceRegistry.Controllers;
-using ResourceRegistryTest.Utils;
+using Altinn.ResourceRegistry.Tests.Utils;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ResourceRegistryTest
+namespace Altinn.ResourceRegistry.Tests
 {
     public class ExportControllerTest : IClassFixture<CustomWebApplicationFactory<ExportController>>
     {

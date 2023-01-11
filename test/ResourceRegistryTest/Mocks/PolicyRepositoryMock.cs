@@ -1,16 +1,13 @@
-﻿using Altinn.ResourceRegistry.Core;
+﻿using System;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using Altinn.ResourceRegistry.Core;
 using Azure;
 using Azure.Storage.Blobs.Models;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ResourceRegistryTest.Mocks
+namespace Altinn.ResourceRegistry.Tests.Mocks
 {
     public class PolicyRepositoryMock : IPolicyRepository
     {
@@ -19,9 +16,15 @@ namespace ResourceRegistryTest.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<Stream> GetPolicyAsync(string filepath)
+        public async Task<Stream> GetPolicyAsync(string resourceId)
         {
-            throw new NotImplementedException();
+            resourceId = Path.Combine(GetPolicyContainerPath(), resourceId, "resourcepolicy.xml");
+            if (File.Exists(resourceId))
+            {
+                return new FileStream(resourceId, FileMode.Open, FileAccess.Read, FileShare.Read); 
+            }
+
+            return null;
         }
 
         public Task<Stream> GetPolicyVersionAsync(string filepath, string version)
@@ -61,5 +64,12 @@ namespace ResourceRegistryTest.Mocks
         {
             throw new NotImplementedException();
         }
+
+        private static string GetPolicyContainerPath()
+        {
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
+            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourcePolicies");
+        }
+
     }
 }

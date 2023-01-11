@@ -9,16 +9,16 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Altinn.Common.AccessTokenClient.Services;
 using Microsoft.Extensions.Logging;
 using Altinn.ResourceRegistry.Core.Configuration;
 using Xunit;
 using Altinn.ResourceRegistry.Core.Clients;
 using Altinn.ResourceRegistry.Core.Extensions;
-using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Core.Models;
-using ResourceRegistryTest.Mocks;
+using Altinn.ResourceRegistry.Tests.Mocks;
 
-namespace ResourceRegistryTest
+namespace Altinn.ResourceRegistry.Tests
 {
     public class AccessManagementClientTest
     {
@@ -59,12 +59,12 @@ namespace ResourceRegistryTest
                         Content = JsonContent.Create(responseData)
                     });
 
-                IAccessTokenProvider accessTokenProvider = new AccessTokenProviderMock();
+                IAccessTokenGenerator accessTokenGenerator = new AccessTokenGeneratorMock();
 
                 HttpClient httpClient = new HttpClient(mockHttpMessageHandler.Object);
                 Mock<ILogger<AccessManagementClient>> logger = new Mock<ILogger<AccessManagementClient>>();
 
-                AccessManagementClient target = new AccessManagementClient(httpClient, accessTokenProvider, _platformSettings, logger.Object);
+                AccessManagementClient target = new AccessManagementClient(httpClient, accessTokenGenerator, _platformSettings, logger.Object);
 
                 // Act
                 HttpResponseMessage result = await target.AddResourceToAccessManagement(requestData);

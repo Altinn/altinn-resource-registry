@@ -1,17 +1,18 @@
 ﻿using System.Net.Http;
 
+using Altinn.Common.Authentication.Configuration;
 using Altinn.ResourceRegistry.Controllers;
 using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Tests.Mocks;
+using AltinnCore.Authentication.JwtCookie;
 using Altinn.ResourceRegistry.Core.Clients.Interfaces;
-
+using Altinn.ResourceRegistry.Tests.Mocks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using ResourceRegistryTest.Mocks;
+using Microsoft.Extensions.Options;
 
-
-
-namespace ResourceRegistryTest.Utils
+namespace Altinn.ResourceRegistry.Tests.Utils
 {
     public static class SetupUtil
     {
@@ -22,9 +23,11 @@ namespace ResourceRegistryTest.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                     services.AddSingleton<IResourceRegistryRepository, RegisterResourceRepositoryMock>();
                     services.AddSingleton<IPolicyRepository, PolicyRepositoryMock>();
                     services.AddSingleton<IPRP, PRPMock>();
+                    services.AddSingleton<IPostConfigureOptions<OidcProviderSettings>, OidcProviderPostConfigureSettingsStub>();
                     services.AddSingleton<IAccessManagementClient, AccessManagementMock>();
 
                 });

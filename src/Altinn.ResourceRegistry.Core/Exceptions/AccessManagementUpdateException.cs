@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Altinn.ResourceRegistry.Core.Exceptions
+﻿namespace Altinn.ResourceRegistry.Core.Exceptions
 {
     /// <summary>
     /// Exception to handle when AccessManagement is not updated correctly
     /// </summary>
+    [Serializable]
     public class AccessManagementUpdateException : Exception
     {
         /// <summary>

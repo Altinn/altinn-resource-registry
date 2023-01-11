@@ -64,7 +64,7 @@ namespace Altinn.ResourceRegistry.Core.Clients
                 _logger.LogDebug(
                     "AccessManagementClient posting resource list to {url} with token {token} and body {body}",
                     request.RequestUri,
-                    request.Headers.Authorization.ToString(),
+                    request.Headers.GetValues(_settings.AccessTokenHeaderId).FirstOrDefault(),
                     await request.Content.ReadAsStringAsync());
             }
 

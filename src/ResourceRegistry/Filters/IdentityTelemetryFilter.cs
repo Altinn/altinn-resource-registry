@@ -31,7 +31,7 @@ namespace Altinn.ResourceRegistry.Filters
         {
             RequestTelemetry request = item as RequestTelemetry;
 
-            if (request != null && request.Url.ToString().Contains("accessmanagement/api/"))
+            if (request != null && request.Url.ToString().Contains("resourceregistry/api/"))
             {
                 HttpContext ctx = _httpContextAccessor.HttpContext;
 

@@ -20,5 +20,10 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// The organization code
         /// </summary>
         public string Orgcode { get; set; }
+
+        /// <summary>
+        /// Gets or set the name of the Authority with language support
+        /// </summary>
+        public Dictionary<string, string> Orgname { get; set; }
     }
 }

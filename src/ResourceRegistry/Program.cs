@@ -39,11 +39,11 @@ string applicationInsightsKeySecretName = "ApplicationInsights--InstrumentationK
 string applicationInsightsConnectionString = string.Empty;
 
 var builder = WebApplication.CreateBuilder(args);
-ConfigureSetupLogging();
+ConfigureSetupLogging(); // metode definert i linje 265
 
-await SetConfigurationProviders(builder.Configuration);
+await SetConfigurationProviders(builder.Configuration); // metode definert i linje 173
 
-ConfigureLogging(builder.Logging);
+ConfigureLogging(builder.Logging); // metode definert i linje 280
 
 // Add services to the container.
 ConfigureServices(builder.Services, builder.Configuration);
@@ -56,7 +56,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-Configure(builder.Configuration);
+Configure(builder.Configuration); // Metoden er definert i linje 135
 
 app.Run();
 
@@ -149,7 +149,7 @@ void Configure(IConfiguration config)
         app.UseExceptionHandler("/resourceregistry/api/v1/error");
     }
 
-    ConfigurePostgreSql();
+    ConfigurePostgreSql(); // metode definert i linje 200
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -194,7 +194,7 @@ async Task SetConfigurationProviders(ConfigurationManager config)
     config.AddEnvironmentVariables();
     config.AddCommandLine(args);
 
-    await ConnectToKeyVaultAndSetApplicationInsights(config);
+    await ConnectToKeyVaultAndSetApplicationInsights(config); // metode definert i linje 226
 }
 
 void ConfigurePostgreSql()

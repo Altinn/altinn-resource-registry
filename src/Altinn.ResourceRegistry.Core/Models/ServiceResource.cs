@@ -7,6 +7,16 @@ namespace Altinn.ResourceRegistry.Core.Models
     /// <summary>
     /// Model describing a complete resource from the resrouce registry
     /// </summary>
+    
+    /// Kommentar: det er overlapp her med /app-localtest/testdata/
+    /// /authorization/resources/Appid_400.json
+    /// Mangler fra testdata: bool Delegable, bool Visible
+    /// Keywords har uklar struktur: står som "null" i Appid_400.json,
+    /// mangler fra acc-man.json, nav...json har array med et objekt,
+    // to key:value par "word": "xxx", "language": "nb", som passer med
+    // Core.Model.Keywor.cs fil, såvidt jeg kan forstå. 
+    // ResourceType er Enum med array... uklart hvordan dette blir sendt videre
+    // MainLanguage mangler fra alle tre .json eksempler i testdata.
     public class ServiceResource
     {
         /// <summary>

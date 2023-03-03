@@ -150,6 +150,7 @@ void Configure(IConfiguration config)
     }
 
     ConfigurePostgreSql();
+    
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {

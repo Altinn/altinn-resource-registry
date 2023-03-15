@@ -1,6 +1,4 @@
-﻿using System.Net;
-using Altinn.ResourceRegistry.Core.Constants;
-using Altinn.ResourceRegistry.Core.Enums;
+﻿using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;

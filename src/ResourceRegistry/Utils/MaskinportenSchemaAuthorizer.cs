@@ -36,7 +36,7 @@ namespace Altinn.ResourceRegistry.Utils
         /// <returns>A complete error model</returns>
         public static ValidationProblemDetails CreateErrorResponseMissingPrefix(List<string> forbiddenScopes)
         {
-            var errorContent = forbiddenScopes is {Count: > 0} ? new Dictionary<string, string[]> { { "InvalidPrefix", forbiddenScopes.ToArray() } } : new Dictionary<string, string[]>();
+            var errorContent = forbiddenScopes is { Count: > 0 } ? new Dictionary<string, string[]> { { "InvalidPrefix", forbiddenScopes.ToArray() } } : new Dictionary<string, string[]>();
 
             ValidationProblemDetails error = new ValidationProblemDetails(errorContent)
             {

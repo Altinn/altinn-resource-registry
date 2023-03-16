@@ -83,12 +83,9 @@ namespace Altinn.ResourceRegistry.Controllers
 
             List<string> scopes = MaskinportenSchemaAuthorizer.GetMaskinportenScopesFromServiceResource(serviceResource);
 
-            if (scopes is { Count: > 0 })
+            if (scopes is { Count: > 0 } && !MaskinportenSchemaAuthorizer.IsAuthorizedDelegationLookupAccess(scopes, HttpContext.User, out List<string> forbiddenScopes))
             {
-                if (!MaskinportenSchemaAuthorizer.IsAuthorizedDelegationLookupAccess(scopes, HttpContext.User, out List<string> forbiddenScopes))
-                {
-                    return Unauthorized(MaskinportenSchemaAuthorizer.CreateErrorResponseMissingPrefix(forbiddenScopes));
-                }
+                return Unauthorized(MaskinportenSchemaAuthorizer.CreateErrorResponseMissingPrefix(forbiddenScopes));
             }
 
             try
@@ -144,12 +141,9 @@ namespace Altinn.ResourceRegistry.Controllers
 
             List<string> scopes = MaskinportenSchemaAuthorizer.GetMaskinportenScopesFromServiceResource(serviceResource);
 
-            if (scopes is { Count: > 0 })
+            if (scopes is { Count: > 0 } && !MaskinportenSchemaAuthorizer.IsAuthorizedDelegationLookupAccess(scopes, HttpContext.User, out List<string> forbiddenScopes))
             {
-                if (!MaskinportenSchemaAuthorizer.IsAuthorizedDelegationLookupAccess(scopes, HttpContext.User, out List<string> forbiddenScopes))
-                {
-                    return Unauthorized(MaskinportenSchemaAuthorizer.CreateErrorResponseMissingPrefix(forbiddenScopes));
-                }
+                return Unauthorized(MaskinportenSchemaAuthorizer.CreateErrorResponseMissingPrefix(forbiddenScopes));
             }
 
             try

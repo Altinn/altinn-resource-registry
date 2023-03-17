@@ -18,7 +18,7 @@ namespace Altinn.ResourceRegistry.Utils
         /// <param name="claims">The claims principal of the authenticated organization</param>
         /// <param name="missingScopes">The scope missing prefix to handle empty list if all ok</param>
         /// <returns>bool</returns>
-        public static bool IsAuthorizedDelegationLookupAccess(List<string> scope, ClaimsPrincipal claims, out List<string> missingScopes)
+        public static bool IsAuthorizedForChangeResourceWithScopes(List<string> scope, ClaimsPrincipal claims, out List<string> missingScopes)
         {
             if (HasDelegationsAdminScope(claims))
             {

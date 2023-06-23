@@ -34,7 +34,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
                 HttpResponseMessage response = await _client.GetAsync(_settings.OrgListEndpoint);
                 if (!response.IsSuccessStatusCode)
                 {
-                    response = await _client.GetAsync(_settings.OrgListEndpoint);
+                    response = await _client.GetAsync(_settings.OrgListAlternativeEndpoint);
                 }
 
                 string orgListString = await response.Content.ReadAsStringAsync();

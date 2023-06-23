@@ -85,6 +85,24 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         [Fact]
+        public async Task ResourceList()
+        {
+            string requestUri = "resourceregistry/api/v1/Resource/resourcelist";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+            {
+            };
+
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+            List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+            Assert.NotNull(resource);
+            Assert.Equal(309, resource.Count);
+        }
+
+        [Fact]
         public async Task CreateResource_WithErrors()
         {
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");

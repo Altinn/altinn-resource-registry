@@ -35,6 +35,17 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
+        /// List of all resources
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("resourcelist")]
+        [Produces("application/json")]
+        public async Task<List<ServiceResource>> ResourceList()
+        {
+            return await _resourceRegistry.GetResourceList(true, true);
+        }
+
+        /// <summary>
         /// Gets a single resource by its resource identifier if it exists in the resource registry
         /// </summary>
         /// <param name="id">The resource identifier to retrieve</param>

@@ -127,6 +127,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
     services.AddHttpClient<IOrgListClient, OrgListClient>();
     services.AddHttpClient<IAltinn2Services, Altinn2ServicesClient>();
+    services.AddHttpClient<IApplications, ApplicationsClient>();
 
     services.AddAuthorization(options =>
     {

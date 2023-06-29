@@ -32,22 +32,21 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         /// <inheritdoc/>
         public async Task<ApplicationList> GetApplicationList()
         {
-            ApplicationList orgList;
+            ApplicationList applicationList;
             string availabbleServicePath = _settings.StorageApiEndpoint + $"applications";
 
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(availabbleServicePath);
 
-                string orgListString = await response.Content.ReadAsStringAsync();
-                orgList = System.Text.Json.JsonSerializer.Deserialize<ApplicationList>(orgListString, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase });
-                return orgList;
+                string responseContent = await response.Content.ReadAsStringAsync();
+                applicationList = System.Text.Json.JsonSerializer.Deserialize<ApplicationList>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase });
+                return applicationList;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Something went wrong when retrieving appliocations", ex);
+                throw new Exception($"Something went wrong when retrieving applications", ex);
             }
-
         }
     }
 }

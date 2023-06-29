@@ -177,6 +177,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         {
             ServiceResource service = new ServiceResource();
             service.Title = application.Title;
+            service.ResourceType = Enums.ResourceType.Default;
             service.ResourceReferences = new List<ResourceReference>();
             service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.Default, Reference = application.Id });
             return service;

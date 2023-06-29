@@ -148,12 +148,11 @@ namespace Altinn.ResourceRegistry.Core.Services
                 {
                     nntext = service2068.ServiceEditionVersionName;
                 }
-
-
+                
                 AvailableService service1033 = altinn2List1033.FirstOrDefault(r => r.ExternalServiceCode == service.ExternalServiceCode && r.ExternalServiceEditionCode == service.ExternalServiceEditionCode);
                 if (service1033 != null)
                 {
-                    nntext = service1033.ServiceEditionVersionName;
+                    entext = service1033.ServiceEditionVersionName;
                 }
 
                 serviceResources.Add(MapAltinn2ServiceToServiceResource(service, entext, nntext));

@@ -34,7 +34,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         private static string GetAltinn2TestDatafolder()
         {
             string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Altinn3sTORAGE");
+            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Altinn3Storage");
         }
     }
 }

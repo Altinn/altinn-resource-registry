@@ -46,6 +46,19 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
+        /// List of all resources
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("export")]
+        [Produces("application/xml+rdf")]
+        public async Task<string> Export()
+        {
+            List<ServiceResource> serviceResources = await _resourceRegistry.Search(null);
+            string rdfString = RdfUtil.CreateRdf(serviceResources);
+            return rdfString;
+        }
+
+        /// <summary>
         /// Gets a single resource by its resource identifier if it exists in the resource registry
         /// </summary>
         /// <param name="id">The resource identifier to retrieve</param>

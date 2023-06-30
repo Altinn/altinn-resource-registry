@@ -10,7 +10,8 @@ namespace Altinn.ResourceRegistry.Controllers
     /// Controller responsible export of resources from the resource registry
     /// </summary>
     [Route("resourceregistry/api/v1/export")]
-    public class ExportController : Controller
+    [ApiController]
+    public class ExportController : ControllerBase
     {
         private IResourceRegistry _resourceRegistry;
 
@@ -27,11 +28,13 @@ namespace Altinn.ResourceRegistry.Controllers
         /// Index
         /// </summary>
         /// <returns>ActionResult</returns>
-        protected async Task<IActionResult> Index()
+        [HttpGet]
+        [Produces("application/rdf+xml")]
+        protected async Task<string> Index()
         {
             List<ServiceResource> serviceResources = await _resourceRegistry.Search(null);
             string rdfString = RdfUtil.CreateRdf(serviceResources);
-            return Content(rdfString);
+            return rdfString;
         }
     }
 }

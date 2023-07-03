@@ -16,12 +16,21 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         {
             string availableServiceFilePath = Path.Combine(GetAltinn2TestDatafolder(), $"availableServices{languageId}.json");
 
-            List<AvailableService> availableServices = new List<AvailableService>();
+            List<AvailableService>? availableServices = null;
 
             if (File.Exists(availableServiceFilePath))
             {
                 string content = await File.ReadAllTextAsync(availableServiceFilePath);
-                availableServices = System.Text.Json.JsonSerializer.Deserialize<List<AvailableService>>(content, new System.Text.Json.JsonSerializerOptions());
+                if (!string.IsNullOrEmpty(content))
+                {
+                    availableServices = System.Text.Json.JsonSerializer.Deserialize<List<AvailableService>>(content, new System.Text.Json.JsonSerializerOptions());
+                }
+
+                if(availableServices == null)
+                {
+                    availableServices = new List<AvailableService>();
+                }
+
                 return availableServices;
             }
 
@@ -31,7 +40,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 
         private static string GetAltinn2TestDatafolder()
         {
-            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
+            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
             return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Altinn2");
         }
     }

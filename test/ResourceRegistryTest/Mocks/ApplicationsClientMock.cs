@@ -16,13 +16,22 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         {
             string applicationsFilePath = Path.Combine(GetAltinn2TestDatafolder(), $"applications.json");
 
-            ApplicationList availableServices = new ApplicationList();
+            ApplicationList? applicationList = new ApplicationList();
 
             if (File.Exists(applicationsFilePath))
             {
                 string content = await File.ReadAllTextAsync(applicationsFilePath);
-                availableServices = System.Text.Json.JsonSerializer.Deserialize<ApplicationList>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase });
-                return availableServices;
+                if (!string.IsNullOrEmpty(content))
+                {
+                    applicationList = System.Text.Json.JsonSerializer.Deserialize<ApplicationList>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase });
+                }
+                
+                if(applicationList == null)
+                {
+                    applicationList = new ApplicationList();
+                }
+
+                return applicationList;
             }
 
             throw new FileNotFoundException("Could not find " + applicationsFilePath);

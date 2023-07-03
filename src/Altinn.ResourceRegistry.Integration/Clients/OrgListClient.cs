@@ -32,7 +32,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(_settings.OrgListEndpoint);
-                if (!response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     response = await _client.GetAsync(_settings.OrgListAlternativeEndpoint);
                 }

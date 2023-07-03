@@ -32,6 +32,8 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <param name="policyRepository">Repository implementation for operations on policies</param>
         /// <param name="logger">Logger</param>
         /// <param name="accessManagementClient">client to send data to AccessManagement</param>
+        /// <param name="altinn2ServicesClient">Used to retrieve information from Altinn 2</param>
+        /// <param name="applicationsClient">Used to retrieve information from Altinn Storage about Altinn 3 apps</param>
         public ResourceRegistryService(IResourceRegistryRepository repository, IPolicyRepository policyRepository, ILogger<ResourceRegistryService> logger, IAccessManagementClient accessManagementClient, IAltinn2Services altinn2ServicesClient, IApplications applicationsClient)
         {
             _repository = repository;
@@ -143,13 +145,13 @@ namespace Altinn.ResourceRegistry.Core.Services
                 string nntext = string.Empty;
                 string entext = string.Empty;
 
-                AvailableService service2068 = altinn2List2068.FirstOrDefault(r => r.ExternalServiceCode == service.ExternalServiceCode && r.ExternalServiceEditionCode == service.ExternalServiceEditionCode);
+                AvailableService service2068 = altinn2List2068.Find(r => r.ExternalServiceCode == service.ExternalServiceCode && r.ExternalServiceEditionCode == service.ExternalServiceEditionCode);
                 if (service2068 != null)
                 {
                     nntext = service2068.ServiceEditionVersionName;
                 }
                 
-                AvailableService service1033 = altinn2List1033.FirstOrDefault(r => r.ExternalServiceCode == service.ExternalServiceCode && r.ExternalServiceEditionCode == service.ExternalServiceEditionCode);
+                AvailableService service1033 = altinn2List1033.Find(r => r.ExternalServiceCode == service.ExternalServiceCode && r.ExternalServiceEditionCode == service.ExternalServiceEditionCode);
                 if (service1033 != null)
                 {
                     entext = service1033.ServiceEditionVersionName;
@@ -159,7 +161,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             }
         }
 
-        private ServiceResource MapAltinn2ServiceToServiceResource(AvailableService availableService, string entext, string nntext)
+        private static ServiceResource MapAltinn2ServiceToServiceResource(AvailableService availableService, string entext, string nntext)
         {
             ServiceResource serviceResource = new ServiceResource();
             serviceResource.Title = new Dictionary<string, string>();
@@ -172,7 +174,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             return serviceResource;
         }
 
-        private ServiceResource MapApplicationToApplicationResource(Application application)
+        private static ServiceResource MapApplicationToApplicationResource(Application application)
         {
             ServiceResource service = new ServiceResource();
             service.Title = application.Title;

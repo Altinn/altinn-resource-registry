@@ -29,7 +29,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         /// <returns></returns>
         public async Task<List<AvailableService>> AvailableServices(int languageId)
         {
-            List<AvailableService> availableServices;
+            List<AvailableService>? availableServices = null;
             string availabbleServicePath = _settings.BridgeApiEndpoint + $"metadata/api/availableServices?languageID={languageId}&appTypesToInclude=1&includeExpired=false";
 
             try
@@ -37,7 +37,11 @@ namespace Altinn.ResourceRegistry.Integration.Clients
                 HttpResponseMessage response = await _client.GetAsync(availabbleServicePath);
                 
                 string availableServiceString = await response.Content.ReadAsStringAsync();
-                availableServices = System.Text.Json.JsonSerializer.Deserialize<List<AvailableService>>(availableServiceString, new System.Text.Json.JsonSerializerOptions());
+                if (!string.IsNullOrEmpty(availableServiceString))
+                {
+                    availableServices = System.Text.Json.JsonSerializer.Deserialize<List<AvailableService>>(availableServiceString, new System.Text.Json.JsonSerializerOptions());
+                }
+
                 return availableServices;
             }
             catch (Exception ex)

@@ -1,6 +1,5 @@
-﻿using Altinn.ResourceRegistry.Core.Models;
-using J2N.Text;
-using System.Text;
+﻿using System.Text;
+using Altinn.ResourceRegistry.Core.Models;
 using VDS.RDF;
 using VDS.RDF.Writing;
 
@@ -34,7 +33,6 @@ namespace Altinn.ResourceRegistry.Utils
             {
                 try
                 {
-
                     IUriNode serviceNode = g.CreateUriNode(UriFactory.Create("https://platform.altinn.no/resourceRegistry/" + serviceResource.Identifier));
                     IUriNode predicate = g.CreateUriNode("rdf:type");
                     IUriNode objectNode = g.CreateUriNode("cpsv:PublicService");

@@ -1,4 +1,6 @@
 ﻿using Altinn.ResourceRegistry.Core.Models;
+using J2N.Text;
+using System.Text;
 using VDS.RDF;
 using VDS.RDF.Writing;
 
@@ -26,67 +28,78 @@ namespace Altinn.ResourceRegistry.Utils
             g.NamespaceMap.AddNamespace("eli", UriFactory.Create("http://data.europa.eu/eli/ontology#"));
             g.NamespaceMap.AddNamespace("foaf", UriFactory.Create("http://xmlns.com/foaf/0.1/"));
 
+            StringBuilder resourceErrors = new StringBuilder();
+
             foreach (ServiceResource serviceResource in serviceResources)
             {
-                IUriNode serviceNode = g.CreateUriNode(UriFactory.Create("https://platform.altinn.no/resourceRegistry/"+serviceResource.Identifier));
-                IUriNode predicate = g.CreateUriNode("rdf:type");
-                IUriNode objectNode = g.CreateUriNode("cpsv:PublicService");
-
-                g.Assert(new Triple(serviceNode, predicate, objectNode));
-
-                IUriNode identfierPredicate = g.CreateUriNode("dct:identifier");
-                ILiteralNode identiferObject = g.CreateLiteralNode(serviceResource.Identifier);
-                g.Assert(new Triple(serviceNode, identfierPredicate, identiferObject));
-
-                if (serviceResource.Title != null && serviceResource.Title.Count > 0)
+                try
                 {
-                    IUriNode titlePredicate = g.CreateUriNode("dct:title");
-                    foreach (KeyValuePair<string,string> kvp in serviceResource.Title)
+
+                    IUriNode serviceNode = g.CreateUriNode(UriFactory.Create("https://platform.altinn.no/resourceRegistry/" + serviceResource.Identifier));
+                    IUriNode predicate = g.CreateUriNode("rdf:type");
+                    IUriNode objectNode = g.CreateUriNode("cpsv:PublicService");
+
+                    g.Assert(new Triple(serviceNode, predicate, objectNode));
+
+                    IUriNode identfierPredicate = g.CreateUriNode("dct:identifier");
+                    ILiteralNode identiferObject = g.CreateLiteralNode(serviceResource.Identifier);
+                    g.Assert(new Triple(serviceNode, identfierPredicate, identiferObject));
+
+                    if (serviceResource.Title != null && serviceResource.Title.Count > 0)
                     {
-                        ILiteralNode titleObject = g.CreateLiteralNode(kvp.Value, kvp.Key);
-                        g.Assert(new Triple(serviceNode, titlePredicate, titleObject));
-                    }
-                }
-
-                if (serviceResource.Description != null && serviceResource.Description.Count > 0)
-                {
-                    IUriNode descriptionPredicate = g.CreateUriNode("dct:description");
-                    foreach (KeyValuePair<string, string> kvp in serviceResource.Description)
-                    {
-                        ILiteralNode descriptionObject = g.CreateLiteralNode(kvp.Value, kvp.Key);
-                        g.Assert(new Triple(serviceNode, descriptionPredicate, descriptionObject));
-                    }
-                }
-
-                if (serviceResource.HasCompetentAuthority != null)
-                {
-                    IUriNode competentAuthorityPredicate = g.CreateUriNode("cv:hasCompetentAuthority");
-                    IUriNode competentAuthorityObject = g.CreateUriNode(UriFactory.Create("https://organization-catalogue.fellesdatakatalog.digdir.no/organizations/" + serviceResource.HasCompetentAuthority.Organization));
-                    g.Assert(new Triple(serviceNode, competentAuthorityPredicate, competentAuthorityObject));
-                }
-
-                if (serviceResource.Keywords != null && serviceResource.Keywords.Count > 0)
-                {
-                    IUriNode keywordPredicate = g.CreateUriNode("dct:keyword");
-
-                    foreach (Keyword keyword in serviceResource.Keywords)
-                    {
-                        ILiteralNode keywordObject = g.CreateLiteralNode(keyword.Word, keyword.Language);
-                        g.Assert(new Triple(serviceNode, keywordPredicate, keywordObject));
-                    }
-                 }
-
-                if (serviceResource.Sector != null && serviceResource.Sector.Count > 0)
-                {
-                    IUriNode sectorPredicate = g.CreateUriNode("cv:sector");
-                    foreach (string sector in serviceResource.Sector)
-                    {
-                        if (!string.IsNullOrEmpty(sector))
+                        IUriNode titlePredicate = g.CreateUriNode("dct:title");
+                        foreach (KeyValuePair<string, string> kvp in serviceResource.Title)
                         {
-                            IUriNode sectorObject = g.CreateUriNode(UriFactory.Create(sector));
-                            g.Assert(new Triple(serviceNode, sectorPredicate, sectorObject));
+                            ILiteralNode titleObject = g.CreateLiteralNode(kvp.Value, kvp.Key);
+                            g.Assert(new Triple(serviceNode, titlePredicate, titleObject));
                         }
                     }
+
+                    if (serviceResource.Description != null && serviceResource.Description.Count > 0)
+                    {
+                        IUriNode descriptionPredicate = g.CreateUriNode("dct:description");
+                        foreach (KeyValuePair<string, string> kvp in serviceResource.Description)
+                        {
+                            ILiteralNode descriptionObject = g.CreateLiteralNode(kvp.Value, kvp.Key);
+                            g.Assert(new Triple(serviceNode, descriptionPredicate, descriptionObject));
+                        }
+                    }
+
+                    if (serviceResource.HasCompetentAuthority != null)
+                    {
+                        IUriNode competentAuthorityPredicate = g.CreateUriNode("cv:hasCompetentAuthority");
+                        IUriNode competentAuthorityObject = g.CreateUriNode(UriFactory.Create("https://organization-catalogue.fellesdatakatalog.digdir.no/organizations/" + serviceResource.HasCompetentAuthority.Organization));
+                        g.Assert(new Triple(serviceNode, competentAuthorityPredicate, competentAuthorityObject));
+                    }
+
+                    if (serviceResource.Keywords != null && serviceResource.Keywords.Count > 0)
+                    {
+                        IUriNode keywordPredicate = g.CreateUriNode("dct:keyword");
+
+                        foreach (Keyword keyword in serviceResource.Keywords)
+                        {
+                            ILiteralNode keywordObject = g.CreateLiteralNode(keyword.Word, keyword.Language);
+                            g.Assert(new Triple(serviceNode, keywordPredicate, keywordObject));
+                        }
+                    }
+
+                    if (serviceResource.Sector != null && serviceResource.Sector.Count > 0)
+                    {
+                        IUriNode sectorPredicate = g.CreateUriNode("cv:sector");
+                        foreach (string sector in serviceResource.Sector)
+                        {
+                            if (!string.IsNullOrEmpty(sector) && Uri.IsWellFormedUriString(sector, UriKind.Absolute))
+                            {
+                                IUriNode sectorObject = g.CreateUriNode(UriFactory.Create(sector));
+                                g.Assert(new Triple(serviceNode, sectorPredicate, sectorObject));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    resourceErrors.AppendLine("Error for " + serviceResource.Identifier);
+                    resourceErrors.AppendLine($"{ex.Message}");
                 }
             }
 
@@ -100,6 +113,11 @@ namespace Altinn.ResourceRegistry.Utils
 
             // Call the Save() method to write to the StringWriter
             rdfTurtlewriter.Save(g, sw);
+
+            if (!string.IsNullOrEmpty(resourceErrors.ToString())) 
+            {
+                return resourceErrors.ToString();
+            }
 
             // We can now retrieve the written RDF by using the ToString() method of the StringWriter
             return sw.ToString();

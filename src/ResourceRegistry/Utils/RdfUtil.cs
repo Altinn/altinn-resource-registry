@@ -81,8 +81,11 @@ namespace Altinn.ResourceRegistry.Utils
                     IUriNode sectorPredicate = g.CreateUriNode("cv:sector");
                     foreach (string sector in serviceResource.Sector)
                     {
-                        IUriNode sectorObject = g.CreateUriNode(UriFactory.Create(sector));
-                        g.Assert(new Triple(serviceNode, sectorPredicate, sectorObject));
+                        if (!string.IsNullOrEmpty(sector))
+                        {
+                            IUriNode sectorObject = g.CreateUriNode(UriFactory.Create(sector));
+                            g.Assert(new Triple(serviceNode, sectorPredicate, sectorObject));
+                        }
                     }
                 }
             }

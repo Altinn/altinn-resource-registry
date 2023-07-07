@@ -181,7 +181,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceCode, Reference = availableService.ExternalServiceCode, ReferenceSource = Enums.ReferenceSource.Altinn2 });
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceEditionCode, Reference = availableService.ExternalServiceEditionCode.ToString(), ReferenceSource = Enums.ReferenceSource.Altinn2 });
             serviceResource.HasCompetentAuthority = new CompetentAuthority();
-            serviceResource.HasCompetentAuthority.Orgcode = availableService.ServiceOwnerCode;
+            serviceResource.HasCompetentAuthority.Orgcode = availableService.ServiceOwnerCode.ToLower();
             if (orgList.Orgs.ContainsKey(serviceResource.HasCompetentAuthority.Orgcode))
             {
                 serviceResource.HasCompetentAuthority.Organization = orgList.Orgs[serviceResource.HasCompetentAuthority.Orgcode].Orgnr;
@@ -206,14 +206,17 @@ namespace Altinn.ResourceRegistry.Core.Services
         {
             string cacheKey = "fullorglist";
 
-            if (_memoryCache.TryGetValue(cacheKey, out OrgList orgList))
+            if (!_memoryCache.TryGetValue(cacheKey, out OrgList orgList))
             {
                 orgList = await _orgList.GetOrgList();
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                  .SetPriority(CacheItemPriority.High)
                  .SetAbsoluteExpiration(new TimeSpan(0, 3600, 0));
 
-                _memoryCache.Set(cacheKey, orgList, cacheEntryOptions);
+                if (orgList != null)
+                {
+                    _memoryCache.Set(cacheKey, orgList, cacheEntryOptions);
+                }
 
             }
 

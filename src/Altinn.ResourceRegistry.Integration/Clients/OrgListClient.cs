@@ -1,6 +1,7 @@
 ﻿using Altinn.ResourceRegistry.Core.Configuration;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Services;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
 namespace Altinn.ResourceRegistry.Integration.Clients
@@ -12,14 +13,16 @@ namespace Altinn.ResourceRegistry.Integration.Clients
     {
         private readonly HttpClient _client;
         private readonly ResourceRegistrySettings _settings;
+        private readonly IMemoryCache _memoryCache;
 
         /// <summary>
         /// Default constroctur
         /// </summary>
-        public OrgListClient(HttpClient client, IOptions<ResourceRegistrySettings> resourceRegistrySettings)
+        public OrgListClient(HttpClient client, IOptions<ResourceRegistrySettings> resourceRegistrySettings, IMemoryCache memoryCache)
         {
             _client = client;
             _settings = resourceRegistrySettings.Value;
+            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -38,7 +41,8 @@ namespace Altinn.ResourceRegistry.Integration.Clients
                 }
 
                 string orgListString = await response.Content.ReadAsStringAsync();
-                orgList = System.Text.Json.JsonSerializer.Deserialize<OrgList>(orgListString, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase});
+                orgList = System.Text.Json.JsonSerializer.Deserialize<OrgList>(orgListString, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase });
+
                 return orgList;
             }
             catch (Exception ex)

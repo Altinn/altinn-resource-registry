@@ -9,6 +9,7 @@ using Altinn.ResourceRegistry.Core.Models.Altinn2;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Azure;
 using Azure.Storage.Blobs.Models;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace Altinn.ResourceRegistry.Core.Services
@@ -23,6 +24,8 @@ namespace Altinn.ResourceRegistry.Core.Services
         private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAltinn2Services _altinn2ServicesClient;
         private readonly IApplications _applicationsClient;
+        private readonly IOrgListClient _orgList;
+        private readonly IMemoryCache _memoryCache;
 
         /// <summary>
         /// Creates a new instance of the <see cref="ResourceRegistryService"/> service.
@@ -34,13 +37,17 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <param name="accessManagementClient">client to send data to AccessManagement</param>
         /// <param name="altinn2ServicesClient">Used to retrieve information from Altinn 2</param>
         /// <param name="applicationsClient">Used to retrieve information from Altinn Storage about Altinn 3 apps</param>
-        public ResourceRegistryService(IResourceRegistryRepository repository, IPolicyRepository policyRepository, ILogger<ResourceRegistryService> logger, IAccessManagementClient accessManagementClient, IAltinn2Services altinn2ServicesClient, IApplications applicationsClient)
+        /// <param name="orgList">Client to retrive orglist</param>
+        /// <param name="memoryCache">Memorycache</param>
+        public ResourceRegistryService(IResourceRegistryRepository repository, IPolicyRepository policyRepository, ILogger<ResourceRegistryService> logger, IAccessManagementClient accessManagementClient, IAltinn2Services altinn2ServicesClient, IApplications applicationsClient, IOrgListClient orgList, IMemoryCache memoryCache)
         {
             _repository = repository;
             _policyRepository = policyRepository;
             _accessManagementClient = accessManagementClient;
             _altinn2ServicesClient = altinn2ServicesClient;
             _applicationsClient = applicationsClient;
+            _orgList = orgList;
+            _memoryCache = memoryCache;
         }
 
         /// <inheritdoc/>
@@ -157,12 +164,13 @@ namespace Altinn.ResourceRegistry.Core.Services
                     entext = service1033.ServiceEditionVersionName;
                 }
 
-                serviceResources.Add(MapAltinn2ServiceToServiceResource(service, entext, nntext));
+                serviceResources.Add(await MapAltinn2ServiceToServiceResource(service, entext, nntext));
             }
         }
 
-        private static ServiceResource MapAltinn2ServiceToServiceResource(AvailableService availableService, string entext, string nntext)
+        private async Task<ServiceResource> MapAltinn2ServiceToServiceResource(AvailableService availableService, string entext, string nntext)
         {
+            OrgList orgList = await GetOrgList();
             ServiceResource serviceResource = new ServiceResource();
             serviceResource.ResourceType = Enums.ResourceType.Altinn2Service;
             serviceResource.Title = new Dictionary<string, string>();
@@ -172,6 +180,14 @@ namespace Altinn.ResourceRegistry.Core.Services
             serviceResource.ResourceReferences = new List<ResourceReference>();
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceCode, Reference = availableService.ExternalServiceCode, ReferenceSource = Enums.ReferenceSource.Altinn2 });
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceEditionCode, Reference = availableService.ExternalServiceEditionCode.ToString(), ReferenceSource = Enums.ReferenceSource.Altinn2 });
+            serviceResource.HasCompetentAuthority = new CompetentAuthority();
+            serviceResource.HasCompetentAuthority.Orgcode = availableService.ServiceOwnerCode;
+            if (orgList.Orgs.ContainsKey(serviceResource.HasCompetentAuthority.Orgcode))
+            {
+                serviceResource.HasCompetentAuthority.Organization = orgList.Orgs[serviceResource.HasCompetentAuthority.Orgcode].Orgnr;
+                serviceResource.HasCompetentAuthority.Name = orgList.Orgs[serviceResource.HasCompetentAuthority.Orgcode].Name;
+            }
+
             return serviceResource;
         }
 
@@ -184,6 +200,24 @@ namespace Altinn.ResourceRegistry.Core.Services
             service.ResourceReferences = new List<ResourceReference>();
             service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.Default, Reference = application.Id });
             return service;
+        }
+
+        private async Task<OrgList> GetOrgList()
+        {
+            string cacheKey = "fullorglist";
+
+            if (_memoryCache.TryGetValue(cacheKey, out OrgList orgList))
+            {
+                orgList = await _orgList.GetOrgList();
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                 .SetPriority(CacheItemPriority.High)
+                 .SetAbsoluteExpiration(new TimeSpan(0, 3600, 0));
+
+                _memoryCache.Set(cacheKey, orgList, cacheEntryOptions);
+
+            }
+
+            return orgList;
         }
     }
 }

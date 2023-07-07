@@ -201,6 +201,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             service.ResourceType = Enums.ResourceType.Default;
             service.ResourceReferences = new List<ResourceReference>();
             service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.Default, Reference = application.Id });
+            service.HasCompetentAuthority = new CompetentAuthority();
             service.HasCompetentAuthority.Orgcode = application.Org.ToLower();
             if (orgList.Orgs.ContainsKey(service.HasCompetentAuthority.Orgcode))
             {

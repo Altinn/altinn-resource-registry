@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using Altinn.Platform.Storage.Interface.Models;
 using Altinn.ResourceRegistry.Core.Clients.Interfaces;
 using Altinn.ResourceRegistry.Core.Exceptions;
@@ -191,14 +192,22 @@ namespace Altinn.ResourceRegistry.Core.Services
             return serviceResource;
         }
 
-        private static ServiceResource MapApplicationToApplicationResource(Application application)
+        private async Task<ServiceResource> MapApplicationToApplicationResource(Application application)
         {
+            OrgList orgList = await GetOrgList();
             ServiceResource service = new ServiceResource();
             service.ResourceType = Enums.ResourceType.AltinnApp;
             service.Title = application.Title;
             service.ResourceType = Enums.ResourceType.Default;
             service.ResourceReferences = new List<ResourceReference>();
             service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.Default, Reference = application.Id });
+            service.HasCompetentAuthority.Orgcode = application.Org.ToLower();
+            if (orgList.Orgs.ContainsKey(service.HasCompetentAuthority.Orgcode))
+            {
+                service.HasCompetentAuthority.Organization = orgList.Orgs[service.HasCompetentAuthority.Orgcode].Orgnr;
+                service.HasCompetentAuthority.Name = orgList.Orgs[service.HasCompetentAuthority.Orgcode].Name;
+            }
+
             return service;
         }
 

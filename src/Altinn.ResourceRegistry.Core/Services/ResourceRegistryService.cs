@@ -138,7 +138,7 @@ namespace Altinn.ResourceRegistry.Core.Services
 
             foreach (Application application in applicationList.Applications)
             {
-                serviceResources.Add(MapApplicationToApplicationResource(application));
+                serviceResources.Add(await MapApplicationToApplicationResource(application));
             }
         }
 

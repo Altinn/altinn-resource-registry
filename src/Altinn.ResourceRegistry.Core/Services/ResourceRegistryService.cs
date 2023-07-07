@@ -227,7 +227,6 @@ namespace Altinn.ResourceRegistry.Core.Services
                 {
                     _memoryCache.Set(cacheKey, orgList, cacheEntryOptions);
                 }
-
             }
 
             return orgList;

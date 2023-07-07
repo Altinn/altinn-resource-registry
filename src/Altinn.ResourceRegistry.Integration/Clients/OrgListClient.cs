@@ -13,16 +13,14 @@ namespace Altinn.ResourceRegistry.Integration.Clients
     {
         private readonly HttpClient _client;
         private readonly ResourceRegistrySettings _settings;
-        private readonly IMemoryCache _memoryCache;
 
         /// <summary>
-        /// Default constroctur
+        /// Default constructor
         /// </summary>
-        public OrgListClient(HttpClient client, IOptions<ResourceRegistrySettings> resourceRegistrySettings, IMemoryCache memoryCache)
+        public OrgListClient(HttpClient client, IOptions<ResourceRegistrySettings> resourceRegistrySettings)
         {
             _client = client;
             _settings = resourceRegistrySettings.Value;
-            _memoryCache = memoryCache;
         }
 
         /// <summary>

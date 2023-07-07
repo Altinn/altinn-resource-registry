@@ -183,10 +183,10 @@ namespace Altinn.ResourceRegistry.Core.Services
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceEditionCode, Reference = availableService.ExternalServiceEditionCode.ToString(), ReferenceSource = Enums.ReferenceSource.Altinn2 });
             serviceResource.HasCompetentAuthority = new CompetentAuthority();
             serviceResource.HasCompetentAuthority.Orgcode = availableService.ServiceOwnerCode.ToLower();
-            if (orgList.Orgs.ContainsKey(serviceResource.HasCompetentAuthority.Orgcode))
+            if (orgList.Orgs.TryGetValue(serviceResource.HasCompetentAuthority.Orgcode, out Org orgentity))
             {
-                serviceResource.HasCompetentAuthority.Organization = orgList.Orgs[serviceResource.HasCompetentAuthority.Orgcode].Orgnr;
-                serviceResource.HasCompetentAuthority.Name = orgList.Orgs[serviceResource.HasCompetentAuthority.Orgcode].Name;
+                serviceResource.HasCompetentAuthority.Organization = orgentity.Orgnr;
+                serviceResource.HasCompetentAuthority.Name = orgentity.Name;
             }
 
             return serviceResource;
@@ -203,10 +203,10 @@ namespace Altinn.ResourceRegistry.Core.Services
             service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.Default, Reference = application.Id });
             service.HasCompetentAuthority = new CompetentAuthority();
             service.HasCompetentAuthority.Orgcode = application.Org.ToLower();
-            if (orgList.Orgs.ContainsKey(service.HasCompetentAuthority.Orgcode))
+            if (orgList.Orgs.TryGetValue(service.HasCompetentAuthority.Orgcode, out Org orgentity))
             {
-                service.HasCompetentAuthority.Organization = orgList.Orgs[service.HasCompetentAuthority.Orgcode].Orgnr;
-                service.HasCompetentAuthority.Name = orgList.Orgs[service.HasCompetentAuthority.Orgcode].Name;
+                service.HasCompetentAuthority.Organization = orgentity.Orgnr;
+                service.HasCompetentAuthority.Name = orgentity.Name;
             }
 
             return service;

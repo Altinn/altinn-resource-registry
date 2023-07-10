@@ -178,6 +178,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             serviceResource.Title.Add("nb", availableService.ServiceEditionVersionName);
             serviceResource.Title.Add("en", entext);
             serviceResource.Title.Add("nn", nntext);
+            serviceResource.ValidTo = DateTime.MaxValue;
             serviceResource.ResourceReferences = new List<ResourceReference>();
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceCode, Reference = availableService.ExternalServiceCode, ReferenceSource = Enums.ReferenceSource.Altinn2 });
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceEditionCode, Reference = availableService.ExternalServiceEditionCode.ToString(), ReferenceSource = Enums.ReferenceSource.Altinn2 });
@@ -202,6 +203,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.Default, Reference = application.Id });
             service.HasCompetentAuthority = new CompetentAuthority();
             service.HasCompetentAuthority.Orgcode = application.Org.ToLower();
+            service.ValidTo = DateTime.MaxValue;
             if (orgList.Orgs.TryGetValue(service.HasCompetentAuthority.Orgcode, out Org orgentity))
             {
                 service.HasCompetentAuthority.Organization = orgentity.Orgnr;

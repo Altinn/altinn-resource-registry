@@ -196,9 +196,8 @@ namespace Altinn.ResourceRegistry.Core.Services
         {
             OrgList orgList = await GetOrgList();
             ServiceResource service = new ServiceResource();
-            service.ResourceType = Enums.ResourceType.AltinnApp;
             service.Title = application.Title;
-            service.ResourceType = Enums.ResourceType.Default;
+            service.ResourceType = Enums.ResourceType.AltinnApp;
             service.ResourceReferences = new List<ResourceReference>();
             service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.Default, Reference = application.Id });
             service.HasCompetentAuthority = new CompetentAuthority();

@@ -38,11 +38,11 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task CreateResource(ServiceResource serviceResource)
         {
-            bool result = await UpdateResourceInAccessManagement(serviceResource);
-            if (!result)
-            {
-                throw new AccessManagementUpdateException("Updating Access management failed");
-            }
+            //bool result = await UpdateResourceInAccessManagement(serviceResource);
+            //if (!result)
+            //{
+            //    throw new AccessManagementUpdateException("Updating Access management failed");
+            //}
 
             await _repository.CreateResource(serviceResource);
         }

@@ -118,7 +118,6 @@ namespace Altinn.ResourceRegistry.Tests
                     Orgcode = "skd",
                 }
             };
-            resource.IsComplete = true;
 
             string requestUri = "resourceregistry/api/v1/Resource/";
 
@@ -198,7 +197,6 @@ namespace Altinn.ResourceRegistry.Tests
                 }
 
             };
-            resource.IsComplete = true;
 
             string requestUri = "resourceregistry/api/v1/Resource/";
 
@@ -273,7 +271,6 @@ namespace Altinn.ResourceRegistry.Tests
                 }
 
             };
-            resource.IsComplete = true;
 
             string requestUri = "resourceregistry/api/v1/Resource/";
 
@@ -348,7 +345,6 @@ namespace Altinn.ResourceRegistry.Tests
                 }
 
             };
-            resource.IsComplete = true;
 
             string requestUri = "resourceregistry/api/v1/Resource/";
 
@@ -430,7 +426,6 @@ namespace Altinn.ResourceRegistry.Tests
                 }
 
             };
-            resource.IsComplete = true;
 
             string requestUri = $"resourceregistry/api/v1/Resource/{resource.Identifier}";
 
@@ -505,7 +500,6 @@ namespace Altinn.ResourceRegistry.Tests
                 }
 
             };
-            resource.IsComplete = true;
 
             string requestUri = $"resourceregistry/api/v1/Resource/{resource.Identifier}";
 
@@ -580,7 +574,6 @@ namespace Altinn.ResourceRegistry.Tests
                 }
 
             };
-            resource.IsComplete = true;
 
             string requestUri = $"resourceregistry/api/v1/Resource/{resource.Identifier}";
 
@@ -777,7 +770,6 @@ namespace Altinn.ResourceRegistry.Tests
                     Orgcode = "skd",
                 }
             };
-            resource.IsComplete = false;
 
             HttpClient client = SetupUtil.GetTestClient(_factory);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -801,7 +793,6 @@ namespace Altinn.ResourceRegistry.Tests
         {
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
             ServiceResource resource = new ServiceResource() { Identifier = "wrong_non_matcing_id" };
-            resource.IsComplete = false;
 
             HttpClient client = SetupUtil.GetTestClient(_factory);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -835,7 +826,6 @@ namespace Altinn.ResourceRegistry.Tests
                   Orgcode = "skd",
               }
             };
-            resource.IsComplete = false;
 
             string requestUri = "resourceregistry/api/v1/Resource/";
 
@@ -867,7 +857,6 @@ namespace Altinn.ResourceRegistry.Tests
                     Orgcode = "digdir",
                 }
             };
-            resource.IsComplete = false;
 
             string requestUri = "resourceregistry/api/v1/Resource/";
 
@@ -899,7 +888,6 @@ namespace Altinn.ResourceRegistry.Tests
                     Orgcode = "skd",
                 }
             };
-            resource.IsComplete = false;
 
             string requestUri = "resourceregistry/api/v1/Resource/";
 
@@ -928,7 +916,6 @@ namespace Altinn.ResourceRegistry.Tests
                     Orgcode = "skd",
                 }
             };
-            resource.IsComplete = false;
 
             string requestUri = "resourceregistry/api/v1/Resource/";
 

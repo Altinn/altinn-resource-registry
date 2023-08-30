@@ -32,7 +32,7 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// The homepage
         /// </summary>
-        public string Homepage { get; set; }    
+        public string? Homepage { get; set; }    
 
         /// <summary>
         /// The status
@@ -43,27 +43,22 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// spatial coverage
         /// This property represents that area(s) a Public Service is likely to be available only within, typically the area(s) covered by a particular public authority.
         /// </summary>
-        public List<string> Spatial { get; set;  }
+        public List<string>? Spatial { get; set;  }
 
         /// <summary>
         /// List of possible contact points
         /// </summary>
-        public List<string> ContactPoints { get; set; }
+        public List<string>? ContactPoints { get; set; }
 
         /// <summary>
         /// Linkes to the outcome of a public service
         /// </summary>
-        public List<string> Produces { get; set;  }
+        public List<string>? Produces { get; set;  }
 
         /// <summary>
         /// IsPartOf
         /// </summary>
-        public string IsPartOf { get; set; }
-
-        /// <summary>
-        /// IsPublicService
-        /// </summary>
-        public bool IsPublicService { get; set; }
+        public string? IsPartOf { get; set; }
 
         /// <summary>
         /// ThematicAreas
@@ -93,12 +88,12 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// Keywords
         /// </summary>
-        public List<Keyword> Keywords { get; set; }
+        public List<Keyword>? Keywords { get; set; }
 
         /// <summary>
         /// Sector
         /// </summary>
-        public List<string> Sector { get; set; }
+        public List<string>? Sector { get; set; }
 
         /// <summary>
         /// Defines if the resource is limited by Resource Rights Registry

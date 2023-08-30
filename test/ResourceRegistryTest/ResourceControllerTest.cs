@@ -137,7 +137,7 @@ namespace Altinn.ResourceRegistry.Tests
 
             Assert.NotNull(errordetails);
 
-            Assert.Equal(8, errordetails.Errors.Count);
+            Assert.Equal(4, errordetails.Errors.Count);
         }
 
         [Fact]
@@ -764,6 +764,11 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "altinn_access_management",
+                Title = new Dictionary<string, string>() { { "en", "Maskinporten Scope Delegation" } },
+                Description = new Dictionary<string, string>() { { "nb", "Maskinporten Scope Delegation" } },
+                RightDescription = new Dictionary<string, string> { { "nb", "Access to Maskinporten Scope Delegation" } },
+                Status = "Completed",
+
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
@@ -818,9 +823,13 @@ namespace Altinn.ResourceRegistry.Tests
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource() 
-            { 
-              Identifier = "superdupertjenestene", 
-              HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+            {
+                Identifier = "superdupertjenestene",
+                Title = new Dictionary<string, string>() { { "en", "Super Duper Tjenestene" } },
+                Description = new Dictionary<string, string>() { { "nb", "Dette er en super duper tjeneste" } },
+                RightDescription = new Dictionary<string, string> { { "nb", "Dette gir mottakere rett til super duper tjeenste" } },
+                Status = "Completed",
+                HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
               {
                   Organization = "974761076",
                   Orgcode = "skd",
@@ -851,6 +860,10 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "superdupertjenestene",
+                Title = new Dictionary<string, string>() { { "en", "Super Duper Tjenestene" } },
+                Description = new Dictionary<string, string>() { { "nb", "Dette er en super duper tjeneste" } },
+                RightDescription = new Dictionary<string, string> { { "nb", "Dette gir mottakere rett til super duper tjeenste" } },
+                Status = "Completed",
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "991825827",
@@ -882,6 +895,10 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "superdupertjenestene",
+                Title = new Dictionary<string, string>() { { "en", "Super Duper Tjenestene" } },
+                Description = new Dictionary<string, string>() { { "nb", "Dette er en super duper tjeneste"} },
+                RightDescription = new Dictionary<string, string> { { "nb", "Dette gir mottakere rett til super duper tjeenste"} },
+                Status = "Completed",
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
@@ -910,6 +927,10 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "superdupertjenestene",
+                Title = new Dictionary<string, string>() { { "en", "Super Duper Tjenestene" } },
+                Description = new Dictionary<string, string>() { { "nb", "Dette er en super duper tjeneste" } },
+                RightDescription = new Dictionary<string, string> { { "nb", "Dette gir mottakere rett til super duper tjeenste" } },
+                Status = "Completed",
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",

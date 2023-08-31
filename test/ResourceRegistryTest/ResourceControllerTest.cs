@@ -137,7 +137,7 @@ namespace Altinn.ResourceRegistry.Tests
 
             Assert.NotNull(errordetails);
 
-            Assert.Equal(4, errordetails.Errors.Count);
+            Assert.Equal(5, errordetails.Errors.Count);
         }
 
         [Fact]
@@ -157,6 +157,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Keywords = new List<Keyword>(),
                 Description = new Dictionary<string, string>(),
                 RightDescription = new Dictionary<string, string>(),
+                ContactPoints = new List<string>() { { "909 1337 0" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
@@ -231,6 +232,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Keywords = new List<Keyword>(),
                 Description = new Dictionary<string, string>(),
                 RightDescription = new Dictionary<string, string>(),
+                ContactPoints = new List<string>() { { "909 1337 0" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
@@ -305,6 +307,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Keywords = new List<Keyword>(),
                 Description = new Dictionary<string, string>(),
                 RightDescription = new Dictionary<string, string>(),
+                ContactPoints = new List<string>() { { "909 1337 0" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
@@ -386,6 +389,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Keywords = new List<Keyword>(),
                 Description = new Dictionary<string, string>(),
                 RightDescription = new Dictionary<string, string>(),
+                ContactPoints = new List<string>() { { "909 1337 0" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
@@ -460,6 +464,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Keywords = new List<Keyword>(),
                 Description = new Dictionary<string, string>(),
                 RightDescription = new Dictionary<string, string>(),
+                ContactPoints = new List<string>() { { "909 1337 0" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
@@ -534,6 +539,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Keywords = new List<Keyword>(),
                 Description = new Dictionary<string, string>(),
                 RightDescription = new Dictionary<string, string>(),
+                ContactPoints = new List<string>() { { "909 1337 0" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
@@ -768,7 +774,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Description = new Dictionary<string, string>() { { "nb", "Maskinporten Scope Delegation" } },
                 RightDescription = new Dictionary<string, string> { { "nb", "Access to Maskinporten Scope Delegation" } },
                 Status = "Completed",
-
+                ContactPoints = new List<string>() { { "909 1337 0" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
@@ -829,6 +835,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Description = new Dictionary<string, string>() { { "nb", "Dette er en super duper tjeneste" } },
                 RightDescription = new Dictionary<string, string> { { "nb", "Dette gir mottakere rett til super duper tjeenste" } },
                 Status = "Completed",
+                ContactPoints = new List<string>() { { "909 1337 0" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
               {
                   Organization = "974761076",
@@ -864,6 +871,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Description = new Dictionary<string, string>() { { "nb", "Dette er en super duper tjeneste" } },
                 RightDescription = new Dictionary<string, string> { { "nb", "Dette gir mottakere rett til super duper tjeenste" } },
                 Status = "Completed",
+                ContactPoints = new List<string>() { { "909 1337 0" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "991825827",
@@ -899,6 +907,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Description = new Dictionary<string, string>() { { "nb", "Dette er en super duper tjeneste"} },
                 RightDescription = new Dictionary<string, string> { { "nb", "Dette gir mottakere rett til super duper tjeenste"} },
                 Status = "Completed",
+                ContactPoints = new List<string>() { { "909 1337 0"} },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",

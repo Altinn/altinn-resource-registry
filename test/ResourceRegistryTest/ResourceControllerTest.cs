@@ -150,7 +150,6 @@ namespace Altinn.ResourceRegistry.Tests
             {
                 Identifier = "superdupertjenestene",
                 Title = new Dictionary<string, string>(),
-                Sector = new List<string>(),
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
@@ -225,7 +224,6 @@ namespace Altinn.ResourceRegistry.Tests
             {
                 Identifier = "superdupertjenestene",
                 Title = new Dictionary<string, string>(),
-                Sector = new List<string>(),
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
@@ -300,7 +298,6 @@ namespace Altinn.ResourceRegistry.Tests
             {
                 Identifier = "superdupertjenestene",
                 Title = new Dictionary<string, string>(),
-                Sector = new List<string>(),
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf  = "Altinn",
@@ -382,7 +379,6 @@ namespace Altinn.ResourceRegistry.Tests
             {
                 Identifier = "altinn_access_management",
                 Title = new Dictionary<string, string>(),
-                Sector = new List<string>(),
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
@@ -457,7 +453,6 @@ namespace Altinn.ResourceRegistry.Tests
             {
                 Identifier = "altinn_access_management",
                 Title = new Dictionary<string, string>(),
-                Sector = new List<string>(),
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
@@ -532,7 +527,6 @@ namespace Altinn.ResourceRegistry.Tests
             {
                 Identifier = "altinn_access_management",
                 Title = new Dictionary<string, string>(),
-                Sector = new List<string>(),
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",

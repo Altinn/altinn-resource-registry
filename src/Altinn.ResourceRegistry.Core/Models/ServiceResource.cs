@@ -91,11 +91,6 @@ namespace Altinn.ResourceRegistry.Core.Models
         public List<Keyword>? Keywords { get; set; }
 
         /// <summary>
-        /// Sector
-        /// </summary>
-        public List<string>? Sector { get; set; }
-
-        /// <summary>
         /// Defines if the resource is limited by Resource Rights Registry
         /// </summary>
         public bool LimitedByRRR { get; set; }

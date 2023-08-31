@@ -48,7 +48,7 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// List of possible contact points
         /// </summary>
-        public List<string> ContactPoints { get; set; }
+        public List<ContactPoint> ContactPoints { get; set; }
 
         /// <summary>
         /// Linkes to the outcome of a public service

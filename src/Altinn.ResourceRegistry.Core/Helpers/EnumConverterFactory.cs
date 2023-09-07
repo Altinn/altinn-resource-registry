@@ -5,12 +5,12 @@ using System.Text.Json.Serialization;
 namespace Altinn.ResourceRegistry.Core.Helpers
 {
     /// <summary>
-    /// facotry
+    /// Facotry to trigger correct cversion
     /// </summary>
     public class EnumConverterFactory : JsonConverterFactory
     {
         /// <summary>
-        ///  asda
+        ///  Check if 
         /// </summary>
         public override bool CanConvert(Type typeToConvert)
         {
@@ -27,9 +27,8 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         }
 
         /// <summary>
-        /// asd update
+        /// Get the converter
         /// </summary>
-        /// <typeparam name="TEnum"></typeparam>
         public class EnumStringValueConverter<TEnum> : JsonConverter<TEnum>
         {
             /// <summary>
@@ -60,7 +59,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             }
 
             /// <summary>
-            /// doc
+            /// Write
             /// </summary>
             public override void Write(Utf8JsonWriter writer, TEnum value, JsonSerializerOptions options)
             {

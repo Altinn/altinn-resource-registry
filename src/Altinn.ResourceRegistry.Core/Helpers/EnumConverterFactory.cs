@@ -1,12 +1,9 @@
-﻿using Altinn.Platform.Storage.Interface.Enums;
-using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Altinn.ResourceRegistry.Core.Helpers
 {
-
     /// <summary>
     /// facotry
     /// </summary>
@@ -29,8 +26,15 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             return (JsonConverter)Activator.CreateInstance(converterType);
         }
 
-        private class EnumStringValueConverter<TEnum> : JsonConverter<TEnum>
+        /// <summary>
+        /// asd update
+        /// </summary>
+        /// <typeparam name="TEnum"></typeparam>
+        public class EnumStringValueConverter<TEnum> : JsonConverter<TEnum>
         {
+            /// <summary>
+            /// ads
+            /// </summary>
             public override TEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
                 if (reader.TokenType != JsonTokenType.String)

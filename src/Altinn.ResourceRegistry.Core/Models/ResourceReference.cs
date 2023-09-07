@@ -1,11 +1,14 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Altinn.ResourceRegistry.Core.Enums;
+using Altinn.ResourceRegistry.Core.Helpers;
 
 namespace Altinn.ResourceRegistry.Core.Models
 {
     /// <summary>
     /// Model representation of the resource reference part of the ServiceResource model
     /// </summary>
+    [DataContract]
     public class ResourceReference
     {
         /// <summary>
@@ -22,7 +25,6 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// The reference type
         /// </summary>
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public ReferenceType? ReferenceType { get; set; }
     }
 }

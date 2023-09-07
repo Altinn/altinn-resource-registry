@@ -1,10 +1,13 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+using Altinn.ResourceRegistry.Core.Helpers;
 
 namespace Altinn.ResourceRegistry.Core.Enums
 {
     /// <summary>
     /// Enum for reference types of resources in the resource registry
     /// </summary>
+    [JsonConverter(typeof(EnumStringValueConverter))]
     public enum ReferenceType : int
     {
         [EnumMember(Value = "Default")]
@@ -12,20 +15,23 @@ namespace Altinn.ResourceRegistry.Core.Enums
 
         [EnumMember(Value = "Uri")]
         Uri = 1,
-        
+
         [EnumMember(Value = "DelegationSchemeId")]
         DelegationSchemeId = 2,
 
         [EnumMember(Value = "MaskinportenScope")]
         MaskinportenScope = 3,
-        
-        [EnumMember(Value = "ServiceCode")]
+
+        [EnumMember(Value = "urn:altinn:servicecode")]
         ServiceCode = 4,
 
-        [EnumMember(Value = "ServiceEditionCode")]
+        [EnumMember(Value = "urn:altinn:serviceeditioncode")]
         ServiceEditionCode = 5,
 
-        [EnumMember(Value = "ApplicationId")]
-        ApplicationId = 6,
+        [EnumMember(Value = "urn:altinn:app")]
+        App = 6,
+
+        [EnumMember(Value = "urn:altinn:org")]
+        Org = 7,
     }
 }

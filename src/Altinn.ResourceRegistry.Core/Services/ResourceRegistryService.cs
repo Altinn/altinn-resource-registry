@@ -199,7 +199,8 @@ namespace Altinn.ResourceRegistry.Core.Services
             service.Title = application.Title;
             service.ResourceType = Enums.ResourceType.AltinnApp;
             service.ResourceReferences = new List<ResourceReference>();
-            service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.ApplicationId, Reference = application.Id });
+            service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.Org, Reference = application.Org });
+            service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.App, Reference = application.Id.Substring(application.Id.IndexOf("/") + 1) });
             service.HasCompetentAuthority = new CompetentAuthority();
             service.HasCompetentAuthority.Orgcode = application.Org.ToLower();
             if (orgList.Orgs.TryGetValue(service.HasCompetentAuthority.Orgcode, out Org orgentity))

@@ -72,5 +72,4 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             }
         }
     }
-
 }

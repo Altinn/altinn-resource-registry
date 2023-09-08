@@ -101,6 +101,7 @@ namespace Altinn.ResourceRegistry.Tests
 
             Assert.NotNull(resource);
             Assert.Equal(439, resource.Count);
+            Assert.Contains("urn:altinn:org", responseContent);
         }
 
         [Fact]

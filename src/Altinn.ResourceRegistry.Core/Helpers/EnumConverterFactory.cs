@@ -41,7 +41,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                     throw new JsonException($"Expected string for {typeToConvert.Name}.");
                 }
 
-                string enumString = reader.GetString();
+                string enumString = reader.GetString().ToLower();
 
                 foreach (var enumValue in Enum.GetValues(typeToConvert))
                 {
@@ -49,13 +49,13 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                         .GetCustomAttributes(typeof(EnumMemberAttribute), false)
                         .FirstOrDefault() as EnumMemberAttribute;
 
-                    if (enumMemberAttribute != null && enumMemberAttribute.Value == enumString)
+                    if (enumMemberAttribute != null && enumMemberAttribute.Value.ToLower() == enumString)
                     {
                         return (TEnum)enumValue;
                     }
 
                     // Fallback if enumString matches the enumValue
-                    if (enumValue.ToString() == enumString)
+                    if (enumValue.ToString().ToLower() == enumString)
                     {
                         return (TEnum)enumValue;
                     }

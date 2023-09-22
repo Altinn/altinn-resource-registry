@@ -1,0 +1,61 @@
+{
+  "identifier": "skd-maskinportenschemaid-9",
+  "title": {
+    "en": "National Population Register - Privat non-authorized business - On behalf of",
+    "nb": "Folkeregisteret - Privat virksomhet uten hjemmel - På vegne av",
+    "nn": "Folkeregisteret - Privat verksemd utan heimel - På vegner av"
+  },
+  "description": {},
+  "rightDescription": {
+    "en": "This service allows you to delegate your access to The national Population Register information to a provider. Once the delegation has been completed, the provider will be notified that they can use the services available within the rights",
+    "nb": "Denne tjenesten gir deg mulighet for å delegere din tilgang til folkeregisteropplysninger til en  leverandør. Når delegeringen er utført, vil leverandøren motta melding om at de på vegne av din virksomhet kan benyttet de tjenester som er ti",
+    "nn": "Denne tenesta gir deg moglegheit for å delegera tilgangen din til folkeregisteropplysningar til ein leverandør. Når delegeringen er utførte, vil leverandøren få melding om at dei på vegner av verksemda di kan nytta dei tenestene som er tilg"
+  },
+  "homepage": "www.skatteetaten.no",
+  "status": "Active",
+  "validFrom": "2020-03-04T19:07:46.143",
+  "validTo": "9999-12-31T23:59:59.997",
+  "isPartOf": "Altinn",
+  "isPublicService": true,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "a6574ca8-5836-46b0-91f0-8ebb0ff214cf",
+      "referenceType": "DelegationSchemeId"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "folkeregister:deling/privatutenhjemmel",
+      "referenceType": "MaskinportenScope"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "AppId:9",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    }
+  ],
+  "isComplete": true,
+  "delegable": true,
+  "visible": true,
+  "hasCompetentAuthority": {
+    "organization": "974761076",
+    "orgcode": "SKD",
+    "name": {
+      "en": "Norwegian Tax Administration",
+      "nb": "Skatteetaten",
+      "nn": "Skatteetaten"
+    }
+  },
+  "keywords": [],
+  "sector": [
+    "private",
+    "public"
+  ],
+  "resourceType": "MaskinportenSchema",
+  "mainLanguage": "nb"
+}

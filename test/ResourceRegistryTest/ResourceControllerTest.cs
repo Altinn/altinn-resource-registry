@@ -49,6 +49,25 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         [Fact]
+        public async Task GetResource_skd_maskinportenschemaid_9_OK()
+        {
+            string requestUri = "resourceregistry/api/v1/Resource/skd-maskinportenschemaid-9";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+            {
+            };
+
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+            ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+
+            Assert.NotNull(resource);
+            Assert.Equal("skd-maskinportenschemaid-9", resource.Identifier);
+            Assert.Contains("urn:altinn:servicecode", responseContent);
+        }
+
+        [Fact]
         public async Task Test_Nav_Get()
         {
             string requestUri = "resourceregistry/api/v1/Resource/nav_tiltakAvtaleOmArbeidstrening";

@@ -5,12 +5,12 @@ using System.Text.Json.Serialization;
 namespace Altinn.ResourceRegistry.Core.Helpers
 {
     /// <summary>
-    /// Facotry to trigger correct cversion
+    /// Factory to trigger correct cversion
     /// </summary>
     public class EnumConverterFactory : JsonConverterFactory
     {
         /// <summary>
-        ///  Check if 
+        ///  Check if it can convert
         /// </summary>
         public override bool CanConvert(Type typeToConvert)
         {
@@ -18,7 +18,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         }
 
         /// <summary>
-        ///  asda
+        ///  Create the convert
         /// </summary>
         public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
@@ -50,6 +50,12 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                         .FirstOrDefault() as EnumMemberAttribute;
 
                     if (enumMemberAttribute != null && enumMemberAttribute.Value == enumString)
+                    {
+                        return (TEnum)enumValue;
+                    }
+
+                    // Fallback if enumString matches the enumValue
+                    if (enumValue.ToString() == enumString)
                     {
                         return (TEnum)enumValue;
                     }

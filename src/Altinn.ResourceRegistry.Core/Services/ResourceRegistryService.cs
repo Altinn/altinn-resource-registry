@@ -174,13 +174,21 @@ namespace Altinn.ResourceRegistry.Core.Services
             OrgList orgList = await GetOrgList();
             ServiceResource serviceResource = new ServiceResource();
             serviceResource.ResourceType = Enums.ResourceType.Altinn2Service;
-            serviceResource.Title = new Dictionary<string, string>();
-            serviceResource.Title.Add("nb", availableService.ServiceEditionVersionName);
-            serviceResource.Title.Add("en", entext);
-            serviceResource.Title.Add("nn", nntext);
+            serviceResource.Title = new Dictionary<string, string>
+            {
+                { "nb", availableService.ServiceEditionVersionName },
+                { "en", entext },
+                { "nn", nntext }
+            };
             serviceResource.ResourceReferences = new List<ResourceReference>();
+            serviceResource.Identifier = $"se_{availableService.ExternalServiceCode}_{availableService.ExternalServiceEditionCode.ToString()}";
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceCode, Reference = availableService.ExternalServiceCode, ReferenceSource = Enums.ReferenceSource.Altinn2 });
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceEditionCode, Reference = availableService.ExternalServiceEditionCode.ToString(), ReferenceSource = Enums.ReferenceSource.Altinn2 });
+            serviceResource.AuthorizationReference = new List<AuthorizationReferenceAttribute>
+            {
+                new AuthorizationReferenceAttribute() { Key = "urn:altinn:externalservicecode", Value = availableService.ExternalServiceCode },
+                new AuthorizationReferenceAttribute() { Key = "urn:altinn:externalserviceeditioncode", Value = availableService.ExternalServiceEditionCode.ToString() }
+            };
             serviceResource.HasCompetentAuthority = new CompetentAuthority();
             serviceResource.HasCompetentAuthority.Orgcode = availableService.ServiceOwnerCode.ToLower();
             if (orgList.Orgs.TryGetValue(serviceResource.HasCompetentAuthority.Orgcode.ToLower(), out Org orgentity))
@@ -198,8 +206,15 @@ namespace Altinn.ResourceRegistry.Core.Services
             ServiceResource service = new ServiceResource();
             service.Title = application.Title;
             service.ResourceType = Enums.ResourceType.AltinnApp;
-            service.ResourceReferences = new List<ResourceReference>();
-            service.ResourceReferences.Add(new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.ApplicationId, Reference = application.Id });
+            service.ResourceReferences = new List<ResourceReference>
+            {
+                new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.ApplicationId, Reference = application.Id }
+            };
+            service.AuthorizationReference = new List<AuthorizationReferenceAttribute>
+            {
+                new AuthorizationReferenceAttribute() { Key = "urn:altinn:org", Value = application.Org },
+                new AuthorizationReferenceAttribute() { Key = "urn:altinn:app", Value = application.Id.Substring(application.Id.IndexOf("/") + 1) }
+            };
             service.HasCompetentAuthority = new CompetentAuthority();
             service.HasCompetentAuthority.Orgcode = application.Org.ToLower();
             if (orgList.Orgs.TryGetValue(service.HasCompetentAuthority.Orgcode, out Org orgentity))

@@ -104,7 +104,7 @@ namespace Altinn.ResourceRegistry.Controllers
                 || !serviceResource.ResourceReferences.Any()
                 || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ApplicationId))))
             {
-                // Uses app prefix without it beeing a service engine resource
+                // Uses app prefix without it beeing a app resource
                 return BadRequest("Invalid Prefix");
             }
 
@@ -171,6 +171,25 @@ namespace Altinn.ResourceRegistry.Controllers
             if (!ModelState.IsValid)
             {
                 return ValidationProblem(ModelState);
+            }
+
+            if (serviceResource.Identifier.StartsWith(ResourceConstants.SERVICE_ENGINE_RESOURCE_PREFIX)
+                && (serviceResource.ResourceReferences == null
+                || !serviceResource.ResourceReferences.Any()
+                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceCode))
+                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceEditionCode))))
+            {
+                // Uses Service engine prefix without it beeing a service engine resource
+                return BadRequest("Invalid Prefix");
+            }
+
+            if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX)
+                && (serviceResource.ResourceReferences == null
+                || !serviceResource.ResourceReferences.Any()
+                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ApplicationId))))
+            {
+                // Uses app prefix without it beeing a app resource
+                return BadRequest("Invalid Prefix");
             }
 
             if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))

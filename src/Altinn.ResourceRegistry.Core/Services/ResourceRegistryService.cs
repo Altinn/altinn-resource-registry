@@ -2,6 +2,7 @@
 using System.Net;
 using Altinn.Platform.Storage.Interface.Models;
 using Altinn.ResourceRegistry.Core.Clients.Interfaces;
+using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Exceptions;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
@@ -181,13 +182,13 @@ namespace Altinn.ResourceRegistry.Core.Services
                 { "nn", nntext }
             };
             serviceResource.ResourceReferences = new List<ResourceReference>();
-            serviceResource.Identifier = $"se_{availableService.ExternalServiceCode}_{availableService.ExternalServiceEditionCode.ToString()}";
+            serviceResource.Identifier = $"{ResourceConstants.SERVICE_ENGINE_RESOURCE_PREFIX}{availableService.ExternalServiceCode}_{availableService.ExternalServiceEditionCode.ToString()}";
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceCode, Reference = availableService.ExternalServiceCode, ReferenceSource = Enums.ReferenceSource.Altinn2 });
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceEditionCode, Reference = availableService.ExternalServiceEditionCode.ToString(), ReferenceSource = Enums.ReferenceSource.Altinn2 });
             serviceResource.AuthorizationReference = new List<AuthorizationReferenceAttribute>
             {
-                new AuthorizationReferenceAttribute() { Key = "urn:altinn:servicecode", Value = availableService.ExternalServiceCode },
-                new AuthorizationReferenceAttribute() { Key = "urn:altinn:serviceeditioncode", Value = availableService.ExternalServiceEditionCode.ToString() }
+                new AuthorizationReferenceAttribute() { Id = "urn:altinn:servicecode", Value = availableService.ExternalServiceCode },
+                new AuthorizationReferenceAttribute() { Id = "urn:altinn:serviceeditioncode", Value = availableService.ExternalServiceEditionCode.ToString() }
             };
             serviceResource.HasCompetentAuthority = new CompetentAuthority();
             serviceResource.HasCompetentAuthority.Orgcode = availableService.ServiceOwnerCode.ToLower();
@@ -205,6 +206,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             OrgList orgList = await GetOrgList();
             ServiceResource service = new ServiceResource();
             service.Title = application.Title;
+            service.Identifier = $"{ResourceConstants.APPLICATION_RESOURCE_PREFIX}{application.Org}_{application.Id.Substring(application.Id.IndexOf("/") + 1)}";
             service.ResourceType = Enums.ResourceType.AltinnApp;
             service.ResourceReferences = new List<ResourceReference>
             {
@@ -212,8 +214,8 @@ namespace Altinn.ResourceRegistry.Core.Services
             };
             service.AuthorizationReference = new List<AuthorizationReferenceAttribute>
             {
-                new AuthorizationReferenceAttribute() { Key = "urn:altinn:org", Value = application.Org },
-                new AuthorizationReferenceAttribute() { Key = "urn:altinn:app", Value = application.Id.Substring(application.Id.IndexOf("/") + 1) }
+                new AuthorizationReferenceAttribute() { Id = "urn:altinn:org", Value = application.Org },
+                new AuthorizationReferenceAttribute() { Id = "urn:altinn:app", Value = application.Id.Substring(application.Id.IndexOf("/") + 1) }
             };
             service.HasCompetentAuthority = new CompetentAuthority();
             service.HasCompetentAuthority.Orgcode = application.Org.ToLower();

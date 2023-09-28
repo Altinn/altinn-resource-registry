@@ -14,7 +14,7 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// The key for authorization reference. Used for authorization api related to resource
         /// </summary>
-        public string Key { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// The value for authorization reference. Used for authorization api related to resource

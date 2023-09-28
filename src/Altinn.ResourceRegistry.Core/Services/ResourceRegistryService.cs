@@ -186,8 +186,8 @@ namespace Altinn.ResourceRegistry.Core.Services
             serviceResource.ResourceReferences.Add(new ResourceReference() { ReferenceType = Enums.ReferenceType.ServiceEditionCode, Reference = availableService.ExternalServiceEditionCode.ToString(), ReferenceSource = Enums.ReferenceSource.Altinn2 });
             serviceResource.AuthorizationReference = new List<AuthorizationReferenceAttribute>
             {
-                new AuthorizationReferenceAttribute() { Key = "urn:altinn:externalservicecode", Value = availableService.ExternalServiceCode },
-                new AuthorizationReferenceAttribute() { Key = "urn:altinn:externalserviceeditioncode", Value = availableService.ExternalServiceEditionCode.ToString() }
+                new AuthorizationReferenceAttribute() { Key = "urn:altinn:servicecode", Value = availableService.ExternalServiceCode },
+                new AuthorizationReferenceAttribute() { Key = "urn:altinn:serviceeditioncode", Value = availableService.ExternalServiceEditionCode.ToString() }
             };
             serviceResource.HasCompetentAuthority = new CompetentAuthority();
             serviceResource.HasCompetentAuthority.Orgcode = availableService.ServiceOwnerCode.ToLower();

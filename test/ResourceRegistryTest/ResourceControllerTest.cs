@@ -288,7 +288,7 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         [Fact]
-        public async Task CreateResource_WithInvalidId()
+        public async Task CreateResource_With_APPrefixWithoutRequiredResourceReference()
         {
             string[] prefixes = { "altinn", "digdir", "difi", "krr", "test", "digdirintern", "idporten", "digitalpostinnbygger", "minid", "move", "difitest" };
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write", prefixes);
@@ -328,7 +328,7 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         [Fact]
-        public async Task CreateResource_WithValidAppIdPrefix()
+        public async Task CreateResource_With_APPrefixWithRequiredResourceReference()
         {
             string[] prefixes = { "altinn", "digdir", "difi", "krr", "test", "digdirintern", "idporten", "digitalpostinnbygger", "minid", "move", "difitest" };
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write", prefixes);

@@ -125,7 +125,17 @@ namespace Altinn.ResourceRegistry.Core.Services
             List<ServiceResource> serviceResources = new List<ServiceResource>();
 
             ResourceSearch resourceSearch = new ResourceSearch();
+            
             List<ServiceResource> resources = await Search(resourceSearch);
+
+            foreach (ServiceResource resource in resources)
+            {
+                resource.AuthorizationReference = new List<AuthorizationReferenceAttribute>
+                {
+                    new AuthorizationReferenceAttribute() { Id = "urn:altinn:resource", Value = resource.Identifier }
+                };
+            }
+
             serviceResources.AddRange(resources);
             await AddAltinn2AvailableServices(serviceResources);
             await AddAltinn3Applications(serviceResources);

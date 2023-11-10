@@ -1,0 +1,49 @@
+{
+    "identifier": "k6-regression-resource1",
+    "title": {
+      "en": "K6 Regression Test Resource 1",
+      "nb": "K6 regresjonstest ressurs 1",
+      "nn": "K6 regresjonstest ressurs 1"
+    },
+    "description": {
+      "en": "This service provides full access to aquaculture applications for county municipalities and other sector authorities.",
+      "nb": "Denne tjenesten gir full tilgang til akvakultursøknader for fylkeskommuner og andre sektormyndigheter.",
+      "nn": "Denne tenesta gir full tilgang til akvakultursøknader for fylkeskommunar og andre sektormyndigheiter."
+    },
+    "rightDescription": {
+      "en": "This service provides full access to aquaculture applications for county municipalities and other sector authorities.",
+      "nb": "Denne tjenesten gir full tilgang til akvakultursøknader for fylkeskommuner og andre sektormyndigheter.",
+      "nn": "Denne tenesta gir full tilgang til akvakultursøknader for fylkeskommunar og andre sektormyndigheiter."
+    },
+    "homepage": "https://www.fiskeridir.no/",
+    "status": "Active",
+    "contactPoints": [
+      {
+        "contactPage": "https://www.fiskeridir.no/"
+      }
+    ],
+    "isPartOf": "",
+    "resourceReferences": [
+      {
+        "referenceSource": "Altinn3",
+        "reference": "fdir:aquaportalapi",
+        "referenceType": "MaskinportenScope"
+      }
+    ],
+    "delegable": true,
+    "visible": true,
+    "hasCompetentAuthority": {
+      "organization": "971203420",
+      "orgcode": "FD",
+      "name": {
+        "en": "The Norwegian Directorate of Fisheries",
+        "nb": "Fiskeridirektoratet",
+        "nn": "Fiskeridirektoratet"
+      }
+    },
+    "keywords": [],
+    "limitedByRRR": false,
+    "selfIdentifiedUserEnabled": false,
+    "enterpriseUserEnabled": false,
+    "resourceType": "MaskinportenSchema"
+  }

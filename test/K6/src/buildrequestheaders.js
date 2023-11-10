@@ -66,6 +66,16 @@ export function buildHeaderWithRuntimeAndJson(altinnStudioRuntimeCookie, api) {
   return params;
 }
 
+//Function to build headers with altinnStudioRuntimeCookie and JSON content-type and returns a json object
+export function buildHeaderWithJsonOnly() {
+  var params = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  return params;
+}
+
 //Function to build headers with altinnStudioRuntimeCookie, JSON content-type, and offeredby's org number and returns a json object
 export function buildHeaderWithRuntimeOrgNumberAndJson(altinnStudioRuntimeCookie, organizationNumber) {
   var params = {

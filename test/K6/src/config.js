@@ -120,6 +120,14 @@ export function buildMaskinPorteSchemaUrls(party, type) {
   return value;
 }
 
+export function buildResourceRegistryResourceUrls(resource) {
+  var value = '';
+  value = `https://platform.${baseUrl}/resourceregistry/api/v1/resource/${resource}`;
+
+  return value;
+}
+
+
 //Function to build endpoints in storage with instanceOwnerId, instanceId, dataId, type
 //and returns the endpoint
 export function buildStorageUrls(instanceOwnerId, instanceId, dataId, type) {

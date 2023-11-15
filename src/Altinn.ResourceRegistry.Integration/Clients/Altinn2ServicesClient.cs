@@ -27,7 +27,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<AvailableService>> AvailableServices(int languageId)
+        public async Task<List<AvailableService>?> AvailableServices(int languageId)
         {
             List<AvailableService>? availableServices = null;
             string availabbleServicePath = _settings.BridgeApiEndpoint + $"metadata/api/availableServices?languageID={languageId}&appTypesToInclude=0&includeExpired=false";
@@ -51,7 +51,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<ServiceResource> GetServiceResourceFromService(string serviceCode, int serviceEditionCode)
+        public async Task<ServiceResource?> GetServiceResourceFromService(string serviceCode, int serviceEditionCode)
         {
             string bridgeBaseUrl = _settings.BridgeApiEndpoint;
             string url = $"{bridgeBaseUrl}metadata/api/resourceregisterresource?serviceCode={serviceCode}&serviceEditionCode={serviceEditionCode}";
@@ -60,12 +60,17 @@ namespace Altinn.ResourceRegistry.Integration.Clients
             response.EnsureSuccessStatusCode();
 
             string contentString = await response.Content.ReadAsStringAsync();
-            ServiceResource serviceResource = System.Text.Json.JsonSerializer.Deserialize<ServiceResource>(contentString);
+            if (string.IsNullOrEmpty(contentString))
+            {
+                return null;
+            }
+
+            ServiceResource? serviceResource = System.Text.Json.JsonSerializer.Deserialize<ServiceResource>(contentString);
             return serviceResource;
         }
 
         /// <inheritdoc/>
-        public async Task<XacmlPolicy> GetXacmlPolicy(string serviceCode, int serviceEditionCode, string identifier)
+        public async Task<XacmlPolicy?> GetXacmlPolicy(string serviceCode, int serviceEditionCode, string identifier)
         {
             string bridgeBaseUrl = _settings.BridgeApiEndpoint;
             string url = $"{bridgeBaseUrl}authorization/api/resourcepolicyfile?serviceCode={serviceCode}&serviceEditionCode={serviceEditionCode}&identifier={identifier}";
@@ -74,6 +79,11 @@ namespace Altinn.ResourceRegistry.Integration.Clients
             response.EnsureSuccessStatusCode();
 
             string contentString = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrEmpty(contentString))
+            {
+                return null;
+            }
+
             XacmlPolicy policy;
             using (XmlReader reader = XmlReader.Create(new StringReader(contentString)))
             {

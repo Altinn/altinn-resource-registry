@@ -27,14 +27,14 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<AvailableService>?> AvailableServices(int languageId)
+        public async Task<List<AvailableService>?> AvailableServices(int languageId, CancellationToken cancellationToken = default)
         {
             List<AvailableService>? availableServices = null;
             string availabbleServicePath = _settings.BridgeApiEndpoint + $"metadata/api/availableServices?languageID={languageId}&appTypesToInclude=0&includeExpired=false";
 
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(availabbleServicePath);
+                HttpResponseMessage response = await _client.GetAsync(availabbleServicePath, cancellationToken);
                 
                 string availableServiceString = await response.Content.ReadAsStringAsync();
                 if (!string.IsNullOrEmpty(availableServiceString))
@@ -51,15 +51,15 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<ServiceResource?> GetServiceResourceFromService(string serviceCode, int serviceEditionCode)
+        public async Task<ServiceResource?> GetServiceResourceFromService(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken = default)
         {
             string bridgeBaseUrl = _settings.BridgeApiEndpoint;
             string url = $"{bridgeBaseUrl}metadata/api/resourceregisterresource?serviceCode={serviceCode}&serviceEditionCode={serviceEditionCode}";
 
-            HttpResponseMessage response = await _client.GetAsync(url);
+            HttpResponseMessage response = await _client.GetAsync(url, cancellationToken);
             response.EnsureSuccessStatusCode();
 
-            string contentString = await response.Content.ReadAsStringAsync();
+            string contentString = await response.Content.ReadAsStringAsync(cancellationToken);
             if (string.IsNullOrEmpty(contentString))
             {
                 return null;
@@ -70,15 +70,15 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<XacmlPolicy?> GetXacmlPolicy(string serviceCode, int serviceEditionCode, string identifier)
+        public async Task<XacmlPolicy?> GetXacmlPolicy(string serviceCode, int serviceEditionCode, string identifier, CancellationToken cancellationToken = default)
         {
             string bridgeBaseUrl = _settings.BridgeApiEndpoint;
             string url = $"{bridgeBaseUrl}authorization/api/resourcepolicyfile?serviceCode={serviceCode}&serviceEditionCode={serviceEditionCode}&identifier={identifier}";
 
-            HttpResponseMessage response = await _client.GetAsync(url);
+            HttpResponseMessage response = await _client.GetAsync(url, cancellationToken);
             response.EnsureSuccessStatusCode();
 
-            string contentString = await response.Content.ReadAsStringAsync();
+            string contentString = await response.Content.ReadAsStringAsync(cancellationToken);
             if (string.IsNullOrEmpty(contentString))
             {
                 return null;

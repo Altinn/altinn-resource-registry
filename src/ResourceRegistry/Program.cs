@@ -1,6 +1,5 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Altinn.AccessGroups.Persistance;
 using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Common.Authentication.Configuration;
 using Altinn.Common.PEP.Authorization;
@@ -17,6 +16,7 @@ using Altinn.ResourceRegistry.Filters;
 using Altinn.ResourceRegistry.Health;
 using Altinn.ResourceRegistry.Integration.Clients;
 using Altinn.ResourceRegistry.Persistence;
+using Altinn.ResourceRegistry.Persistence.Configuration;
 using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
@@ -78,7 +78,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddHealthChecks().AddCheck<HealthCheck>("resourceregistry_health_check");
 
     services.AddSingleton<IResourceRegistry, ResourceRegistryService>();
-    services.AddSingleton<IResourceRegistryRepository, ResourceRegistryRepository>();
+    services.AddResourceRegistryRepository();
     services.AddSingleton<IPRP, PRPClient>();
     services.AddSingleton<IPolicyRepository, PolicyRepository>();
     services.AddSingleton<IAuthorizationHandler, ScopeAccessHandler>();

@@ -50,7 +50,7 @@ namespace Altinn.ResourceRegistry.Core.Clients
         /// </summary>
         /// <param name="resources">A list of resources to add to Access Management</param>
         /// <returns>A HTTP response message</returns>
-        public async Task<HttpResponseMessage> AddResourceToAccessManagement(List<AccessManagementResource> resources)
+        public async Task<HttpResponseMessage> AddResourceToAccessManagement(List<AccessManagementResource> resources, CancellationToken cancellationToken = default)
         {
             using var request = new HttpRequestMessage(HttpMethod.Post, AccessManagementEndpoint)
             {
@@ -68,7 +68,7 @@ namespace Altinn.ResourceRegistry.Core.Clients
                     await request.Content.ReadAsStringAsync());
             }
 
-            return await Client.SendAsync(request);
+            return await Client.SendAsync(request, cancellationToken);
         }
     }
 }

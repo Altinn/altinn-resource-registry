@@ -78,6 +78,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// <returns>XacmlPolicy</returns>
         public static XacmlPolicy ParsePolicy(Stream stream)
         {
+            // TODO: This is reading a stream synchronously, which could be problematic.
             stream.Position = 0;
             XacmlPolicy policy;
             using (XmlReader reader = XmlReader.Create(stream))

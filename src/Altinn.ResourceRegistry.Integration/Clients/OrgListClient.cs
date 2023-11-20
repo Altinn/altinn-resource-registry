@@ -1,7 +1,8 @@
-﻿using Altinn.ResourceRegistry.Core.Configuration;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
+using Altinn.ResourceRegistry.Core.Configuration;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Services;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
 namespace Altinn.ResourceRegistry.Integration.Clients
@@ -11,6 +12,11 @@ namespace Altinn.ResourceRegistry.Integration.Clients
     /// </summary>
     public class OrgListClient : IOrgListClient
     {
+        private static readonly JsonSerializerOptions SerializerOptions = new()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        };
+
         private readonly HttpClient _client;
         private readonly ResourceRegistrySettings _settings;
 
@@ -26,22 +32,17 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         /// <summary>
         /// Returns configured org list
         /// </summary>
-        public async Task<OrgList> GetOrgList()
+        public async Task<OrgList> GetOrgList(CancellationToken cancellationToken = default)
         {
-            OrgList orgList;
-
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(_settings.OrgListEndpoint);
+                HttpResponseMessage response = await _client.GetAsync(_settings.OrgListEndpoint, cancellationToken);
                 if (response.IsSuccessStatusCode)
                 {
                     response = await _client.GetAsync(_settings.OrgListAlternativeEndpoint);
                 }
 
-                string orgListString = await response.Content.ReadAsStringAsync();
-                orgList = System.Text.Json.JsonSerializer.Deserialize<OrgList>(orgListString, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase });
-
-                return orgList;
+                return await response.Content.ReadFromJsonAsync<OrgList>(SerializerOptions, cancellationToken);
             }
             catch (Exception ex)
             {

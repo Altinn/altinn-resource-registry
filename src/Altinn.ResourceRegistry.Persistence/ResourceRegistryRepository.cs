@@ -53,10 +53,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         try
         {
-            await using var conn = _conn.OpenConnection();
-            var trans = await conn.BeginTransactionAsync();
-
-            await using var pgcom = conn.CreateCommand(QUERY);
+            await using var pgcom = _conn.CreateCommand(QUERY);
             pgcom.Parameters.AddWithNullableValue("id", NpgsqlDbType.Text, resourceSearch.Id);
             pgcom.Parameters.AddWithNullableValue("title", NpgsqlDbType.Text, resourceSearch.Title);
             pgcom.Parameters.AddWithNullableValue("description", NpgsqlDbType.Text, resourceSearch.Description);

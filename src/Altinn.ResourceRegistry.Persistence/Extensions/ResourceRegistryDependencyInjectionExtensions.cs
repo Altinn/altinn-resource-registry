@@ -15,6 +15,20 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ResourceRegistryDependencyInjectionExtensions 
 {
     /// <summary>
+    /// Registers resource registry persistence services with the dependency injection container.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/>.</param>
+    /// <returns><paramref name="services"/> for further chaining.</returns>
+    public static IServiceCollection AddResourceRegistryPersistence(
+        this IServiceCollection services)
+    {
+        services.AddResourceRegistryRepository();
+        services.AddResourceRegistryPolicyRepository();
+
+        return services;
+    }
+
+    /// <summary>
     /// Registers a <see cref="IResourceRegistryRepository"/> with the dependency injection container.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/>.</param>
@@ -41,6 +55,25 @@ public static class ResourceRegistryDependencyInjectionExtensions
 
         services.TryAddTransient((IServiceProvider sp) => sp.GetRequiredService<NpgsqlDataSource>().CreateConnection());
         services.TryAddTransient<IResourceRegistryRepository, ResourceRegistryRepository>();
+
+        return services;
+    }
+
+    /// <summary>
+    /// Registers a <see cref="IPolicyRepository"/> with the dependency injection container.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/>.</param>
+    /// <returns><paramref name="services"/> for further chaining.</returns>
+    public static IServiceCollection AddResourceRegistryPolicyRepository(
+        this IServiceCollection services)
+    {
+        services.AddOptions<AzureStorageConfiguration>()
+            .Validate(s => !string.IsNullOrEmpty(s.ResourceRegistryAccountKey), "account key cannot be null or empty")
+            .Validate(s => !string.IsNullOrEmpty(s.ResourceRegistryAccountName), "account name cannot be null or empty")
+            .Validate(s => !string.IsNullOrEmpty(s.ResourceRegistryContainer), "container cannot be null or empty")
+            .Validate(s => !string.IsNullOrEmpty(s.ResourceRegistryBlobEndpoint), "blob endpoint cannot be null or empty");
+
+        services.TryAddSingleton<IPolicyRepository, PolicyRepository>();
 
         return services;
     }

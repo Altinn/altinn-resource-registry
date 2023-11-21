@@ -17,7 +17,7 @@ namespace Altinn.ResourceRegistry.Persistence;
 /// Repository for handling policy files
 /// </summary>
 [ExcludeFromCodeCoverage]
-public class PolicyRepository : IPolicyRepository
+internal class PolicyRepository : IPolicyRepository
 {
     private readonly ILogger<PolicyRepository> _logger;
     private readonly AzureStorageConfiguration _storageConfig;

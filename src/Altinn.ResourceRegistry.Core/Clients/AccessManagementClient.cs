@@ -49,6 +49,7 @@ namespace Altinn.ResourceRegistry.Core.Clients
         /// Posts a list of delegation events to the Altinn Bridge API endpoint
         /// </summary>
         /// <param name="resources">A list of resources to add to Access Management</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>A HTTP response message</returns>
         public async Task<HttpResponseMessage> AddResourceToAccessManagement(List<AccessManagementResource> resources, CancellationToken cancellationToken = default)
         {

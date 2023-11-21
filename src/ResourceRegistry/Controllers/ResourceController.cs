@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Nerdbank.Streams;
 
 namespace Altinn.ResourceRegistry.Controllers
 {
@@ -288,7 +289,8 @@ namespace Altinn.ResourceRegistry.Controllers
 
             try
             {
-                bool successfullyStored = await _resourceRegistry.StorePolicy(resource, fileStream, cancellationToken);
+                using var policyFileContent = await fileStream.ReadToSequenceAsync(cancellationToken);
+                bool successfullyStored = await _resourceRegistry.StorePolicy(resource, policyFileContent.AsReadOnlySequence, cancellationToken);
                
                 if (successfullyStored)
                 {

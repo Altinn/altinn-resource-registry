@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Altinn.ResourceRegistry.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Altinn.ResourceRegistry.Persistence", "src\Altinn.ResourceRegistry.Persistence\Altinn.ResourceRegistry.Persistence.csproj", "{1AE36D08-7DE9-41A7-8306-0696F3BF2AC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Altinn.ResourceRegistry.Integration", "src\Altinn.ResourceRegistry.Integration\Altinn.ResourceRegistry.Integration.csproj", "{28B0545F-050F-41C2-AA02-214C96A01AD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Altinn.ResourceRegistry.Integration", "src\Altinn.ResourceRegistry.Integration\Altinn.ResourceRegistry.Integration.csproj", "{28B0545F-050F-41C2-AA02-214C96A01AD0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F8341BDC-AFD6-4940-BBCF-3479AB059851}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

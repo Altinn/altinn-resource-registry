@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Buffers;
+using System.Diagnostics;
 using System.Net;
 using Altinn.Platform.Storage.Interface.Models;
 using Altinn.ResourceRegistry.Core.Clients.Interfaces;
@@ -13,6 +14,7 @@ using Azure;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Nerdbank.Streams;
 
 namespace Altinn.ResourceRegistry.Core.Services
 {
@@ -101,10 +103,10 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<bool> StorePolicy(ServiceResource serviceResource, Stream fileStream, CancellationToken cancellationToken = default)
+        public async Task<bool> StorePolicy(ServiceResource serviceResource, ReadOnlySequence<byte> policyContent, CancellationToken cancellationToken = default)
         {
-            PolicyHelper.IsValidResourcePolicy(serviceResource, fileStream);
-            Response<BlobContentInfo> response = await _policyRepository.WritePolicyAsync(serviceResource.Identifier, fileStream, cancellationToken);
+            PolicyHelper.IsValidResourcePolicy(serviceResource, policyContent);
+            Response<BlobContentInfo> response = await _policyRepository.WritePolicyAsync(serviceResource.Identifier, policyContent.AsStream(), cancellationToken);
 
             return response?.GetRawResponse()?.Status == (int)HttpStatusCode.Created;
         }

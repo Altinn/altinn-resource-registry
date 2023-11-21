@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Text.Json;
+using System.Xml;
 using Altinn.Authorization.ABAC.Utils;
 using Altinn.Authorization.ABAC.Xacml;
 using Altinn.ResourceRegistry.Core.Configuration;
@@ -14,6 +15,10 @@ namespace Altinn.ResourceRegistry.Integration.Clients
     /// </summary>
     public class Altinn2ServicesClient : IAltinn2Services
     {
+        private static readonly JsonSerializerOptions SerializerOptions = new()
+        {
+        };
+
         private readonly HttpClient _client;
         private readonly PlatformSettings _settings;
 
@@ -36,10 +41,10 @@ namespace Altinn.ResourceRegistry.Integration.Clients
             {
                 HttpResponseMessage response = await _client.GetAsync(availabbleServicePath, cancellationToken);
                 
-                string availableServiceString = await response.Content.ReadAsStringAsync();
+                string availableServiceString = await response.Content.ReadAsStringAsync(cancellationToken);
                 if (!string.IsNullOrEmpty(availableServiceString))
                 {
-                    availableServices = System.Text.Json.JsonSerializer.Deserialize<List<AvailableService>>(availableServiceString, new System.Text.Json.JsonSerializerOptions());
+                    availableServices = JsonSerializer.Deserialize<List<AvailableService>>(availableServiceString, SerializerOptions);
                 }
 
                 return availableServices;
@@ -65,7 +70,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
                 return null;
             }
 
-            ServiceResource? serviceResource = System.Text.Json.JsonSerializer.Deserialize<ServiceResource>(contentString);
+            ServiceResource? serviceResource = JsonSerializer.Deserialize<ServiceResource>(contentString, SerializerOptions);
             return serviceResource;
         }
 

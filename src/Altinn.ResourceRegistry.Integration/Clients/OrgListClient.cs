@@ -34,12 +34,14 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         /// </summary>
         public async Task<OrgList> GetOrgList(CancellationToken cancellationToken = default)
         {
+            HttpResponseMessage? response = null;
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(_settings.OrgListEndpoint, cancellationToken);
-                if (response.IsSuccessStatusCode)
+                response = await _client.GetAsync(_settings.OrgListEndpoint, cancellationToken);
+                if (!response.IsSuccessStatusCode)
                 {
-                    response = await _client.GetAsync(_settings.OrgListAlternativeEndpoint);
+                    response.Dispose();
+                    response = await _client.GetAsync(_settings.OrgListAlternativeEndpoint, cancellationToken);
                 }
 
                 return await response.Content.ReadFromJsonAsync<OrgList>(SerializerOptions, cancellationToken);
@@ -47,6 +49,10 @@ namespace Altinn.ResourceRegistry.Integration.Clients
             catch (Exception ex)
             {
                 throw new Exception($"Something went wrong when retrieving Action options", ex);
+            }
+            finally 
+            { 
+                response?.Dispose(); 
             }
         }
     }

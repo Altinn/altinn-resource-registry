@@ -46,7 +46,7 @@ internal class PolicyRepository : IPolicyRepository
         string filePath = $"{resourceId.AsFilePath()}/resourcepolicy.xml";
         BlobClient blobClient = CreateBlobClient(filePath);
 
-        return await GetBlobStreamInternal(blobClient);
+        return await GetBlobStreamInternal(blobClient, cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -55,7 +55,7 @@ internal class PolicyRepository : IPolicyRepository
         string filePath = $"{resourceId.AsFilePath()}/resourcepolicy.xml";
         BlobClient blobClient = CreateBlobClient(filePath).WithVersion(version);
 
-        return await GetBlobStreamInternal(blobClient);
+        return await GetBlobStreamInternal(blobClient, cancellationToken);
     }
 
     /// <inheritdoc/>

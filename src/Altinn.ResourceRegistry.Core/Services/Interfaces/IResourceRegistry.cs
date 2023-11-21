@@ -60,10 +60,10 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// Allows for storing a policy xacml policy for the resource
         /// </summary>
         /// <param name="serviceResource">The resource</param>
-        /// <param name="fileStream">The file stream to the policy file</param>
+        /// <param name="policyContent">The file stream to the policy file</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>Bool if storing the policy was successfull</returns>
-        Task<bool> StorePolicy(ServiceResource serviceResource, ReadOnlySequence<byte> fileStream, CancellationToken cancellationToken = default);
+        Task<bool> StorePolicy(ServiceResource serviceResource, ReadOnlySequence<byte> policyContent, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns the policy for a service resource

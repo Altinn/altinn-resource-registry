@@ -27,7 +27,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 
             if (File.Exists(availableServiceFilePath))
             {
-                string content = await File.ReadAllTextAsync(availableServiceFilePath);
+                string content = await File.ReadAllTextAsync(availableServiceFilePath, cancellationToken);
                 if (!string.IsNullOrEmpty(content))
                 {
                     availableServices = System.Text.Json.JsonSerializer.Deserialize<List<AvailableService>>(content, new System.Text.Json.JsonSerializerOptions());

@@ -38,9 +38,11 @@ public static class StreamExtensions
         int bufferSize,
         CancellationToken cancellationToken = default) 
     {
+        ArgumentNullException.ThrowIfNull(stream);
+
         if (!stream.CanRead) 
         {
-            throw new ArgumentException(nameof(stream), "Stream is not readable");
+            throw new ArgumentException("Stream is not readable", nameof(stream));
         } 
 
         while (true)

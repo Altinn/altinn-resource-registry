@@ -55,14 +55,40 @@ internal static class NpgsqlExtensions
         string parameterName,
         NpgsqlDbType parameterType,
         object? value)
+        => parameters.Add(parameterName, parameterType).SetNullableValue(value);
+
+    /// <summary>
+    /// Sets the value of the <see cref="NpgsqlParameter"/> to the given value.
+    /// </summary>
+    /// <param name="parameter">The <see cref="NpgsqlParameter"/></param>
+    /// <param name="value">The new value</param>
+    /// <returns><paramref name="parameter"/></returns>
+    public static NpgsqlParameter SetValue(
+        this NpgsqlParameter parameter,
+        object value)
     {
-        var param = parameters.Add(parameterName, parameterType);
-        param.Value = value;
+        parameter.Value = value;
+
+        return parameter;
+    }
+
+    /// <summary>
+    /// Sets the value of the <see cref="NpgsqlParameter"/> to the given value, converting <see langword="null"/>
+    /// to <see cref="DBNull.Value"/>.
+    /// </summary>
+    /// <param name="parameter">The <see cref="NpgsqlParameter"/></param>
+    /// <param name="value">The new value</param>
+    /// <returns><paramref name="parameter"/></returns>
+    public static NpgsqlParameter SetNullableValue(
+        this NpgsqlParameter parameter,
+        object? value)
+    {
+        parameter.Value = value;
         if (value is null)
         {
-            param.Value = DBNull.Value;
+            parameter.Value = DBNull.Value;
         }
 
-        return param;
+        return parameter;
     }
 }

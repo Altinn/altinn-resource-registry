@@ -9,7 +9,7 @@ internal interface IAggregateEventHandler<TEvent>
     /// Apply the <paramref name="event"/> to the aggregate.
     /// </summary>
     /// <param name="event">The event</param>
-    void Apply(TEvent @event);
+    void ApplyEvent(TEvent @event);
 }
 
 /// <summary>

@@ -78,8 +78,8 @@ internal class PartyRegistryRepository
             }
 
             // Step 2. Create a new aggregate.
-            var partyRegistryAggregate = PartyRegistryAggregate.New(Guid.NewGuid());
-            partyRegistryAggregate.Initialize(_timeProvider.GetUtcNow(), registryOwner, identifier, name, description);
+            var partyRegistryAggregate = PartyRegistryAggregate.New(_timeProvider, Guid.NewGuid());
+            partyRegistryAggregate.Initialize(registryOwner, identifier, name, description);
 
             // Step 3. Apply the event(s) to the database.
             await ApplyChanges(partyRegistryAggregate, cancellationToken);
@@ -133,8 +133,8 @@ internal class PartyRegistryRepository
                     registry_name.SetNullableValue(values.Name);
                     registry_description.SetNullableValue(values.Description);
                     registry_owner.SetNullableValue(values.RegistryOwner);
-                    actions.SetNullableValue(values.Actions);
-                    party_ids.SetNullableValue(values.PartyIds);
+                    actions.SetOptionalImmutableArrayValue(values.Actions);
+                    party_ids.SetOptionalImmutableArrayValue(values.PartyIds);
 
                     await cmd.ExecuteNonQueryAsync(cancellationToken);
                 }
@@ -148,6 +148,9 @@ internal class PartyRegistryRepository
                     PartyRegistryCreatedEvent create => ApplyCreateState(create, cancellationToken),
                     PartyRegistryUpdatedEvent update => ApplyUpdateState(update, cancellationToken),
                     PartyRegistryDeletedEvent delete => ApplyDeleteState(delete, cancellationToken),
+                    PartyRegistryResourceConnectionSetEvent connectionSet => ApplyResourceConnectionState(connectionSet, cancellationToken),
+                    PartyRegistryMembersAddedEvent membersAdded => ApplyMembersAddedState(membersAdded, cancellationToken),
+                    PartyRegistryMembersRemovedEvent membersRemoved => ApplyMembersRemovedState(membersRemoved, cancellationToken),
                     _ => throw new InvalidOperationException($"Unknown event type '{evt.GetType().Name}'")
                 };
 
@@ -208,6 +211,76 @@ internal class PartyRegistryRepository
 
             await using var cmd = _conn.CreateCommand(QUERY);
             cmd.Parameters.AddWithValue("rid", NpgsqlDbType.Uuid, evt.RegistryId);
+
+            await cmd.ExecuteNonQueryAsync(cancellationToken);
+        }
+
+        private async Task ApplyResourceConnectionState(PartyRegistryResourceConnectionSetEvent evt, CancellationToken cancellationToken)
+        {
+            const string UPSERT_QUERY = /*strpsql*/@"
+                INSERT INTO resourceregistry.party_registry_resource_connections_state
+                (rid, resource_identifier, actions, created, modified)
+                VALUES(@rid, @resource_identifier, @actions, @time, @time)
+                ON CONFLICT (rid, resource_identifier) DO UPDATE SET
+                    actions = @actions,
+                    modified = @time;";
+
+            const string DELETE_QUERY = /*strpsql*/@"
+                DELETE FROM resourceregistry.party_registry_resource_connections_state
+                WHERE rid = @rid
+                AND resource_identifier = @resource_identifier;";
+
+            // We use `default` (null in the database) to indicate that the connection should be deleted.
+            if (evt.Actions.IsDefault)
+            {
+                await using var cmd = _conn.CreateCommand(DELETE_QUERY);
+
+                cmd.Parameters.AddWithValue("rid", NpgsqlDbType.Uuid, evt.RegistryId);
+                cmd.Parameters.AddWithValue("resource_identifier", NpgsqlDbType.Text, evt.ResourceIdentifier);
+
+                await cmd.ExecuteNonQueryAsync(cancellationToken);
+            } 
+            else
+            {
+                await using var cmd = _conn.CreateCommand(UPSERT_QUERY);
+
+                cmd.Parameters.AddWithValue("rid", NpgsqlDbType.Uuid, evt.RegistryId);
+                cmd.Parameters.AddWithValue("resource_identifier", NpgsqlDbType.Text, evt.ResourceIdentifier);
+                cmd.Parameters.AddWithValue("actions", NpgsqlDbType.Array | NpgsqlDbType.Text, evt.Actions);
+                cmd.Parameters.AddWithValue("time", NpgsqlDbType.TimestampTz, evt.EventTime);
+
+                await cmd.ExecuteNonQueryAsync(cancellationToken);
+            }
+        }
+
+        private async Task ApplyMembersAddedState(PartyRegistryMembersAddedEvent evt, CancellationToken cancellationToken)
+        {
+            const string QUERY = /*strpsql*/@"
+                INSERT INTO resourceregistry.party_registry_members_state
+                (rid, party_id, since)
+                SELECT @rid, party_id, @since
+                FROM unnest(@party_ids) AS party_id;";
+
+            await using var cmd = _conn.CreateCommand(QUERY);
+
+            cmd.Parameters.AddWithValue("rid", NpgsqlDbType.Uuid, evt.RegistryId);
+            cmd.Parameters.AddWithValue("party_ids", NpgsqlDbType.Array | NpgsqlDbType.Uuid, evt.PartyIds);
+            cmd.Parameters.AddWithValue("time", NpgsqlDbType.TimestampTz, evt.EventTime);
+
+            await cmd.ExecuteNonQueryAsync(cancellationToken);
+        }
+
+        private async Task ApplyMembersRemovedState(PartyRegistryMembersRemovedEvent evt, CancellationToken cancellationToken)
+        {
+            const string QUERY = /*strpsql*/@"
+                DELETE FROM resourceregistry.party_registry_members_state
+                WHERE rid = @rid
+                AND party_id = ANY(@party_ids);";
+
+            await using var cmd = _conn.CreateCommand(QUERY);
+
+            cmd.Parameters.AddWithValue("rid", NpgsqlDbType.Uuid, evt.RegistryId);
+            cmd.Parameters.AddWithValue("party_ids", NpgsqlDbType.Array | NpgsqlDbType.Uuid, evt.PartyIds);
 
             await cmd.ExecuteNonQueryAsync(cancellationToken);
         }

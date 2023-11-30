@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 using Npgsql;
 using NpgsqlTypes;
 
@@ -83,8 +84,35 @@ internal static class NpgsqlExtensions
         this NpgsqlParameter parameter,
         object? value)
     {
-        parameter.Value = value;
-        if (value is null)
+        if (value is not null)
+        {
+            parameter.Value = value;
+        }
+        else
+        {
+            parameter.Value = DBNull.Value;
+        }
+
+        return parameter;
+    }
+
+    /// <summary>
+    /// Sets the value of the <see cref="NpgsqlParameter"/> to the given value, converting <see langword="default"/>
+    /// to <see cref="DBNull.Value"/>.
+    /// </summary>
+    /// <typeparam name="T">The array item type</typeparam>
+    /// <param name="parameter">The <see cref="NpgsqlParameter"/></param>
+    /// <param name="value">The new value</param>
+    /// <returns><paramref name="parameter"/></returns>
+    public static NpgsqlParameter SetOptionalImmutableArrayValue<T>(
+        this NpgsqlParameter parameter,
+        ImmutableArray<T> value)
+    {
+        if (!value.IsDefault)
+        {
+            parameter.Value = value;
+        }
+        else
         {
             parameter.Value = DBNull.Value;
         }

@@ -12,19 +12,21 @@ internal interface IAggregateFactory<TAggregate, in TEvent>
     /// <summary>
     /// Creates a new aggregate with the specified <paramref name="id"/>.
     /// </summary>
+    /// <param name="timeProvider">The time provider</param>
     /// <param name="id">The aggregate id</param>
     /// <returns><typeparamref name="TAggregate"/></returns>
-    static abstract TAggregate New(Guid id);
+    static abstract TAggregate New(TimeProvider timeProvider, Guid id);
 
     /// <summary>
     /// Creates a new aggregate with the specified <paramref name="id"/> from the specified <paramref name="events"/>.
     /// </summary>
+    /// <param name="timeProvider">The time provider</param>
     /// <param name="id">The aggregate id</param>
     /// <param name="events">The events that are loaded into the aggregate and marked as committed</param>
     /// <returns><typeparamref name="TAggregate"/></returns>
-    static TAggregate FromEvents(Guid id, IEnumerable<TEvent> events)
+    static TAggregate FromEvents(TimeProvider timeProvider, Guid id, IEnumerable<TEvent> events)
     {
-        var aggregate = TAggregate.New(id);
+        var aggregate = TAggregate.New(timeProvider, id);
         
         foreach (var e in events)
         {
@@ -38,12 +40,13 @@ internal interface IAggregateFactory<TAggregate, in TEvent>
     /// <summary>
     /// Creates a new aggregate with the specified <paramref name="id"/> from the specified <paramref name="events"/>.
     /// </summary>
+    /// <param name="timeProvider">The time provider</param>
     /// <param name="id">The aggregate id</param>
     /// <param name="events">The events that are loaded into the aggregate and marked as committed</param>
     /// <returns><typeparamref name="TAggregate"/></returns>
-    static async Task<TAggregate> FromEventsAsync(Guid id, IAsyncEnumerable<TEvent> events)
+    static async Task<TAggregate> FromEventsAsync(TimeProvider timeProvider, Guid id, IAsyncEnumerable<TEvent> events)
     {
-        var aggregate = TAggregate.New(id);
+        var aggregate = TAggregate.New(timeProvider, id);
         
         await foreach (var e in events)
         {

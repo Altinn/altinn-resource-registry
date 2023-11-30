@@ -12,9 +12,11 @@ internal abstract class Aggregate<TAggregate, TEvent>
     where TAggregate : Aggregate<TAggregate, TEvent>, IAggregateEventHandler<TAggregate, TEvent>, IAggregateFactory<TAggregate, TEvent>
     where TEvent : IAggregateEvent<TAggregate, TEvent>
 {
+    private readonly TimeProvider _timeProvider;
+
     [SuppressMessage(
-        "StyleCop.CSharp.SpacingRules", 
-        "SA1010:Opening square brackets should be spaced correctly", 
+        "StyleCop.CSharp.SpacingRules",
+        "SA1010:Opening square brackets should be spaced correctly",
         Justification = "https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3687")]
     private readonly List<TEvent> _events = [];
     private int _committed = 0;
@@ -57,6 +59,13 @@ internal abstract class Aggregate<TAggregate, TEvent>
     }
 
     /// <summary>
+    /// Gets the current time in UTC according to the configured <see cref="TimeProvider"/>.
+    /// </summary>
+    /// <returns><see cref="DateTimeOffset"/></returns>
+    protected DateTimeOffset GetUtcNow()
+        => _timeProvider.GetUtcNow();
+
+    /// <summary>
     /// Gets a self-reference that throws an exception if the aggregate is not initialized.
     /// </summary>
     /// <exception cref="InvalidOperationException">If the aggregate is not initialized</exception>
@@ -78,9 +87,11 @@ internal abstract class Aggregate<TAggregate, TEvent>
     /// <summary>
     /// Constructs a new <see cref="Aggregate{TAggregate,TEvent}"/> with the specified <paramref name="id"/>.
     /// </summary>
+    /// <param name="timeProvider">The time provider</param>
     /// <param name="id">The aggregate id</param>
-    protected Aggregate(Guid id)
+    protected Aggregate(TimeProvider timeProvider, Guid id)
     {
+        _timeProvider = timeProvider;
         Id = id;
     }
 
@@ -103,13 +114,13 @@ internal abstract class Aggregate<TAggregate, TEvent>
     /// Apply the <paramref name="event"/> to the aggregate.
     /// </summary>
     /// <param name="event">The event</param>
-    protected void Apply(TEvent @event)
+    protected void AddEvent(TEvent @event)
     {
         @event.ApplyTo((TAggregate)this);
         _events.Add(@event);
     }
 
     /// <inheritdoc />
-    void IAggregateEventHandler<TEvent>.Apply(TEvent @event)
-        => Apply(@event);
+    void IAggregateEventHandler<TEvent>.ApplyEvent(TEvent @event)
+        => AddEvent(@event);
 }

@@ -1,5 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using Altinn.ResourceRegistry.Core.PartyRegistry;
+using Microsoft.Extensions.Logging;
 
 namespace Altinn.ResourceRegistry.Persistence.Aggregates;
 
@@ -12,23 +14,28 @@ internal class PartyRegistryAggregate
     , IAggregateEventHandler<PartyRegistryCreatedEvent>
     , IAggregateEventHandler<PartyRegistryUpdatedEvent>
     , IAggregateEventHandler<PartyRegistryDeletedEvent>
+    , IAggregateEventHandler<PartyRegistryResourceConnectionSetEvent>
+    , IAggregateEventHandler<PartyRegistryMembersAddedEvent>
+    , IAggregateEventHandler<PartyRegistryMembersRemovedEvent>
 {
     private bool _isDeleted;
     private string? _registryOwner;
     private string? _identifier;
     private string? _name;
     private string? _description;
+    private Dictionary<string, ImmutableArray<string>> _resourceConnections = new();
+    private HashSet<Guid> _members = new();
 
     /// <inheritdoc/>
     [SuppressMessage(
         "StyleCop.CSharp.DocumentationRules", 
         "SA1648:inheritdoc should be used with inheriting class", 
         Justification = "https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3717")]
-    public static PartyRegistryAggregate New(Guid id)
-        => new(id);
+    public static PartyRegistryAggregate New(TimeProvider timeProvider, Guid id)
+        => new(timeProvider, id);
 
-    private PartyRegistryAggregate(Guid id)
-        : base(id)
+    private PartyRegistryAggregate(TimeProvider timeProvider, Guid id)
+        : base(timeProvider, id)
     {
     }
 
@@ -61,43 +68,162 @@ internal class PartyRegistryAggregate
     /// <summary>
     /// Create a new party registry.
     /// </summary>
-    /// <param name="eventTime">The event time</param>
     /// <param name="registryOwner">The registry owner</param>
     /// <param name="identifier">The registry identifier</param>
     /// <param name="name">The registry (display) name</param>
     /// <param name="description">The registry (optional) description</param>
-    public void Initialize(DateTimeOffset eventTime, string registryOwner, string identifier, string name, string? description)
-        => Apply(new PartyRegistryCreatedEvent(Id, registryOwner, identifier, name, description ?? string.Empty, eventTime));
-
-    /// <summary>
-    /// Update the party registry.
-    /// </summary>
-    /// <param name="eventTime">The event time</param>
-    /// <param name="identifier">The new identifier, or <see langword="null"/> to keep the old value</param>
-    /// <param name="name">The new <see cref="Name"/>, or <see langword="null"/> to keep the old value</param>
-    /// <param name="description">The new <see cref="Description"/>, or <see langword="null"/> to keep the old value</param>
-    public void Update(
-        DateTimeOffset eventTime,
-        string? identifier = null,
-        string? name = null,
-        string? description = null)
-        => Apply(new PartyRegistryUpdatedEvent(Id, identifier, name, description, eventTime));
-
-    /// <summary>
-    /// Delete the party registry.
-    /// </summary>
-    /// <param name="eventTime">The event time</param>
-    public void Delete(DateTimeOffset eventTime)
-        => Apply(new PartyRegistryDeletedEvent(Id, eventTime));
-
-    /// <inheritdoc />
-    void IAggregateEventHandler<PartyRegistryCreatedEvent>.Apply(PartyRegistryCreatedEvent @event)
+    public void Initialize(string registryOwner, string identifier, string name, string? description)
     {
         if (IsInitialized)
         {
             throw new InvalidOperationException("Aggregate already initialized");
         }
 
+        AddEvent(new PartyRegistryCreatedEvent(Id, registryOwner, identifier, name, description ?? string.Empty, GetUtcNow()));
+    }
+
+    /// <summary>
+    /// Update the party registry.
+    /// </summary>
+    /// <param name="identifier">The new identifier, or <see langword="null"/> to keep the old value</param>
+    /// <param name="name">The new <see cref="Name"/>, or <see langword="null"/> to keep the old value</param>
+    /// <param name="description">The new <see cref="Description"/>, or <see langword="null"/> to keep the old value</param>
+    public void Update(
+        string? identifier = null,
+        string? name = null,
+        string? description = null)
+    {
+        AssertInitialized();
+
+        if (identifier is null
+            && name is null
+            && description is null)
+        {
+            throw new ArgumentException("At least one of the parameters must be specified");
+        }
+
+        AddEvent(new PartyRegistryUpdatedEvent(Id, identifier, name, description, GetUtcNow()));
+    }
+
+    /// <summary>
+    /// Delete the party registry.
+    /// </summary>
+    public void Delete()
+    {
+        AssertInitialized();
+
+        AddEvent(new PartyRegistryDeletedEvent(Id, GetUtcNow()));
+    }
+
+    /// <summary>
+    /// Add a resource connection to the party registry.
+    /// </summary>
+    /// <param name="resourceIdentifier">The resource identifier</param>
+    /// <param name="actions">The actions allow-list</param>
+    public void AddResourceConnection(string resourceIdentifier, IEnumerable<string> actions)
+    {
+        AssertInitialized();
+
+        if (_resourceConnections.ContainsKey(resourceIdentifier))
+        {
+            throw new ArgumentException($"Resource connection for resource '{resourceIdentifier}' already exists");
+        }
+
+        var actionsImmutable = actions.ToImmutableArray();
+        if (actionsImmutable.IsDefault)
+        {
+            throw new ArgumentException("Actions must be specified");
+        }
+
+        AddEvent(new PartyRegistryResourceConnectionSetEvent(Id, resourceIdentifier, actionsImmutable, GetUtcNow()));
+    }
+
+    /// <summary>
+    /// Update a resource connection in the party registry.
+    /// </summary>
+    /// <param name="resourceIdentifier">The resource identifier</param>
+    /// <param name="actions">The actions allow-list</param>
+    public void UpdateResourceConnection(string resourceIdentifier, IEnumerable<string> actions)
+    {
+        AssertInitialized();
+
+        if (!_resourceConnections.ContainsKey(resourceIdentifier))
+        {
+            throw new ArgumentException($"Resource connection for resource '{resourceIdentifier}' does not exist");
+        }
+
+        var actionsImmutable = actions.ToImmutableArray();
+        if (actionsImmutable.IsDefault)
+        {
+            throw new ArgumentException("Actions must be specified");
+        }
+
+        AddEvent(new PartyRegistryResourceConnectionSetEvent(Id, resourceIdentifier, actionsImmutable, GetUtcNow()));
+    }
+
+    /// <summary>
+    /// Remove a resource connection from the party registry.
+    /// </summary>
+    /// <param name="resourceIdentifier">The resource identifier</param>
+    public void RemoveResourceConnection(string resourceIdentifier)
+    {
+        AssertInitialized();
+
+        if (!_resourceConnections.ContainsKey(resourceIdentifier))
+        {
+            throw new ArgumentException($"Resource connection for resource '{resourceIdentifier}' does not exist");
+        }
+
+        AddEvent(new PartyRegistryResourceConnectionSetEvent(Id, resourceIdentifier, Actions: default, GetUtcNow()));
+    }
+
+    /// <summary>
+    /// Add members to the party registry.
+    /// </summary>
+    /// <param name="partyIds">The members</param>
+    public void AddMembers(IEnumerable<Guid> partyIds)
+    {
+        AssertInitialized();
+
+        var partyIdsImmutable = partyIds.ToImmutableArray();
+        if (partyIdsImmutable.IsDefault)
+        {
+            throw new ArgumentException("Party IDs must be specified", nameof(partyIds));
+        }
+
+        if (partyIdsImmutable.Any(_members.Contains))
+        {
+            throw new ArgumentException("One or more party IDs already exist in the registry", nameof(partyIds));
+        }
+
+        AddEvent(new PartyRegistryMembersAddedEvent(Id, partyIdsImmutable, GetUtcNow()));
+    }
+
+    /// <summary>
+    /// Remove members from the party registry.
+    /// </summary>
+    /// <param name="partyIds">The members</param>
+    public void RemoveMembers(IEnumerable<Guid> partyIds)
+    {
+        AssertInitialized();
+
+        var partyIdsImmutable = partyIds.ToImmutableArray();
+        if (partyIdsImmutable.IsDefault)
+        {
+            throw new ArgumentException("Party IDs must be specified", nameof(partyIds));
+        }
+
+        if (!partyIdsImmutable.All(_members.Contains))
+        {
+            throw new ArgumentException("One or more party IDs do not exist in the registry", nameof(partyIds));
+        }
+
+        AddEvent(new PartyRegistryMembersRemovedEvent(Id, partyIdsImmutable, GetUtcNow()));
+    }
+
+    /// <inheritdoc />
+    void IAggregateEventHandler<PartyRegistryCreatedEvent>.ApplyEvent(PartyRegistryCreatedEvent @event)
+    {
         _registryOwner = @event.RegistryOwner;
         _identifier = @event.Identifier;
         _name = @event.Name;
@@ -105,17 +231,8 @@ internal class PartyRegistryAggregate
     }
 
     /// <inheritdoc />
-    void IAggregateEventHandler<PartyRegistryUpdatedEvent>.Apply(PartyRegistryUpdatedEvent @event)
+    void IAggregateEventHandler<PartyRegistryUpdatedEvent>.ApplyEvent(PartyRegistryUpdatedEvent @event)
     {
-        AssertInitialized();
-        
-        if (@event.Identifier is null
-            && @event.Name is null
-            && @event.Description is null)
-        {
-            throw new ArgumentException("At least one of the parameters must be specified", nameof(@event));
-        }
-
         if (@event.Identifier is { } identifier)
         {
             _identifier = identifier;
@@ -133,11 +250,34 @@ internal class PartyRegistryAggregate
     }
 
     /// <inheritdoc />
-    void IAggregateEventHandler<PartyRegistryDeletedEvent>.Apply(PartyRegistryDeletedEvent @event)
+    void IAggregateEventHandler<PartyRegistryDeletedEvent>.ApplyEvent(PartyRegistryDeletedEvent @event)
     {
-        AssertInitialized();
-
         _isDeleted = true;
+    }
+
+    /// <inheritdoc />
+    void IAggregateEventHandler<PartyRegistryResourceConnectionSetEvent>.ApplyEvent(PartyRegistryResourceConnectionSetEvent @event)
+    {
+        if (@event.Actions.IsDefault)
+        {
+            _resourceConnections.Remove(@event.ResourceIdentifier);
+        }
+        else
+        {
+            _resourceConnections[@event.ResourceIdentifier] = @event.Actions;
+        }
+    }
+
+    /// <inheritdoc />
+    void IAggregateEventHandler<PartyRegistryMembersAddedEvent>.ApplyEvent(PartyRegistryMembersAddedEvent @event)
+    {
+        _members.UnionWith(@event.PartyIds);
+    }
+
+    /// <inheritdoc />
+    void IAggregateEventHandler<PartyRegistryMembersRemovedEvent>.ApplyEvent(PartyRegistryMembersRemovedEvent @event)
+    {
+        _members.ExceptWith(@event.PartyIds);
     }
 
     /// <summary>
@@ -176,8 +316,8 @@ internal abstract record PartyRegistryEvent(Guid RegistryId, DateTimeOffset Even
         string? Name,
         string? Description,
         string? RegistryOwner,
-        string[]? Actions,
-        Guid[]? PartyIds);
+        ImmutableArray<string> Actions,
+        ImmutableArray<Guid> PartyIds);
 }
 
 internal record PartyRegistryCreatedEvent(
@@ -191,7 +331,7 @@ internal record PartyRegistryCreatedEvent(
 {
     /// <inheritdoc />
     protected override void ApplyTo(PartyRegistryAggregate aggregate)
-        => ((IAggregateEventHandler<PartyRegistryCreatedEvent>)aggregate).Apply(this);
+        => ((IAggregateEventHandler<PartyRegistryCreatedEvent>)aggregate).ApplyEvent(this);
 
     /// <inheritdoc />
     internal override Values AsValues()
@@ -203,8 +343,8 @@ internal record PartyRegistryCreatedEvent(
             Name: Name,
             Description: Description,
             RegistryOwner: RegistryOwner,
-            Actions: null,
-            PartyIds: null);
+            Actions: default,
+            PartyIds: default);
 }
 
 internal record PartyRegistryUpdatedEvent(
@@ -217,7 +357,7 @@ internal record PartyRegistryUpdatedEvent(
 {
     /// <inheritdoc />
     protected override void ApplyTo(PartyRegistryAggregate aggregate)
-        => ((IAggregateEventHandler<PartyRegistryUpdatedEvent>)aggregate).Apply(this);
+        => ((IAggregateEventHandler<PartyRegistryUpdatedEvent>)aggregate).ApplyEvent(this);
 
     /// <inheritdoc />
     internal override Values AsValues()
@@ -229,8 +369,8 @@ internal record PartyRegistryUpdatedEvent(
             Name: Name,
             Description: Description,
             RegistryOwner: null,
-            Actions: null,
-            PartyIds: null);
+            Actions: default,
+            PartyIds: default);
 }
 
 internal record PartyRegistryDeletedEvent(
@@ -240,7 +380,7 @@ internal record PartyRegistryDeletedEvent(
 {
     /// <inheritdoc />
     protected override void ApplyTo(PartyRegistryAggregate aggregate)
-        => ((IAggregateEventHandler<PartyRegistryDeletedEvent>)aggregate).Apply(this);
+        => ((IAggregateEventHandler<PartyRegistryDeletedEvent>)aggregate).ApplyEvent(this);
 
     /// <inheritdoc />
     internal override Values AsValues()
@@ -252,6 +392,79 @@ internal record PartyRegistryDeletedEvent(
             Name: null,
             Description: null,
             RegistryOwner: null,
-            Actions: null,
-            PartyIds: null);
+            Actions: default,
+            PartyIds: default);
+}
+
+internal record PartyRegistryResourceConnectionSetEvent(
+    Guid RegistryId,
+    string ResourceIdentifier,
+    ImmutableArray<string> Actions,
+    DateTimeOffset EventTime)
+    : PartyRegistryEvent(RegistryId, EventTime)
+{
+    /// <inheritdoc />
+    protected override void ApplyTo(PartyRegistryAggregate aggregate)
+        => ((IAggregateEventHandler<PartyRegistryResourceConnectionSetEvent>)aggregate).ApplyEvent(this);
+
+    /// <inheritdoc />
+    internal override Values AsValues()
+        => new Values(
+            Kind: "resource_connection_set",
+            EventTime: EventTime,
+            AggregateId: RegistryId,
+            Identifier: null,
+            Name: null,
+            Description: null,
+            RegistryOwner: null,
+            Actions: Actions,
+            PartyIds: default);
+}
+
+internal record PartyRegistryMembersAddedEvent(
+    Guid RegistryId,
+    ImmutableArray<Guid> PartyIds,
+    DateTimeOffset EventTime)
+    : PartyRegistryEvent(RegistryId, EventTime)
+{
+    /// <inheritdoc />
+    protected override void ApplyTo(PartyRegistryAggregate aggregate)
+        => ((IAggregateEventHandler<PartyRegistryMembersAddedEvent>)aggregate).ApplyEvent(this);
+
+    /// <inheritdoc />
+    internal override Values AsValues()
+        => new Values(
+            Kind: "members_added",
+            EventTime: EventTime,
+            AggregateId: RegistryId,
+            Identifier: null,
+            Name: null,
+            Description: null,
+            RegistryOwner: null,
+            Actions: default,
+            PartyIds: PartyIds);
+}
+
+internal record PartyRegistryMembersRemovedEvent(
+    Guid RegistryId,
+    ImmutableArray<Guid> PartyIds,
+    DateTimeOffset EventTime)
+    : PartyRegistryEvent(RegistryId, EventTime)
+{
+    /// <inheritdoc />
+    protected override void ApplyTo(PartyRegistryAggregate aggregate)
+        => ((IAggregateEventHandler<PartyRegistryMembersRemovedEvent>)aggregate).ApplyEvent(this);
+
+    /// <inheritdoc />
+    internal override Values AsValues()
+        => new Values(
+            Kind: "members_removed",
+            EventTime: EventTime,
+            AggregateId: RegistryId,
+            Identifier: null,
+            Name: null,
+            Description: null,
+            RegistryOwner: null,
+            Actions: default,
+            PartyIds: PartyIds);
 }

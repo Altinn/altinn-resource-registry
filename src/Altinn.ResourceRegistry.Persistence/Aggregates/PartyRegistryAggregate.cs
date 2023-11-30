@@ -10,7 +10,10 @@ internal class PartyRegistryAggregate
     : Aggregate<PartyRegistryAggregate, PartyRegistryEvent>
     , IAggregateFactory<PartyRegistryAggregate, PartyRegistryEvent>
     , IAggregateEventHandler<PartyRegistryCreatedEvent>
+    , IAggregateEventHandler<PartyRegistryUpdatedEvent>
+    , IAggregateEventHandler<PartyRegistryDeletedEvent>
 {
+    private bool _isDeleted;
     private string? _registryOwner;
     private string? _identifier;
     private string? _name;
@@ -33,7 +36,7 @@ internal class PartyRegistryAggregate
     public override bool IsInitialized => _registryOwner is not null;
 
     /// <inheritdoc />
-    public override bool IsDeleted => false;
+    public override bool IsDeleted => _isDeleted;
 
     /// <summary>
     /// Gets the registry owner.
@@ -58,13 +61,34 @@ internal class PartyRegistryAggregate
     /// <summary>
     /// Create a new party registry.
     /// </summary>
+    /// <param name="eventTime">The event time</param>
     /// <param name="registryOwner">The registry owner</param>
     /// <param name="identifier">The registry identifier</param>
     /// <param name="name">The registry (display) name</param>
     /// <param name="description">The registry (optional) description</param>
+    public void Initialize(DateTimeOffset eventTime, string registryOwner, string identifier, string name, string? description)
+        => Apply(new PartyRegistryCreatedEvent(Id, registryOwner, identifier, name, description ?? string.Empty, eventTime));
+
+    /// <summary>
+    /// Update the party registry.
+    /// </summary>
     /// <param name="eventTime">The event time</param>
-    public void Initialize(string registryOwner, string identifier, string name, string? description, DateTimeOffset eventTime)
-        => Apply(new PartyRegistryCreatedEvent(Id, registryOwner, identifier, name, description, eventTime));
+    /// <param name="identifier">The new identifier, or <see langword="null"/> to keep the old value</param>
+    /// <param name="name">The new <see cref="Name"/>, or <see langword="null"/> to keep the old value</param>
+    /// <param name="description">The new <see cref="Description"/>, or <see langword="null"/> to keep the old value</param>
+    public void Update(
+        DateTimeOffset eventTime,
+        string? identifier = null,
+        string? name = null,
+        string? description = null)
+        => Apply(new PartyRegistryUpdatedEvent(Id, identifier, name, description, eventTime));
+
+    /// <summary>
+    /// Delete the party registry.
+    /// </summary>
+    /// <param name="eventTime">The event time</param>
+    public void Delete(DateTimeOffset eventTime)
+        => Apply(new PartyRegistryDeletedEvent(Id, eventTime));
 
     /// <inheritdoc />
     void IAggregateEventHandler<PartyRegistryCreatedEvent>.Apply(PartyRegistryCreatedEvent @event)
@@ -78,6 +102,42 @@ internal class PartyRegistryAggregate
         _identifier = @event.Identifier;
         _name = @event.Name;
         _description = @event.Description;
+    }
+
+    /// <inheritdoc />
+    void IAggregateEventHandler<PartyRegistryUpdatedEvent>.Apply(PartyRegistryUpdatedEvent @event)
+    {
+        AssertInitialized();
+        
+        if (@event.Identifier is null
+            && @event.Name is null
+            && @event.Description is null)
+        {
+            throw new ArgumentException("At least one of the parameters must be specified", nameof(@event));
+        }
+
+        if (@event.Identifier is { } identifier)
+        {
+            _identifier = identifier;
+        }
+
+        if (@event.Name is { } name)
+        {
+            _name = name;
+        }
+
+        if (@event.Description is { } description)
+        {
+            _description = description;
+        }
+    }
+
+    /// <inheritdoc />
+    void IAggregateEventHandler<PartyRegistryDeletedEvent>.Apply(PartyRegistryDeletedEvent @event)
+    {
+        AssertInitialized();
+
+        _isDeleted = true;
     }
 
     /// <summary>
@@ -125,7 +185,7 @@ internal record PartyRegistryCreatedEvent(
     string RegistryOwner,
     string Identifier,
     string Name,
-    string? Description,
+    string Description,
     DateTimeOffset EventTime)
     : PartyRegistryEvent(RegistryId, EventTime)
 {
@@ -136,13 +196,62 @@ internal record PartyRegistryCreatedEvent(
     /// <inheritdoc />
     internal override Values AsValues()
         => new Values(
-            "registry_created",
-            EventTime,
-            RegistryId,
-            Identifier,
-            Name,
-            Description,
-            RegistryOwner,
-            null,
-            null);
+            Kind: "registry_created",
+            EventTime: EventTime,
+            AggregateId: RegistryId,
+            Identifier: Identifier,
+            Name: Name,
+            Description: Description,
+            RegistryOwner: RegistryOwner,
+            Actions: null,
+            PartyIds: null);
+}
+
+internal record PartyRegistryUpdatedEvent(
+    Guid RegistryId,
+    string? Identifier,
+    string? Name,
+    string? Description,
+    DateTimeOffset EventTime)
+    : PartyRegistryEvent(RegistryId, EventTime)
+{
+    /// <inheritdoc />
+    protected override void ApplyTo(PartyRegistryAggregate aggregate)
+        => ((IAggregateEventHandler<PartyRegistryUpdatedEvent>)aggregate).Apply(this);
+
+    /// <inheritdoc />
+    internal override Values AsValues()
+        => new Values(
+            Kind: "registry_updated",
+            EventTime: EventTime,
+            AggregateId: RegistryId,
+            Identifier: Identifier,
+            Name: Name,
+            Description: Description,
+            RegistryOwner: null,
+            Actions: null,
+            PartyIds: null);
+}
+
+internal record PartyRegistryDeletedEvent(
+    Guid RegistryId,
+    DateTimeOffset EventTime)
+    : PartyRegistryEvent(RegistryId, EventTime)
+{
+    /// <inheritdoc />
+    protected override void ApplyTo(PartyRegistryAggregate aggregate)
+        => ((IAggregateEventHandler<PartyRegistryDeletedEvent>)aggregate).Apply(this);
+
+    /// <inheritdoc />
+    internal override Values AsValues()
+        => new Values(
+            Kind: "registry_deleted",
+            EventTime: EventTime,
+            AggregateId: RegistryId,
+            Identifier: null,
+            Name: null,
+            Description: null,
+            RegistryOwner: null,
+            Actions: null,
+            PartyIds: null);
 }

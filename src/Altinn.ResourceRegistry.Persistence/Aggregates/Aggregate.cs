@@ -1,4 +1,6 @@
-﻿namespace Altinn.ResourceRegistry.Persistence.Aggregates;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Altinn.ResourceRegistry.Persistence.Aggregates;
 
 /// <summary>
 /// A base class for aggregates.
@@ -10,7 +12,11 @@ internal abstract class Aggregate<TAggregate, TEvent>
     where TAggregate : Aggregate<TAggregate, TEvent>, IAggregateEventHandler<TAggregate, TEvent>, IAggregateFactory<TAggregate, TEvent>
     where TEvent : IAggregateEvent<TAggregate, TEvent>
 {
-    private readonly List<TEvent> _events = new();
+    [SuppressMessage(
+        "StyleCop.CSharp.SpacingRules", 
+        "SA1010:Opening square brackets should be spaced correctly", 
+        Justification = "https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3687")]
+    private readonly List<TEvent> _events = [];
     private int _committed = 0;
 
     /// <summary>
@@ -42,6 +48,11 @@ internal abstract class Aggregate<TAggregate, TEvent>
         if (!IsInitialized)
         {
             throw new InvalidOperationException("Aggregate not initialized");
+        }
+
+        if (IsDeleted)
+        {
+            throw new InvalidOperationException("Aggregate is deleted");
         }
     }
 

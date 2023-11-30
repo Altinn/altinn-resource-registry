@@ -79,7 +79,7 @@ internal class PartyRegistryRepository
 
             // Step 2. Create a new aggregate.
             var partyRegistryAggregate = PartyRegistryAggregate.New(Guid.NewGuid());
-            partyRegistryAggregate.Initialize(registryOwner, identifier, name, description, _timeProvider.GetUtcNow());
+            partyRegistryAggregate.Initialize(_timeProvider.GetUtcNow(), registryOwner, identifier, name, description);
 
             // Step 3. Apply the event(s) to the database.
             await ApplyChanges(partyRegistryAggregate, cancellationToken);
@@ -93,8 +93,7 @@ internal class PartyRegistryRepository
             const string QUERY = /*strpsql*/@"
                 SELECT rid, identifier, registry_owner, registry_name, registry_description, created, modified
                 FROM resourceregistry.party_registry_state
-                WHERE registry_owner = @owner AND identifier = @identifier;
-                ";
+                WHERE registry_owner = @owner AND identifier = @identifier;";
 
             await using var cmd = _conn.CreateCommand(QUERY);
             cmd.Parameters.AddWithValue("owner", NpgsqlDbType.Text, registryOwner);
@@ -111,50 +110,55 @@ internal class PartyRegistryRepository
                 INSERT INTO resourceregistry.party_registry_events (etime, kind, rid, identifier, registry_name, registry_description, registry_owner, actions, party_ids)
                 VALUES (@etime, @kind, @rid, @identifier, @registry_name, @registry_description, @registry_owner, @actions, @party_ids);";
 
-            await using var cmd = _conn.CreateCommand(QUERY);
-            var etime = cmd.Parameters.Add("etime", NpgsqlDbType.TimestampTz);
-            var kind = cmd.Parameters.Add("kind", NpgsqlDbType.Text);
-            var rid = cmd.Parameters.Add("rid", NpgsqlDbType.Uuid);
-            var identifier = cmd.Parameters.Add("identifier", NpgsqlDbType.Text);
-            var registry_name = cmd.Parameters.Add("registry_name", NpgsqlDbType.Text);
-            var registry_description = cmd.Parameters.Add("registry_description", NpgsqlDbType.Text);
-            var registry_owner = cmd.Parameters.Add("registry_owner", NpgsqlDbType.Text);
-            var actions = cmd.Parameters.Add("actions", NpgsqlDbType.Array | NpgsqlDbType.Text);
-            var party_ids = cmd.Parameters.Add("party_ids", NpgsqlDbType.Array | NpgsqlDbType.Uuid);
-
             // Step 1. Insert all events into the database.
-            foreach (var evt in aggregate.GetUncommittedEvents())
             {
-                var values = evt.AsValues();
-                etime.SetValue(values.EventTime);
-                kind.SetValue(values.Kind);
-                rid.SetValue(values.AggregateId);
-                identifier.SetNullableValue(values.Identifier);
-                registry_name.SetNullableValue(values.Name);
-                registry_description.SetNullableValue(values.Description);
-                registry_owner.SetNullableValue(values.RegistryOwner);
-                actions.SetNullableValue(values.Actions);
-                party_ids.SetNullableValue(values.PartyIds);
+                await using var cmd = _conn.CreateCommand(QUERY);
+                var etime = cmd.Parameters.Add("etime", NpgsqlDbType.TimestampTz);
+                var kind = cmd.Parameters.Add("kind", NpgsqlDbType.Text);
+                var rid = cmd.Parameters.Add("rid", NpgsqlDbType.Uuid);
+                var identifier = cmd.Parameters.Add("identifier", NpgsqlDbType.Text);
+                var registry_name = cmd.Parameters.Add("registry_name", NpgsqlDbType.Text);
+                var registry_description = cmd.Parameters.Add("registry_description", NpgsqlDbType.Text);
+                var registry_owner = cmd.Parameters.Add("registry_owner", NpgsqlDbType.Text);
+                var actions = cmd.Parameters.Add("actions", NpgsqlDbType.Array | NpgsqlDbType.Text);
+                var party_ids = cmd.Parameters.Add("party_ids", NpgsqlDbType.Array | NpgsqlDbType.Uuid);
 
-                await cmd.ExecuteNonQueryAsync(cancellationToken);
+                foreach (var evt in aggregate.GetUncommittedEvents())
+                {
+                    var values = evt.AsValues();
+                    etime.SetValue(values.EventTime);
+                    kind.SetValue(values.Kind);
+                    rid.SetValue(values.AggregateId);
+                    identifier.SetNullableValue(values.Identifier);
+                    registry_name.SetNullableValue(values.Name);
+                    registry_description.SetNullableValue(values.Description);
+                    registry_owner.SetNullableValue(values.RegistryOwner);
+                    actions.SetNullableValue(values.Actions);
+                    party_ids.SetNullableValue(values.PartyIds);
+
+                    await cmd.ExecuteNonQueryAsync(cancellationToken);
+                }
             }
 
             // Step 2. Update state tables in the database.
             foreach (var evt in aggregate.GetUncommittedEvents())
             {
-                switch (evt)
+                var applyTask = evt switch
                 {
-                    case PartyRegistryCreatedEvent create:
-                        await ApplyCreateState(create, cancellationToken);
-                        break;
+                    PartyRegistryCreatedEvent create => ApplyCreateState(create, cancellationToken),
+                    PartyRegistryUpdatedEvent update => ApplyUpdateState(update, cancellationToken),
+                    PartyRegistryDeletedEvent delete => ApplyDeleteState(delete, cancellationToken),
+                    _ => throw new InvalidOperationException($"Unknown event type '{evt.GetType().Name}'")
+                };
 
-                    default:
-                        throw new InvalidOperationException($"Unknown event type '{evt.GetType().Name}'");
-                }
+                await applyTask;
             }
 
             // Step 3. Update modified timestamp on the registry state table.
-            await UpdateModifiedAt(aggregate, cancellationToken);
+            if (!aggregate.IsDeleted)
+            {
+                await UpdateModifiedAt(aggregate, cancellationToken);
+            }
 
             // Step 4. Mark all events as commited.
             aggregate.Commit();
@@ -174,6 +178,36 @@ internal class PartyRegistryRepository
             cmd.Parameters.AddWithValue("registry_name", NpgsqlDbType.Text, evt.Name);
             cmd.Parameters.AddWithValue("created", NpgsqlDbType.TimestampTz, evt.EventTime);
             cmd.Parameters.AddWithValue("modified", NpgsqlDbType.TimestampTz, evt.EventTime);
+
+            await cmd.ExecuteNonQueryAsync(cancellationToken);
+        }
+
+        private async Task ApplyUpdateState(PartyRegistryUpdatedEvent evt, CancellationToken cancellationToken)
+        {
+            const string QUERY = /*strpsql*/@"
+                UPDATE resourceregistry.party_registry_state
+                SET identifier = COALESCE(@identifier, identifier),
+                    registry_name = COALESCE(@registry_name, registry_name),
+                    registry_description = COALESCE(@registry_description, registry_description),
+                WHERE rid = @rid;";
+
+            await using var cmd = _conn.CreateCommand(QUERY);
+            cmd.Parameters.AddWithValue("rid", NpgsqlDbType.Uuid, evt.RegistryId);
+            cmd.Parameters.AddWithNullableValue("identifier", NpgsqlDbType.Text, evt.Identifier);
+            cmd.Parameters.AddWithNullableValue("registry_name", NpgsqlDbType.Text, evt.Name);
+            cmd.Parameters.AddWithNullableValue("registry_description", NpgsqlDbType.Text, evt.Description);
+
+            await cmd.ExecuteNonQueryAsync(cancellationToken);
+        }
+
+        private async Task ApplyDeleteState(PartyRegistryDeletedEvent evt, CancellationToken cancellationToken)
+        {
+            const string QUERY = /*strpsql*/@"
+                DELETE FROM resourceregistry.party_registry_state
+                WHERE rid = @rid;";
+
+            await using var cmd = _conn.CreateCommand(QUERY);
+            cmd.Parameters.AddWithValue("rid", NpgsqlDbType.Uuid, evt.RegistryId);
 
             await cmd.ExecuteNonQueryAsync(cancellationToken);
         }

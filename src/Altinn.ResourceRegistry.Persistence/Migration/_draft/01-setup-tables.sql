@@ -70,7 +70,7 @@ CREATE TABLE resourceregistry.party_registry_state(
     -- name of the registry (display name)
     registry_name text COLLATE pg_catalog."default" NOT NULL,
     -- description of the registry
-    registry_description text COLLATE pg_catalog."default",
+    registry_description text COLLATE pg_catalog."default" NOT NULL,
     -- when the registry was created
     created timestamp with time zone NOT NULL,
     -- last update time for the registry
@@ -88,7 +88,8 @@ CREATE TABLE resourceregistry.party_registry_members_state(
     party_id uuid NOT NULL,
     -- since when this member was added
     since timestamp with time zone NOT NULL,
-    PRIMARY KEY (rid, party_id)
+    PRIMARY KEY (rid, party_id),
+    FOREIGN KEY (rid) REFERENCES resourceregistry.party_registry_state(rid) ON DELETE CASCADE ON UPDATE RESTRICT
 )
 TABLESPACE pg_default;
 
@@ -105,7 +106,8 @@ CREATE TABLE resourceregistry.party_registry_resource_connections_state(
     -- last update time for the connection
     modified timestamp with time zone NOT NULL,
     PRIMARY KEY (rid, resource_identifier),
-    FOREIGN KEY (resource_identifier) REFERENCES resourceregistry.resources(identifier) ON DELETE RESTRICT ON UPDATE RESTRICT
+    FOREIGN KEY (resource_identifier) REFERENCES resourceregistry.resources(identifier) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    FOREIGN KEY (rid) REFERENCES resourceregistry.party_registry_state(rid) ON DELETE CASCADE ON UPDATE RESTRICT
 )
 TABLESPACE pg_default;
 

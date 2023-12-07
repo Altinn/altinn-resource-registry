@@ -552,7 +552,7 @@ internal partial class PartyRegistryRepository
                 WHERE rid = @rid
                 AND resource_identifier = @resource_identifier;";
 
-            var actions = new HashSet<string>();
+            HashSet<string> actions;
             
             // get the actions in the db (locking the row)
             {
@@ -567,7 +567,7 @@ internal partial class PartyRegistryRepository
                     throw new InvalidOperationException($"No resource connection with identifier '{evt.ResourceIdentifier}' found.");
                 }
 
-                actions.UnionWith(await reader.GetFieldValueAsync<IList<string>>("actions", cancellationToken));
+                actions = new HashSet<string>(await reader.GetFieldValueAsync<IList<string>>("actions", cancellationToken));
             }
 
             // remove the items in the event

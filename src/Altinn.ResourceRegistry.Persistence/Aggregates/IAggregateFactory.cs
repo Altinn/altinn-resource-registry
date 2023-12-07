@@ -6,7 +6,7 @@
 /// <typeparam name="TAggregate">The concrete aggregate type</typeparam>
 /// <typeparam name="TEvent">The concrete event type</typeparam>
 internal interface IAggregateFactory<TAggregate, in TEvent>
-    where TAggregate : Aggregate<TAggregate, TEvent>, IAggregateFactory<TAggregate, TEvent>
+    where TAggregate : Aggregate<TAggregate, TEvent>, IAggregateFactory<TAggregate, TEvent>, IAggregateEventHandler<TAggregate, TEvent>
     where TEvent : IAggregateEvent<TAggregate, TEvent>
 {
     /// <summary>
@@ -24,13 +24,13 @@ internal interface IAggregateFactory<TAggregate, in TEvent>
     /// <param name="id">The aggregate id</param>
     /// <param name="events">The events that are loaded into the aggregate and marked as committed</param>
     /// <returns><typeparamref name="TAggregate"/></returns>
-    static TAggregate FromEvents(TimeProvider timeProvider, Guid id, IEnumerable<TEvent> events)
+    static TAggregate LoadFrom(TimeProvider timeProvider, Guid id, IEnumerable<TEvent> events)
     {
         var aggregate = TAggregate.New(timeProvider, id);
         
         foreach (var e in events)
         {
-            e.ApplyTo(aggregate);
+            aggregate.ApplyEvent(e);
         }
 
         aggregate.Commit();
@@ -44,15 +44,16 @@ internal interface IAggregateFactory<TAggregate, in TEvent>
     /// <param name="id">The aggregate id</param>
     /// <param name="events">The events that are loaded into the aggregate and marked as committed</param>
     /// <returns><typeparamref name="TAggregate"/></returns>
-    static async Task<TAggregate> FromEventsAsync(TimeProvider timeProvider, Guid id, IAsyncEnumerable<TEvent> events)
+    static async Task<TAggregate> LoadFrom(TimeProvider timeProvider, Guid id, IAsyncEnumerable<TEvent> events)
     {
         var aggregate = TAggregate.New(timeProvider, id);
         
         await foreach (var e in events)
         {
-            e.ApplyTo(aggregate);
+            aggregate.ApplyEvent(e);
         }
             
+        aggregate.Commit();
         return aggregate;
     }
 }

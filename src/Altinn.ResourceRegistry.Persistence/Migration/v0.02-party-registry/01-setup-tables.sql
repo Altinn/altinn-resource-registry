@@ -5,6 +5,10 @@ DROP INDEX IF EXISTS ix_party_registry_resource_connections_state_resource;
 
 DROP INDEX IF EXISTS uq_party_registry_state_owner_ident;
 
+DROP INDEX IF EXISTS ix_party_registry_members_state_rid;
+
+DROP INDEX IF EXISTS ix_party_registry_resource_connections_state_rid;
+
 DROP TABLE IF EXISTS resourceregistry.party_registry_events;
 
 DROP TABLE IF EXISTS resourceregistry.party_registry_state;
@@ -22,7 +26,10 @@ BEGIN
         'registry_created',
         'registry_updated',
         'registry_deleted',
-        'resource_connection_set',
+        'resource_connection_created',
+        'resource_connection_actions_added',
+        'resource_connection_actions_removed',
+        'resource_connection_deleted',
         'members_added',
         'members_removed'
 );
@@ -42,7 +49,7 @@ CREATE TABLE resourceregistry.party_registry_events(
     kind resourceregistry.party_registry_event_kind NOT NULL,
     -- event target (registry id)
     rid uuid NOT NULL,
-    -- identifier - registry_created.registry_identifier, resource_connection_set.resource_identifier
+    -- identifier - registry_created.registry_identifier, resource_connection_*.resource_identifier
     identifier text COLLATE pg_catalog."default",
     -- registry_name - registry_created.registry_name, registry_updated.registry_name -- display name for a registry
     registry_name text COLLATE pg_catalog."default",
@@ -50,7 +57,7 @@ CREATE TABLE resourceregistry.party_registry_events(
     registry_description text COLLATE pg_catalog."default",
     -- registry_owner - registry_created.registry_owner -- the org. nr of the owning party
     registry_owner text COLLATE pg_catalog."default",
-    -- actions - resource_connection_set.actions - if NULL means to remove connection
+    -- actions - resource_connection_created.actions, resource_connection_actions_added.actions, resource_connection_actions_removed.actions
     actions text[] COLLATE pg_catalog."default",
     -- party_id - members_added.party_ids, members_removed.party_ids
     party_ids uuid[]
@@ -93,6 +100,8 @@ CREATE TABLE resourceregistry.party_registry_members_state(
 )
 TABLESPACE pg_default;
 
+CREATE INDEX ix_party_registry_members_state_rid ON resourceregistry.party_registry_members_state (rid) TABLESPACE pg_default;
+
 -- State Table: resourceregistry.party_registry_resource_connections_state
 CREATE TABLE resourceregistry.party_registry_resource_connections_state(
     -- registry id
@@ -112,6 +121,8 @@ CREATE TABLE resourceregistry.party_registry_resource_connections_state(
 TABLESPACE pg_default;
 
 CREATE INDEX ix_party_registry_resource_connections_state_resource ON resourceregistry.party_registry_resource_connections_state (resource_identifier) TABLESPACE pg_default;
+
+CREATE INDEX ix_party_registry_resource_connections_state_rid ON resourceregistry.party_registry_resource_connections_state (rid) TABLESPACE pg_default;
 
 -- Table: resourceregistry.resources - make serviceresourcejson NOT NULL
 ALTER TABLE resourceregistry.resources

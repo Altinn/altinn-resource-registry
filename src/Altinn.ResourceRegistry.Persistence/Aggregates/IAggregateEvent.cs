@@ -10,6 +10,11 @@ internal interface IAggregateEvent<TAggregate, in TEvent>
     where TEvent : IAggregateEvent<TAggregate, TEvent>
 {
     /// <summary>
+    /// Get's the event id.
+    /// </summary>
+    EventId EventId { get; }
+
+    /// <summary>
     /// Gets the event time.
     /// </summary>
     DateTimeOffset EventTime { get; }

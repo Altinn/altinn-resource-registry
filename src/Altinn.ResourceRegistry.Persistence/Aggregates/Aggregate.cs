@@ -34,12 +34,37 @@ internal abstract class Aggregate<TAggregate, TEvent>
     /// <summary>
     /// Gets when this aggregate was created.
     /// </summary>
-    public DateTimeOffset CreatedAt => InitializedThis._events[0].EventTime;
+    public DateTimeOffset CreatedAt
+        => _events.Count switch
+        {
+            0 => throw new InvalidOperationException("Aggregate not initialized"),
+            _ => _events[0].EventTime,
+        };
 
     /// <summary>
     /// Gets when this aggregate was last updated.
     /// </summary>
-    public DateTimeOffset UpdatedAt => InitializedThis._events[^1].EventTime;
+    public DateTimeOffset UpdatedAt 
+        => _events.Count switch
+        {
+            0 => throw new InvalidOperationException("Aggregate not initialized"),
+            _ => _events[^1].EventTime,
+        };
+
+    /// <summary>
+    /// Gets the current aggregate version (for use with optimistic concurency).
+    /// </summary>
+    public ulong CommittedVersion
+        => _committed switch
+        {
+            0 => 0,
+            _ => _events[_committed - 1].EventId.UnsafeValue,
+        };
+
+    /// <summary>
+    /// Gets a value indicating wheather or not this aggregate has any uncommited events.
+    /// </summary>
+    public bool HasUncommittedEvents => _events.Count != _committed;
 
     /// <summary>
     /// Asserts that the aggregate is initialized.
@@ -100,6 +125,13 @@ internal abstract class Aggregate<TAggregate, TEvent>
     /// </summary>
     public void Commit()
     {
+#if DEBUG
+        if (GetUncommittedEvents().Any(static e => !e.EventId.IsSet))
+        {
+            throw new InvalidOperationException("Cannot commit aggregate events with unset event ids");
+        }
+#endif
+
         _committed = _events.Count;
     }
 

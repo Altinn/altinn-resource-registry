@@ -53,11 +53,11 @@ internal partial class PartyRegistryRepository
         => InTransaction(tx => tx.CreatePartyRegistry(registryOwner, identifier, name, description, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<PartyRegistryInfo> DeletePartyRegistry(Guid id, CancellationToken cancellationToken)
+    public Task<PartyRegistryInfo> DeletePartyRegistry(Guid id, CancellationToken cancellationToken = default)
         => InTransaction(tx => tx.Delete(new(id), cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<PartyRegistryInfo> DeletePartyRegistry(string registryOwner, string identifier, CancellationToken cancellationToken)
+    public Task<PartyRegistryInfo> DeletePartyRegistry(string registryOwner, string identifier, CancellationToken cancellationToken = default)
         => InTransaction(tx => tx.Delete(new(registryOwner, identifier), cancellationToken), cancellationToken);
 
     /// <inheritdoc/>

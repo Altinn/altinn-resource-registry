@@ -675,7 +675,7 @@ internal partial class PartyRegistryRepository
                 "resource_connection_created" => await CreateResourceConnectionCreatedEvent(reader, id, cancellationToken),
                 "resource_connection_actions_added" => await CreateResourceConnectionActionsAddedEvent(reader, id, cancellationToken),
                 "resource_connection_actions_removed" => await CreateResourceConnectionActionsRemovedEvent(reader, id, cancellationToken),
-                "resource_connection_deleted" => CreateResourceConnectionDeletedEvent(reader, id, cancellationToken),
+                "resource_connection_deleted" => CreateResourceConnectionDeletedEvent(reader, id),
                 "members_added" => await CreateMembersAddedEvent(reader, id, cancellationToken),
                 "members_removed" => await CreateMembersRemovedEvent(reader, id, cancellationToken),
                 _ => throw new InvalidOperationException($"Unknown event kind '{kind}'")
@@ -742,7 +742,7 @@ internal partial class PartyRegistryRepository
                 return new PartyRegistryResourceConnectionActionsRemovedEvent(id, rid, resourceIdentifier, actions, etime);
             }
 
-            static PartyRegistryResourceConnectionDeletedEvent CreateResourceConnectionDeletedEvent(NpgsqlDataReader reader, Aggregates.EventId id, CancellationToken cancellationToken)
+            static PartyRegistryResourceConnectionDeletedEvent CreateResourceConnectionDeletedEvent(NpgsqlDataReader reader, Aggregates.EventId id)
             {
                 var etime = reader.GetFieldValue<DateTimeOffset>("etime");
                 var rid = reader.GetGuid("rid");

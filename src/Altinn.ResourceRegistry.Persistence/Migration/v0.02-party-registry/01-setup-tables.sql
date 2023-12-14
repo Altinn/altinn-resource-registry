@@ -1,24 +1,4 @@
 -- Schema: resourceregistry
-DROP INDEX IF EXISTS ix_party_registry_events_rid;
-
-DROP INDEX IF EXISTS ix_party_registry_resource_connections_state_resource;
-
-DROP INDEX IF EXISTS uq_party_registry_state_owner_ident;
-
-DROP INDEX IF EXISTS ix_party_registry_members_state_rid;
-
-DROP INDEX IF EXISTS ix_party_registry_resource_connections_state_rid;
-
-DROP TABLE IF EXISTS resourceregistry.party_registry_events;
-
-DROP TABLE IF EXISTS resourceregistry.party_registry_state;
-
-DROP TABLE IF EXISTS resourceregistry.party_registry_members_state;
-
-DROP TABLE IF EXISTS resourceregistry.party_registry_resource_connections_state;
-
-DROP TYPE IF EXISTS resourceregistry.party_registry_event_kind;
-
 -- Enum: resourceregistry.party_registry_event_kind
 DO $$
 BEGIN
@@ -40,7 +20,7 @@ END
 $$;
 
 -- Table: resourceregistry.party_registry_events
-CREATE TABLE resourceregistry.party_registry_events(
+CREATE TABLE IF NOT EXISTS resourceregistry.party_registry_events(
     -- event id
     eid bigint NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     -- event time
@@ -64,10 +44,10 @@ CREATE TABLE resourceregistry.party_registry_events(
 )
 TABLESPACE pg_default;
 
-CREATE INDEX ix_party_registry_events_rid ON resourceregistry.party_registry_events (rid) TABLESPACE pg_default;
+CREATE INDEX IF NOT EXISTS ix_party_registry_events_rid ON resourceregistry.party_registry_events(rid) TABLESPACE pg_default;
 
 -- State Table: resourceregistry.party_registry_state
-CREATE TABLE resourceregistry.party_registry_state(
+CREATE TABLE IF NOT EXISTS resourceregistry.party_registry_state(
     -- registry id
     rid uuid NOT NULL PRIMARY KEY,
     -- identifier - public "id" (changeable) - unique per owner
@@ -85,10 +65,10 @@ CREATE TABLE resourceregistry.party_registry_state(
 )
 TABLESPACE pg_default;
 
-CREATE UNIQUE INDEX uq_party_registry_state_owner_ident ON resourceregistry.party_registry_state (registry_owner, identifier) TABLESPACE pg_default;
+CREATE UNIQUE INDEX IF NOT EXISTS uq_party_registry_state_owner_ident ON resourceregistry.party_registry_state(registry_owner, identifier) TABLESPACE pg_default;
 
 -- State Table: resourceregistry.party_registry_members_state
-CREATE TABLE resourceregistry.party_registry_members_state(
+CREATE TABLE IF NOT EXISTS resourceregistry.party_registry_members_state(
     -- registry id
     rid uuid NOT NULL,
     -- party id
@@ -100,10 +80,10 @@ CREATE TABLE resourceregistry.party_registry_members_state(
 )
 TABLESPACE pg_default;
 
-CREATE INDEX ix_party_registry_members_state_rid ON resourceregistry.party_registry_members_state (rid) TABLESPACE pg_default;
+CREATE INDEX IF NOT EXISTS ix_party_registry_members_state_rid ON resourceregistry.party_registry_members_state(rid) TABLESPACE pg_default;
 
 -- State Table: resourceregistry.party_registry_resource_connections_state
-CREATE TABLE resourceregistry.party_registry_resource_connections_state(
+CREATE TABLE IF NOT EXISTS resourceregistry.party_registry_resource_connections_state(
     -- registry id
     rid uuid NOT NULL,
     -- resource id
@@ -120,9 +100,9 @@ CREATE TABLE resourceregistry.party_registry_resource_connections_state(
 )
 TABLESPACE pg_default;
 
-CREATE INDEX ix_party_registry_resource_connections_state_resource ON resourceregistry.party_registry_resource_connections_state (resource_identifier) TABLESPACE pg_default;
+CREATE INDEX IF NOT EXISTS ix_party_registry_resource_connections_state_resource ON resourceregistry.party_registry_resource_connections_state(resource_identifier) TABLESPACE pg_default;
 
-CREATE INDEX ix_party_registry_resource_connections_state_rid ON resourceregistry.party_registry_resource_connections_state (rid) TABLESPACE pg_default;
+CREATE INDEX IF NOT EXISTS ix_party_registry_resource_connections_state_rid ON resourceregistry.party_registry_resource_connections_state(rid) TABLESPACE pg_default;
 
 -- Table: resourceregistry.resources - make serviceresourcejson NOT NULL
 ALTER TABLE resourceregistry.resources

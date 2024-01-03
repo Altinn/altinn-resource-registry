@@ -219,6 +219,7 @@ void ConfigurePostgreSql()
             new Configuration
             {
                 Workspace = workspacePath,
+                Environment = "prod",
                 ConnectionString = connectionString,
                 IsAutoCreateDatabase = false,
                 IsDebug = true

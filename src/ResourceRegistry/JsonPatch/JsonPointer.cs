@@ -210,10 +210,17 @@ public sealed class JsonPointer
     public override int GetHashCode()
         => _raw.GetHashCode();
 
-    public static bool operator ==(JsonPointer left, JsonPointer right)
-        => left.Equals(right);
+    public static bool operator ==(JsonPointer? left, JsonPointer? right)
+    {
+        if (left is null)
+        {
+            return right is null;
+        }
 
-    public static bool operator !=(JsonPointer left, JsonPointer right)
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(JsonPointer? left, JsonPointer? right)
         => !(left == right);
 
     /// <summary>

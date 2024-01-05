@@ -24,7 +24,7 @@ public record Paginated<T>(
 public record PaginatedLinks(
     string? Next)
 {
-    private class SchemaFilter : ISchemaFilter
+    private sealed class SchemaFilter : ISchemaFilter
     {
         /// <inheritdoc/>
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)

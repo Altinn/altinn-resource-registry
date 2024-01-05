@@ -7,7 +7,7 @@ namespace Altinn.ResourceRegistry.JsonPatch;
 
 public sealed partial record class JsonPatchOperation
 {
-    private class JsonConverter : JsonConverter<JsonPatchOperation>
+    private sealed class JsonConverter : JsonConverter<JsonPatchOperation>
     {
         private static class Props
         {

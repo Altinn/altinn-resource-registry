@@ -69,7 +69,7 @@ public sealed record class JsonPatchDocument
         return hashCode.ToHashCode();
     }
 
-    private class JsonConverter : JsonConverter<JsonPatchDocument>
+    private sealed class JsonConverter : JsonConverter<JsonPatchDocument>
     {
         /// <inheritdoc/>
         public override JsonPatchDocument Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -86,7 +86,7 @@ public sealed record class JsonPatchDocument
         }
     }
 
-    private class SchemaFilter : ISchemaFilter
+    private sealed class SchemaFilter : ISchemaFilter
     {
         /// <inheritdoc/>
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)

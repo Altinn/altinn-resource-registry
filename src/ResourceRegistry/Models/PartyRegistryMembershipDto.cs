@@ -19,7 +19,7 @@ public record PartyRegistryMembershipDto(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     PartyIdentifiers Identifiers)
 {
-    private class SchemaFilter : ISchemaFilter
+    private sealed class SchemaFilter : ISchemaFilter
     {
         /// <inheritdoc/>
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
@@ -52,7 +52,7 @@ public record PartyIdentifiers(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     string? OrganizationNumber)
 {
-    private class SchemaFilter : ISchemaFilter
+    private sealed class SchemaFilter : ISchemaFilter
     {
         /// <inheritdoc/>
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)

@@ -6,7 +6,7 @@ namespace Altinn.ResourceRegistry.JsonPatch;
 
 public sealed partial record class JsonPatchOperation
 {
-    private class SchemaFilter : ISchemaFilter
+    private sealed class SchemaFilter : ISchemaFilter
     {
         private const string OP = "op";
         private const string PATH = "path";

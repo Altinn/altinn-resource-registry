@@ -297,7 +297,7 @@ public sealed class JsonPointer
             => $"\"{ToString()}\"";
     }
 
-    private class JsonConverter : JsonConverter<JsonPointer?>
+    private sealed class JsonConverter : JsonConverter<JsonPointer?>
     {
         public override JsonPointer? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -329,7 +329,7 @@ public sealed class JsonPointer
         }
     }
 
-    private class SchemaFilter : ISchemaFilter
+    private sealed class SchemaFilter : ISchemaFilter
     {
         /// <inheritdoc/>
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)

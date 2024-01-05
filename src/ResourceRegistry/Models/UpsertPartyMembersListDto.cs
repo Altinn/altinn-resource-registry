@@ -37,7 +37,7 @@ public class UpsertPartyMembersListDto(
         return ((IEnumerable)_items).GetEnumerator();
     }
 
-    private class Converter : JsonConverter<UpsertPartyMembersListDto>
+    private sealed class Converter : JsonConverter<UpsertPartyMembersListDto>
     {
         /// <inheritdoc/>
         public override UpsertPartyMembersListDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -52,7 +52,7 @@ public class UpsertPartyMembersListDto(
         }
     }
 
-    private class SchemaFilter : ISchemaFilter
+    private sealed class SchemaFilter : ISchemaFilter
     {
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {

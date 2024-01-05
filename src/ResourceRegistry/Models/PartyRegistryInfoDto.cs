@@ -35,7 +35,7 @@ public record PartyRegistryInfoDto(
             info.CreatedAt,
             info.UpdatedAt);
 
-    private class SchemaFilter : ISchemaFilter
+    private sealed class SchemaFilter : ISchemaFilter
     {
         /// <inheritdoc/>
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)

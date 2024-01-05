@@ -18,7 +18,7 @@ public record PartyReference(
     PartyReferenceType Type,
     string Value)
 {
-    private class Converter : JsonConverter<PartyReference>
+    private sealed class Converter : JsonConverter<PartyReference>
     {
         public override PartyReference Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -31,7 +31,7 @@ public record PartyReference(
         }
     }
 
-    private class SchemaFilter : ISchemaFilter
+    private sealed class SchemaFilter : ISchemaFilter
     {
         /// <inheritdoc/>
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)

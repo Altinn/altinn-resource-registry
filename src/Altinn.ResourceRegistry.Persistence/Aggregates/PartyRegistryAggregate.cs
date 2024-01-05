@@ -384,6 +384,12 @@ internal readonly struct EventId(ulong id)
         => IsSet ? id.ToString(CultureInfo.InvariantCulture) : "unset";
 }
 
+/// <summary>
+/// Base class for <see cref="PartyRegistryAggregate"/> events.
+/// </summary>
+/// <param name="EventId">The event id.</param>
+/// <param name="RegistryId">The registry id.</param>
+/// <param name="EventTime">The event time.</param>
 internal abstract record PartyRegistryEvent(EventId EventId, Guid RegistryId, DateTimeOffset EventTime)
     : IAggregateEvent<PartyRegistryAggregate, PartyRegistryEvent>
 {
@@ -425,6 +431,18 @@ internal abstract record PartyRegistryEvent(EventId EventId, Guid RegistryId, Da
     /// <returns><see cref="Values"/></returns>
     internal abstract Values AsValues();
 
+    /// <summary>
+    /// Database representation of events.
+    /// </summary>
+    /// <param name="Kind">The event kind.</param>
+    /// <param name="EventTime">The event time.</param>
+    /// <param name="AggregateId">The aggregate id.</param>
+    /// <param name="Identifier">Optional identifier.</param>
+    /// <param name="Name">Optional name.</param>
+    /// <param name="Description">Optional description.</param>
+    /// <param name="RegistryOwner">Optional registry owner.</param>
+    /// <param name="Actions">Optional set of actions.</param>
+    /// <param name="PartyIds">Optional set of party ids.</param>
     internal readonly record struct Values(
         string Kind,
         DateTimeOffset EventTime,
@@ -437,6 +455,16 @@ internal abstract record PartyRegistryEvent(EventId EventId, Guid RegistryId, Da
         ImmutableArray<Guid> PartyIds);
 }
 
+/// <summary>
+/// Event for when a party registry is created.
+/// </summary>
+/// <param name="EventId">The event id.</param>
+/// <param name="RegistryId">The registry id.</param>
+/// <param name="RegistryOwner">The registry owner.</param>
+/// <param name="Identifier">The owner-unique identifier.</param>
+/// <param name="Name">The registry display-name.</param>
+/// <param name="Description">The optional registry description.</param>
+/// <param name="EventTime">The event time.</param>
 internal record PartyRegistryCreatedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -465,6 +493,15 @@ internal record PartyRegistryCreatedEvent(
             PartyIds: default);
 }
 
+/// <summary>
+/// Event for when a party registry is updated.
+/// </summary>
+/// <param name="EventId">The event id.</param>
+/// <param name="RegistryId">The registry id.</param>
+/// <param name="Identifier">The owner-unique identifier (if updated).</param>
+/// <param name="Name">The registry display-name (if updated).</param>
+/// <param name="Description">The registry description (if updated).</param>
+/// <param name="EventTime">The event time.</param>
 internal record PartyRegistryUpdatedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -492,6 +529,12 @@ internal record PartyRegistryUpdatedEvent(
             PartyIds: default);
 }
 
+/// <summary>
+/// Event for when a party registry is deleted.
+/// </summary>
+/// <param name="EventId">The event id.</param>
+/// <param name="RegistryId">The registry id.</param>
+/// <param name="EventTime">The event time.</param>
 internal record PartyRegistryDeletedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -516,6 +559,14 @@ internal record PartyRegistryDeletedEvent(
             PartyIds: default);
 }
 
+/// <summary>
+/// Event for when a resource connection is created.
+/// </summary>
+/// <param name="EventId">The event id.</param>
+/// <param name="RegistryId">The registry id.</param>
+/// <param name="ResourceIdentifier">The resource identifier.</param>
+/// <param name="Actions">The allowed actions.</param>
+/// <param name="EventTime">The event time.</param>
 internal record PartyRegistryResourceConnectionCreatedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -542,6 +593,14 @@ internal record PartyRegistryResourceConnectionCreatedEvent(
             PartyIds: default);
 }
 
+/// <summary>
+/// Event for when actions are added to a resource connection.
+/// </summary>
+/// <param name="EventId">The event id.</param>
+/// <param name="RegistryId">The registry id.</param>
+/// <param name="ResourceIdentifier">The resource identifier.</param>
+/// <param name="Actions">The newly added actions.</param>
+/// <param name="EventTime">The event time.</param>
 internal record PartyRegistryResourceConnectionActionsAddedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -568,6 +627,14 @@ internal record PartyRegistryResourceConnectionActionsAddedEvent(
             PartyIds: default);
 }
 
+/// <summary>
+/// Event for when actions are removed from a resource connection.
+/// </summary>
+/// <param name="EventId">The event id.</param>
+/// <param name="RegistryId">The registry id.</param>
+/// <param name="ResourceIdentifier">The resource identifier.</param>
+/// <param name="Actions">The removed actions.</param>
+/// <param name="EventTime">The event time.</param>
 internal record PartyRegistryResourceConnectionActionsRemovedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -594,6 +661,13 @@ internal record PartyRegistryResourceConnectionActionsRemovedEvent(
             PartyIds: default);
 }
 
+/// <summary>
+/// Event for when a resource connection is deleted.
+/// </summary>
+/// <param name="EventId">The event id.</param>
+/// <param name="RegistryId">The registry id.</param>
+/// <param name="ResourceIdentifier">The resource identifier.</param>
+/// <param name="EventTime">The event time.</param>
 internal record PartyRegistryResourceConnectionDeletedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -619,6 +693,13 @@ internal record PartyRegistryResourceConnectionDeletedEvent(
             PartyIds: default);
 }
 
+/// <summary>
+/// Event for when members are added to the party registry.
+/// </summary>
+/// <param name="EventId">The event id.</param>
+/// <param name="RegistryId">The registry id.</param>
+/// <param name="PartyIds">The parties added.</param>
+/// <param name="EventTime">The event time.</param>
 internal record PartyRegistryMembersAddedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -644,6 +725,13 @@ internal record PartyRegistryMembersAddedEvent(
             PartyIds: PartyIds);
 }
 
+/// <summary>
+/// Event for when members are removed from the party registry.
+/// </summary>
+/// <param name="EventId">The event id.</param>
+/// <param name="RegistryId">The registry id.</param>
+/// <param name="PartyIds">The parties removed.</param>
+/// <param name="EventTime">The event time.</param>
 internal record PartyRegistryMembersRemovedEvent(
     EventId EventId,
     Guid RegistryId,

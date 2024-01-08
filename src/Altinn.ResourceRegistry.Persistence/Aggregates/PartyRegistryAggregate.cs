@@ -68,7 +68,7 @@ internal class PartyRegistryAggregate
     /// <summary>
     /// Gets the registry (optional) description.
     /// </summary>
-    public string? Description => InitializedThis._description;
+    public string Description => InitializedThis._description!;
 
     /// <summary>
     /// Create a new party registry.

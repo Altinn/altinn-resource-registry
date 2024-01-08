@@ -1,4 +1,6 @@
-﻿using Microsoft.OpenApi.Any;
+﻿#nullable enable
+
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;

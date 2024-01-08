@@ -1,4 +1,6 @@
-﻿namespace Altinn.ResourceRegistry.Models;
+﻿#nullable enable
+
+namespace Altinn.ResourceRegistry.Models;
 
 /// <summary>
 /// Model for creating a party registry resource connection.

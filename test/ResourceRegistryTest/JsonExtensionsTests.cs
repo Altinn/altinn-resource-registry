@@ -1,4 +1,6 @@
-﻿using Altinn.ResourceRegistry.JsonPatch;
+﻿#nullable enable
+
+using Altinn.ResourceRegistry.JsonPatch;
 using System.Text.Json;
 using Xunit;
 

@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿#nullable enable
+
+using System.Collections.Immutable;
 
 namespace Altinn.ResourceRegistry.Core.PartyRegistry;
 

@@ -1,4 +1,6 @@
-﻿namespace Altinn.ResourceRegistry.Models;
+﻿#nullable enable
+
+namespace Altinn.ResourceRegistry.Models;
 
 /// <summary>
 /// Model used for creating or updating a party registry.

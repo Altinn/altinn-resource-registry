@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#nullable enable
+
+using System.Collections;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -203,7 +205,7 @@ public sealed class JsonPointer
         => other is not null && _raw == other._raw;
 
     /// <inheritdoc/>
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
         => obj is JsonPointer other && Equals(other);
 
     /// <inheritdoc/>
@@ -277,8 +279,8 @@ public sealed class JsonPointer
             => _value.Span.SequenceEqual(other._value.Span);
 
         /// <inheritdoc/>
-        public bool Equals(string other)
-            => _value.Span.SequenceEqual(other.AsSpan());
+        public bool Equals(string? other)
+            => other is not null && _value.Span.SequenceEqual(other.AsSpan());
 
         /// <inheritdoc/>
         public override bool Equals([NotNullWhen(true)] object? obj)
@@ -295,6 +297,12 @@ public sealed class JsonPointer
 
         private string DebuggerDisplay
             => $"\"{ToString()}\"";
+
+        public static bool operator ==(Segment left, Segment right)
+            => left.Equals(right);
+
+        public static bool operator !=(Segment left, Segment right)
+            => !(left == right);
     }
 
     private sealed class JsonConverter : JsonConverter<JsonPointer?>

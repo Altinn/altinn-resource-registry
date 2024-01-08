@@ -1,4 +1,6 @@
-﻿using System.Buffers;
+﻿#nullable enable
+
+using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using CommunityToolkit.Diagnostics;

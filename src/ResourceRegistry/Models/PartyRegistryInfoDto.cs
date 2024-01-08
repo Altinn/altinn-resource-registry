@@ -1,4 +1,6 @@
-﻿using Altinn.ResourceRegistry.Core.PartyRegistry;
+﻿#nullable enable
+
+using Altinn.ResourceRegistry.Core.PartyRegistry;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Annotations;

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿#nullable enable
+
+using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CommunityToolkit.Diagnostics;
@@ -190,7 +192,7 @@ public sealed partial record class JsonPatchOperation
                 case JsonPatchOperationType.Replace:
                 case JsonPatchOperationType.Test:
                     writer.WritePropertyName(Props.Value);
-                    value.Value.Value.WriteTo(writer);
+                    value.Value!.Value.WriteTo(writer);
                     break;
 
                 case JsonPatchOperationType.Move:

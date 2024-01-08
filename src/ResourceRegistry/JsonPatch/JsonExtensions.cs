@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿#nullable enable
+
+using System.Text.Json;
 
 namespace Altinn.ResourceRegistry.JsonPatch;
 
@@ -72,7 +74,11 @@ internal static class JsonExtensions
     /// <returns>A hash code.</returns>
     public static int GetStableHashCode(this JsonElement? self)
     {
-        return JsonEquivalenceComparer.Instance.GetHashCode(self);
+        return self switch 
+        { 
+            null => 0,
+            { } value => JsonEquivalenceComparer.Instance.GetHashCode(value),
+        };
     }
 
     /// <summary>

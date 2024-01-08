@@ -1,4 +1,6 @@
-﻿using Altinn.ResourceRegistry.JsonPatch;
+﻿#nullable enable
+
+using Altinn.ResourceRegistry.JsonPatch;
 using Altinn.ResourceRegistry.Models;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

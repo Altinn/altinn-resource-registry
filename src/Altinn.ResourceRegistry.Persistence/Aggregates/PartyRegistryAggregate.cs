@@ -426,6 +426,7 @@ internal abstract record PartyRegistryEvent(EventId EventId, Guid RegistryId, Da
     /// <returns><see cref="Values"/></returns>
     internal abstract Values AsValues();
 
+    /// <inheritdoc />
     internal readonly record struct Values(
         string Kind,
         DateTimeOffset EventTime,

@@ -49,7 +49,7 @@ internal partial class AccessListsRepository
             _timeProvider = timeProvider;
         }
 
-        public async Task<AccessListInfo> CreatePartyRegistry(string resourceOwner, string identifier, string name, string description, CancellationToken cancellationToken)
+        public async Task<AccessListInfo> CreateAccessList(string resourceOwner, string identifier, string name, string description, CancellationToken cancellationToken)
         {
             // Step 1. Check that the access list doesn't already exist
             var existingRegistry = await Lookup(resourceOwner, identifier, cancellationToken);
@@ -59,14 +59,14 @@ internal partial class AccessListsRepository
             }
 
             // Step 2. Create a new aggregate
-            var partyRegistryAggregate = AccessListAggregate.New(_timeProvider, Guid.NewGuid());
-            partyRegistryAggregate.Initialize(resourceOwner, identifier, name, description);
+            var accessListAggregate = AccessListAggregate.New(_timeProvider, Guid.NewGuid());
+            accessListAggregate.Initialize(resourceOwner, identifier, name, description);
 
             // Step 3. Apply the event(s) to the database
-            await ApplyChanges(partyRegistryAggregate, cancellationToken);
+            await ApplyChanges(accessListAggregate, cancellationToken);
 
             // Step 4. Return the access list info
-            return partyRegistryAggregate.AsAccessListInfo();
+            return accessListAggregate.AsAccessListInfo();
         }
 
         public Task<AccessListInfo?> Lookup(AccessListIdentifier identifier, CancellationToken cancellationToken)
@@ -78,7 +78,7 @@ internal partial class AccessListsRepository
             };
 
         [SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1010:Opening square brackets should be spaced correctly", Justification = "Collection initializer")]
-        public async Task<IReadOnlyList<AccessListResourceConnection>> GetResourceConnections(AccessListIdentifier identifier, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<AccessListResourceConnection>> GetAccessListResourceConnections(AccessListIdentifier identifier, CancellationToken cancellationToken)
         {
             const string QUERY = /*strpsql*/@"
                 SELECT resource_identifier, actions, created, modified
@@ -107,7 +107,7 @@ internal partial class AccessListsRepository
             return connections;
         }
 
-        public async Task<IReadOnlyList<AccessListMembership>> GetPartyRegistryMemberships(AccessListIdentifier identifier, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<AccessListMembership>> GetAccessListMemberships(AccessListIdentifier identifier, CancellationToken cancellationToken)
         {
             const string QUERY = /*strpsql*/@"
                 SELECT party_id, since
@@ -142,16 +142,16 @@ internal partial class AccessListsRepository
             CancellationToken cancellationToken)
         {
             // Step 1. Load the aggregate
-            var partyRegistryAggregate = await Load(identifier, cancellationToken);
+            var accessListAggregate = await Load(identifier, cancellationToken);
 
             // Step 2. Update the aggregate
-            partyRegistryAggregate.Update(newIdentifier, newName, newDescription);
+            accessListAggregate.Update(newIdentifier, newName, newDescription);
 
             // Step 3. Apply the event(s) to the database
-            await ApplyChanges(partyRegistryAggregate, cancellationToken);
+            await ApplyChanges(accessListAggregate, cancellationToken);
 
             // Step 4. Return the access list info
-            return partyRegistryAggregate.AsAccessListInfo();
+            return accessListAggregate.AsAccessListInfo();
         }
 
         public async Task<AccessListInfo> Delete(
@@ -159,124 +159,124 @@ internal partial class AccessListsRepository
             CancellationToken cancellationToken)
         {
             // Step 1. Load the aggregate
-            var partyRegistryAggregate = await Load(identifier, cancellationToken);
+            var accessListAggregate = await Load(identifier, cancellationToken);
 
             // Step 2. Mark the aggregate as deleted
-            var registryInfo = partyRegistryAggregate.AsAccessListInfo();
-            partyRegistryAggregate.Delete();
+            var registryInfo = accessListAggregate.AsAccessListInfo();
+            accessListAggregate.Delete();
 
             // Step 3. Apply the event(s) to the database
-            await ApplyChanges(partyRegistryAggregate, cancellationToken);
+            await ApplyChanges(accessListAggregate, cancellationToken);
 
             // Step 4. Return the access list info
             return registryInfo;
         }
 
-        public async Task<AccessListResourceConnection> AddPartyResourceConnection(
+        public async Task<AccessListResourceConnection> AddAccessListResourceConnection(
             AccessListIdentifier identifier,
             string resourceIdentifier,
             IEnumerable<string> actions,
             CancellationToken cancellationToken)
         {
             // Step 1. Load the aggregate
-            var partyRegistryAggregate = await Load(identifier, cancellationToken);
+            var accessListAggregate = await Load(identifier, cancellationToken);
 
             // Step 2. Add the connection to the aggregate
-            var connectionInfo = partyRegistryAggregate.AddResourceConnection(resourceIdentifier, actions);
+            var connectionInfo = accessListAggregate.AddResourceConnection(resourceIdentifier, actions);
             
             // Step 3. Apply the event(s) to the database
-            await ApplyChanges(partyRegistryAggregate, cancellationToken);
+            await ApplyChanges(accessListAggregate, cancellationToken);
 
             // Step 4. Return the access list info
             return connectionInfo;
         }
 
-        public async Task<AccessListResourceConnection> AddPartyResourceConnectionActions(
+        public async Task<AccessListResourceConnection> AddAccessListResourceConnectionActions(
             AccessListIdentifier identifier,
             string resourceIdentifier,
             IEnumerable<string> actions,
             CancellationToken cancellationToken)
         {
             // Step 1. Load the aggregate
-            var partyRegistryAggregate = await Load(identifier, cancellationToken);
+            var accessListAggregate = await Load(identifier, cancellationToken);
 
             // Step 2. Add the connection to the aggregate
-            var connectionInfo = partyRegistryAggregate.AddResourceConnectionActions(resourceIdentifier, actions);
+            var connectionInfo = accessListAggregate.AddResourceConnectionActions(resourceIdentifier, actions);
 
             // Step 3. Apply the event(s) to the database
-            await ApplyChanges(partyRegistryAggregate, cancellationToken);
+            await ApplyChanges(accessListAggregate, cancellationToken);
 
             // Step 4. Return the connection info
             return connectionInfo;
         }
 
-        public async Task<AccessListResourceConnection> RemovePartyResourceConnectionActions(
+        public async Task<AccessListResourceConnection> RemoveAccessListResourceConnectionActions(
            AccessListIdentifier identifier,
            string resourceIdentifier,
            IEnumerable<string> actions,
            CancellationToken cancellationToken)
         {
             // Step 1. Load the aggregate
-            var partyRegistryAggregate = await Load(identifier, cancellationToken);
+            var accessListAggregate = await Load(identifier, cancellationToken);
 
             // Step 2. Add the connection to the aggregate
-            var connectionInfo = partyRegistryAggregate.RemoveResourceConnectionActions(resourceIdentifier, actions);
+            var connectionInfo = accessListAggregate.RemoveResourceConnectionActions(resourceIdentifier, actions);
 
             // Step 3. Apply the event(s) to the database
-            await ApplyChanges(partyRegistryAggregate, cancellationToken);
+            await ApplyChanges(accessListAggregate, cancellationToken);
 
             // Step 4. Return the connection info
             return connectionInfo;
         }
 
-        public async Task<AccessListResourceConnection> DeletePartyResourceConnection(
+        public async Task<AccessListResourceConnection> DeleteAccessListResourceConnection(
             AccessListIdentifier identifier,
             string resourceIdentifier,
             CancellationToken cancellationToken)
         {
             // Step 1. Load the aggregate
-            var partyRegistryAggregate = await Load(identifier, cancellationToken);
+            var accessListAggregate = await Load(identifier, cancellationToken);
 
             // Step 2. Add the connection to the aggregate
-            var connectionInfo = partyRegistryAggregate.RemoveResourceConnection(resourceIdentifier);
+            var connectionInfo = accessListAggregate.RemoveResourceConnection(resourceIdentifier);
 
             // Step 3. Apply the event(s) to the database
-            await ApplyChanges(partyRegistryAggregate, cancellationToken);
+            await ApplyChanges(accessListAggregate, cancellationToken);
 
             // Step 4. Return the connection info
             return connectionInfo;
         }
 
-        public async Task<Unit> AddPartyRegistryMembers(
+        public async Task<Unit> AddAccessListMembers(
             AccessListIdentifier identifier,
             IEnumerable<Guid> partyIds,
             CancellationToken cancellationToken)
         {
             // Step 1. Load the aggregate
-            var partyRegistryAggregate = await Load(identifier, cancellationToken);
+            var accessListAggregate = await Load(identifier, cancellationToken);
 
             // Step 2. Add the members to the aggregate
-            partyRegistryAggregate.AddMembers(partyIds);
+            accessListAggregate.AddMembers(partyIds);
 
             // Step 3. Apply the event(s) to the database
-            await ApplyChanges(partyRegistryAggregate, cancellationToken);
+            await ApplyChanges(accessListAggregate, cancellationToken);
 
             return Unit.Value;
         }
 
-        public async Task<Unit> RemovePartyRegistryMembers(
+        public async Task<Unit> RemoveAccessListMembers(
             AccessListIdentifier identifier,
             IEnumerable<Guid> partyIds,
             CancellationToken cancellationToken)
         {
             // Step 1. Load the aggregate
-            var partyRegistryAggregate = await Load(identifier, cancellationToken);
+            var accessListAggregate = await Load(identifier, cancellationToken);
 
             // Step 2. Remove the members to the aggregate
-            partyRegistryAggregate.RemoveMembers(partyIds);
+            accessListAggregate.RemoveMembers(partyIds);
 
             // Step 3. Apply the event(s) to the database
-            await ApplyChanges(partyRegistryAggregate, cancellationToken);
+            await ApplyChanges(accessListAggregate, cancellationToken);
 
             return Unit.Value;
         }

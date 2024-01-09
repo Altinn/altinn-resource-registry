@@ -31,48 +31,48 @@ internal partial class AccessListsRepository
     }
 
     /// <inheritdoc/>
-    public Task<AccessListResourceConnection> AddPartyResourceConnection(Guid id, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.AddPartyResourceConnection(new(id), resourceIdentifier, actions, cancellationToken), cancellationToken);
+    public Task<AccessListResourceConnection> AddAccessListResourceConnection(Guid id, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.AddAccessListResourceConnection(new(id), resourceIdentifier, actions, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListResourceConnection> AddPartyResourceConnection(string registryOwner, string identifier, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.AddPartyResourceConnection(new(registryOwner, identifier), resourceIdentifier, actions, cancellationToken), cancellationToken);
+    public Task<AccessListResourceConnection> AddAccessListResourceConnection(string registryOwner, string identifier, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.AddAccessListResourceConnection(new(registryOwner, identifier), resourceIdentifier, actions, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListResourceConnection> AddPartyResourceConnectionActions(Guid id, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.AddPartyResourceConnectionActions(new(id), resourceIdentifier, actions, cancellationToken), cancellationToken);
+    public Task<AccessListResourceConnection> AddAccessListResourceConnectionActions(Guid id, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.AddAccessListResourceConnectionActions(new(id), resourceIdentifier, actions, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListResourceConnection> AddPartyResourceConnectionActions(string registryOwner, string identifier, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.AddPartyResourceConnectionActions(new(registryOwner, identifier), resourceIdentifier, actions, cancellationToken), cancellationToken);
+    public Task<AccessListResourceConnection> AddAccessListResourceConnectionActions(string registryOwner, string identifier, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.AddAccessListResourceConnectionActions(new(registryOwner, identifier), resourceIdentifier, actions, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListInfo> CreatePartyRegistry(string registryOwner, string identifier, string name, string description, CancellationToken cancellationToken = default) 
-        => InTransaction(tx => tx.CreatePartyRegistry(registryOwner, identifier, name, description, cancellationToken), cancellationToken);
+    public Task<AccessListInfo> CreateAccessList(string registryOwner, string identifier, string name, string description, CancellationToken cancellationToken = default) 
+        => InTransaction(tx => tx.CreateAccessList(registryOwner, identifier, name, description, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListInfo> DeletePartyRegistry(Guid id, CancellationToken cancellationToken = default)
+    public Task<AccessListInfo> DeleteAccessList(Guid id, CancellationToken cancellationToken = default)
         => InTransaction(tx => tx.Delete(new(id), cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListInfo> DeletePartyRegistry(string registryOwner, string identifier, CancellationToken cancellationToken = default)
+    public Task<AccessListInfo> DeleteAccessList(string registryOwner, string identifier, CancellationToken cancellationToken = default)
         => InTransaction(tx => tx.Delete(new(registryOwner, identifier), cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListResourceConnection> DeletePartyResourceConnection(Guid id, string resourceIdentifier, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.DeletePartyResourceConnection(new(id), resourceIdentifier, cancellationToken), cancellationToken);
+    public Task<AccessListResourceConnection> DeleteAccessListResourceConnection(Guid id, string resourceIdentifier, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.DeleteAccessListResourceConnection(new(id), resourceIdentifier, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListResourceConnection> DeletePartyResourceConnection(string registryOwner, string identifier, string resourceIdentifier, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.DeletePartyResourceConnection(new(registryOwner, identifier), resourceIdentifier, cancellationToken), cancellationToken);
+    public Task<AccessListResourceConnection> DeleteAccessListResourceConnection(string registryOwner, string identifier, string resourceIdentifier, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.DeleteAccessListResourceConnection(new(registryOwner, identifier), resourceIdentifier, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<IReadOnlyList<AccessListResourceConnection>> GetResourceConnections(string registryOwner, string identifier, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.GetResourceConnections(new(registryOwner, identifier), cancellationToken), cancellationToken);
+    public Task<IReadOnlyList<AccessListResourceConnection>> GetAccessListResourceConnections(string registryOwner, string identifier, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.GetAccessListResourceConnections(new(registryOwner, identifier), cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<IReadOnlyList<AccessListResourceConnection>> GetResourceConnections(Guid id, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.GetResourceConnections(new(id), cancellationToken), cancellationToken);
+    public Task<IReadOnlyList<AccessListResourceConnection>> GetAccessListResourceConnections(Guid id, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.GetAccessListResourceConnections(new(id), cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
     public Task<AccessListInfo?> Lookup(Guid id, CancellationToken cancellationToken = default)
@@ -83,44 +83,44 @@ internal partial class AccessListsRepository
         => TransactionLess(tx => tx.Lookup(new(registryOwner, identifier), cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListInfo> UpdatePartyRegistry(Guid id, string? newIdentifier, string? newName, string? newDescription, CancellationToken cancellationToken = default)
+    public Task<AccessListInfo> UpdateAccessList(Guid id, string? newIdentifier, string? newName, string? newDescription, CancellationToken cancellationToken = default)
         => InTransaction(tx => tx.Update(new(id), newIdentifier, newName, newDescription, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListInfo> UpdatePartyRegistry(string registryOwner, string identifier, string? newIdentifier, string? newName, string? newDescription, CancellationToken cancellationToken = default)
+    public Task<AccessListInfo> UpdateAccessList(string registryOwner, string identifier, string? newIdentifier, string? newName, string? newDescription, CancellationToken cancellationToken = default)
         => InTransaction(tx => tx.Update(new(registryOwner, identifier), newIdentifier, newName, newDescription, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListResourceConnection> RemovePartyResourceConnectionActions(Guid id, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.RemovePartyResourceConnectionActions(new(id), resourceIdentifier, actions, cancellationToken), cancellationToken);
+    public Task<AccessListResourceConnection> RemoveAccessListResourceConnectionActions(Guid id, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.RemoveAccessListResourceConnectionActions(new(id), resourceIdentifier, actions, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<AccessListResourceConnection> RemovePartyResourceConnectionActions(string registryOwner, string identifier, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.RemovePartyResourceConnectionActions(new(registryOwner, identifier), resourceIdentifier, actions, cancellationToken), cancellationToken);
+    public Task<AccessListResourceConnection> RemoveAccessListResourceConnectionActions(string registryOwner, string identifier, string resourceIdentifier, IEnumerable<string> actions, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.RemoveAccessListResourceConnectionActions(new(registryOwner, identifier), resourceIdentifier, actions, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<IReadOnlyList<AccessListMembership>> GetPartyRegistryMemberships(Guid id, CancellationToken cancellationToken = default)
-        => TransactionLess(tx => tx.GetPartyRegistryMemberships(new(id), cancellationToken), cancellationToken);
+    public Task<IReadOnlyList<AccessListMembership>> GetAccessListMemberships(Guid id, CancellationToken cancellationToken = default)
+        => TransactionLess(tx => tx.GetAccessListMemberships(new(id), cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<IReadOnlyList<AccessListMembership>> GetPartyRegistryMemberships(string registryOwner, string identifier, CancellationToken cancellationToken = default)
-        => TransactionLess(tx => tx.GetPartyRegistryMemberships(new(registryOwner, identifier), cancellationToken), cancellationToken);
+    public Task<IReadOnlyList<AccessListMembership>> GetAccessListMemberships(string registryOwner, string identifier, CancellationToken cancellationToken = default)
+        => TransactionLess(tx => tx.GetAccessListMemberships(new(registryOwner, identifier), cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task AddPartyRegistryMembers(Guid id, IEnumerable<Guid> partyIds, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.AddPartyRegistryMembers(new(id), partyIds, cancellationToken), cancellationToken);
+    public Task AddAccessListMembers(Guid id, IEnumerable<Guid> partyIds, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.AddAccessListMembers(new(id), partyIds, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task AddPartyRegistryMembers(string registryOwner, string identifier, IEnumerable<Guid> partyIds, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.AddPartyRegistryMembers(new(registryOwner, identifier), partyIds, cancellationToken), cancellationToken);
+    public Task AddAccessListMembers(string registryOwner, string identifier, IEnumerable<Guid> partyIds, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.AddAccessListMembers(new(registryOwner, identifier), partyIds, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task RemovePartyRegistryMembers(Guid id, IEnumerable<Guid> partyIds, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.RemovePartyRegistryMembers(new(id), partyIds, cancellationToken), cancellationToken);
+    public Task RemoveAccessListMembers(Guid id, IEnumerable<Guid> partyIds, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.RemoveAccessListMembers(new(id), partyIds, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
-    public Task RemovePartyRegistryMembers(string registryOwner, string identifier, IEnumerable<Guid> partyIds, CancellationToken cancellationToken = default)
-        => InTransaction(tx => tx.RemovePartyRegistryMembers(new(registryOwner, identifier), partyIds, cancellationToken), cancellationToken);
+    public Task RemoveAccessListMembers(string registryOwner, string identifier, IEnumerable<Guid> partyIds, CancellationToken cancellationToken = default)
+        => InTransaction(tx => tx.RemoveAccessListMembers(new(registryOwner, identifier), partyIds, cancellationToken), cancellationToken);
 
     private Task<T> InTransaction<T>(Func<ScopedRepository, Task<T>> func, CancellationToken cancellationToken)
         => ScopedRepository.RunInTransaction(this, func, cancellationToken);

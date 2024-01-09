@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Altinn.ResourceRegistry.Core.AccessLists;
-using Microsoft.Extensions.Logging;
 
 namespace Altinn.ResourceRegistry.Persistence.Aggregates;
 
@@ -33,10 +32,6 @@ internal class AccessListAggregate
     private readonly HashSet<Guid> _members = new();
 
     /// <inheritdoc/>
-    [SuppressMessage(
-        "StyleCop.CSharp.DocumentationRules", 
-        "SA1648:inheritdoc should be used with inheriting class", 
-        Justification = "https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3717")]
     public static AccessListAggregate New(TimeProvider timeProvider, Guid id)
         => new(timeProvider, id);
 

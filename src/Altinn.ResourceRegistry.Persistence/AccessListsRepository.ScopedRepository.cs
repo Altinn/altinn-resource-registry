@@ -16,7 +16,7 @@ namespace Altinn.ResourceRegistry.Persistence;
 /// </content>
 internal partial class AccessListsRepository
 {
-    private class ScopedRepository
+    private sealed class ScopedRepository
     {
         public static async Task<T> TransactionLess<T>(AccessListsRepository repo, Func<ScopedRepository, Task<T>> func, CancellationToken cancellationToken)
         {

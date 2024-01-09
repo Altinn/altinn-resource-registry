@@ -28,8 +28,9 @@ internal class AccessListAggregate
     private string? _identifier;
     private string? _name;
     private string? _description;
-    private Dictionary<string, AccessListResourceConnection> _resourceConnections = new();
-    private HashSet<Guid> _members = new();
+
+    private readonly Dictionary<string, AccessListResourceConnection> _resourceConnections = new();
+    private readonly HashSet<Guid> _members = new();
 
     /// <inheritdoc/>
     [SuppressMessage(

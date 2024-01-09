@@ -9,13 +9,13 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Altinn.ResourceRegistry.Models;
 
 /// <summary>
-/// Represents a party registry membership.
+/// Represents an access list membership.
 /// </summary>
 /// <param name="Id">The party id.</param>
 /// <param name="Since">Since when the party has been a member of the registry.</param>
 /// <param name="Identifiers">An optional set of identifiers.</param>
 [SwaggerSchemaFilter(typeof(SchemaFilter))]
-public record PartyRegistryMembershipDto(
+public record AccessListMembershipDto(
     string Id,
     DateTimeOffset Since,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

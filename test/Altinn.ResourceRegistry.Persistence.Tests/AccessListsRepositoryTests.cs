@@ -1,5 +1,5 @@
 
-using Altinn.ResourceRegistry.Core.PartyRegistry;
+using Altinn.ResourceRegistry.Core.AccessLists;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
@@ -7,14 +7,14 @@ using System.Collections.Immutable;
 
 namespace Altinn.ResourceRegistry.Persistence.Tests;
 
-public class PartyRegistryRepositoryTests : DbTests
+public class AccessListsRepositoryTests : DbTests
 {
-    public PartyRegistryRepositoryTests(DbFixture dbFixture) 
+    public AccessListsRepositoryTests(DbFixture dbFixture) 
         : base(dbFixture)
     {
     }
 
-    protected IPartyRegistryRepository Repository => Services.GetRequiredService<IPartyRegistryRepository>();
+    protected IAccessListsRepository Repository => Services.GetRequiredService<IAccessListsRepository>();
     protected NpgsqlDataSource DataSource => Services.GetRequiredService<NpgsqlDataSource>();
 
     protected override void ConfigureServices(IServiceCollection services)
@@ -245,7 +245,7 @@ public class PartyRegistryRepositoryTests : DbTests
         memberships.Should().BeEmpty();
     }
 
-    private async Task CheckRegistryLookup(PartyRegistryInfo info)
+    private async Task CheckRegistryLookup(AccessListInfo info)
     {
         var lookup = await Repository.Lookup(info.RegistryOwner, info.Identifier);
         Assert.NotNull(lookup);

@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-using Altinn.ResourceRegistry.Core.PartyRegistry;
+using Altinn.ResourceRegistry.Core.AccessLists;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Annotations;
@@ -9,15 +9,15 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Altinn.ResourceRegistry.Models;
 
 /// <summary>
-/// Represents public party registry metadata.
+/// Represents public access list metadata.
 /// </summary>
-/// <param name="Identifier">The party registry identifier</param>
-/// <param name="Name">The party registry name</param>
-/// <param name="Description">The party registry description</param>
-/// <param name="CreatedAt">When the party registry was created</param>
-/// <param name="UpdatedAt">When the party registry was updated</param>
+/// <param name="Identifier">The access list identifier</param>
+/// <param name="Name">The access list name</param>
+/// <param name="Description">The access list description</param>
+/// <param name="CreatedAt">When the access list was created</param>
+/// <param name="UpdatedAt">When the access list was updated</param>
 [SwaggerSchemaFilter(typeof(SchemaFilter))]
-public record PartyRegistryInfoDto(
+public record AccessListInfoDto(
     string Identifier,
     string Name,
     string Description,
@@ -25,11 +25,11 @@ public record PartyRegistryInfoDto(
     DateTimeOffset UpdatedAt)
 {
     /// <summary>
-    /// Create a <see cref="PartyRegistryInfoDto"/> from a <see cref="PartyRegistryInfo"/>.
+    /// Create a <see cref="AccessListInfoDto"/> from a <see cref="AccessListInfo"/>.
     /// </summary>
-    /// <param name="info">The <see cref="PartyRegistryInfo"/></param>
-    /// <returns>A <see cref="PartyRegistryInfoDto"/> matching the <see cref="PartyRegistryInfo"/></returns>
-    public static PartyRegistryInfoDto From(PartyRegistryInfo info)
+    /// <param name="info">The <see cref="AccessListInfo"/></param>
+    /// <returns>A <see cref="AccessListInfoDto"/> matching the <see cref="AccessListInfo"/></returns>
+    public static AccessListInfoDto From(AccessListInfo info)
         => new(
             info.Identifier,
             info.Name,

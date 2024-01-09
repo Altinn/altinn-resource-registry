@@ -2,23 +2,23 @@
 
 using System.Collections.Immutable;
 
-namespace Altinn.ResourceRegistry.Core.PartyRegistry;
+namespace Altinn.ResourceRegistry.Core.AccessLists;
 
 /// <summary>
-/// Repository for managing party registries.
+/// Repository for managing access lists.
 /// </summary>
-public interface IPartyRegistryRepository
+public interface IAccessListsRepository
 {
     /// <summary>
-    /// Create a new party registry.
+    /// Create a new access list.
     /// </summary>
-    /// <param name="registryOwner">The registry owner (org.nr.).</param>
-    /// <param name="identifier">The registry identifier (unique per owner).</param>
+    /// <param name="registryOwner">The resource owner (org.nr.).</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="name">The registry name.</param>
     /// <param name="description">The registry description.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>The newly created registry in the form of a <see cref="PartyRegistryInfo"/>.</returns>
-    public Task<PartyRegistryInfo> CreatePartyRegistry(
+    /// <returns>The newly created registry in the form of a <see cref="AccessListInfo"/>.</returns>
+    public Task<AccessListInfo> CreatePartyRegistry(
         string registryOwner,
         string identifier,
         string name,
@@ -26,54 +26,54 @@ public interface IPartyRegistryRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Lookup party registry by registry id.
+    /// Lookup access list by id.
     /// </summary>
     /// <param name="id">The id</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>The <see cref="PartyRegistryInfo"/>, if found, else <see langword="null"/></returns>
-    public Task<PartyRegistryInfo?> Lookup(Guid id, CancellationToken cancellationToken = default);
+    /// <returns>The <see cref="AccessListInfo"/>, if found, else <see langword="null"/></returns>
+    public Task<AccessListInfo?> Lookup(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Lookup party registry by registry registry owner and identifier.
+    /// Lookup access list by resource owner and identifier.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>The <see cref="PartyRegistryInfo"/>, if found, else <see langword="null"/></returns>
-    public Task<PartyRegistryInfo?> Lookup(string registryOwner, string identifier, CancellationToken cancellationToken = default);
+    /// <returns>The <see cref="AccessListInfo"/>, if found, else <see langword="null"/></returns>
+    public Task<AccessListInfo?> Lookup(string registryOwner, string identifier, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Lookup resource connections for a party registry by it's id.
+    /// Lookup resource connections for an access list by it's id.
     /// </summary>
     /// <param name="id">The id</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A list of <see cref="PartyRegistryResourceConnection"/> for the given resource.</returns>
-    public Task<IReadOnlyList<PartyRegistryResourceConnection>> GetResourceConnections(
+    /// <returns>A list of <see cref="AccessListResourceConnection"/> for the given resource.</returns>
+    public Task<IReadOnlyList<AccessListResourceConnection>> GetResourceConnections(
         Guid id,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Lookup resource connections for a party registry by it's registry owner and identifier.
+    /// Lookup resource connections for an access list by it's resource owner and identifier.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A list of <see cref="PartyRegistryResourceConnection"/> for the given resource.</returns>
-    public Task<IReadOnlyList<PartyRegistryResourceConnection>> GetResourceConnections(
+    /// <returns>A list of <see cref="AccessListResourceConnection"/> for the given resource.</returns>
+    public Task<IReadOnlyList<AccessListResourceConnection>> GetResourceConnections(
         string registryOwner,
         string identifier,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Update party registry with new values.
+    /// Update access list with new values.
     /// </summary>
-    /// <param name="id">The registry id</param>
-    /// <param name="newIdentifier">An optional new identifier, or <see langword="nul"/> to keep the old value</param>
-    /// <param name="newName">An optional new name, or <see langword="nul"/> to keep the old value</param>
-    /// <param name="newDescription">An optional new description, or <see langword="nul"/> to keep the old value</param>
+    /// <param name="id">The access list id</param>
+    /// <param name="newIdentifier">An optional new identifier, or <see langword="null"/> to keep the old value</param>
+    /// <param name="newName">An optional new name, or <see langword="null"/> to keep the old value</param>
+    /// <param name="newDescription">An optional new description, or <see langword="null"/> to keep the old value</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>The updated <see cref="PartyRegistryInfo"/></returns>
-    public Task<PartyRegistryInfo> UpdatePartyRegistry(
+    /// <returns>The updated <see cref="AccessListInfo"/></returns>
+    public Task<AccessListInfo> UpdatePartyRegistry(
         Guid id,
         string? newIdentifier,
         string? newName,
@@ -81,16 +81,16 @@ public interface IPartyRegistryRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Update party registry with new values.
+    /// Update access list with new values.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
-    /// <param name="newIdentifier">An optional new identifier, or <see langword="nul"/> to keep the old value</param>
-    /// <param name="newName">An optional new name, or <see langword="nul"/> to keep the old value</param>
-    /// <param name="newDescription">An optional new description, or <see langword="nul"/> to keep the old value</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
+    /// <param name="newIdentifier">An optional new identifier, or <see langword="null"/> to keep the old value</param>
+    /// <param name="newName">An optional new name, or <see langword="null"/> to keep the old value</param>
+    /// <param name="newDescription">An optional new description, or <see langword="null"/> to keep the old value</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>The updated <see cref="PartyRegistryInfo"/></returns>
-    public Task<PartyRegistryInfo> UpdatePartyRegistry(
+    /// <returns>The updated <see cref="AccessListInfo"/></returns>
+    public Task<AccessListInfo> UpdatePartyRegistry(
         string registryOwner, 
         string identifier,
         string? newIdentifier,
@@ -99,46 +99,46 @@ public interface IPartyRegistryRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Delete a party registry.
+    /// Delete an access list.
     /// </summary>
-    /// <param name="id">The registry id</param>
+    /// <param name="id">The access list id</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>The deleted <see cref="PartyRegistryInfo"/>.</returns>
-    public Task<PartyRegistryInfo> DeletePartyRegistry(Guid id, CancellationToken cancellationToken = default);
+    /// <returns>The deleted <see cref="AccessListInfo"/>.</returns>
+    public Task<AccessListInfo> DeletePartyRegistry(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Delete a party registry.
+    /// Delete an access list.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>The deleted <see cref="PartyRegistryInfo"/>.</returns>
-    public Task<PartyRegistryInfo> DeletePartyRegistry(string registryOwner, string identifier, CancellationToken cancellationToken = default);
+    /// <returns>The deleted <see cref="AccessListInfo"/>.</returns>
+    public Task<AccessListInfo> DeletePartyRegistry(string registryOwner, string identifier, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Add a connection to a resource from a party registry.
+    /// Add a connection to a resource from an access list.
     /// </summary>
-    /// <param name="id">The party registry id</param>
+    /// <param name="id">The access list id</param>
     /// <param name="resourceIdentifier">The resource identifier</param>
     /// <param name="actions">The set of actions allowed for the members of the registry on the resource</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A <see cref="PartyRegistryResourceConnection"/> containing the information about the resource connection</returns>
-    public Task<PartyRegistryResourceConnection> AddPartyResourceConnection(
+    /// <returns>A <see cref="AccessListResourceConnection"/> containing the information about the resource connection</returns>
+    public Task<AccessListResourceConnection> AddPartyResourceConnection(
         Guid id, 
         string resourceIdentifier, 
         IEnumerable<string> actions, 
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Add a connection to a resource from a party registry.
+    /// Add a connection to a resource from an access list.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="resourceIdentifier">The resource identifier</param>
     /// <param name="actions">The set of actions allowed for the members of the registry on the resource</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A <see cref="PartyRegistryResourceConnection"/> containing the information about the resource connection</returns>
-    public Task<PartyRegistryResourceConnection> AddPartyResourceConnection(
+    /// <returns>A <see cref="AccessListResourceConnection"/> containing the information about the resource connection</returns>
+    public Task<AccessListResourceConnection> AddPartyResourceConnection(
         string registryOwner, 
         string identifier, 
         string resourceIdentifier, 
@@ -146,29 +146,29 @@ public interface IPartyRegistryRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Add additional actions to a party registry resource connection.
+    /// Add additional actions to an access list resource connection.
     /// </summary>
-    /// <param name="id">The party registry id</param>
+    /// <param name="id">The access list id</param>
     /// <param name="resourceIdentifier">The resource identifier</param>
     /// <param name="actions">The set of actions allowed for the members of the registry on the resource</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A <see cref="PartyRegistryResourceConnection"/> containing the information about the resource connection</returns>
-    public Task<PartyRegistryResourceConnection> AddPartyResourceConnectionActions(
+    /// <returns>A <see cref="AccessListResourceConnection"/> containing the information about the resource connection</returns>
+    public Task<AccessListResourceConnection> AddPartyResourceConnectionActions(
         Guid id,
         string resourceIdentifier,
         IEnumerable<string> actions,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Add additional actions to a party registry resource connection.
+    /// Add additional actions to an access list resource connection.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="resourceIdentifier">The resource identifier</param>
     /// <param name="actions">The set of actions allowed for the members of the registry on the resource</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A <see cref="PartyRegistryResourceConnection"/> containing the information about the resource connection</returns>
-    public Task<PartyRegistryResourceConnection> AddPartyResourceConnectionActions(
+    /// <returns>A <see cref="AccessListResourceConnection"/> containing the information about the resource connection</returns>
+    public Task<AccessListResourceConnection> AddPartyResourceConnectionActions(
         string registryOwner,
         string identifier,
         string resourceIdentifier,
@@ -176,29 +176,29 @@ public interface IPartyRegistryRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Remove actions to a party registry resource connection.
+    /// Remove actions from an access list resource connection.
     /// </summary>
-    /// <param name="id">The party registry id</param>
+    /// <param name="id">The access list id</param>
     /// <param name="resourceIdentifier">The resource identifier</param>
     /// <param name="actions">The set of actions to be removed from the allowed actions for the members of the registry on the resource</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A <see cref="PartyRegistryResourceConnection"/> containing the information about the resource connection</returns>
-    public Task<PartyRegistryResourceConnection> RemovePartyResourceConnectionActions(
+    /// <returns>A <see cref="AccessListResourceConnection"/> containing the information about the resource connection</returns>
+    public Task<AccessListResourceConnection> RemovePartyResourceConnectionActions(
         Guid id,
         string resourceIdentifier,
         IEnumerable<string> actions,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Remove actions to a party registry resource connection.
+    /// Remove actions from an access list resource connection.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="resourceIdentifier">The resource identifier</param>
     /// <param name="actions">The set of actions to be removed from the allowed actions for the members of the registry on the resource</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A <see cref="PartyRegistryResourceConnection"/> containing the information about the resource connection</returns>
-    public Task<PartyRegistryResourceConnection> RemovePartyResourceConnectionActions(
+    /// <returns>A <see cref="AccessListResourceConnection"/> containing the information about the resource connection</returns>
+    public Task<AccessListResourceConnection> RemovePartyResourceConnectionActions(
         string registryOwner,
         string identifier,
         string resourceIdentifier,
@@ -206,57 +206,57 @@ public interface IPartyRegistryRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Delete a connection to a resource from a party registry.
+    /// Delete a connection to a resource from an access list.
     /// </summary>
-    /// <param name="id">The party registry id</param>
+    /// <param name="id">The access list id</param>
     /// <param name="resourceIdentifier">The resource identifier</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A <see cref="PartyRegistryResourceConnection"/> containing the information about the resource connection</returns>
-    public Task<PartyRegistryResourceConnection> DeletePartyResourceConnection(
+    /// <returns>A <see cref="AccessListResourceConnection"/> containing the information about the resource connection</returns>
+    public Task<AccessListResourceConnection> DeletePartyResourceConnection(
         Guid id,
         string resourceIdentifier,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Delete a connection to a resource from a party registry.
+    /// Delete a connection to a resource from an access list.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="resourceIdentifier">The resource identifier</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A <see cref="PartyRegistryResourceConnection"/> containing the information about the resource connection</returns>
-    public Task<PartyRegistryResourceConnection> DeletePartyResourceConnection(
+    /// <returns>A <see cref="AccessListResourceConnection"/> containing the information about the resource connection</returns>
+    public Task<AccessListResourceConnection> DeletePartyResourceConnection(
         string registryOwner,
         string identifier,
         string resourceIdentifier,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Get members of a party registry.
+    /// Get members of an access list.
     /// </summary>
-    /// <param name="id">The party registry id</param>
+    /// <param name="id">The access list id</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A list of <see cref="PartyRegistryMembership"/></returns>
-    public Task<IReadOnlyList<PartyRegistryMembership>> GetPartyRegistryMemberships(
+    /// <returns>A list of <see cref="AccessListMembership"/></returns>
+    public Task<IReadOnlyList<AccessListMembership>> GetPartyRegistryMemberships(
         Guid id,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Get members of a party registry.
+    /// Get members of an access list.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-    /// <returns>A list of <see cref="PartyRegistryMembership"/></returns>
-    public Task<IReadOnlyList<PartyRegistryMembership>> GetPartyRegistryMemberships(
+    /// <returns>A list of <see cref="AccessListMembership"/></returns>
+    public Task<IReadOnlyList<AccessListMembership>> GetPartyRegistryMemberships(
         string registryOwner,
         string identifier,
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Add members to a party registry.
+    /// Add members to an access list.
     /// </summary>
-    /// <param name="id">The party registry id</param>
+    /// <param name="id">The access list id</param>
     /// <param name="partyIds">The parties to add</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     public Task AddPartyRegistryMembers(
@@ -265,10 +265,10 @@ public interface IPartyRegistryRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Add members to a party registry.
+    /// Add members to an access list.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="partyIds">The parties to add</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     public Task AddPartyRegistryMembers(
@@ -278,9 +278,9 @@ public interface IPartyRegistryRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Remove members from a party registry.
+    /// Remove members from an access list.
     /// </summary>
-    /// <param name="id">The party registry id</param>
+    /// <param name="id">The access list id</param>
     /// <param name="partyIds">The parties to remove</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     public Task RemovePartyRegistryMembers(
@@ -289,10 +289,10 @@ public interface IPartyRegistryRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Remove members from a party registry.
+    /// Remove members from an access list.
     /// </summary>
-    /// <param name="registryOwner">The registry owner</param>
-    /// <param name="identifier">The owner-unique identifier</param>
+    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="partyIds">The parties to remove</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     public Task RemovePartyRegistryMembers(
@@ -303,16 +303,16 @@ public interface IPartyRegistryRepository
 }
 
 /// <summary>
-/// Information about a party registry.
+/// Information about an access list.
 /// </summary>
-/// <param name="Id">The database id for the party registry.</param>
-/// <param name="RegistryOwner">The registry owner (a org.nr.).</param>
-/// <param name="Identifier">The registry owner-unique identifier. Limited to 'a'-'z' and '-' characters.</param>
+/// <param name="Id">The database id for the access list.</param>
+/// <param name="RegistryOwner">The resource owner (a org.nr.).</param>
+/// <param name="Identifier">The resource owner-unique identifier. Limited to 'a'-'z' and '-' characters.</param>
 /// <param name="Name">The registry name. Does not have to be unique, and can contain any characters.</param>
 /// <param name="Description">A registry description.</param>
 /// <param name="CreatedAt">When this registry was created.</param>
 /// <param name="UpdatedAt">When this registry was last updated.</param>
-public record PartyRegistryInfo(
+public record AccessListInfo(
     Guid Id,
     string RegistryOwner,
     string Identifier,
@@ -322,23 +322,23 @@ public record PartyRegistryInfo(
     DateTimeOffset UpdatedAt);
 
 /// <summary>
-/// Information about a party registry resource connection.
+/// Information about an access list resource connection.
 /// </summary>
 /// <param name="ResourceIdentifier">The resource identifier.</param>
 /// <param name="Actions">The allowed actions.</param>
 /// <param name="Created">When the connection was created.</param>
 /// <param name="Modified">When the connection was last modified.</param>
-public record PartyRegistryResourceConnection(
+public record AccessListResourceConnection(
     string ResourceIdentifier,
     ImmutableHashSet<string> Actions,
     DateTimeOffset Created,
     DateTimeOffset Modified);
 
 /// <summary>
-/// Information about a party registry membership.
+/// Information about an access list membership.
 /// </summary>
 /// <param name="PartyId">The party id.</param>
 /// <param name="Since">When the party was added to the registry.</param>
-public record PartyRegistryMembership(
+public record AccessListMembership(
     Guid PartyId,
     DateTimeOffset Since);

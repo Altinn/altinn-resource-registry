@@ -10,12 +10,12 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Altinn.ResourceRegistry.Models;
 
 /// <summary>
-/// Object sent to the API to add/remove/overwrite members from a party registry.
+/// Object sent to the API to add/remove/overwrite members from an access list.
 /// </summary>
 /// <param name="items">The members to add/remove/overwrite</param>
 [JsonConverter(typeof(Converter))]
 [SwaggerSchemaFilter(typeof(SchemaFilter))]
-public class UpsertPartyMembersListDto(
+public class UpsertAccessListPartyMembersListDto(
     IReadOnlyList<PartyReference> items)
     : IReadOnlyList<PartyReference>
 {
@@ -39,16 +39,16 @@ public class UpsertPartyMembersListDto(
         return ((IEnumerable)_items).GetEnumerator();
     }
 
-    private sealed class Converter : JsonConverter<UpsertPartyMembersListDto>
+    private sealed class Converter : JsonConverter<UpsertAccessListPartyMembersListDto>
     {
         /// <inheritdoc/>
-        public override UpsertPartyMembersListDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override UpsertAccessListPartyMembersListDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public override void Write(Utf8JsonWriter writer, UpsertPartyMembersListDto value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, UpsertAccessListPartyMembersListDto value, JsonSerializerOptions options)
         {
             throw new NotImplementedException();
         }

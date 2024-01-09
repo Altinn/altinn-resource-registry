@@ -25,7 +25,7 @@ public class AccessListsController
     /// <returns>A paginated set of <see cref="AccessListInfoDto"/></returns>
     [HttpGet("{owner:required}")]
     [SwaggerOperation(Tags = ["Access List"])]
-    public Task<ActionResult<Paginated<AccessListInfoDto>>> GetPartyRegistries(string owner, CancellationToken cancellationToken = default)
+    public Task<ActionResult<Paginated<AccessListInfoDto>>> GetAccessListsByOwner(string owner, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -39,7 +39,7 @@ public class AccessListsController
     /// <returns>A <see cref="AccessListInfoDto"/></returns>
     [HttpGet("{owner:required}/{identifier:required}")]
     [SwaggerOperation(Tags = ["Access List"])]
-    public Task<ActionResult<AccessListInfoDto>> GetPartyRegistry(string owner, string identifier, CancellationToken cancellationToken = default)
+    public Task<ActionResult<AccessListInfoDto>> GetAccessList(string owner, string identifier, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -54,7 +54,7 @@ public class AccessListsController
     /// <returns>A <see cref="AccessListInfoDto"/></returns>
     [HttpPut("{owner:required}/{identifier:required}")]
     [SwaggerOperation(Tags = ["Access List"])]
-    public Task<ActionResult<AccessListInfoDto>> UpsertPartyRegistry(string owner, string identifier, [FromBody] CreateAccessListModel model, CancellationToken cancellationToken = default)
+    public Task<ActionResult<AccessListInfoDto>> UpsertAccessList(string owner, string identifier, [FromBody] CreateAccessListModel model, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -70,7 +70,7 @@ public class AccessListsController
     [HttpPatch("{owner:required}/{identifier:required}")]
     [SwaggerOperation(Tags = ["Access List"])]
     [Consumes("application/json-patch+json")]
-    public Task<ActionResult<AccessListInfoDto>> UpdatePartyRegistry(string owner, string identifier, [FromBody] JsonPatchDocument patch, CancellationToken cancellationToken = default)
+    public Task<ActionResult<AccessListInfoDto>> UpdateAccessList(string owner, string identifier, [FromBody] JsonPatchDocument patch, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -84,7 +84,7 @@ public class AccessListsController
     /// <returns>A paginated list of <see cref="AccessListMembershipDto"/></returns>
     [HttpGet("{owner:required}/{identifier:required}/members")]
     [SwaggerOperation(Tags = ["Access List Members"])]
-    public Task<ActionResult<Paginated<AccessListMembershipDto>>> GetPartyRegistryMembers(string owner, string identifier, CancellationToken cancellationToken = default)
+    public Task<ActionResult<Paginated<AccessListMembershipDto>>> GetAccessListMembers(string owner, string identifier, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -102,7 +102,7 @@ public class AccessListsController
     /// <returns>A paginated list of <see cref="AccessListMembershipDto"/></returns>
     [HttpPut("{owner:required}/{identifier:required}/members")]
     [SwaggerOperation(Tags = ["Access List Members"])]
-    public Task<ActionResult<Paginated<AccessListMembershipDto>>> ReplacePartyRegistryMembers(string owner, string identifier, [FromBody] UpsertAccessListPartyMembersListDto members, CancellationToken cancellationToken = default)
+    public Task<ActionResult<Paginated<AccessListMembershipDto>>> ReplaceAccessListMembers(string owner, string identifier, [FromBody] UpsertAccessListPartyMembersListDto members, CancellationToken cancellationToken = default)
     {
         if (members.Count > 100)
         {
@@ -126,7 +126,7 @@ public class AccessListsController
     /// <returns>A paginated list of <see cref="AccessListMembershipDto"/></returns>
     [HttpPost("{owner:required}/{identifier:required}/members")]
     [SwaggerOperation(Tags = ["Access List Members"])]
-    public Task<ActionResult<Paginated<AccessListMembershipDto>>> AddPartyRegistryMembers(string owner, string identifier, [FromBody] UpsertAccessListPartyMembersListDto members, CancellationToken cancellationToken = default)
+    public Task<ActionResult<Paginated<AccessListMembershipDto>>> AddAccessListMembers(string owner, string identifier, [FromBody] UpsertAccessListPartyMembersListDto members, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -144,7 +144,7 @@ public class AccessListsController
     /// <returns>A paginated list of <see cref="AccessListMembershipDto"/></returns>
     [HttpDelete("{owner:required}/{identifier:required}/members")]
     [SwaggerOperation(Tags = ["Access List Members"])]
-    public Task<ActionResult<Paginated<AccessListMembershipDto>>> RemovePartyRegistryMembers(string owner, string identifier, [FromBody] UpsertAccessListPartyMembersListDto members, CancellationToken cancellationToken = default)
+    public Task<ActionResult<Paginated<AccessListMembershipDto>>> RemoveAccessListMembers(string owner, string identifier, [FromBody] UpsertAccessListPartyMembersListDto members, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -158,7 +158,7 @@ public class AccessListsController
     /// <returns>A parinated list of <see cref="AccessListResourceConnectionDto"/></returns>
     [HttpGet("{owner:required}/{identifier:required}/resource-connections")]
     [SwaggerOperation(Tags = ["Access List Resource Connections"])]
-    public Task<ActionResult<Paginated<AccessListResourceConnectionDto>>> GetPartyRegistryResourceConnections(string owner, string identifier, CancellationToken cancellationToken = default)
+    public Task<ActionResult<Paginated<AccessListResourceConnectionDto>>> GetAccessListResourceConnections(string owner, string identifier, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -177,7 +177,7 @@ public class AccessListsController
     /// <returns>The newly created/updated <see cref="AccessListResourceConnectionDto"/></returns>
     [HttpPut("{owner:required}/{identifier:required}/resource-connections/{resourceIdentifier:required}")]
     [SwaggerOperation(Tags = ["Access List Resource Connections"])]
-    public Task<ActionResult<AccessListResourceConnectionDto>> UpsertPartyResourceConnection(string owner, string identifier, string resourceIdentifier, [FromBody] UpsertAccessListResourceConnectionDto model, CancellationToken cancellationToken = default)
+    public Task<ActionResult<AccessListResourceConnectionDto>> UpsertAccessListResourceConnection(string owner, string identifier, string resourceIdentifier, [FromBody] UpsertAccessListResourceConnectionDto model, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -197,7 +197,7 @@ public class AccessListsController
     [SwaggerOperation(Tags = ["Access List Resource Connections"])]
     [SwaggerResponse(StatusCodes.Status200OK, description: "The resource connection was removed", type: typeof(AccessListResourceConnectionDto))]
     [SwaggerResponse(StatusCodes.Status204NoContent, description: "The resource connection did not exist")]
-    public Task<ActionResult<AccessListResourceConnectionDto?>> DeletePartyResourceConnection(string owner, string identifier, string resourceIdentifier, CancellationToken cancellationToken = default)
+    public Task<ActionResult<AccessListResourceConnectionDto?>> DeleteAccessListResourceConnection(string owner, string identifier, string resourceIdentifier, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

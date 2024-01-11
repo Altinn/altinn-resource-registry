@@ -31,7 +31,6 @@ public class IntegrationTestWebApplicationFactory
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        //builder.ConfigureAppConfiguration(config => config.AddJsonFile("appsettings.test.json"));
         builder.ConfigureAppConfiguration(config =>
         {
             config.AddConfiguration(new ConfigurationBuilder()

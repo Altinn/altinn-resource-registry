@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Altinn.ResourceRegistry.Persistence\Altinn.ResourceRegistry.Persistence.csproj" />
-    <ProjectReference Include="..\Altinn.ResourceRegistry.TestUtils\Altinn.ResourceRegistry.TestUtils.csproj" />
   </ItemGroup>
 
 </Project>

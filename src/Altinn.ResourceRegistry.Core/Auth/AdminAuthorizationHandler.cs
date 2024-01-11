@@ -34,7 +34,7 @@ internal class AdminAuthorizationHandler
         var scopes = altinScopes.Concat(normalScopes)
             .Select(claim => claim.Value)
             .Where(claim => !string.IsNullOrWhiteSpace(claim))
-            .SelectMany(claim => claim.Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.TrimEntries));
+            .SelectMany(claim => claim.Split(' ', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries));
 
         return scopes.Contains(AuthzConstants.SCOPE_RESOURCE_ADMIN);
     }

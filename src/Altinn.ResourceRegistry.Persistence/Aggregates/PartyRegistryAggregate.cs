@@ -384,7 +384,6 @@ internal readonly struct EventId(ulong id)
         => IsSet ? id.ToString(CultureInfo.InvariantCulture) : "unset";
 }
 
-/// <inheritdoc />
 internal abstract record PartyRegistryEvent(EventId EventId, Guid RegistryId, DateTimeOffset EventTime)
     : IAggregateEvent<PartyRegistryAggregate, PartyRegistryEvent>
 {
@@ -426,7 +425,6 @@ internal abstract record PartyRegistryEvent(EventId EventId, Guid RegistryId, Da
     /// <returns><see cref="Values"/></returns>
     internal abstract Values AsValues();
 
-    /// <inheritdoc />
     internal readonly record struct Values(
         string Kind,
         DateTimeOffset EventTime,
@@ -439,7 +437,6 @@ internal abstract record PartyRegistryEvent(EventId EventId, Guid RegistryId, Da
         ImmutableArray<Guid> PartyIds);
 }
 
-/// <inheritdoc />
 internal record PartyRegistryCreatedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -468,7 +465,6 @@ internal record PartyRegistryCreatedEvent(
             PartyIds: default);
 }
 
-/// <inheritdoc />
 internal record PartyRegistryUpdatedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -496,7 +492,6 @@ internal record PartyRegistryUpdatedEvent(
             PartyIds: default);
 }
 
-/// <inheritdoc />
 internal record PartyRegistryDeletedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -521,7 +516,6 @@ internal record PartyRegistryDeletedEvent(
             PartyIds: default);
 }
 
-/// <inheritdoc />
 internal record PartyRegistryResourceConnectionCreatedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -548,7 +542,6 @@ internal record PartyRegistryResourceConnectionCreatedEvent(
             PartyIds: default);
 }
 
-/// <inheritdoc />
 internal record PartyRegistryResourceConnectionActionsAddedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -575,7 +568,6 @@ internal record PartyRegistryResourceConnectionActionsAddedEvent(
             PartyIds: default);
 }
 
-/// <inheritdoc />
 internal record PartyRegistryResourceConnectionActionsRemovedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -602,7 +594,6 @@ internal record PartyRegistryResourceConnectionActionsRemovedEvent(
             PartyIds: default);
 }
 
-/// <inheritdoc />
 internal record PartyRegistryResourceConnectionDeletedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -628,7 +619,6 @@ internal record PartyRegistryResourceConnectionDeletedEvent(
             PartyIds: default);
 }
 
-/// <inheritdoc />
 internal record PartyRegistryMembersAddedEvent(
     EventId EventId,
     Guid RegistryId,
@@ -654,7 +644,6 @@ internal record PartyRegistryMembersAddedEvent(
             PartyIds: PartyIds);
 }
 
-/// <inheritdoc />
 internal record PartyRegistryMembersRemovedEvent(
     EventId EventId,
     Guid RegistryId,

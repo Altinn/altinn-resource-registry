@@ -25,17 +25,6 @@ namespace Altinn.ResourceRegistry.Controllers;
 public class AccessListsController 
     : Controller
 {
-    private readonly IAuthorizationService _authorizationService;
-
-    /// <summary>
-    /// Create a new instance of <see cref="AccessListsController"/>.
-    /// </summary>
-    /// <param name="authorizationService">A <see cref="IAuthorizationService"/></param>
-    public AccessListsController(IAuthorizationService authorizationService)
-    {
-        _authorizationService = authorizationService;
-    }
-
     /// <summary>
     /// Get all access lists for a given resource owner.
     /// </summary>
@@ -250,7 +239,7 @@ public class AccessListsController
     }
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    private class NotImplementedFilterAttribute : Attribute, IExceptionFilter
+    private sealed class NotImplementedFilterAttribute : Attribute, IExceptionFilter
     {
         public void OnException(ExceptionContext context)
         {

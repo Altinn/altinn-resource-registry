@@ -65,7 +65,7 @@ internal class OwnedResourceAuthorizationHandler
         return Task.CompletedTask;
     }
 
-    private bool MatchResourceOwner(ClaimsPrincipal user, string resourceOwner)
+    private static bool MatchResourceOwner(ClaimsPrincipal user, string resourceOwner)
     {
         var orgClaim = user.FindFirst("consumer")?.Value;
         if (string.IsNullOrEmpty(orgClaim))
@@ -96,7 +96,7 @@ internal class OwnedResourceAuthorizationHandler
     /// <summary>
     /// The consumer claim object
     /// </summary>
-    private class ConsumerClaim
+    private sealed class ConsumerClaim
     {
         /// <summary>
         /// Gets or sets the format of the identifier. Must always be "iso6523-actorid-upis"

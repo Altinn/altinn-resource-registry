@@ -87,7 +87,7 @@ public class DbFixture : IAsyncLifetime
         throw new InvalidOperationException("Workspace directory not found");
     }
 
-    public class OwnedDb : IAsyncDisposable
+    public sealed class OwnedDb : IAsyncDisposable
     {
         readonly string _connectionString;
         readonly string _dbName;

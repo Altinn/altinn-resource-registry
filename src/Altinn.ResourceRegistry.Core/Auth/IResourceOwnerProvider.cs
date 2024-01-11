@@ -8,7 +8,7 @@ namespace Altinn.ResourceRegistry.Core.Auth;
 /// Interface used to configure resource owner lookup.
 /// </summary>
 /// <typeparam name="T">The resource type.</typeparam>
-public interface IResourceOwnerProvider<T>
+public interface IResourceOwnerProvider<in T>
 {
     /// <summary>
     /// Try to get the resource owner for the given resource.

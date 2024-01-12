@@ -1,9 +1,8 @@
 ﻿#nullable enable
 
 using Altinn.Common.PEP.Authorization;
-using Altinn.ResourceRegistry.Core.Auth;
+using Altinn.ResourceRegistry.Auth;
 using CommunityToolkit.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Microsoft.AspNetCore.Authorization;
 

@@ -1,9 +1,8 @@
 ﻿#nullable enable
 
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Http;
 
-namespace Altinn.ResourceRegistry.Core.Auth;
+namespace Altinn.ResourceRegistry.Auth;
 
 /// <summary>
 /// Provides a <see cref="IResourceOwnerProvider{T}"/> for <see cref="HttpContext"/> and <see cref="HttpRequest"/>

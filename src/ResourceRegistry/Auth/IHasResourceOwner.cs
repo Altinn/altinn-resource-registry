@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-namespace Altinn.ResourceRegistry.Core.Auth;
+namespace Altinn.ResourceRegistry.Auth;
 
 /// <summary>
 /// Interface used for objects that have a resource owner

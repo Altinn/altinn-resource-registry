@@ -4,9 +4,8 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 
-namespace Altinn.ResourceRegistry.Core.Auth;
+namespace Altinn.ResourceRegistry.Auth;
 
 /// <summary>
 /// Authorization handler for checking if the user owns the resource.

@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-using Altinn.ResourceRegistry.Core.Auth;
+using Altinn.ResourceRegistry.Auth;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Microsoft.Extensions.DependencyInjection;

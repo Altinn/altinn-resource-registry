@@ -1,7 +1,7 @@
 ﻿#nullable enable
 
 using System.Net;
-using Altinn.ResourceRegistry.Core.Auth;
+using Altinn.ResourceRegistry.Auth;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.JsonPatch;
 using Altinn.ResourceRegistry.Models;

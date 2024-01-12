@@ -2,7 +2,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace Altinn.ResourceRegistry.Core.Auth;
+namespace Altinn.ResourceRegistry.Auth;
 
 /// <summary>
 /// Interface used to configure resource owner lookup.

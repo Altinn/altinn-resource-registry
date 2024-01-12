@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Altinn.ResourceRegistry.Core.Constants;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Altinn.ResourceRegistry.Core.Auth;
+namespace Altinn.ResourceRegistry.Auth;
 
 /// <summary>
 /// Authorization handler for checking if the user is an admin.

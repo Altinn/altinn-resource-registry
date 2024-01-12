@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Authorization;
 
-namespace Altinn.ResourceRegistry.Core.Auth;
+namespace Altinn.ResourceRegistry.Auth;
 
 /// <summary>
 /// Authorization requirement for checking if the user owns the resource

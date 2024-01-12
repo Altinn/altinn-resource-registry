@@ -46,7 +46,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 }
                 else
                 {
-                    return resource.Description.Any(d => d.Key.Contains(resourceSearch.Description, StringComparison.InvariantCultureIgnoreCase) || d.Value.Contains(resourceSearch.Description, StringComparison.InvariantCultureIgnoreCase));
+                    return resource.Description.Any(d => d.Value.Contains(resourceSearch.Description, StringComparison.InvariantCultureIgnoreCase));
                 }
             }
         }

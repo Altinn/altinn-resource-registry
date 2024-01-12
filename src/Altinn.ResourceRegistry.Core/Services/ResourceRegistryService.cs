@@ -103,7 +103,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task<List<ServiceResource>> GetSearchResults(ResourceSearch resourceSearch, CancellationToken cancellationToken = default)
         {
-            List<ServiceResource> resourceList = await GetResourceList(true, true, cancellationToken);
+            List<ServiceResource> resourceList = await GetResourceList(false, false, cancellationToken);
             return ServiceResourceHelper.GetSearchResultsFromResourceList(resourceList, resourceSearch);
         }
 

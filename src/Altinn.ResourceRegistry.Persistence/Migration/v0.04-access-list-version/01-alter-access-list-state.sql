@@ -11,7 +11,10 @@ SET
         FROM
             resourceregistry.access_list_events
         WHERE
-            resourceregistry.access_list_events.aggregate_id = resourceregistry.access_list_state.aggregate_id);
+            resourceregistry.access_list_events.aggregate_id = resourceregistry.access_list_state.aggregate_id)
+WHERE
+    version IS NULL;
 
 ALTER TABLE resourceregistry.access_list_state
     ALTER COLUMN version SET NOT NULL;
+

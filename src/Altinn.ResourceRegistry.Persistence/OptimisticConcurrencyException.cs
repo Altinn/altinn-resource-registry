@@ -9,7 +9,7 @@ public class OptimisticConcurrencyException
     : Exception
 {
     /// <summary>
-    /// Creates a new <see cref="OptimisticConcurrencyException"/> for the given <paramref name="aggregate"/> and <paramref name="dbVersion"/>.
+    /// Creates a new <see cref="OptimisticConcurrencyException"/> for the given <paramref name="aggregate"/>.
     /// </summary>
     /// <typeparam name="TAggregate"></typeparam>
     /// <param name="aggregate">The <see cref="IAggregate"/> that failed to update</param>

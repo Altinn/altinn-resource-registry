@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using Altinn.ResourceRegistry.Core.Models;
+using CommunityToolkit.Diagnostics;
 
 namespace Altinn.ResourceRegistry.Core.AccessLists;
 
@@ -30,8 +31,14 @@ internal class AccessListService
     /// <param name="request">The page request metadata.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A <see cref="Page{TItem, TToken}"/> of <see cref="AccessListInfo"/></returns>
-    public async Task<Page<AccessListInfo, string>> GetAccessListsByOwner(string owner, Page<string>.Request request, CancellationToken cancellationToken)
+    public async Task<Page<AccessListInfo, string>> GetAccessListsByOwner(
+        string owner,
+        Page<string>.Request request,
+        CancellationToken cancellationToken = default)
     {
+        Guard.IsNotNull(owner);
+        Guard.IsNotNull(request);
+
         // request 1 more than page size to determine if there are more pages
         var accessLists = await _repository.GetAccessListsByOwner(
             owner,

@@ -47,12 +47,12 @@ public interface IAccessListsRepository
     /// <summary>
     /// Lookup resource connections for an access list by it's resource owner and identifier.
     /// </summary>
-    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="resourceOwner">The resource owner</param>
     /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A list of <see cref="AccessListResourceConnection"/> for the given resource.</returns>
     Task<IReadOnlyList<AccessListResourceConnection>?> GetAccessListResourceConnections(
-        string registryOwner,
+        string resourceOwner,
         string identifier,
         CancellationToken cancellationToken = default);
 
@@ -69,26 +69,26 @@ public interface IAccessListsRepository
     /// <summary>
     /// Get members of an access list.
     /// </summary>
-    /// <param name="registryOwner">The resource owner</param>
+    /// <param name="resourceOwner">The resource owner</param>
     /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A list of <see cref="AccessListMembership"/></returns>
     Task<IReadOnlyList<AccessListMembership>?> GetAccessListMemberships(
-        string registryOwner,
+        string resourceOwner,
         string identifier,
         CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Create a new access list.
     /// </summary>
-    /// <param name="registryOwner">The resource owner (org.nr.).</param>
+    /// <param name="resourceOwner">The resource owner (org.nr.).</param>
     /// <param name="identifier">The access list identifier (unique per owner).</param>
     /// <param name="name">The registry name.</param>
     /// <param name="description">The registry description.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>The newly created registry in the form of a <see cref="AccessListInfo"/>.</returns>
     Task<IAccessListAggregate> CreateAccessList(
-        string registryOwner,
+        string resourceOwner,
         string identifier,
         string name,
         string description,

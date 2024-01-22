@@ -1,6 +1,7 @@
 #nullable enable
 
 using System.Collections.Immutable;
+using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
 
 namespace Altinn.ResourceRegistry.Core.AccessLists;
@@ -18,6 +19,20 @@ public interface IAccessListService
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A <see cref="Page{TItem, TToken}"/> of <see cref="AccessListInfo"/>.</returns>
     Task<Page<AccessListInfo, string>> GetAccessListsByOwner(string owner, Page<string>.Request request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets an access list by owner and identifier.
+    /// </summary>
+    /// <param name="owner">The resource owner (org.nr.).</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
+    /// <param name="condition">Optional condition on the access list</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>A conditional <see cref="AccessListInfo"/></returns>
+    Task<Conditional<AccessListInfo, ulong>> GetAccessList(
+        string owner,
+        string identifier,
+        IVersionedEntityCondition<ulong>? condition = null,
+        CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -30,6 +45,7 @@ public interface IAccessListService
 /// <param name="Description">A registry description.</param>
 /// <param name="CreatedAt">When this registry was created.</param>
 /// <param name="UpdatedAt">When this registry was last updated.</param>
+/// <param name="Version">The access list version</param>
 public record AccessListInfo(
     Guid Id,
     string RegistryOwner,
@@ -37,7 +53,22 @@ public record AccessListInfo(
     string Name,
     string Description,
     DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt);
+    DateTimeOffset UpdatedAt,
+    ulong Version)
+    : IVersionEquatable<ulong>
+{
+    /// <inheritdoc/>
+    bool IVersionEquatable<ulong>.ModifiedSince(HttpDateTimeHeaderValue other)
+    {
+        return UpdatedAt > other;
+    }
+
+    /// <inheritdoc/>
+    bool IVersionEquatable<ulong>.VersionEquals(ulong other)
+    {
+        return Version == other;
+    }
+}
 
 /// <summary>
 /// Information about an access list resource connection.

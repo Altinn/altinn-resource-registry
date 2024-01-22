@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 
 using System.Net;
 using Altinn.ResourceRegistry.Auth;
@@ -7,6 +7,7 @@ using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.JsonPatch;
 using Altinn.ResourceRegistry.Models;
+using Altinn.ResourceRegistry.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -72,15 +73,20 @@ public class AccessListsController
     /// </summary>
     /// <param name="owner">The resource owner</param>
     /// <param name="identifier">The resource owner-unique identifier</param>
+    /// <param name="conditions">Request conditions</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
     /// <returns>A <see cref="AccessListInfoDto"/></returns>
     [HttpGet("{identifier:required}")]
     [SwaggerOperation(Tags = ["Access List"])]
-    public async Task<ActionResult<AccessListInfoDto>> GetAccessList(string owner, string identifier, CancellationToken cancellationToken = default)
+    public async Task<ConditionalResult<AccessListInfoDto, AggregateVersion>> GetAccessList(
+        string owner, 
+        string identifier, 
+        RequestConditions<AggregateVersion> conditions,
+        CancellationToken cancellationToken = default)
     {
-        await Task.Yield();
+        var result = await _service.GetAccessList(owner, identifier, conditions.Select(v => v.Version), cancellationToken);
 
-        throw new NotImplementedException();
+        return result.Select(AccessListInfoDto.From, AggregateVersion.From);
     }
 
     /// <summary>

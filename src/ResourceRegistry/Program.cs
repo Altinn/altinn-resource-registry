@@ -15,6 +15,8 @@ using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Filters;
 using Altinn.ResourceRegistry.Health;
 using Altinn.ResourceRegistry.Integration.Clients;
+using Altinn.ResourceRegistry.Models;
+using Altinn.ResourceRegistry.Models.ApiDescriptions;
 using Altinn.ResourceRegistry.Persistence.Configuration;
 using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
@@ -24,6 +26,8 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Npgsql;
@@ -54,7 +58,9 @@ builder.Services.AddControllers(opts =>
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddEndpointsApiExplorer()
+    .TryAddEnumerable(ServiceDescriptor.Singleton<IApiDescriptionProvider, ConditionalApiDescriptionProvider>());
+
 builder.Services.AddSwaggerGen(c =>
 {
     var assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -66,6 +72,7 @@ builder.Services.AddSwaggerGen(c =>
 
     c.EnableAnnotations();
     c.SupportNonNullableReferenceTypes();
+    c.OperationFilter<ConditionalOperationFilter>();
 });
 
 var app = builder.Build();
@@ -76,12 +83,16 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
-    services.AddControllers().AddJsonOptions(options =>
+    services.AddControllers(options =>
     {
-        options.JsonSerializerOptions.WriteIndented = true;
-        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-    });
+        options.ModelBinderProviders.Insert(0, RequestConditions.ModelBinderProvider.Instance);
+    })
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.WriteIndented = true;
+            options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        });
 
     services.AddMemoryCache();
     services.AddSingleton(config);

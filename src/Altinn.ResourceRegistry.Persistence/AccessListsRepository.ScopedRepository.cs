@@ -81,7 +81,7 @@ internal partial class AccessListsRepository
             Guard.IsGreaterThan(count, 0);
 
             const string QUERY = /*strpsql*/@"
-                SELECT aggregate_id, identifier, resource_owner, name, description, created, modified
+                SELECT aggregate_id, identifier, resource_owner, name, description, created, modified, version
                 FROM resourceregistry.access_list_state
                 WHERE resource_owner = @resource_owner
                 AND (@continue_from IS NULL OR identifier >= @continue_from)
@@ -233,7 +233,7 @@ internal partial class AccessListsRepository
         private async Task<AccessListInfo?> LookupInfo(Guid accessListId, CancellationToken cancellationToken)
         {
             const string QUERY = /*strpsql*/@"
-                SELECT aggregate_id, identifier, resource_owner, name, description, created, modified
+                SELECT aggregate_id, identifier, resource_owner, name, description, created, modified, version
                 FROM resourceregistry.access_list_state
                 WHERE aggregate_id = @aggregate_id;";
 
@@ -248,7 +248,7 @@ internal partial class AccessListsRepository
         private async Task<AccessListInfo?> LookupInfo(string registryOwner, string identifier, CancellationToken cancellationToken)
         {
             const string QUERY = /*strpsql*/@"
-                SELECT aggregate_id, identifier, resource_owner, name, description, created, modified
+                SELECT aggregate_id, identifier, resource_owner, name, description, created, modified, version
                 FROM resourceregistry.access_list_state
                 WHERE resource_owner = @owner AND identifier = @identifier;";
 
@@ -574,8 +574,9 @@ internal partial class AccessListsRepository
             var description = reader.GetString("description");
             var created = reader.GetFieldValue<DateTimeOffset>("created");
             var modified = reader.GetFieldValue<DateTimeOffset>("modified");
+            var version = reader.GetFieldValue<long>("version");
 
-            return new AccessListInfo(aggregate_id, owner, identifier, name, description, created, modified);
+            return new AccessListInfo(aggregate_id, owner, identifier, name, description, created, modified, checked((ulong)version));
         }
 
         private static async ValueTask<AccessListEvent> CreateAccessListEvent(

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Altinn.ResourceRegistry.Core.AccessLists;
 using Altinn.ResourceRegistry.Core.Aggregates;
+using CommunityToolkit.Diagnostics;
 
 namespace Altinn.ResourceRegistry.Persistence.Aggregates;
 
@@ -308,8 +309,16 @@ internal class AccessListAggregate
     /// Gets the aggregate as a <see cref="AccessListInfo"/>.
     /// </summary>
     /// <returns><see cref="AccessListInfo"/></returns>
+    /// <exception cref="InvalidOperationException">Thrown if aggregate is not commited.</exception>
     public AccessListInfo AsAccessListInfo()
-        => new AccessListInfo(Id, ResourceOwner, Identifier, Name, Description, CreatedAt, UpdatedAt);
+    {
+        if (HasUncommittedEvents)
+        {
+            ThrowHelper.ThrowInvalidOperationException("Cannot get access list info for uncommitted aggregate");
+        }
+
+        return new AccessListInfo(Id, ResourceOwner, Identifier, Name, Description, CreatedAt, UpdatedAt, CommittedVersion.UnsafeValue);
+    }
 }
 
 /// <summary>

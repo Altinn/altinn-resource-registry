@@ -48,4 +48,33 @@ internal class AccessListService
 
         return Page.Create(accessLists, LISTS_PAGE_SIZE, static list => list.Identifier);
     }
+
+    /// <inheritdoc/>
+    public async Task<Conditional<AccessListInfo, ulong>> GetAccessList(string owner, string identifier, IVersionedEntityCondition<ulong>? condition = null, CancellationToken cancellationToken = default)
+    {
+        Guard.IsNotNull(owner);
+        Guard.IsNotNull(identifier);
+
+        var accessList = await _repository.LookupInfo(owner, identifier, cancellationToken);
+        if (accessList == null)
+        {
+            return Conditional.NotFound();
+        }
+
+        if (condition is not null)
+        {
+            var result = condition.Validate(accessList);
+            if (result == VersionedEntityConditionResult.Failed)
+            {
+                return Conditional.Failed();
+            }
+
+            if (result == VersionedEntityConditionResult.Unmodified)
+            {
+                return Conditional.Unmodified(accessList.Version, accessList.UpdatedAt);
+            }
+        }
+
+        return accessList;
+    }
 }

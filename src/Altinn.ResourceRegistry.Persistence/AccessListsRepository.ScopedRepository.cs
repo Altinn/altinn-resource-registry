@@ -20,6 +20,8 @@ internal partial class AccessListsRepository
 {
     private sealed class ScopedRepository
     {
+        private const string UNIQUE_OWNER_IDENT_CONSTRAINT_NAME = "uq_access_list_state_owner_ident";
+
         public static async Task<T> RunInTransaction<T>(
             AccessListsRepository repo,
             Func<ScopedRepository, Task<T>> func,
@@ -28,7 +30,7 @@ internal partial class AccessListsRepository
             await using var conn = await repo._conn.OpenConnectionAsync(cancellationToken);
             await using var tx = await conn.BeginTransactionAsync(IsolationLevel.RepeatableRead, cancellationToken);
 
-            var result = await func(new ScopedRepository(repo, conn));
+            var result = await func(new ScopedRepository(repo, conn, tx));
             await tx.CommitAsync(cancellationToken);
 
             return result;
@@ -36,12 +38,14 @@ internal partial class AccessListsRepository
 
         private readonly ILogger _logger;
         private readonly NpgsqlConnection _conn;
+        private readonly NpgsqlTransaction _tx;
         private readonly TimeProvider _timeProvider;
         private readonly IAggregateRepository<AccessListAggregate, AccessListEvent> _repo;
 
-        private ScopedRepository(AccessListsRepository repo, NpgsqlConnection conn)
+        private ScopedRepository(AccessListsRepository repo, NpgsqlConnection conn, NpgsqlTransaction tx)
         {
             _conn = conn;
+            _tx = tx;
             _logger = repo._logger;
             _timeProvider = repo._timeProvider;
             _repo = repo;
@@ -49,22 +53,66 @@ internal partial class AccessListsRepository
 
         public async Task<AccessListAggregate> CreateAccessList(string resourceOwner, string identifier, string name, string description, CancellationToken cancellationToken)
         {
-            // Step 1. Check that the access list doesn't already exist
-            var existingRegistry = await LookupInfo(resourceOwner, identifier, cancellationToken);
-            if (existingRegistry is not null)
-            {
-                throw new InvalidOperationException($"An access list with identifier '{identifier}' already exists for owner '{resourceOwner}'.");
-            }
-
-            // Step 2. Create a new aggregate
+            // Step 1. Create the aggregate
             var accessListAggregate = AccessListAggregate.New(_timeProvider, Guid.NewGuid(), _repo);
             accessListAggregate.Initialize(resourceOwner, identifier, name, description);
 
-            // Step 3. Apply the event(s) to the database
-            await ApplyChanges(accessListAggregate, cancellationToken);
+            // Step 2. Try to save the aggregate - catching the exception that's thrown if the list already exist
+            try
+            {
+                await ApplyChanges(accessListAggregate, cancellationToken);
+            }
+            catch (PostgresException e) when (e.ConstraintName is UNIQUE_OWNER_IDENT_CONSTRAINT_NAME)
+            {
+                ThrowHelper.ThrowInvalidOperationException("Access list already exists", e);
+            }
 
-            // Step 4. Return the access list info
+            // Step 3. Return the access list info
             return accessListAggregate;
+        }
+
+        public async Task<AccessListLoadOrCreateResult?> LoadOrCreateAccessList(
+            string resourceOwner,
+            string identifier,
+            string name,
+            string description,
+            CancellationToken cancellationToken = default)
+        {
+            const string SAVEPOINT_NAME = nameof(LoadOrCreateAccessList);
+
+            AccessListAggregate aggregate;
+            AccessListLoadOrCreateResult.ResultMode mode;
+
+            // Try to create the access list
+            try
+            {
+                // We expect that the following call to CreateAccessList *might* fail with a database constraint violation,
+                // so we wrap it in a savepoint to be able to rollback to the savepoint if it fails.
+                await _tx.SaveAsync(SAVEPOINT_NAME, cancellationToken);
+
+                aggregate = await CreateAccessList(resourceOwner, identifier, name, description, cancellationToken);
+                await _tx.ReleaseAsync(SAVEPOINT_NAME, cancellationToken);
+
+                mode = AccessListLoadOrCreateResult.ResultMode.Created;
+            }
+            catch (InvalidOperationException e) when (e.InnerException is PostgresException { ConstraintName: UNIQUE_OWNER_IDENT_CONSTRAINT_NAME })
+            {
+                await _tx.RollbackAsync(SAVEPOINT_NAME, cancellationToken);
+
+                // If it fails because we already have the list created, load it instead
+                var loaded = await Load(new(resourceOwner, identifier), cancellationToken);
+                mode = AccessListLoadOrCreateResult.ResultMode.Loaded;
+
+                if (loaded is null)
+                {
+                    // We've hit an optimistic concurrency case.
+                    return null;
+                }
+
+                aggregate = loaded;
+            }
+
+            return new AccessListLoadOrCreateResult(mode, aggregate);
         }
 
         public Task<AccessListInfo?> LookupInfo(AccessListIdentifier identifier, CancellationToken cancellationToken)
@@ -224,7 +272,7 @@ internal partial class AccessListsRepository
             await using var reader = await cmd.ExecuteReaderAsync(cancellationToken);
             if (!await reader.ReadAsync(cancellationToken))
             {
-                throw new ArgumentException($"No access list with owner '{owner}' and identifier '{identifier}' found.");
+                return null;
             }
 
             return reader.GetGuid(0);

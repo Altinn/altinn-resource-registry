@@ -58,6 +58,26 @@ public class AccessListsRepositoryTests : DbTests
 
         // same owner, same identifier
         await Assert.ThrowsAsync<InvalidOperationException>(() => Repository.CreateAccessList("owner", "identifier", "name", "description"));
+
+        // create or load existing
+        var result = await Repository.LoadOrCreateAccessList("owner", "identifier", "wrong name", "wrong description");
+        var aggregate = result.Aggregate;
+        result.IsNew.Should().BeFalse();
+        aggregate.Name.Should().Be("name");
+        aggregate.Description.Should().Be("description");
+
+        // create or load new
+        result = await Repository.LoadOrCreateAccessList("owner", "identifier3", "name3", "description3");
+        aggregate = result.Aggregate;
+        result.IsNew.Should().BeTrue();
+        Assert.NotNull(aggregate);
+
+        var info4 = aggregate.AsAccessListInfo();
+        info4.RegistryOwner.Should().Be("owner");
+        info4.Identifier.Should().Be("identifier3");
+        info4.Name.Should().Be("name3");
+        info4.Description.Should().Be("description3");
+        await CheckRegistryLookup(info4);
     }
 
     [Fact]
@@ -413,6 +433,54 @@ public class AccessListsRepositoryTests : DbTests
         members.Should().HaveCount(2)
             .And.Contain(m => m.PartyId == party1)
             .And.Contain(m => m.PartyId == party3);
+    }
+
+    [Fact]
+    public async Task RaceMultipleLoadOrCreate()
+    {
+        var latch = new ManualResetEvent(false);
+
+        var readyTasks = new List<Task>();
+        var resultTasks = new List<Task<ulong>>();
+
+        for(var idx = 0; idx < 10; idx++)
+        {
+            var readySource = new TaskCompletionSource();
+
+            var resultTask = Task.Run(async () =>
+            {
+                var resultSource = new TaskCompletionSource<Task<AccessListLoadOrCreateResult>>();
+                var thread = new Thread(() =>
+                {
+                    try
+                    {
+                        readySource.SetResult();
+                        latch.WaitOne();
+                        var result = Repository.LoadOrCreateAccessList("owner", "identifier", $"name {idx}", $"description {idx}");
+                        resultSource.SetResult(result);
+                    }
+                    catch (Exception e)
+                    {
+                        readySource.TrySetException(e);
+                        resultSource.TrySetException(e);
+                    }
+                });
+
+                thread.Start();
+                var result = await resultSource.Task.Unwrap();
+                return result.Aggregate.CommittedVersion.UnsafeValue;
+            });
+
+            readyTasks.Add(readySource.Task);
+            resultTasks.Add(resultTask);
+        }
+
+        await Task.WhenAll(readyTasks);
+        await Task.Delay(TimeSpan.FromMilliseconds(100)); // wait a bit to make sure all threads are waiting on the latch
+        latch.Set();
+        var versions = await Task.WhenAll(resultTasks);
+        var expectedVersion = versions[0];
+        versions.Should().AllSatisfy(version => version.Should().Be(expectedVersion));
     }
 
     private async Task CheckRegistryLookup(AccessListInfo info)

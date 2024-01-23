@@ -85,7 +85,7 @@ internal class AccessListAggregate
         string? name = null,
         string? description = null)
     {
-        AssertInitialized();
+        AssertLive();
 
         if (identifier is null
             && name is null
@@ -100,7 +100,7 @@ internal class AccessListAggregate
     /// <inheritdoc />
     public void Delete()
     {
-        AssertInitialized();
+        AssertLive();
 
         AddEvent(new AccessListDeletedEvent(EventId.Unset, Id, GetUtcNow()));
     }
@@ -108,7 +108,7 @@ internal class AccessListAggregate
     /// <inheritdoc />
     public AccessListResourceConnection AddResourceConnection(string resourceIdentifier, IEnumerable<string> actions)
     {
-        AssertInitialized();
+        AssertLive();
 
         if (_resourceConnections.ContainsKey(resourceIdentifier))
         {
@@ -128,7 +128,7 @@ internal class AccessListAggregate
     /// <inheritdoc />
     public AccessListResourceConnection AddResourceConnectionActions(string resourceIdentifier, IEnumerable<string> actions)
     {
-        AssertInitialized();
+        AssertLive();
 
         if (!_resourceConnections.TryGetValue(resourceIdentifier, out var connection))
         {
@@ -153,7 +153,7 @@ internal class AccessListAggregate
     /// <inheritdoc />
     public AccessListResourceConnection RemoveResourceConnectionActions(string resourceIdentifier, IEnumerable<string> actions)
     {
-        AssertInitialized();
+        AssertLive();
 
         if (!_resourceConnections.TryGetValue(resourceIdentifier, out var connection))
         {
@@ -178,7 +178,7 @@ internal class AccessListAggregate
     /// <inheritdoc />
     public AccessListResourceConnection RemoveResourceConnection(string resourceIdentifier)
     {
-        AssertInitialized();
+        AssertLive();
 
         if (!_resourceConnections.TryGetValue(resourceIdentifier, out var connection))
         {
@@ -192,7 +192,7 @@ internal class AccessListAggregate
     /// <inheritdoc />
     public void AddMembers(IEnumerable<Guid> partyIds)
     {
-        AssertInitialized();
+        AssertLive();
 
         var partyIdsImmutable = partyIds.ToImmutableArray();
         if (partyIdsImmutable.IsDefault)
@@ -211,7 +211,7 @@ internal class AccessListAggregate
     /// <inheritdoc />
     public void RemoveMembers(IEnumerable<Guid> partyIds)
     {
-        AssertInitialized();
+        AssertLive();
 
         var partyIdsImmutable = partyIds.ToImmutableArray();
         if (partyIdsImmutable.IsDefault)

@@ -1,7 +1,6 @@
 #nullable enable
 
 using System.Collections.Immutable;
-using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
 
 namespace Altinn.ResourceRegistry.Core.AccessLists;
@@ -31,6 +30,39 @@ public interface IAccessListService
     Task<Conditional<AccessListInfo, ulong>> GetAccessList(
         string owner,
         string identifier,
+        IVersionedEntityCondition<ulong>? condition = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes an access list by owner and identifier.
+    /// </summary>
+    /// <remarks>Returns <see cref="Conditional{T, TTag}.IsNotFound"/> if the access list is already deleted.</remarks>
+    /// <param name="owner">The resource owner (org.nr.).</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
+    /// <param name="condition">Optional condition on the access list</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>A conditional <see cref="AccessListInfo"/></returns>
+    Task<Conditional<AccessListInfo, ulong>> DeleteAccessList(
+        string owner,
+        string identifier,
+        IVersionedEntityCondition<ulong>? condition = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates or updates an access list.
+    /// </summary>
+    /// <param name="owner">The resource owner (org.nr.).</param>
+    /// <param name="identifier">The access list identifier (unique per owner).</param>
+    /// <param name="name">The access list name.</param>
+    /// <param name="description">The access list description.</param>
+    /// <param name="condition">Optional condition on the access list</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>A conditional <see cref="AccessListInfo"/></returns>
+    Task<Conditional<AccessListInfo, ulong>> CreateOrUpdateAccessList(
+        string owner,
+        string identifier,
+        string name,
+        string description,
         IVersionedEntityCondition<ulong>? condition = null,
         CancellationToken cancellationToken = default);
 }

@@ -36,6 +36,11 @@ internal sealed class ConditionalApiDescriptionProvider
     /// <inheritdoc />
     public void OnProvidersExecuted(ApiDescriptionProviderContext context)
     {
+    }
+
+    /// <inheritdoc />
+    public void OnProvidersExecuting(ApiDescriptionProviderContext context)
+    {
         Guard.IsNotNull(context);
 
         foreach (var result in context.Results)
@@ -78,7 +83,7 @@ internal sealed class ConditionalApiDescriptionProvider
                 });
             }
 
-            if (!HasResponseCode(result, StatusCodes.Status304NotModified))
+            if (IsReadMethod(result.HttpMethod) && !HasResponseCode(result, StatusCodes.Status304NotModified))
             {
                 result.SupportedResponseTypes.Add(new ApiResponseType
                 {
@@ -89,13 +94,13 @@ internal sealed class ConditionalApiDescriptionProvider
         }
     }
 
-    /// <inheritdoc />
-    public void OnProvidersExecuting(ApiDescriptionProviderContext context)
-    {
-    }
-
     private static bool HasResponseCode(ApiDescription apiDescription, int statusCode)
     {
         return apiDescription.SupportedResponseTypes.Any(r => r.StatusCode == statusCode);
+    }
+
+    private static bool IsReadMethod(string? method)
+    {
+        return method is not null && (HttpMethods.IsGet(method) || HttpMethods.IsHead(method));
     }
 }

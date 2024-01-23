@@ -159,12 +159,12 @@ public static class Conditional
         Guard.IsNotNull(valueConverter);
         Guard.IsNotNull(tagConverter);
 
-        if (conditional.Succeeded)
+        if (conditional.IsSucceeded)
         {
             return Conditional<TTo, TTagTo>.CreateSucceeded(valueConverter(conditional.Value));
         }
 
-        if (conditional.Unmodified)
+        if (conditional.IsUnmodified)
         {
             return Conditional<TTo, TTagTo>.CreateUnmodified(tagConverter(conditional.VersionTag), conditional.VersionModifiedAt);
         }
@@ -221,22 +221,22 @@ public sealed class Conditional<T, TTag>
     /// <summary>
     /// Gets a value indicating whether the condition was successful.
     /// </summary>
-    public bool Succeeded => _result == Result.Succeeded;
+    public bool IsSucceeded => _result == Result.Succeeded;
 
     /// <summary>
     /// Gets a value indicating whether the entity was unmodified.
     /// </summary>
-    public bool Unmodified => _result == Result.Unmodified;
+    public bool IsUnmodified => _result == Result.Unmodified;
 
     /// <summary>
     /// Gets a value indicating whether the condition failed.
     /// </summary>
-    public bool ConditionFailed => _result == Result.ConditionFailed;
+    public bool IsConditionFailed => _result == Result.ConditionFailed;
 
     /// <summary>
     /// Gets a value indicating whether the entity was not found.
     /// </summary>
-    public bool NotFound => _result == Result.NotFound;
+    public bool IsNotFound => _result == Result.NotFound;
 
     private VersionInfo Version
     {
@@ -254,19 +254,19 @@ public sealed class Conditional<T, TTag>
     /// <summary>
     /// Gets the version tag.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if <see cref="Unmodified"/> is not true.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if <see cref="IsUnmodified"/> is not true.</exception>
     public TTag VersionTag => Version.Tag;
 
     /// <summary>
     /// Gets when this version was last modified.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if <see cref="Unmodified"/> is not true.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if <see cref="IsUnmodified"/> is not true.</exception>
     public DateTimeOffset VersionModifiedAt => Version.ModifiedAt;
 
     /// <summary>
     /// Gets the value.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if <see cref="Succeeded"/> is not true.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if <see cref="IsSucceeded"/> is not true.</exception>
     public T Value
     {
         get

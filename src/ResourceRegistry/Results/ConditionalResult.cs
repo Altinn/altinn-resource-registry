@@ -185,12 +185,12 @@ public class ConditionalResult<TValue, TTag>
     /// <returns>A new <see cref="ConditionalResult{TValue, TTag}"/></returns>
     public static ConditionalResult<TValue, TTag> FromConditional(Conditional<TValue, TTag> conditional)
     {
-        if (conditional.Succeeded)
+        if (conditional.IsSucceeded)
         {
             return Succeeded(conditional.Value);
         }
 
-        if (conditional.Unmodified)
+        if (conditional.IsUnmodified)
         {
             return Unmodified(conditional.VersionTag, new(conditional.VersionModifiedAt));
         }

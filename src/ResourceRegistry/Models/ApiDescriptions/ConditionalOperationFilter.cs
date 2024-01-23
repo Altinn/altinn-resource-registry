@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using Altinn.ResourceRegistry.Results;
 using CommunityToolkit.Diagnostics;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.OpenApi.Models;
@@ -56,12 +55,23 @@ public class ConditionalOperationFilter : IOperationFilter
             return;
         }
 
-        AddResponseVersionHeaders(operation.Responses[StatusCodes.Status200OK.ToString()].Headers);
-        AddResponseVersionHeaders(operation.Responses[StatusCodes.Status304NotModified.ToString()].Headers);
+        AddResponseVersionHeaders(operation.Responses, StatusCodes.Status200OK);
+        AddResponseVersionHeaders(operation.Responses, StatusCodes.Status304NotModified);
+
+        if (operation.Responses.TryGetValue(StatusCodes.Status412PreconditionFailed.ToString(), out var precondFailedResponse))
+        {
+            precondFailedResponse.Description = "Precondition Failed";
+        }
     }
 
-    private static void AddResponseVersionHeaders(IDictionary<string, OpenApiHeader> headers)
+    private static void AddResponseVersionHeaders(OpenApiResponses responses, int statusCode)
     {
+        if (!responses.TryGetValue(statusCode.ToString(), out var response))
+        {
+            return;
+        }
+
+        var headers = response.Headers;
         headers.TryAdd("ETag", new OpenApiHeader()
         {
             Description = "The version tag of the resource",

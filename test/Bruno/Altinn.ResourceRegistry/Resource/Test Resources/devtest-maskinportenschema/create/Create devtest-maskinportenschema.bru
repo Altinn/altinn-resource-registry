@@ -1,0 +1,75 @@
+meta {
+  name: Create devtest-maskinportenschema
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/resourceregistry/api/v1/resource
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "identifier": "devtest-maskinportenschema",
+      "title": {
+        "en": "Maskinporten Schema for development testing",
+        "nb": "Maskinporten Schema for utviklingstester",
+        "nn": "Maskinporten Schema for utviklingstestar"
+      },
+      "description": {
+        "en": "Maskinporten Schema test resource for development testing",
+        "nb": "Maskinporten Schema test resource for utviklingstester",
+        "nn": "Maskinporten Schema test resource for utviklingstestar"
+      },
+      "rightDescription": {
+        "en": "Access to the referenced maskinporten scopes",
+        "nb": "Tilgang til de refererte maskinporten scopene",
+        "nn": "Tilgong til dei refererte maskinporten scopa"
+      },
+    "homepage": "",
+    "status": "Active",
+    "contactPoints": [],
+    "isPartOf": "",
+    "resourceReferences": [
+        {
+          "referenceSource": "ExternalPlatform",
+          "reference": "ttd:am/devtest.read",
+          "referenceType": "MaskinportenScope"
+        },
+        {
+          "referenceSource": "ExternalPlatform",
+          "reference": "ttd:am/devtest.write",
+          "referenceType": "MaskinportenScope"
+        }
+      ],
+    "delegable": true,
+    "visible": true,
+    "hasCompetentAuthority": {
+      "organization": "991825827",
+      "orgcode": "ttd",
+      "name": {
+        "en": "Test departement",
+        "nb": "Testdepartement",
+        "nn": "Testdepartement"
+      }
+    },
+    "keywords": [],
+    "limitedByRRR": false,
+    "selfIdentifiedUserEnabled": false,
+    "enterpriseUserEnabled": true,
+    "resourceType": "GenericAccessResource"    
+  }
+}
+
+vars:pre-request {
+  auth_tokenType: Enterprise
+  auth_scopes: altinn:resourceregistry/resource.admin
+  auth_org: digdir
+  auth_orgNo: 991825827
+}
+
+script:pre-request {
+  await tokenGenerator.getToken();
+}

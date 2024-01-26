@@ -1,0 +1,15 @@
+meta {
+  name: Get policy devtest-generic-access-resource
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/resourceregistry/api/v1/resource/{{id}}/policy
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  id: devtest-generic-access-resource
+}

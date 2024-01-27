@@ -1,11 +1,11 @@
 meta {
-  name: Update altinn_access_management
+  name: Create altinn_access_management
   type: http
-  seq: 1
+  seq: 2
 }
 
-put {
-  url: {{baseUrl}}/resourceregistry/api/v1/resource/{{id}}
+post {
+  url: {{baseUrl}}/resourceregistry/api/v1/resource
   body: json
   auth: none
 }
@@ -57,7 +57,6 @@ vars:pre-request {
   auth_scopes: altinn:resourceregistry/resource.write
   auth_org: digdir
   auth_orgNo: 991825827
-  id: altinn_access_management
 }
 
 script:pre-request {

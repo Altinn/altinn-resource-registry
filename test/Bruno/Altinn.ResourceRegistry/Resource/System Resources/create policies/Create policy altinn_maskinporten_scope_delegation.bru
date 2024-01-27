@@ -1,7 +1,7 @@
 meta {
-  name: Create policy devtest-maskinportenschema
+  name: Create policy altinn_maskinporten_scope_delegation
   type: http
-  seq: 2
+  seq: 1
 }
 
 post {
@@ -23,7 +23,7 @@ vars:pre-request {
   auth_scopes: altinn:resourceregistry/resource.write
   auth_org: digdir
   auth_orgNo: 991825827
-  id: devtest-maskinportenschema
+  id: altinn_access_management
 }
 
 script:pre-request {

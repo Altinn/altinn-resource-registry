@@ -1,5 +1,5 @@
 meta {
-  name: Create devtest-generic-access-resource
+  name: Create resource devtest_gar_{{name}}
   type: http
   seq: 1
 }
@@ -12,21 +12,21 @@ post {
 
 body:json {
   {
-    "identifier": "devtest-generic-access-resource",
+    "identifier": "devtest_gar_{{name}}",
     "title": {
-      "en": "Generic Access Resource for Development Tests",
-      "nb": "Generisk Tilgangsressurs for Utviklingstester",
-      "nn": "Generisk Tilgongsressurs for Utviklingstestar"
+      "en": "{{title}} Generic Access Resource for Development Tests",
+      "nb": "{{title}} Generisk Tilgangsressurs for Utviklingstester",
+      "nn": "{{title}} Generisk Tilgongsressurs for Utviklingstestar"
     },
     "description": {
-      "en": "Very nice generic access resource for development tests",
-      "nb": "Veldig fin generisk tilgangsressurs for utviklingstester",
-      "nn": "Steikje fine generisk tilgongsressurs for utviklingstestar"
+      "en": "{{title}} is a very nice generic access resource for development tests",
+      "nb": "{{title}} er en veldig fin generisk tilgangsressurs for utviklingstester",
+      "nn": "{{title}} er ein steikje fine generisk tilgongsressurs for utviklingstestar"
     },
     "rightDescription": {
-      "en": "You'll give access to this nice generic access resource for development tests",
-      "nb": "Du gir tilgang til denne fine generiske tilgangsressursen for utviklingstester",
-      "nn": "Du gir tilgong til dinne steikje fine generiske tilgongsressursen for utviklingstestar"
+      "en": "You'll give access to {{title}}, a generic access resource for development tests",
+      "nb": "Du gir tilgang til {{title}}, en generisk tilgangsressurs for utviklingstester",
+      "nn": "Du gir tilgong til {{title}}, ein generisk tilgongsressurs for utviklingstestar"
     },
     "homepage": "",
     "status": "Active",
@@ -55,8 +55,10 @@ body:json {
 vars:pre-request {
   auth_tokenType: Enterprise
   auth_scopes: altinn:resourceregistry/resource.write
-  auth_org: digdir
+  auth_org: ttd
   auth_orgNo: 991825827
+  name: 
+  title: 
 }
 
 script:pre-request {

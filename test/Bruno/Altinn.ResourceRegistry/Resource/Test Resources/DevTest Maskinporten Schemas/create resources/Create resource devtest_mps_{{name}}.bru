@@ -1,5 +1,5 @@
 meta {
-  name: Create devtest-maskinportenschema
+  name: Create resource devtest_mps_{{name}}
   type: http
   seq: 1
 }
@@ -12,16 +12,16 @@ post {
 
 body:json {
   {
-      "identifier": "devtest-maskinportenschema",
+      "identifier": "devtest_mps_{{name}}",
       "title": {
-        "en": "Maskinporten Schema for development testing",
-        "nb": "Maskinporten Schema for utviklingstester",
-        "nn": "Maskinporten Schema for utviklingstestar"
+        "en": "{{title}} Maskinporten Schema for development testing",
+        "nb": "{{title}} Maskinporten Schema for utviklingstester",
+        "nn": "{{title}} Maskinporten Schema for utviklingstestar"
       },
       "description": {
-        "en": "Maskinporten Schema test resource for development testing",
-        "nb": "Maskinporten Schema test resource for utviklingstester",
-        "nn": "Maskinporten Schema test resource for utviklingstestar"
+        "en": "{{title}} Maskinporten Schema test resource for development testing",
+        "nb": "{{title}} Maskinporten Schema test resource for utviklingstester",
+        "nn": "{{title}} Maskinporten Schema test resource for utviklingstestar"
       },
       "rightDescription": {
         "en": "Access to the referenced maskinporten scopes",
@@ -35,12 +35,12 @@ body:json {
     "resourceReferences": [
         {
           "referenceSource": "ExternalPlatform",
-          "reference": "ttd:am/devtest.read",
+          "reference": "ttd:mps/{{name}}.read",
           "referenceType": "MaskinportenScope"
         },
         {
           "referenceSource": "ExternalPlatform",
-          "reference": "ttd:am/devtest.write",
+          "reference": "ttd:mps/{{name}}.write",
           "referenceType": "MaskinportenScope"
         }
       ],
@@ -59,7 +59,7 @@ body:json {
     "limitedByRRR": false,
     "selfIdentifiedUserEnabled": false,
     "enterpriseUserEnabled": true,
-    "resourceType": "GenericAccessResource"    
+    "resourceType": "MaskinportenSchema"    
   }
 }
 
@@ -68,6 +68,8 @@ vars:pre-request {
   auth_scopes: altinn:resourceregistry/resource.admin
   auth_org: digdir
   auth_orgNo: 991825827
+  name: 
+  title: 
 }
 
 script:pre-request {

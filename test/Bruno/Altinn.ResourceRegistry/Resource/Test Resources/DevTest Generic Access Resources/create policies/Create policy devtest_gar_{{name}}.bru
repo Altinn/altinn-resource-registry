@@ -1,11 +1,11 @@
 meta {
-  name: Create policy devtest-generic-access-resource
+  name: Create policy devtest_gar_{{name}}
   type: http
-  seq: 2
+  seq: 1
 }
 
 post {
-  url: {{baseUrl}}/resourceregistry/api/v1/resource/{{id}}/policy
+  url: {{baseUrl}}/resourceregistry/api/v1/resource/devtest_gar_{{name}}/policy
   body: multipartForm
   auth: none
 }
@@ -23,7 +23,7 @@ vars:pre-request {
   auth_scopes: altinn:resourceregistry/resource.write
   auth_org: digdir
   auth_orgNo: 991825827
-  id: devtest-generic-access-resource
+  name: 
 }
 
 script:pre-request {

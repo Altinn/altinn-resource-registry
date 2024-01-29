@@ -72,5 +72,15 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(RegisterResourceRepositoryMock).Assembly.Location).LocalPath);
             return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Resources");
         }
+
+        public Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<SubjectAttribute>> FindSubjectsInPolicy(string resourceId, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

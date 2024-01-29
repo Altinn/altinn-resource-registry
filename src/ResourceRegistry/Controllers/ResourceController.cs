@@ -5,6 +5,7 @@ using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Extensions;
 using Altinn.ResourceRegistry.Utils;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -244,6 +245,34 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             return File(dataStream, "text/xml", "policy.xml");
+        }
+
+        /// <summary>
+        /// Returns the XACML policy for a resource in resource registry.
+        /// </summary>
+        /// <param name="id">Resource Id</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns></returns>
+        [HttpGet("{id}/policy/subjects")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        public async Task<List<SubjectAttribute>> FindSubjectsInPolicy(string id, CancellationToken cancellationToken)
+        {
+            return await _resourceRegistry.FindSubjectsInPolicy(id, cancellationToken);
+        }
+
+        /// <summary>
+        /// Returns a list of Subject resources. For each which subject and then a list of all resources that are connected.
+        /// </summary>
+        /// <param name="subjects">List of subjects for resource information is needed</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns></returns>
+        [HttpPost("findforsubjects/")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        public async Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken)
+        {
+           return await _resourceRegistry.FindResourcesForSubjects(subjects, cancellationToken);
         }
 
         /// <summary>

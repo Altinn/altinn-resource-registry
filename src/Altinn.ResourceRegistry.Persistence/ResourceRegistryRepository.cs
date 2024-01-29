@@ -203,6 +203,31 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         }
     }
 
+    /// <inheritdoc/>
+    public Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default)
+    {
+        JOIN(VALUES('Porsche', 'Yellow'), ('Audi', 'Red'), ...) AS mytable2(carbrand, carcolor)
+
+        const string QUERY = /*strpsql*/@"
+            SELECT resource_type, resource_value, subject_type, subject_value
+            FROM resourceregistry.resources
+            JOIN (VALUES ('Porsche', 'Yellow'), ('Audi', 'Red'), ...) AS subjects(resource_type, resource_value)
+
+
+            WHERE (@id IS NULL OR serviceresourcejson ->> 'identifier' ILIKE concat('%', @id, '%'))
+            AND (@title IS NULL OR serviceresourcejson ->> 'title' ILIKE concat('%', @title, '%'))
+            AND (@description IS NULL OR serviceresourcejson ->> 'description' ILIKE concat('%', @description, '%'))
+            AND (@resourcetype IS NULL OR serviceresourcejson ->> 'resourceType' ILIKE @resourcetype::text)
+            AND (@keyword IS NULL OR serviceresourcejson ->> 'keywords' ILIKE concat('%', @keyword, '%'))
+            ";
+    }
+
+    /// <inheritdoc/>
+    public Task<List<SubjectAttribute>> FindSubjectsInPolicy(string resourceId, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
     private static async ValueTask<ServiceResource> GetServiceResource(NpgsqlDataReader reader)
     {
         var json = await reader.GetFieldValueAsync<JsonDocument>("serviceresourcejson");

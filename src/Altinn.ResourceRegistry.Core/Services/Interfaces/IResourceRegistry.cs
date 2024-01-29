@@ -80,5 +80,21 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         Task<bool> UpdateResourceInAccessManagement(ServiceResource serviceResource, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Returns a list over resources for what each subject has access to
+        /// </summary>
+        /// <param name="subjects">List of subjects</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns></returns>
+        Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Returns a list of subjects in a policy for a resource
+        /// </summary>
+        /// <param name="resourceId">The resourceId</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns></returns>
+        Task<List<SubjectAttribute>> FindSubjectsInPolicy(string resourceId, CancellationToken cancellationToken = default);
     }
 }

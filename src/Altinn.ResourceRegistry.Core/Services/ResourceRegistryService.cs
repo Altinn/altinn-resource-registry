@@ -297,5 +297,26 @@ namespace Altinn.ResourceRegistry.Core.Services
                 return orgList;
             }
         }
+
+        /// <inheritdoc/>
+        public Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default)
+        {
+            List<SubjectResources> subjectResources = new List<SubjectResources>();
+
+            SubjectResources subjectResources1 = new SubjectResources();
+            subjectResources1.Subject = new SubjectAttribute() { Type = "urn:altinn:accesspackage", Value = "mva" };
+            subjectResources1.Resources = new List<ResourceAttribute>();
+            subjectResources1.Resources.Add(new ResourceAttribute() { Type = "urn:altinn:resource", Value = "mvaappen" });
+
+            subjectResources.Add(subjectResources1);
+
+            return Task.FromResult(subjectResources);
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<SubjectAttribute>> FindSubjectsInPolicy(string resourceId, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

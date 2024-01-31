@@ -8,7 +8,8 @@ namespace Altinn.ResourceRegistry.Core.Models;
 
 /// <summary>
 /// The value of a http date-time header like <c>Last-Modified</c>
-/// or <c>If-Modified-Since</c>.
+/// or <c>If-Modified-Since</c>. Consists of a <see cref="DateTimeOffset"/>
+/// that is rounded down to the nearest second and converted to UTC.
 /// </summary>
 [DebuggerDisplay("{ToString(),nq}")]
 public readonly struct HttpDateTimeHeaderValue
@@ -37,7 +38,7 @@ public readonly struct HttpDateTimeHeaderValue
     /// <param name="value">The value.</param>
     public HttpDateTimeHeaderValue(DateTimeOffset value)
     {
-        _value = value.RoundDown(Precision);
+        _value = value.ToOffset(TimeSpan.Zero).RoundDown(Precision);
     }
 
     /// <inheritdoc/>
@@ -83,14 +84,14 @@ public readonly struct HttpDateTimeHeaderValue
 
     /// <inheritdoc/>
     public static bool operator ==(HttpDateTimeHeaderValue left, DateTimeOffset right)
-    => left.Equals(right);
+        => left.Equals(right);
 
     /// <inheritdoc/>
     public static bool operator !=(HttpDateTimeHeaderValue left, DateTimeOffset right)
         => !left.Equals(right);
 
     public static bool operator ==(DateTimeOffset left, HttpDateTimeHeaderValue right)
-    => right.Equals(left);
+        => right.Equals(left);
 
     public static bool operator !=(DateTimeOffset left, HttpDateTimeHeaderValue right)
         => !right.Equals(left);
@@ -128,14 +129,14 @@ public readonly struct HttpDateTimeHeaderValue
         => left.CompareTo(right) >= 0;
 
     public static bool operator <(DateTimeOffset left, HttpDateTimeHeaderValue right)
-        => right.CompareTo(left) < 0;
-
-    public static bool operator >(DateTimeOffset left, HttpDateTimeHeaderValue right)
         => right.CompareTo(left) > 0;
 
+    public static bool operator >(DateTimeOffset left, HttpDateTimeHeaderValue right)
+        => right.CompareTo(left) < 0;
+
     public static bool operator <=(DateTimeOffset left, HttpDateTimeHeaderValue right)
-        => right.CompareTo(left) <= 0;
+        => right.CompareTo(left) >= 0;
 
     public static bool operator >=(DateTimeOffset left, HttpDateTimeHeaderValue right)
-        => right.CompareTo(left) >= 0;
+        => right.CompareTo(left) <= 0;
 }

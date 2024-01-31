@@ -179,23 +179,26 @@ public class ConditionalResult<TValue, TTag>
     public static ConditionalResult<TValue, TTag> Failed() => new(VersionedEntityConditionResult.Failed, default(TTag?), default(HttpDateTimeHeaderValue?));
 
     /// <summary>
+    /// Creates a new instance of <see cref="ConditionalResult{TValue, TTag}"/> that returns a "404 Not Found" result to the client.
+    /// </summary>
+    /// <returns>A new <see cref="ConditionalResult{TValue, TTag}"/></returns>
+    public static ConditionalResult<TValue, TTag> NotFound() => new(new NotFoundResult());
+
+    /// <summary>
     /// Creates a new instance of <see cref="ConditionalResult{TValue, TTag}"/> from a <see cref="Conditional{TValue, TTag}"/>.
     /// </summary>
     /// <param name="conditional">The conditional.</param>
     /// <returns>A new <see cref="ConditionalResult{TValue, TTag}"/></returns>
     public static ConditionalResult<TValue, TTag> FromConditional(Conditional<TValue, TTag> conditional)
     {
-        if (conditional.IsSucceeded)
+        return conditional switch
         {
-            return Succeeded(conditional.Value);
-        }
-
-        if (conditional.IsUnmodified)
-        {
-            return Unmodified(conditional.VersionTag, new(conditional.VersionModifiedAt));
-        }
-
-        return Failed();
+            { IsSucceeded: true } => Succeeded(conditional.Value),
+            { IsUnmodified: true } => Unmodified(conditional.VersionTag, new(conditional.VersionModifiedAt)),
+            { IsNotFound: true } => NotFound(),
+            { IsConditionFailed: true } => Failed(),
+            _ => throw new UnreachableException("Unhandled conditional case"),
+        };
     }
 
     public static implicit operator ConditionalResult<TValue, TTag>(TValue value)

@@ -159,17 +159,14 @@ public static class Conditional
         Guard.IsNotNull(valueConverter);
         Guard.IsNotNull(tagConverter);
 
-        if (conditional.IsSucceeded)
+        return conditional switch
         {
-            return Conditional<TTo, TTagTo>.CreateSucceeded(valueConverter(conditional.Value));
-        }
-
-        if (conditional.IsUnmodified)
-        {
-            return Conditional<TTo, TTagTo>.CreateUnmodified(tagConverter(conditional.VersionTag), conditional.VersionModifiedAt);
-        }
-
-        return Conditional<TTo, TTagTo>.FailedInstance;
+            { IsSucceeded: true } => Conditional<TTo, TTagTo>.CreateSucceeded(valueConverter(conditional.Value)),
+            { IsUnmodified: true } => Conditional<TTo, TTagTo>.CreateUnmodified(tagConverter(conditional.VersionTag), conditional.VersionModifiedAt),
+            { IsNotFound: true } => Conditional<TTo, TTagTo>.NotFoundInstance,
+            { IsConditionFailed: true } => Conditional<TTo, TTagTo>.FailedInstance,
+            _ => throw new UnreachableException("Unhandled conditional case"),
+        };
     }
 }
 

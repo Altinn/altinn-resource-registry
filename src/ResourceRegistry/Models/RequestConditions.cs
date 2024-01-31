@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Diagnostics;
 using Altinn.ResourceRegistry.Core.Models;
 using CommunityToolkit.Diagnostics;
@@ -243,6 +244,7 @@ public static class RequestConditions
 /// </summary>
 /// <typeparam name="T">The etag type</typeparam>
 [RequestConditions.BindingSource]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public sealed class RequestConditions<T>
     : IReadOnlyList<RequestCondition<T>>
     , IVersionedEntityCondition<T>
@@ -307,6 +309,16 @@ public sealed class RequestConditions<T>
     /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
         => ((IEnumerable)_conditions).GetEnumerator();
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    private string DebuggerDisplay
+        => _conditions.Length switch
+        {
+            0 => "No conditions",
+            1 => _conditions[0].DebuggerDisplay,
+            _ => $"Multiple conditions: {_conditions.Length}",
+        };
 }
 
 /// <summary>
@@ -339,6 +351,7 @@ public static class RequestCondition
 /// A condition for a request.
 /// </summary>
 /// <typeparam name="T">The etag type</typeparam>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public sealed class RequestCondition<T>
     : IVersionedEntityCondition<T>
     where T : notnull
@@ -399,18 +412,33 @@ public sealed class RequestCondition<T>
     {
         return _mode switch
         {
-            RequestCondition<T>.Mode.IsMatch => Check(entity.VersionEquals(_etag!), VersionedEntityConditionResult.Failed),
-            RequestCondition<T>.Mode.IsDifferentRead => Check(!entity.VersionEquals(_etag!), VersionedEntityConditionResult.Unmodified),
-            RequestCondition<T>.Mode.IsDifferent => Check(!entity.VersionEquals(_etag!), VersionedEntityConditionResult.Failed),
-            RequestCondition<T>.Mode.IsModifiedSinceRead => Check(entity.ModifiedSince(_date!.Value), VersionedEntityConditionResult.Unmodified),
-            RequestCondition<T>.Mode.IsModifiedSince => Check(entity.ModifiedSince(_date!.Value), VersionedEntityConditionResult.Failed),
-            RequestCondition<T>.Mode.IsUnmodifiedSince => Check(!entity.ModifiedSince(_date!.Value), VersionedEntityConditionResult.Failed),
+            Mode.IsMatch => Check(entity.VersionEquals(_etag!), VersionedEntityConditionResult.Failed),
+            Mode.IsDifferentRead => Check(!entity.VersionEquals(_etag!), VersionedEntityConditionResult.Unmodified),
+            Mode.IsDifferent => Check(!entity.VersionEquals(_etag!), VersionedEntityConditionResult.Failed),
+            Mode.IsModifiedSinceRead => Check(entity.ModifiedSince(_date!.Value), VersionedEntityConditionResult.Unmodified),
+            Mode.IsModifiedSince => Check(entity.ModifiedSince(_date!.Value), VersionedEntityConditionResult.Failed),
+            Mode.IsUnmodifiedSince => Check(!entity.ModifiedSince(_date!.Value), VersionedEntityConditionResult.Failed),
             _ => ThrowHelper.ThrowInvalidOperationException<VersionedEntityConditionResult>("Invalid mode"),
         };
 
         static VersionedEntityConditionResult Check(bool check, VersionedEntityConditionResult ifError)
             => check ? VersionedEntityConditionResult.Succeeded : ifError;
     }
+
+    /// <summary>
+    /// Debugger display string.
+    /// </summary>
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    internal string DebuggerDisplay
+        => _mode switch
+        {
+            Mode.IsMatch => $"If-Match: {_etag}",
+            Mode.IsDifferent or Mode.IsDifferentRead => $"If-None-Match: {_etag}",
+            Mode.IsModifiedSince or Mode.IsModifiedSinceRead => $"If-Modified-Since: {_date}",
+            Mode.IsUnmodifiedSince => $"If-Unmodified-Since: {_date}",
+            _ => "Invalid",
+        };
 
     private enum Mode
     {

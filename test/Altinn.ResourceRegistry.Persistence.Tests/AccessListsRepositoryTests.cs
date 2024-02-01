@@ -32,7 +32,7 @@ public class AccessListsRepositoryTests : DbTests
     {
         var info1 = (await Repository.CreateAccessList("owner", "identifier", "name", "description")).AsAccessListInfo();
 
-        info1.RegistryOwner.Should().Be("owner");
+        info1.ResourceOwner.Should().Be("owner");
         info1.Identifier.Should().Be("identifier");
         info1.Name.Should().Be("name");
         info1.Description.Should().Be("description");
@@ -41,7 +41,7 @@ public class AccessListsRepositoryTests : DbTests
         // same owner, different identifier
         var info2 = (await Repository.CreateAccessList("owner", "identifier2", "name", "description")).AsAccessListInfo();
 
-        info2.RegistryOwner.Should().Be("owner");
+        info2.ResourceOwner.Should().Be("owner");
         info2.Identifier.Should().Be("identifier2");
         info2.Name.Should().Be("name");
         info2.Description.Should().Be("description");
@@ -50,7 +50,7 @@ public class AccessListsRepositoryTests : DbTests
         // different owner, same identifier
         var info3 = (await Repository.CreateAccessList("owner2", "identifier", "name", "description")).AsAccessListInfo();
 
-        info3.RegistryOwner.Should().Be("owner2");
+        info3.ResourceOwner.Should().Be("owner2");
         info3.Identifier.Should().Be("identifier");
         info3.Name.Should().Be("name");
         info3.Description.Should().Be("description");
@@ -73,7 +73,7 @@ public class AccessListsRepositoryTests : DbTests
         Assert.NotNull(aggregate);
 
         var info4 = aggregate.AsAccessListInfo();
-        info4.RegistryOwner.Should().Be("owner");
+        info4.ResourceOwner.Should().Be("owner");
         info4.Identifier.Should().Be("identifier3");
         info4.Name.Should().Be("name3");
         info4.Description.Should().Be("description3");
@@ -485,16 +485,16 @@ public class AccessListsRepositoryTests : DbTests
 
     private async Task CheckRegistryLookup(AccessListInfo info)
     {
-        var lookup = await Repository.LookupInfo(info.RegistryOwner, info.Identifier);
+        var lookup = await Repository.LookupInfo(info.ResourceOwner, info.Identifier);
         Assert.NotNull(lookup);
-        lookup.RegistryOwner.Should().Be(info.RegistryOwner);
+        lookup.ResourceOwner.Should().Be(info.ResourceOwner);
         lookup.Identifier.Should().Be(info.Identifier);
         lookup.Name.Should().Be(info.Name);
         lookup.Description.Should().Be(info.Description);
 
         lookup = await Repository.LookupInfo(info.Id);
         Assert.NotNull(lookup);
-        lookup.RegistryOwner.Should().Be(info.RegistryOwner);
+        lookup.ResourceOwner.Should().Be(info.ResourceOwner);
         lookup.Identifier.Should().Be(info.Identifier);
         lookup.Name.Should().Be(info.Name);
         lookup.Description.Should().Be(info.Description);

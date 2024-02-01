@@ -41,7 +41,7 @@ public static class VersionedEntityConditionExtensions
         where TInner : notnull
         => new MappedVersionEntityCondition<TInner, TOuter>(self, converter);
 
-    private class MappedVersionEntityCondition<TInner, TOuter>
+    private sealed class MappedVersionEntityCondition<TInner, TOuter>
         : IVersionedEntityCondition<TInner>
         where TInner : notnull
         where TOuter : notnull

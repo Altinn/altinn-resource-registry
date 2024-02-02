@@ -5,6 +5,9 @@ using Altinn.ResourceRegistry.Core.Models.Versioned;
 using Altinn.ResourceRegistry.Models;
 using CommunityToolkit.Diagnostics;
 using FluentAssertions;
+using System;
+using System.Collections.Immutable;
+using System.Linq;
 using Xunit;
 
 namespace Altinn.ResourceRegistry.Tests.Models;
@@ -17,6 +20,40 @@ public class RequestConditionCollectionTests
         VersionedEntityConditionResult.Unmodified,
         VersionedEntityConditionResult.Failed,
     };
+
+    [Fact]
+    public void Create_From_Empty_IEnumerable()
+    {
+        RequestConditionCollection.Create(Enumerable.Empty<IVersionedEntityCondition<Nil>>()).Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Create_From_Empty_ImmutableArray()
+    {
+        RequestConditionCollection.Create(ImmutableArray<IVersionedEntityCondition<Nil>>.Empty).Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Count_Returns_Number_Of_Conditions()
+    {
+        RequestConditionCollection.Create([
+            ConstCondition.Succeeded,
+            ConstCondition.Unmodified,
+            ConstCondition.Failed,
+        ]).Should().HaveCount(3);
+    }
+
+    [Theory]
+    [InlineData(typeof(RequestConditionCollection<Nil>), typeof(Nil))]
+    [InlineData(typeof(RequestConditionCollection<HttpDateTimeHeaderValue>), typeof(HttpDateTimeHeaderValue))]
+    [InlineData(typeof(IVersionedEntityCondition<Nil>), typeof(Nil))]
+    [InlineData(typeof(IVersionedEntityCondition<HttpDateTimeHeaderValue>), typeof(HttpDateTimeHeaderValue))]
+    [InlineData(typeof(string), null)]
+    [InlineData(typeof(int), null)]
+    public void GetETagType_Works(Type requestConditiosType, Type? expected)
+    {
+        RequestConditionCollection.GetETagType(requestConditiosType).Should().Be(expected);
+    }
 
     [Fact]
     public void Empty_Collection_Matches_Any_Entity()

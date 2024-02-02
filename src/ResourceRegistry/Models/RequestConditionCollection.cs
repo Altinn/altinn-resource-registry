@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Altinn.ResourceRegistry.Core.Models.Versioned;
 using CommunityToolkit.Diagnostics;
 
@@ -162,6 +163,7 @@ public sealed class RequestConditionCollection<T>
     IEnumerator IEnumerable.GetEnumerator()
         => ((IEnumerable)_conditions).GetEnumerator();
 
+    [ExcludeFromCodeCoverage]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     private string DebuggerDisplay

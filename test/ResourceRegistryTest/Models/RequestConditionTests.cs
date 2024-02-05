@@ -132,6 +132,22 @@ public class RequestConditionTests
         condition.Validate(Entity.LastModified<string>(lastModifiedAt)).Should().Be(result);
     }
 
+    [Fact]
+    public void ConvertedCondition()
+    {
+        var condition = RequestCondition.Exists<byte>();
+        var converted = condition.Select(v => (uint)v);
+        converted.Validate(Entity.Matchable(1U)).Should().Be(VersionedEntityConditionResult.Succeeded);
+
+        condition = RequestCondition.IsMatch((byte)2);
+        converted = condition.Select(v => (uint)v);
+        converted.Validate(Entity.Matchable(1U)).Should().Be(VersionedEntityConditionResult.Failed);
+
+        condition = RequestCondition.IsUnmodifiedSince<byte>(new(new DateTimeOffset(2022, 01, 01, 01, 01, 01, TimeSpan.Zero)));
+        converted = condition.Select(v => (uint)v);
+        converted.Validate(Entity.LastModified<uint>(new DateTimeOffset(2022, 02, 02, 02, 02, 02, TimeSpan.Zero))).Should().Be(VersionedEntityConditionResult.Failed);
+    }
+
     private static class Entity
     {
         public static MatchableEntity<T> Matchable<T>(T value)

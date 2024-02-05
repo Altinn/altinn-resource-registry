@@ -257,10 +257,10 @@ public sealed class RequestCondition<T>
             if (_etags.Length == 1)
             {
                 var etag = _etags[0];
-                return etag.ToString();
+                return $"\"{etag}\"";
             }
 
-            return $"Count: {_etags.Length}";
+            return string.Join(", ", _etags.Select(etag => $"\"{etag}\""));
         }
     }
 

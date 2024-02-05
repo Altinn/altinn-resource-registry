@@ -3,31 +3,46 @@
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Models.Versioned;
 using Altinn.ResourceRegistry.Models;
-using Altinn.ResourceRegistry.Tests.Utils;
 using CommunityToolkit.Diagnostics;
 using FluentAssertions;
 using System;
+using System.Collections.Immutable;
 using Xunit;
 
 namespace Altinn.ResourceRegistry.Tests.Models;
 
 public class RequestConditionTests
 {
-    public static TheoryData<string, string, VersionedEntityConditionResult> IsMatchData => new()
+    public static TheoryData<string, string, VersionedEntityConditionResult> IsMatchSingleData => new()
     {
         { "foo", "foo", VersionedEntityConditionResult.Succeeded },
         { "foo", "bar", VersionedEntityConditionResult.Failed },
     };
 
     [Theory]
-    [MemberData(nameof(IsMatchData))]
-    public void IsMatch(string ifMatches, string etag, VersionedEntityConditionResult result)
+    [MemberData(nameof(IsMatchSingleData))]
+    public void IsMatchSingle(string ifMatches, string etag, VersionedEntityConditionResult result)
     {
         var condition = RequestCondition.IsMatch(ifMatches);
         condition.Validate(Entity.Matchable(etag)).Should().Be(result);
     }
 
-    public static TheoryData<string, string, bool, VersionedEntityConditionResult> IsDifferentData => new()
+    public static TheoryData<ImmutableArray<string>, string, VersionedEntityConditionResult> IsMatchMultipleData => new()
+    {
+        { ["foo", "foo"], "foo", VersionedEntityConditionResult.Succeeded },
+        { ["foo", "bar"], "foo", VersionedEntityConditionResult.Succeeded },
+        { ["bar", "baz"], "foo", VersionedEntityConditionResult.Failed },
+    };
+
+    [Theory]
+    [MemberData(nameof(IsMatchMultipleData))]
+    public void IsMatchMultiple(ImmutableArray<string> ifMatches, string etag, VersionedEntityConditionResult result)
+    {
+        var condition = RequestCondition.IsMatch(ifMatches);
+        condition.Validate(Entity.Matchable(etag)).Should().Be(result);
+    }
+
+    public static TheoryData<string, string, bool, VersionedEntityConditionResult> IsDifferentSingleData => new()
     {
         { "foo", "foo", false, VersionedEntityConditionResult.Failed },
         { "foo", "bar", false, VersionedEntityConditionResult.Succeeded },
@@ -36,11 +51,49 @@ public class RequestConditionTests
     };
 
     [Theory]
-    [MemberData(nameof(IsDifferentData))]
-    public void IsDifferent(string ifNoneMatches, string etag, bool isRead, VersionedEntityConditionResult result)
+    [MemberData(nameof(IsDifferentSingleData))]
+    public void IsDifferentSingle(string ifNoneMatches, string etag, bool isRead, VersionedEntityConditionResult result)
     {
         var condition = RequestCondition.IsDifferent(ifNoneMatches, isRead);
         condition.Validate(Entity.Matchable(etag)).Should().Be(result);
+    }
+
+    public static TheoryData<ImmutableArray<string>, string, bool, VersionedEntityConditionResult> IsDifferentMultipleData => new()
+    {
+        { ["foo", "foo"], "foo", false, VersionedEntityConditionResult.Failed },
+        { ["foo", "bar"], "foo", false, VersionedEntityConditionResult.Failed },
+        { ["bar", "baz"], "foo", false, VersionedEntityConditionResult.Succeeded },
+        { ["foo", "foo"], "foo", true, VersionedEntityConditionResult.Unmodified },
+        { ["foo", "bar"], "foo", true, VersionedEntityConditionResult.Unmodified },
+        { ["bar", "baz"], "foo", true, VersionedEntityConditionResult.Succeeded },
+    };
+
+    [Theory]
+    [MemberData(nameof(IsDifferentMultipleData))]
+    public void IsDifferentMultiple(ImmutableArray<string> ifNoneMatches, string etag, bool isRead, VersionedEntityConditionResult result)
+    {
+        var condition = RequestCondition.IsDifferent(ifNoneMatches, isRead);
+        condition.Validate(Entity.Matchable(etag)).Should().Be(result);
+    }
+
+    [Fact]
+    public void Exists()
+    {
+        var condition = RequestCondition.Exists<string>();
+        condition.Validate(Entity.Matchable("foo")).Should().Be(VersionedEntityConditionResult.Succeeded);
+        condition.Validate(Entity.Matchable("bar")).Should().Be(VersionedEntityConditionResult.Succeeded);
+    }
+
+    [Fact]
+    public void NotExists()
+    {
+        var condition = RequestCondition.NotExists<string>(isRead: true);
+        condition.Validate(Entity.Matchable("foo")).Should().Be(VersionedEntityConditionResult.Unmodified);
+        condition.Validate(Entity.Matchable("bar")).Should().Be(VersionedEntityConditionResult.Unmodified);
+
+        condition = RequestCondition.NotExists<string>(isRead: false);
+        condition.Validate(Entity.Matchable("foo")).Should().Be(VersionedEntityConditionResult.Failed);
+        condition.Validate(Entity.Matchable("bar")).Should().Be(VersionedEntityConditionResult.Failed);
     }
 
     public static TheoryData<DateTimeOffset, DateTimeOffset, VersionedEntityConditionResult> IsUnmodifiedSinceData => new()

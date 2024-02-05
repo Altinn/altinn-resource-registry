@@ -82,6 +82,7 @@ public class RequestConditionTests
         var condition = RequestCondition.Exists<string>();
         condition.Validate(Entity.Matchable("foo")).Should().Be(VersionedEntityConditionResult.Succeeded);
         condition.Validate(Entity.Matchable("bar")).Should().Be(VersionedEntityConditionResult.Succeeded);
+        condition.Validate(Entity.NonExisting<string>()).Should().Be(VersionedEntityConditionResult.Failed);
     }
 
     [Fact]
@@ -90,10 +91,12 @@ public class RequestConditionTests
         var condition = RequestCondition.NotExists<string>(isRead: true);
         condition.Validate(Entity.Matchable("foo")).Should().Be(VersionedEntityConditionResult.Unmodified);
         condition.Validate(Entity.Matchable("bar")).Should().Be(VersionedEntityConditionResult.Unmodified);
+        condition.Validate(Entity.NonExisting<string>()).Should().Be(VersionedEntityConditionResult.Succeeded);
 
         condition = RequestCondition.NotExists<string>(isRead: false);
         condition.Validate(Entity.Matchable("foo")).Should().Be(VersionedEntityConditionResult.Failed);
         condition.Validate(Entity.Matchable("bar")).Should().Be(VersionedEntityConditionResult.Failed);
+        condition.Validate(Entity.NonExisting<string>()).Should().Be(VersionedEntityConditionResult.Succeeded);
     }
 
     public static TheoryData<DateTimeOffset, DateTimeOffset, VersionedEntityConditionResult> IsUnmodifiedSinceData => new()
@@ -138,11 +141,17 @@ public class RequestConditionTests
         public static LastModifiedEntity<T> LastModified<T>(DateTimeOffset lastModified)
             where T : notnull, IEquatable<T>
             => new(lastModified);
+
+        public static NonEntity<T> NonExisting<T>()
+            where T : notnull, IEquatable<T>
+            => new();
     }
 
     private readonly record struct MatchableEntity<T>(T Value) : IVersionEquatable<T>
         where T : notnull, IEquatable<T>
     {
+        public bool Exists => true;
+
         public bool ModifiedSince(HttpDateTimeHeaderValue other)
             => ThrowHelper.ThrowNotSupportedException<bool>();
 
@@ -153,10 +162,24 @@ public class RequestConditionTests
     private readonly record struct LastModifiedEntity<T>(DateTimeOffset LastModified) : IVersionEquatable<T>
         where T : notnull, IEquatable<T>
     {
+        public bool Exists => true;
+
         public bool ModifiedSince(HttpDateTimeHeaderValue other)
             => LastModified > other;
 
         public bool VersionEquals(T other)
             => ThrowHelper.ThrowNotSupportedException<bool>();
+    }
+
+    private readonly record struct NonEntity<T>() : IVersionEquatable<T>
+        where T : notnull, IEquatable<T>
+    {
+        public bool Exists => false;
+
+        public bool ModifiedSince(HttpDateTimeHeaderValue other)
+            => false;
+
+        public bool VersionEquals(T other)
+            => false;
     }
 }

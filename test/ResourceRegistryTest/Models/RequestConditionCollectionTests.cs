@@ -159,6 +159,8 @@ public class RequestConditionCollectionTests
     private readonly struct Nil
         : IVersionEquatable<Nil>
     {
+        public bool Exists => ThrowHelper.ThrowNotSupportedException<bool>();
+
         public bool ModifiedSince(HttpDateTimeHeaderValue other)
         {
             return ThrowHelper.ThrowNotSupportedException<bool>();

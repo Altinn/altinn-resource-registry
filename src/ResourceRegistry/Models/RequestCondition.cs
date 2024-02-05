@@ -199,9 +199,9 @@ public sealed class RequestCondition<T>
     {
         return _mode switch
         {
-            Mode.Exists => VersionedEntityConditionResult.Succeeded,
-            Mode.NotExists => VersionedEntityConditionResult.Failed,
-            Mode.NotExistsRead => VersionedEntityConditionResult.Unmodified,
+            Mode.Exists => Check(entity.Exists, VersionedEntityConditionResult.Succeeded),
+            Mode.NotExists => Check(!entity.Exists, VersionedEntityConditionResult.Failed),
+            Mode.NotExistsRead => Check(!entity.Exists, VersionedEntityConditionResult.Unmodified),
             Mode.IsMatch => Check(VersionEquals(entity, _etags), VersionedEntityConditionResult.Failed),
             Mode.IsDifferentRead => Check(!VersionEquals(entity, _etags), VersionedEntityConditionResult.Unmodified),
             Mode.IsDifferent => Check(!VersionEquals(entity, _etags), VersionedEntityConditionResult.Failed),

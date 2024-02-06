@@ -174,7 +174,7 @@ internal class AccessListService
                 return Conditional.ConditionFailed();
             }
 
-            Debug.Assert(result != VersionedEntityConditionResult.Unmodified, "Unmodified should not be possible when deleting");
+            Debug.Assert(result != VersionedEntityConditionResult.Unmodified, "Unmodified should not be possible when creating");
         }
 
         // If the name and/or description is different in the list from what was requested, we need to update it.

@@ -115,7 +115,7 @@ public class TestWebApplicationFactory
 public class TestControllerApplicationFactory
     : TestWebApplicationFactory
 {
-    protected void AddTestController(ApplicationPartManager partManager, TypeInfo type)
+    protected static void AddTestController(ApplicationPartManager partManager, TypeInfo type)
     {
         partManager.ApplicationParts.Add(new TestControllerApplicationPart(type));
         if (!partManager.FeatureProviders.Contains(TestControllerApplicationFeatureProvider.Instance))

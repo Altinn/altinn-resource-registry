@@ -20,7 +20,7 @@ public static partial class RequestConditionCollection
     /// Model binder for <see cref="RequestConditionCollection{T}"/>.
     /// </summary>
     /// <typeparam name="T">The entity tag type. Parsed as an <see cref="Opaque{T}"/>.</typeparam>
-    private class ModelBinder<T> : IModelBinder
+    private sealed class ModelBinder<T> : IModelBinder
         where T : notnull
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)
@@ -56,7 +56,7 @@ public static partial class RequestConditionCollection
             else
             {
                 // Only read the If-Unmodified-Since header if If-Match is not present.
-                if (TryReadDate(modelName, bindingContext.ModelState, "If-Unmodified-Since", headers.IfUnmodifiedSince, out var date))
+                if (TryReadDate(bindingContext.ModelState, "If-Unmodified-Since", headers.IfUnmodifiedSince, out var date))
                 {
                     builder ??= ImmutableArray.CreateBuilder<IVersionedEntityCondition<T>>();
                     builder.Add(RequestCondition.IsUnmodifiedSince<T>(date));
@@ -78,7 +78,7 @@ public static partial class RequestConditionCollection
             else
             {
                 // Only read the If-Modified-Since header if If-None-Match is not present.
-                if (TryReadDate(modelName, bindingContext.ModelState, "If-Modified-Since", headers.IfModifiedSince, out var date))
+                if (TryReadDate(bindingContext.ModelState, "If-Modified-Since", headers.IfModifiedSince, out var date))
                 {
                     builder ??= ImmutableArray.CreateBuilder<IVersionedEntityCondition<T>>();
                     builder.Add(RequestCondition.IsModifiedSince<T>(date, isReadRequest));
@@ -165,7 +165,7 @@ public static partial class RequestConditionCollection
         /// <returns>
         /// <see langword="true"/> if the header values were present and successfully parsed, <see langword="false"/> otherwise.
         /// </returns>
-        private static bool TryReadDate(string modelName, ModelStateDictionary modelState, string headerName, StringValues headerValues, out HttpDateTimeHeaderValue date)
+        private static bool TryReadDate(ModelStateDictionary modelState, string headerName, StringValues headerValues, out HttpDateTimeHeaderValue date)
         {
             Debug.Assert(modelState != null);
             Debug.Assert(headerName != null);
@@ -198,7 +198,7 @@ public static partial class RequestConditionCollection
     /// <summary>
     /// <see cref="IModelBinderProvider"/> for <see cref="RequestConditionCollection{T}"/>.
     /// </summary>
-    internal class ModelBinderProvider : IModelBinderProvider
+    internal sealed class ModelBinderProvider : IModelBinderProvider
     {
         /// <summary>
         /// Gets a singleton instance of <see cref="ModelBinderProvider"/>.
@@ -234,7 +234,7 @@ public static partial class RequestConditionCollection
     /// <see cref="IBindingSourceMetadata"/> for <see cref="RequestConditionCollection{T}"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    internal class BindingSourceAttribute : Attribute, IBindingSourceMetadata
+    internal sealed class BindingSourceAttribute : Attribute, IBindingSourceMetadata
     {
         /// <inheritdoc/>
         public BindingSource? BindingSource => BindingSource.Header;

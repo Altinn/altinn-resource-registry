@@ -423,6 +423,24 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
         }
 
         [Fact]
+        public async Task Can_Require_Existing_List()
+        {
+            var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+
+            using var client = CreateAuthenticatedClient();
+
+            var dto = new CreateAccessListModel(Name: "Test 1 external", Description: "Test 1 description external");
+            using var request = new HttpRequestMessage(HttpMethod.Put, $"/resourceregistry/api/v1/access-lists/{ORG_NR}/{def.Identifier}")
+            {
+                Content = JsonContent.Create(dto)
+            };
+            request.Headers.IfMatch.ParseAdd("*");
+
+            var response = await client.SendAsync(request);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [Fact]
         public async Task Can_Require_New_List()
         {
             var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");

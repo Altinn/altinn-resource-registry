@@ -126,7 +126,7 @@ public static partial class RequestConditionCollection
                 return false;
             }
 
-            if (etags.Count == 1 && etags[0].Tag == "*")
+            if (etags is [{ IsWeak: false, Tag: var tag }] && tag == "*")
             {
                 conditions = default;
                 return true;

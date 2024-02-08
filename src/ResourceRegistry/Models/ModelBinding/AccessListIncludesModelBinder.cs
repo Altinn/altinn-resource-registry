@@ -113,6 +113,7 @@ internal class AccessListIncludesModelBinder
             return AccessListIncludes.Members;
         }
 
+        hasErrors = true;
         bindingContext.ModelState.TryAddModelError(bindingContext.ModelName, $"Invalid value: '{name}'");
         return AccessListIncludes.None;
     }

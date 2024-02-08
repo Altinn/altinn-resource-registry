@@ -16,21 +16,24 @@ public interface IAccessListService
     /// </summary>
     /// <param name="owner">The resource owner (org.nr.).</param>
     /// <param name="request">The page request.</param>
+    /// <param name="includes">What additional to include in the response.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A <see cref="Page{TItem, TToken}"/> of <see cref="AccessListInfo"/>.</returns>
-    Task<Page<AccessListInfo, string>> GetAccessListsByOwner(string owner, Page<string>.Request request, CancellationToken cancellationToken = default);
+    Task<Page<AccessListInfo, string>> GetAccessListsByOwner(string owner, Page<string>.Request request, AccessListIncludes includes = default, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets an access list by owner and identifier.
     /// </summary>
     /// <param name="owner">The resource owner (org.nr.).</param>
     /// <param name="identifier">The access list identifier (unique per owner).</param>
+    /// <param name="includes">What additional to include in the response.</param>
     /// <param name="condition">Optional condition on the access list</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>A conditional <see cref="AccessListInfo"/></returns>
     Task<Conditional<AccessListInfo, ulong>> GetAccessList(
         string owner,
         string identifier,
+        AccessListIncludes includes = default,
         IVersionedEntityCondition<ulong>? condition = null,
         CancellationToken cancellationToken = default);
 
@@ -69,6 +72,36 @@ public interface IAccessListService
 }
 
 /// <summary>
+/// What to include when getting access lists.
+/// </summary>
+[Flags]
+public enum AccessListIncludes : uint
+{
+    /// <summary>
+    /// No additional includes.
+    /// </summary>
+    None = default,
+
+    /// <summary>
+    /// Include resource connections.
+    /// </summary>
+    ResourceConnections = 1 << 0,
+
+    /// <summary>
+    /// Include members.
+    /// </summary>
+    /// <remarks>
+    /// Not implemented.
+    /// </remarks>
+    Members = 1 << 1,
+
+    /// <summary>
+    /// Include resource connections and their actions.
+    /// </summary>
+    ResourceConnectionsActions = ResourceConnections | 1 << 2,
+}
+
+/// <summary>
 /// Information about an access list.
 /// </summary>
 /// <param name="Id">The database id for the access list.</param>
@@ -78,6 +111,7 @@ public interface IAccessListService
 /// <param name="Description">A access list description.</param>
 /// <param name="CreatedAt">When this access list was created.</param>
 /// <param name="UpdatedAt">When this access list was last updated.</param>
+/// <param name="ResourceConnections">The resource connections for the access list.</param>
 /// <param name="Version">The version of this access list.</param>
 public record AccessListInfo(
     Guid Id,
@@ -87,6 +121,7 @@ public record AccessListInfo(
     string Description,
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt,
+    IReadOnlyList<AccessListResourceConnection>? ResourceConnections,
     ulong Version)
     : IVersionEquatable<ulong>
 {
@@ -112,7 +147,7 @@ public record AccessListInfo(
 /// <param name="Modified">When the connection was last modified.</param>
 public record AccessListResourceConnection(
     string ResourceIdentifier,
-    ImmutableHashSet<string> Actions,
+    ImmutableHashSet<string>? Actions,
     DateTimeOffset Created,
     DateTimeOffset Modified);
 

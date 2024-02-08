@@ -15,7 +15,8 @@ using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Filters;
 using Altinn.ResourceRegistry.Health;
 using Altinn.ResourceRegistry.Integration.Clients;
-using Altinn.ResourceRegistry.Persistence;
+using Altinn.ResourceRegistry.Models;
+using Altinn.ResourceRegistry.Models.ApiDescriptions;
 using Altinn.ResourceRegistry.Persistence.Configuration;
 using AltinnCore.Authentication.JwtCookie;
 using Azure.Identity;
@@ -25,6 +26,8 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Npgsql;
@@ -55,8 +58,22 @@ builder.Services.AddControllers(opts =>
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer()
+    .TryAddEnumerable(ServiceDescriptor.Singleton<IApiDescriptionProvider, ConditionalApiDescriptionProvider>());
+
+builder.Services.AddSwaggerGen(c =>
+{
+    var assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+    var xmlFile = Path.ChangeExtension(assemblyPath, ".xml");
+    if (File.Exists(xmlFile))
+    {
+        c.IncludeXmlComments(xmlFile);
+    }
+
+    c.EnableAnnotations();
+    c.SupportNonNullableReferenceTypes();
+    c.OperationFilter<ConditionalOperationFilter>();
+});
 
 var app = builder.Build();
 
@@ -66,19 +83,24 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
-    services.AddControllers().AddJsonOptions(options =>
+    services.AddControllers(options =>
     {
-        options.JsonSerializerOptions.WriteIndented = true;
-        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-    });
+        options.ModelBinderProviders.Insert(0, RequestConditionCollection.ModelBinderProvider.Instance);
+    })
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.WriteIndented = true;
+            options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        });
 
     services.AddMemoryCache();
     services.AddSingleton(config);
     services.AddHealthChecks().AddCheck<HealthCheck>("resourceregistry_health_check");
 
-    services.AddSingleton<IResourceRegistry, ResourceRegistryService>();
+    services.AddResourceRegistryCoreServices();
     services.AddResourceRegistryPersistence();
+    services.AddSingleton<IResourceRegistry, ResourceRegistryService>();
     services.AddSingleton<IPRP, PRPClient>();
     services.AddSingleton<IAuthorizationHandler, ScopeAccessHandler>();
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -92,15 +114,13 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.Configure<AzureStorageConfiguration>(config.GetSection("AzureStorageConfiguration"));
 
     services.AddAuthentication(JwtCookieDefaults.AuthenticationScheme)
-    .AddJwtCookie(JwtCookieDefaults.AuthenticationScheme, options =>
-    {
-        if (builder.Environment.IsDevelopment())
+        .AddJwtCookie(JwtCookieDefaults.AuthenticationScheme, options =>
         {
-            options.RequireHttpsMetadata = false;
-        }
-    });
-
-    string[] resourceWriteScope = new string[] { AuthzConstants.SCOPE_RESOURCEREGISTRY_ADMIN, AuthzConstants.SCOPE_RESOURCEREGISTRY_WRITE };
+            if (builder.Environment.IsDevelopment())
+            {
+                options.RequireHttpsMetadata = false;
+            }
+        });
 
     if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
     {
@@ -135,8 +155,16 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
 
     services.AddAuthorization(options =>
     {
-        options.AddPolicy(AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE, policy => policy.Requirements.Add(new ScopeAccessRequirement(resourceWriteScope)));
+        options.AddPolicy(AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE, policy => policy
+            .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN, AuthzConstants.SCOPE_RESOURCE_WRITE));
+        options.AddPolicy(AuthzConstants.POLICY_ACCESS_LIST_READ, policy => policy
+            .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN, AuthzConstants.SCOPE_ACCESS_LIST_READ, AuthzConstants.SCOPE_ACCESS_LIST_WRITE)
+            .RequireUserOwnsResource());
+        options.AddPolicy(AuthzConstants.POLICY_ACCESS_LIST_WRITE, policy => policy
+            .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN, AuthzConstants.SCOPE_ACCESS_LIST_WRITE)
+            .RequireUserOwnsResource());
     });
+    services.AddResourceRegistryAuthorizationHandlers();
 }
 
 void Configure(IConfiguration config)
@@ -218,6 +246,7 @@ void ConfigurePostgreSql()
             traceService,
             new Configuration
             {
+                Environment = "prod",
                 Workspace = workspacePath,
                 ConnectionString = connectionString,
                 IsAutoCreateDatabase = false,
@@ -311,4 +340,11 @@ void ConfigureLogging(ILoggingBuilder logging)
         logging.AddFilter("System", LogLevel.Warning);
         logging.AddConsole();
     }
+}
+
+/// <summary>
+/// Startup class.
+/// </summary>
+public partial class Program 
+{
 }

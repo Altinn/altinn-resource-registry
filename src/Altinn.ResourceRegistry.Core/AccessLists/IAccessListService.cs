@@ -1,6 +1,5 @@
 #nullable enable
 
-using System.Collections.Immutable;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Models.Versioned;
 
@@ -70,92 +69,3 @@ public interface IAccessListService
         IVersionedEntityCondition<ulong>? condition = null,
         CancellationToken cancellationToken = default);
 }
-
-/// <summary>
-/// What to include when getting access lists.
-/// </summary>
-[Flags]
-public enum AccessListIncludes : uint
-{
-    /// <summary>
-    /// No additional includes.
-    /// </summary>
-    None = default,
-
-    /// <summary>
-    /// Include resource connections.
-    /// </summary>
-    ResourceConnections = 1 << 0,
-
-    /// <summary>
-    /// Include members.
-    /// </summary>
-    /// <remarks>
-    /// Not implemented.
-    /// </remarks>
-    Members = 1 << 1,
-
-    /// <summary>
-    /// Include resource connections and their actions.
-    /// </summary>
-    ResourceConnectionsActions = ResourceConnections | 1 << 2,
-}
-
-/// <summary>
-/// Information about an access list.
-/// </summary>
-/// <param name="Id">The database id for the access list.</param>
-/// <param name="ResourceOwner">The resource owner (a org.nr.).</param>
-/// <param name="Identifier">The resource owner-unique identifier. Limited to 'a'-'z' and '-' characters.</param>
-/// <param name="Name">The access list name. Does not have to be unique, and can contain any characters.</param>
-/// <param name="Description">A access list description.</param>
-/// <param name="CreatedAt">When this access list was created.</param>
-/// <param name="UpdatedAt">When this access list was last updated.</param>
-/// <param name="ResourceConnections">The resource connections for the access list.</param>
-/// <param name="Version">The version of this access list.</param>
-public record AccessListInfo(
-    Guid Id,
-    string ResourceOwner,
-    string Identifier,
-    string Name,
-    string Description,
-    DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt,
-    IReadOnlyList<AccessListResourceConnection>? ResourceConnections,
-    ulong Version)
-    : IVersionEquatable<ulong>
-{
-    /// <inheritdoc/>
-    bool IVersionEquatable<ulong>.ModifiedSince(HttpDateTimeHeaderValue other)
-    {
-        return UpdatedAt > other;
-    }
-
-    /// <inheritdoc/>
-    bool IVersionEquatable<ulong>.VersionEquals(ulong other)
-    {
-        return Version == other;
-    }
-}
-
-/// <summary>
-/// Information about an access list resource connection.
-/// </summary>
-/// <param name="ResourceIdentifier">The resource identifier.</param>
-/// <param name="Actions">The allowed actions.</param>
-/// <param name="Created">When the connection was created.</param>
-/// <param name="Modified">When the connection was last modified.</param>
-public record AccessListResourceConnection(
-    string ResourceIdentifier,
-    ImmutableHashSet<string>? Actions,
-    DateTimeOffset Created,
-    DateTimeOffset Modified);
-
-/// <summary>
-/// Information about an access list membership.
-/// </summary>
-/// <param name="PartyId">The party id.</param>
-/// <param name="Since">When the party was added to the access list.</param>
-public record AccessListMembership(
-    Guid PartyId,
-    DateTimeOffset Since);

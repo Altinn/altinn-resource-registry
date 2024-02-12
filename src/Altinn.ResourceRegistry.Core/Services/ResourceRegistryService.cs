@@ -319,9 +319,9 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<SubjectAttribute>> FindSubjectsInPolicy(string resourceId, CancellationToken cancellationToken = default)
+        public async Task<List<ResourceSubjects>> FindSubjectsForResources(List<ResourceAttribute> resources, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return await _repository.FindSubjectsForResources(resources, cancellationToken);
         }
     }
 }

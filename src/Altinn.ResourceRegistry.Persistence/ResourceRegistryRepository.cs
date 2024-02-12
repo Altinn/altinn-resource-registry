@@ -206,8 +206,6 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default)
     {
-        JOIN(VALUES('Porsche', 'Yellow'), ('Audi', 'Red'), ...) AS mytable2(carbrand, carcolor)
-
         const string QUERY = /*strpsql*/@"
             SELECT resource_type, resource_value, subject_type, subject_value
             FROM resourceregistry.resources
@@ -220,10 +218,12 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             AND (@resourcetype IS NULL OR serviceresourcejson ->> 'resourceType' ILIKE @resourcetype::text)
             AND (@keyword IS NULL OR serviceresourcejson ->> 'keywords' ILIKE concat('%', @keyword, '%'))
             ";
+
+        return Task.FromResult(new List<SubjectResources>());
     }
 
     /// <inheritdoc/>
-    public Task<List<SubjectAttribute>> FindSubjectsInPolicy(string resourceId, CancellationToken cancellationToken = default)
+    public Task<List<ResourceSubjects>> FindSubjectsForResources(List<ResourceAttribute> resources, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

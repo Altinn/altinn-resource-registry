@@ -78,9 +78,11 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<List<SubjectAttribute>> FindSubjectsInPolicy(string resourceId, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public Task<List<ResourceSubjects>> FindSubjectsForResources(List<ResourceAttribute> resources, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
+
     }
 }

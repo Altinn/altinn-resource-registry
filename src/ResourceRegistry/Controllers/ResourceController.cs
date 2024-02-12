@@ -256,9 +256,18 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpGet("{id}/policy/subjects")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<List<SubjectAttribute>> FindSubjectsInPolicy(string id, CancellationToken cancellationToken)
+        public async Task<ActionResult<List<SubjectAttribute>>> FindSubjectsInPolicy(string id, CancellationToken cancellationToken)
         {
-            return await _resourceRegistry.FindSubjectsInPolicy(id, cancellationToken);
+            List<ResourceAttribute> resourceAttributes = new List<ResourceAttribute>();
+            resourceAttributes.Add(new ResourceAttribute() { Type = AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute, Value = id });
+
+            List<ResourceSubjects> resourceSubjects = await _resourceRegistry.FindSubjectsForResources(resourceAttributes, cancellationToken);
+            if (resourceSubjects == null && !resourceSubjects.Any())
+            {
+                return new NotFoundResult();
+            }
+
+            return resourceSubjects.First().SubjectAttributes;
         }
 
         /// <summary>

@@ -562,6 +562,61 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
     }
     #endregion
 
+    #region GetAccessListResourceConnections
+    public class GetAccessListResourceConnections(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+        : AccessListControllerTests(dbFixture, webApplicationFixture)
+    {
+        public class ETagHeaders(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+            : EtagHeadersTests(dbFixture, webApplicationFixture)
+        {
+            protected override async Task<AccessListInfo> Setup()
+            {
+                await AddResource("empty");
+                await AddResource("read");
+                await AddResource("write");
+                await AddResource("readwrite");
+
+                var aggregate = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+                aggregate.AddResourceConnection("empty", []);
+                aggregate.AddResourceConnection("read", ["read"]);
+                aggregate.AddResourceConnection("write", ["write"]);
+                aggregate.AddResourceConnection("readwrite", ["read", "write"]);
+                await aggregate.SaveChanged();
+
+                return aggregate.AsAccessListInfo();
+            }
+
+            protected override HttpRequestMessage CreateRequest(AccessListInfo info)
+            {
+                return new(HttpMethod.Get, $"/resourceregistry/api/v1/access-lists/{info.ResourceOwner}/{info.Identifier}/resource-connections");
+            }
+
+            protected override async Task ValidateResponse(HttpResponseMessage response, AccessListInfo info)
+            {
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+                var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListResourceConnectionDto>>();
+                Assert.NotNull(content);
+
+                content.Links.Next.Should().BeNull();
+                content.Items.Should().HaveCount(4);
+
+                content.Items.Should().Contain(rc => rc.ResourceIdentifier == "empty")
+                    .Which.Actions.Should().BeEmpty();
+
+                content.Items.Should().Contain(rc => rc.ResourceIdentifier == "read")
+                    .Which.Actions.Should().BeEquivalentTo(["read"]);
+
+                content.Items.Should().Contain(rc => rc.ResourceIdentifier == "write")
+                    .Which.Actions.Should().BeEquivalentTo(["write"]);
+
+                content.Items.Should().Contain(rc => rc.ResourceIdentifier == "readwrite")
+                    .Which.Actions.Should().BeEquivalentTo(["read", "write"]);
+            }
+        }
+    }
+    #endregion
+
     #region Authorization
     public class Authorization(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
         : AccessListControllerTests(dbFixture, webApplicationFixture)
@@ -849,6 +904,19 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
             Assert.NotNull(latest);
             latest.Version.Should().Be(info.Version);
         }
+    }
+    #endregion
+
+    #region Utils
+    private async Task AddResource(string name)
+    {
+        await using var resourceCmd = DataSource.CreateCommand(/*strpsql*/"INSERT INTO resourceregistry.resources (identifier, created, serviceresourcejson) VALUES (@name, NOW(), @json);");
+        var nameParam = resourceCmd.Parameters.Add("name", NpgsqlTypes.NpgsqlDbType.Text);
+        var jsonParam = resourceCmd.Parameters.Add("json", NpgsqlTypes.NpgsqlDbType.Jsonb);
+        jsonParam.Value = "{}";
+
+        nameParam.Value = name;
+        await resourceCmd.ExecuteNonQueryAsync();
     }
     #endregion
 }

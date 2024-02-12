@@ -65,11 +65,11 @@ public class AccessListsController
             return NotFound();
         }
 
-        var nextLink = page.ContinuationToken != null
+        var nextLink = page.ContinuationToken.HasValue
             ? Url.Link(ROUTE_GET_BY_OWNER, new
             {
                 owner,
-                token = Opaque.Create(page.ContinuationToken),
+                token = Opaque.Create(page.ContinuationToken.Value),
                 includes = AccessListIncludesModelBinder.Stringify(include),
             })
             : null;
@@ -267,15 +267,42 @@ public class AccessListsController
     /// </summary>
     /// <param name="owner">The resource owner</param>
     /// <param name="identifier">The resource owner-unique identifier</param>
+    /// <param name="conditions">Request conditions</param>
+    /// <param name="token">Optional continuation token</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
     /// <returns>A parinated list of <see cref="AccessListResourceConnectionDto"/></returns>
     [HttpGet("{identifier:required}/resource-connections")]
     [SwaggerOperation(Tags = ["Access List Resource Connections"])]
-    public async Task<ActionResult<Paginated<AccessListResourceConnectionDto>>> GetAccessListResourceConnections(string owner, string identifier, CancellationToken cancellationToken = default)
+    public async Task<ConditionalResult<VersionedPaginated<AccessListResourceConnectionDto, AggregateVersion>, AggregateVersion>> GetAccessListResourceConnections(
+        string owner,
+        string identifier,
+        RequestConditionCollection<AggregateVersion> conditions,
+        [FromQuery(Name = "token")] Opaque<string>? token = null,
+        CancellationToken cancellationToken = default)
     {
-        await Task.Yield();
+        var result = await _service.GetAccessListResourceConnections(
+            owner,
+            identifier,
+            Page.ContinueFrom(token?.Value),
+            conditions.Select(v => v.Version),
+            cancellationToken);
 
-        throw new NotImplementedException();
+        return result.Select(
+            page =>
+            {
+                var nextLink = page.ContinuationToken.HasValue
+                ? Url.Link(nameof(GetAccessListResourceConnections), new
+                {
+                    owner,
+                    identifier,
+                    token = Opaque.Create(page.ContinuationToken.Value),
+                })
+                : null;
+
+                return Paginated.Create(page.Items.Select(AccessListResourceConnectionDto.From), nextLink)
+                    .WithVersion(page.ModifiedAt, AggregateVersion.From(page.Version));
+            },
+            AggregateVersion.From);
     }
 
     /// <summary>

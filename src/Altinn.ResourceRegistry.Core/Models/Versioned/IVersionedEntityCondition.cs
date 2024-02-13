@@ -55,20 +55,14 @@ public static class VersionedEntityConditionExtensions
         Guard.IsNotNull(self);
         Guard.IsNotNull(other);
 
-        if (self is IReadOnlyCollection<IVersionedEntityCondition<T>> selfCollection)
+        if (self is IReadOnlyCollection<IVersionedEntityCondition<T>> { Count: 0 })
         {
-            if (selfCollection.Count == 0)
-            {
-                return other;
-            }
+            return other;
         }
 
-        if (other is IReadOnlyCollection<IVersionedEntityCondition<T>> otherCollection)
+        if (other is IReadOnlyCollection<IVersionedEntityCondition<T>> { Count: 0 })
         {
-            if (otherCollection.Count == 0)
-            {
-                return self;
-            }
+            return self;
         }
 
         return new ConcatenatedVersionedEntityCondition<T>(self, other);

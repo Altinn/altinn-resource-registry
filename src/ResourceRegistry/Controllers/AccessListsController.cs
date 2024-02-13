@@ -30,7 +30,15 @@ namespace Altinn.ResourceRegistry.Controllers;
 public class AccessListsController 
     : Controller
 {
-    private const string ROUTE_GET_BY_OWNER = "access-lists/get-by-owner";
+    /// <summary>
+    /// Route name for <see cref="GetAccessListsByOwner"/>.
+    /// </summary>
+    public const string ROUTE_GET_BY_OWNER = "access-lists/get-by-owner";
+
+    /// <summary>
+    /// Route name for <see cref="GetAccessListResourceConnections"/>.
+    /// </summary>
+    public const string ROUTE_GET_RESOURCE_CONNECTIONS = "access-lists/get-resource-connections";
 
     private readonly IAccessListService _service;
 
@@ -267,23 +275,29 @@ public class AccessListsController
     /// </summary>
     /// <param name="owner">The resource owner</param>
     /// <param name="identifier">The resource owner-unique identifier</param>
-    /// <param name="conditions">Request conditions</param>
+    /// <param name="requestConditions">Request conditions</param>
     /// <param name="token">Optional continuation token</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
     /// <returns>A parinated list of <see cref="AccessListResourceConnectionDto"/></returns>
-    [HttpGet("{identifier:required}/resource-connections")]
+    [HttpGet("{identifier:required}/resource-connections", Name = ROUTE_GET_RESOURCE_CONNECTIONS)]
     [SwaggerOperation(Tags = ["Access List Resource Connections"])]
     public async Task<ConditionalResult<VersionedPaginated<AccessListResourceConnectionDto, AggregateVersion>, AggregateVersion>> GetAccessListResourceConnections(
         string owner,
         string identifier,
-        RequestConditionCollection<AggregateVersion> conditions,
-        [FromQuery(Name = "token")] Opaque<string>? token = null,
+        RequestConditionCollection<AggregateVersion> requestConditions,
+        [FromQuery(Name = "token")] Opaque<AccessListResourceConnectionContinuationToken>? token = null,
         CancellationToken cancellationToken = default)
     {
+        IVersionedEntityCondition<AggregateVersion> conditions = requestConditions;
+        if (token?.Value.Version is { } version)
+        {
+            conditions = conditions.Concat(RequestCondition.IsMatch(AggregateVersion.From(version)));
+        }
+
         var result = await _service.GetAccessListResourceConnections(
             owner,
             identifier,
-            Page.ContinueFrom(token?.Value),
+            Page.ContinueFrom(token?.Value.ContinueFrom),
             conditions.Select(v => v.Version),
             cancellationToken);
 
@@ -291,13 +305,13 @@ public class AccessListsController
             page =>
             {
                 var nextLink = page.ContinuationToken.HasValue
-                ? Url.Link(nameof(GetAccessListResourceConnections), new
-                {
-                    owner,
-                    identifier,
-                    token = Opaque.Create(page.ContinuationToken.Value),
-                })
-                : null;
+                    ? Url.Link(ROUTE_GET_RESOURCE_CONNECTIONS, new
+                    {
+                        owner,
+                        identifier,
+                        token = Opaque.Create(new AccessListResourceConnectionContinuationToken(page.Version, page.ContinuationToken.Value)),
+                    })
+                    : null;
 
                 return Paginated.Create(page.Items.Select(AccessListResourceConnectionDto.From), nextLink)
                     .WithVersion(page.ModifiedAt, AggregateVersion.From(page.Version));
@@ -361,4 +375,11 @@ public class AccessListsController
             }
         }
     }
+
+    /// <summary>
+    /// Continuation token for access list resource connections.
+    /// </summary>
+    /// <param name="Version">The access list version.</param>
+    /// <param name="ContinueFrom">What resource identifier to continue from.</param>
+    public record AccessListResourceConnectionContinuationToken(ulong Version, string ContinueFrom);
 }

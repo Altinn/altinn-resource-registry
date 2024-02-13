@@ -194,7 +194,7 @@ internal class AccessListService
     }
 
     /// <inheritdoc/>
-    public async Task<Conditional<VersionedPage<AccessListResourceConnection, DateTimeOffset, ulong>, ulong>> GetAccessListResourceConnections(
+    public async Task<Conditional<VersionedPage<AccessListResourceConnection, string, ulong>, ulong>> GetAccessListResourceConnections(
         string owner,
         string identifier,
         Page<string>.Request request,
@@ -233,7 +233,7 @@ internal class AccessListService
             }
         }
 
-        return Page.Create(data.Value, LARGE_PAGE_SIZE, static list => list.Modified)
+        return Page.Create(data.Value, LARGE_PAGE_SIZE, static resource => resource.ResourceIdentifier)
             .WithVersion(data.UpdatedAt, data.Version);
     }
 }

@@ -78,7 +78,7 @@ public interface IAccessListService
     /// <param name="condition">Optional condition on the access list</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns></returns>
-    Task<Conditional<VersionedPage<AccessListResourceConnection, DateTimeOffset, ulong>, ulong>> GetAccessListResourceConnections(
+    Task<Conditional<VersionedPage<AccessListResourceConnection, string, ulong>, ulong>> GetAccessListResourceConnections(
         string owner,
         string identifier,
         Page<string>.Request request,

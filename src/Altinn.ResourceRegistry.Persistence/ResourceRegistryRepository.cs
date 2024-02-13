@@ -1,8 +1,10 @@
 ﻿using System.Data;
+using System.Data.Common;
 using System.Data.SqlTypes;
 using System.Text.Json;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Models;
+using Altinn.ResourceRegistry.Persistence.CustomTypes;
 using Altinn.ResourceRegistry.Persistence.Extensions;
 using Microsoft.Extensions.Logging;
 using Npgsql;
@@ -204,22 +206,21 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     }
 
     /// <inheritdoc/>
-    public Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default)
+    public async Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default)
     {
-        const string QUERY = /*strpsql*/@"
-            SELECT resource_type, resource_value, subject_type, subject_value
-            FROM resourceregistry.resources
-            JOIN (VALUES ('Porsche', 'Yellow'), ('Audi', 'Red'), ...) AS subjects(resource_type, resource_value)
+        string insertSmsNotificationSql = "call notifications.insertsmsnotification(@noe)";
+        await using NpgsqlCommand pgcom = _conn.CreateCommand(insertSmsNotificationSql);
 
+        NpgsqlParameter subjectAttributes = new NpgsqlParameter<AttributeTypeValue[]>
+        {
+            ParameterName = "noe",
+            NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Unknown,
+            TypedValue = MapToAttributeType(subjects)
+        };
 
-            WHERE (@id IS NULL OR serviceresourcejson ->> 'identifier' ILIKE concat('%', @id, '%'))
-            AND (@title IS NULL OR serviceresourcejson ->> 'title' ILIKE concat('%', @title, '%'))
-            AND (@description IS NULL OR serviceresourcejson ->> 'description' ILIKE concat('%', @description, '%'))
-            AND (@resourcetype IS NULL OR serviceresourcejson ->> 'resourceType' ILIKE @resourcetype::text)
-            AND (@keyword IS NULL OR serviceresourcejson ->> 'keywords' ILIKE concat('%', @keyword, '%'))
-            ";
+        pgcom.Parameters.Add(subjectAttributes);
 
-        return Task.FromResult(new List<SubjectResources>());
+        return new List<SubjectResources>();
     }
 
     /// <inheritdoc/>
@@ -235,4 +236,16 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         return json.Deserialize<ServiceResource>(JsonSerializerOptions) ??
             throw new SqlNullValueException("Got null when trying to parse ServiceResource");
     }
-}
+
+
+    private AttributeTypeValue[] MapToAttributeType(List<SubjectAttribute> subjectAttributes)
+    {
+        AttributeTypeValue[] attributeTypeValues = new AttributeTypeValue[subjectAttributes.Count];
+        for (int i = 0; i < subjectAttributes.Count; i++)
+        {
+            attributeTypeValues[i] = new AttributeTypeValue() { Type = subjectAttributes[i].Type, Value = subjectAttributes[i].Value };
+        }
+
+        return attributeTypeValues;
+    }
+ }

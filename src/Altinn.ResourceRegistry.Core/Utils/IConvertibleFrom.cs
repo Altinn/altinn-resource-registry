@@ -5,7 +5,7 @@
 /// </summary>
 /// <typeparam name="TSelf">The type to convert to.</typeparam>
 /// <typeparam name="T">The type to convert from.</typeparam>
-public interface IConvertibleFrom<TSelf, T>
+public interface IConvertibleFrom<TSelf, in T>
     where TSelf : IConvertibleFrom<TSelf, T>
 {
     /// <summary>

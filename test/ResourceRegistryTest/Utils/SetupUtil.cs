@@ -25,7 +25,7 @@ namespace Altinn.ResourceRegistry.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                    services.AddSingleton<IResourceRegistryRepository, RegisterResourceRepositoryMock>();
+                    // services.AddSingleton<IResourceRegistryRepository, RegisterResourceRepositoryMock>();
                     services.AddSingleton<IPolicyRepository, PolicyRepositoryMock>();
                     services.AddSingleton<IPRP, PRPMock>();
                     services.AddSingleton<IAltinn2Services, Altinn2ServicesClientMock>();

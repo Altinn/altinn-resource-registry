@@ -38,6 +38,6 @@ AS $BODY$
 BEGIN
 RETURN QUERY 
     SELECT rs.resource_type, rs.resource_value, rs.subject_type, rs.subject_value, rs.resource_owner  	FROM resourceregistry.resourcesubjects rs
-    JOIN UNNEST(attributetypevalue) AS atr on rs.resource_type = atr.type AND rs.resource_value = atr.value;
+    JOIN UNNEST(attributetypevalue::resourceregistry.attributetypevalue[]) AS atr on rs.resource_type = atr.type AND rs.resource_value = atr.value;
 END;
 $BODY$;

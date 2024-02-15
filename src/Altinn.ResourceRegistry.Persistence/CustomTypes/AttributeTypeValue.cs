@@ -13,12 +13,12 @@ namespace Altinn.ResourceRegistry.Persistence.CustomTypes
     {
         /// <summary>
         /// The type
-        /// </summary>
-        public required string Type { get; init; }
+        /// </summary>t
+        public string Type { get; set; }
     
         /// <summary>
         /// The value
         /// </summary>
-        public required string Value { get; init; }
+        public string Value { get; set; }
     }
 }

@@ -1,13 +1,17 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlTypes;
 using System.Text.Json;
+using System.Xml.Linq;
+using Altinn.Platform.Storage.Interface.Models;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Persistence.CustomTypes;
 using Altinn.ResourceRegistry.Persistence.Extensions;
 using Microsoft.Extensions.Logging;
 using Npgsql;
+using Npgsql.Internal.Postgres;
 using NpgsqlTypes;
 
 namespace Altinn.ResourceRegistry.Persistence;
@@ -208,12 +212,12 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default)
     {
-        string insertSmsNotificationSql = "call notifications.insertsmsnotification(@noe)";
+        string insertSmsNotificationSql = "call resourceregistry.getsubjectsfromresources(@subjects)";
         await using NpgsqlCommand pgcom = _conn.CreateCommand(insertSmsNotificationSql);
 
         NpgsqlParameter subjectAttributes = new NpgsqlParameter<AttributeTypeValue[]>
         {
-            ParameterName = "noe",
+            ParameterName = "subjects",
             NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Unknown,
             TypedValue = MapToAttributeType(subjects)
         };
@@ -224,9 +228,49 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     }
 
     /// <inheritdoc/>
-    public Task<List<ResourceSubjects>> FindSubjectsForResources(List<ResourceAttribute> resources, CancellationToken cancellationToken = default)
+    public async Task<List<ResourceSubjects>> FindSubjectsForResources(List<ResourceAttribute> resources, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        string insertSmsNotificationSql = "call resourceregistry.getsubjectsfromresources(:attributetypevalue)";
+        await using NpgsqlCommand pgcom = _conn.CreateCommand(insertSmsNotificationSql);
+
+        NpgsqlParameter subjectAttributes = new NpgsqlParameter<AttributeTypeValue[]>
+        {
+            ParameterName = "attributetypevalue",
+            DbType = DbType.Object,
+            Value = MapToAttributeType(resources),
+            DataTypeName = "resourceregistry.attributetypevalue[]"
+        };
+
+        pgcom.Parameters.Add(subjectAttributes);
+        try
+        {
+            await using NpgsqlDataReader reader = await pgcom.ExecuteReaderAsync();
+
+            List<ResourceSubjects> resourceSubjectsList = new List<ResourceSubjects>();
+
+            while (await reader.ReadAsync())
+            {
+                ResourceSubjects resourceSubjects = new ResourceSubjects();
+                resourceSubjects.ResourceAttribute = new ResourceAttribute();
+                resourceSubjects.SubjectAttributes = new List<SubjectAttribute>();
+
+                resourceSubjects.ResourceAttribute.Type = reader.GetFieldValue<string>("resource_type");
+                resourceSubjects.ResourceAttribute.Type = reader.GetFieldValue<string>("resource_value");
+
+                SubjectAttribute subjectAttribute = new SubjectAttribute();
+
+                subjectAttribute.Type = reader.GetFieldValue<string>("subject_type");
+                subjectAttribute.Value = reader.GetFieldValue<string>("subject_value");
+                resourceSubjects.SubjectAttributes.Add(subjectAttribute);
+                resourceSubjectsList.Add(resourceSubjects);
+            }
+
+            return resourceSubjectsList;
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 
     private static async ValueTask<ServiceResource> GetServiceResource(NpgsqlDataReader reader)
@@ -236,7 +280,6 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         return json.Deserialize<ServiceResource>(JsonSerializerOptions) ??
             throw new SqlNullValueException("Got null when trying to parse ServiceResource");
     }
-
 
     private AttributeTypeValue[] MapToAttributeType(List<SubjectAttribute> subjectAttributes)
     {
@@ -248,4 +291,15 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         return attributeTypeValues;
     }
- }
+
+    private AttributeTypeValue[] MapToAttributeType(List<ResourceAttribute> resourceAttributes)
+    {
+        AttributeTypeValue[] attributeTypeValues = new AttributeTypeValue[resourceAttributes.Count];
+        for (int i = 0; i < resourceAttributes.Count; i++)
+        {
+            attributeTypeValues[i] = new AttributeTypeValue() { Type = resourceAttributes[i].Type, Value = resourceAttributes[i].Value };
+        }
+
+        return attributeTypeValues;
+    }
+}

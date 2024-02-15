@@ -253,7 +253,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <param name="id">Resource Id</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
-        [HttpGet("{id}/policy/subjects")]
+        [HttpPost("{id}/policy/subjects")]
         [Produces("application/json")]
         [Consumes("application/json")]
         public async Task<ActionResult<List<SubjectAttribute>>> FindSubjectsInPolicy(string id, CancellationToken cancellationToken)

@@ -230,8 +230,10 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<ResourceSubjects>> FindSubjectsForResources(List<ResourceAttribute> resources, CancellationToken cancellationToken = default)
     {
-        string insertSmsNotificationSql = "call resourceregistry.getsubjectsfromresources(:attributetypevalue)";
-        await using NpgsqlCommand pgcom = _conn.CreateCommand(insertSmsNotificationSql);
+        string findSubjectsSql = "select * from resourceregistry.getsubjectsfromresources(@attributetypevalue)";
+        
+        //string findSubjectsSql = "select * from resourceregistry.getsubjectstest()";
+        await using NpgsqlCommand pgcom = _conn.CreateCommand(findSubjectsSql);
 
         NpgsqlParameter subjectAttributes = new NpgsqlParameter<AttributeTypeValue[]>
         {
@@ -255,7 +257,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                 resourceSubjects.SubjectAttributes = new List<SubjectAttribute>();
 
                 resourceSubjects.ResourceAttribute.Type = reader.GetFieldValue<string>("resource_type");
-                resourceSubjects.ResourceAttribute.Type = reader.GetFieldValue<string>("resource_value");
+                resourceSubjects.ResourceAttribute.Value = reader.GetFieldValue<string>("resource_value");
 
                 SubjectAttribute subjectAttribute = new SubjectAttribute();
 

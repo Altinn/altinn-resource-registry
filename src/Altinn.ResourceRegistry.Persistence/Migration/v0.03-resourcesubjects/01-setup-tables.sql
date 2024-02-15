@@ -41,3 +41,15 @@ RETURN QUERY
     JOIN UNNEST(attributetypevalue::resourceregistry.attributetypevalue[]) AS atr on rs.resource_type = atr.type AND rs.resource_value = atr.value;
 END;
 $BODY$;
+
+
+
+CREATE OR REPLACE FUNCTION resourceregistry.getsubjectstest()
+ RETURNS table(resource_type text, resource_value text, subject_type text, subject_value text, resource_owner text)
+   LANGUAGE 'plpgsql'
+AS $BODY$
+BEGIN
+RETURN QUERY 
+    SELECT rs.resource_type, rs.resource_value, rs.subject_type, rs.subject_value, rs.resource_owner FROM resourceregistry.resourcesubjects rs;
+END;
+$BODY$;

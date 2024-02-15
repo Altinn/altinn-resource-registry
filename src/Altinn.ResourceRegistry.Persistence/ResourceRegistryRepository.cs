@@ -213,46 +213,62 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default)
     {
-        string findResourcesSQL = "select * from resourceregistry.resourcesubjects WHERE subject_urn = ANY(:subjects)";
+        string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE subject_urn = ANY(:subjects)";
 
         await using NpgsqlCommand pgcom = _conn.CreateCommand(findResourcesSQL);
         pgcom.Parameters.AddWithValue("subjects", subjects.ToArray());
         await using NpgsqlDataReader reader = await pgcom.ExecuteReaderAsync(cancellationToken);
 
-        List<SubjectResources> subjectResources = new List<SubjectResources>();
+        Dictionary<string, SubjectResources> allSubjectResources = new Dictionary<string, SubjectResources>();
 
         while (await reader.ReadAsync())
         {
-            SubjectResources resourceSubjects = new SubjectResources();
-            resourceSubjects.Resources = new List<AttributeMatchV2>();
-            resourceSubjects.Subject = new AttributeMatchV2();
+            SubjectResources subjectResources = new SubjectResources();
+            subjectResources.Resources = new List<AttributeMatchV2>();
+            subjectResources.Subject = new AttributeMatchV2();
 
             AttributeMatchV2 resourceAttributeMatch = new AttributeMatchV2();
 
             resourceAttributeMatch.Type = reader.GetFieldValue<string>("resource_type");
             resourceAttributeMatch.Value = reader.GetFieldValue<string>("resource_value");
             resourceAttributeMatch.Urn = reader.GetFieldValue<string>("resource_urn");
-            resourceSubjects.Resources.Add(resourceAttributeMatch);
+            subjectResources.Resources.Add(resourceAttributeMatch);
 
-            resourceSubjects.Subject.Type = reader.GetFieldValue<string>("subject_type");
-            resourceSubjects.Subject.Value = reader.GetFieldValue<string>("subject_value");
-            resourceSubjects.Subject.Urn = reader.GetFieldValue<string>("subject_urn");
-            subjectResources.Add(resourceSubjects);
+            subjectResources.Subject.Type = reader.GetFieldValue<string>("subject_type");
+            subjectResources.Subject.Value = reader.GetFieldValue<string>("subject_value");
+            subjectResources.Subject.Urn = reader.GetFieldValue<string>("subject_urn");
+
+            if (allSubjectResources.ContainsKey(subjectResources.Subject.Urn))
+            {
+                allSubjectResources[subjectResources.Subject.Urn].Resources.AddRange(subjectResources.Resources);
+            }
+            else
+            {
+                allSubjectResources.Add(subjectResources.Subject.Urn, subjectResources);
+            }
+
         }
 
-        return subjectResources;
+        List<SubjectResources> subjectResourcesList = new List<SubjectResources>();
+
+        foreach (KeyValuePair<string, SubjectResources> kvp in allSubjectResources)
+        {
+            subjectResourcesList.Add(kvp.Value);
+        }
+
+        return subjectResourcesList;
     }
 
     /// <inheritdoc/>
     public async Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default)
     {
-        string findResourcesSQL = "select * from resourceregistry.resourcesubjects WHERE resource_urn = ANY(:resources)";
+        string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE resource_urn = ANY(:resources)";
 
         await using NpgsqlCommand pgcom = _conn.CreateCommand(findResourcesSQL);
         pgcom.Parameters.AddWithValue("resources", resources.ToArray());
         await using NpgsqlDataReader reader = await pgcom.ExecuteReaderAsync(cancellationToken);
 
-        List<ResourceSubjects> subjectResources = new List<ResourceSubjects>();
+        Dictionary<string, ResourceSubjects> allResourceSubjects = new Dictionary<string, ResourceSubjects>();
 
         while (await reader.ReadAsync())
         {
@@ -269,9 +285,24 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             subjectAttributeMatch.Type = reader.GetFieldValue<string>("subject_type");
             subjectAttributeMatch.Value = reader.GetFieldValue<string>("subject_value");
             subjectAttributeMatch.Urn = reader.GetFieldValue<string>("subject_urn");
+
             resourceSubjects.Subjects.Add(subjectAttributeMatch);
 
-            subjectResources.Add(resourceSubjects);
+            if (allResourceSubjects.ContainsKey(resourceSubjects.Resource.Urn))
+            {
+                allResourceSubjects[resourceSubjects.Resource.Urn].Subjects.AddRange(resourceSubjects.Subjects);
+            }
+            else 
+            {
+                allResourceSubjects.Add(resourceSubjects.Resource.Urn, resourceSubjects);
+            }
+        }
+
+        List<ResourceSubjects> subjectResources = new List<ResourceSubjects>();
+
+        foreach (KeyValuePair<string,ResourceSubjects> kvp in allResourceSubjects)
+        {
+            subjectResources.Add(kvp.Value);
         }
 
         return subjectResources;

@@ -304,15 +304,9 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc/>
-        public Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default)
+        public async Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default)
         {
-            List<SubjectResources> subjectResources = new List<SubjectResources>();
-
-            SubjectResources subjectResources1 = new SubjectResources();
-           
-            subjectResources.Add(subjectResources1);
-
-            return Task.FromResult(subjectResources);
+            return await _repository.FindResourcesForSubjects(subjects, cancellationToken);
         }
 
         /// <inheritdoc/>

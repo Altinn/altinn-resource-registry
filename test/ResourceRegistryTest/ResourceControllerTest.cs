@@ -1243,9 +1243,33 @@ namespace Altinn.ResourceRegistry.Tests
 
             string requestUri = "resourceregistry/api/v1/resource/skd_mva/policy/subjects";
 
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+            {
+            };
+
+            httpRequestMessage.Headers.Add("Accept", "application/json");
+            httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetResourceForSubjects()
+        {
+            string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            List<string> subjects = new List<string>();
+            subjects.Add("urn:altinn:rolecode:utinn");
+
+
+            string requestUri = "resourceregistry/api/v1/resource/findforsubjects/";
+
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
             {
-                Content = new StringContent(JsonSerializer.Serialize(resourceAttributes), Encoding.UTF8, "application/json")
+                Content = new StringContent(JsonSerializer.Serialize(subjects), Encoding.UTF8, "application/json")
             };
 
             httpRequestMessage.Headers.Add("Accept", "application/json");

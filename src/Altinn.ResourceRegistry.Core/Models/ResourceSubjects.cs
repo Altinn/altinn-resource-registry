@@ -8,11 +8,11 @@
         /// <summary>
         /// The resource itself defined with a resource attribute
         /// </summary>
-        public ResourceAttribute ResourceAttribute { get; set; }
+        public AttributeMatchV2 Resource { get; set; }
 
         /// <summary>
         /// A list of all subjectattribute for that resource 
         /// </summary>
-        public List<SubjectAttribute> SubjectAttributes { get; set; }   
+        public List<AttributeMatchV2> Subjects { get; set; }   
     }
 }

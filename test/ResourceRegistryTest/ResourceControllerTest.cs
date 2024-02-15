@@ -1253,7 +1253,7 @@ namespace Altinn.ResourceRegistry.Tests
 
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
 
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
     }

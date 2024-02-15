@@ -304,22 +304,19 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc/>
-        public Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default)
+        public Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default)
         {
             List<SubjectResources> subjectResources = new List<SubjectResources>();
 
             SubjectResources subjectResources1 = new SubjectResources();
-            subjectResources1.Subject = new SubjectAttribute() { Type = "urn:altinn:accesspackage", Value = "mva" };
-            subjectResources1.Resources = new List<ResourceAttribute>();
-            subjectResources1.Resources.Add(new ResourceAttribute() { Type = "urn:altinn:resource", Value = "mvaappen" });
-
+           
             subjectResources.Add(subjectResources1);
 
             return Task.FromResult(subjectResources);
         }
 
         /// <inheritdoc/>
-        public async Task<List<ResourceSubjects>> FindSubjectsForResources(List<ResourceAttribute> resources, CancellationToken cancellationToken = default)
+        public async Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default)
         {
             return await _repository.FindSubjectsForResources(resources, cancellationToken);
         }

@@ -95,7 +95,7 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="subjects">List of subjects</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
-        Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default);
+        Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns a list of subjects in a policy for a resource
@@ -103,6 +103,6 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="resources">List of resource attributes</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
-        Task<List<ResourceSubjects>> FindSubjectsForResources(List<ResourceAttribute> resources, CancellationToken cancellationToken = default);
+        Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default);
     }
 }

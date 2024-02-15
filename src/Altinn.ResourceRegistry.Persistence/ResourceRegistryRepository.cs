@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlTypes;
+using System.Resources;
 using System.Text.Json;
 using System.Xml.Linq;
 using Altinn.Platform.Storage.Interface.Models;
@@ -210,69 +211,70 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     }
 
     /// <inheritdoc/>
-    public async Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default)
+    public async Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default)
     {
-        string insertSmsNotificationSql = "call resourceregistry.getsubjectsfromresources(@subjects)";
-        await using NpgsqlCommand pgcom = _conn.CreateCommand(insertSmsNotificationSql);
+        string findResourcesSQL = "select * from resourceregistry.resourcesubjects WHERE subject_urn = ANY(:subjects)";
 
-        NpgsqlParameter subjectAttributes = new NpgsqlParameter<AttributeTypeValue[]>
+        await using NpgsqlCommand pgcom = _conn.CreateCommand(findResourcesSQL);
+        pgcom.Parameters.AddWithValue("subjects", subjects.ToArray());
+        await using NpgsqlDataReader reader = await pgcom.ExecuteReaderAsync(cancellationToken);
+
+        List<SubjectResources> subjectResources = new List<SubjectResources>();
+
+        while (await reader.ReadAsync())
         {
-            ParameterName = "subjects",
-            NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Unknown,
-            TypedValue = MapToAttributeType(subjects)
-        };
+            SubjectResources resourceSubjects = new SubjectResources();
+            resourceSubjects.Resources = new List<AttributeMatchV2>();
+            resourceSubjects.Subject = new AttributeMatchV2();
 
-        pgcom.Parameters.Add(subjectAttributes);
+            AttributeMatchV2 resourceAttributeMatch = new AttributeMatchV2();
 
-        return new List<SubjectResources>();
+            resourceAttributeMatch.Type = reader.GetFieldValue<string>("resource_type");
+            resourceAttributeMatch.Value = reader.GetFieldValue<string>("resource_value");
+            resourceAttributeMatch.Urn = reader.GetFieldValue<string>("resource_urn");
+            resourceSubjects.Resources.Add(resourceAttributeMatch);
+
+            resourceSubjects.Subject.Type = reader.GetFieldValue<string>("subject_type");
+            resourceSubjects.Subject.Value = reader.GetFieldValue<string>("subject_value");
+            resourceSubjects.Subject.Urn = reader.GetFieldValue<string>("subject_urn");
+            subjectResources.Add(resourceSubjects);
+        }
+
+        return subjectResources;
     }
 
     /// <inheritdoc/>
-    public async Task<List<ResourceSubjects>> FindSubjectsForResources(List<ResourceAttribute> resources, CancellationToken cancellationToken = default)
+    public async Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default)
     {
-        string findSubjectsSql = "select * from resourceregistry.getsubjectsfromresources(@attributetypevalue)";
-        
-        //string findSubjectsSql = "select * from resourceregistry.getsubjectstest()";
-        await using NpgsqlCommand pgcom = _conn.CreateCommand(findSubjectsSql);
+        string findResourcesSQL = "select * from resourceregistry.resourcesubjects WHERE resource_urn = ANY(:resources)";
 
-        NpgsqlParameter subjectAttributes = new NpgsqlParameter<AttributeTypeValue[]>
+        await using NpgsqlCommand pgcom = _conn.CreateCommand(findResourcesSQL);
+        pgcom.Parameters.AddWithValue("resources", resources.ToArray());
+        await using NpgsqlDataReader reader = await pgcom.ExecuteReaderAsync(cancellationToken);
+
+        List<ResourceSubjects> subjectResources = new List<ResourceSubjects>();
+
+        while (await reader.ReadAsync())
         {
-            ParameterName = "attributetypevalue",
-            DbType = DbType.Object,
-            Value = MapToAttributeType(resources),
-            DataTypeName = "resourceregistry.attributetypevalue[]"
-        };
+            ResourceSubjects resourceSubjects = new ResourceSubjects();
+            resourceSubjects.Subjects = new List<AttributeMatchV2>();
+            resourceSubjects.Resource = new AttributeMatchV2();
 
-        pgcom.Parameters.Add(subjectAttributes);
-        try
-        {
-            await using NpgsqlDataReader reader = await pgcom.ExecuteReaderAsync();
+            AttributeMatchV2 subjectAttributeMatch = new AttributeMatchV2();
 
-            List<ResourceSubjects> resourceSubjectsList = new List<ResourceSubjects>();
+            resourceSubjects.Resource.Type = reader.GetFieldValue<string>("resource_type");
+            resourceSubjects.Resource.Value = reader.GetFieldValue<string>("resource_value");
+            resourceSubjects.Resource.Urn = reader.GetFieldValue<string>("resource_urn");
 
-            while (await reader.ReadAsync())
-            {
-                ResourceSubjects resourceSubjects = new ResourceSubjects();
-                resourceSubjects.ResourceAttribute = new ResourceAttribute();
-                resourceSubjects.SubjectAttributes = new List<SubjectAttribute>();
+            subjectAttributeMatch.Type = reader.GetFieldValue<string>("subject_type");
+            subjectAttributeMatch.Value = reader.GetFieldValue<string>("subject_value");
+            subjectAttributeMatch.Urn = reader.GetFieldValue<string>("subject_urn");
+            resourceSubjects.Subjects.Add(subjectAttributeMatch);
 
-                resourceSubjects.ResourceAttribute.Type = reader.GetFieldValue<string>("resource_type");
-                resourceSubjects.ResourceAttribute.Value = reader.GetFieldValue<string>("resource_value");
-
-                SubjectAttribute subjectAttribute = new SubjectAttribute();
-
-                subjectAttribute.Type = reader.GetFieldValue<string>("subject_type");
-                subjectAttribute.Value = reader.GetFieldValue<string>("subject_value");
-                resourceSubjects.SubjectAttributes.Add(subjectAttribute);
-                resourceSubjectsList.Add(resourceSubjects);
-            }
-
-            return resourceSubjectsList;
+            subjectResources.Add(resourceSubjects);
         }
-        catch (Exception ex)
-        {
-            throw;
-        }
+
+        return subjectResources;
     }
 
     private static async ValueTask<ServiceResource> GetServiceResource(NpgsqlDataReader reader)

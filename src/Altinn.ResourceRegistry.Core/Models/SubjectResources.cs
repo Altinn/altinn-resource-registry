@@ -8,11 +8,11 @@
         /// <summary>
         /// The subject
         /// </summary>
-        public SubjectAttribute Subject { get; set; }    
+        public AttributeMatchV2 Subject { get; set; }    
 
         /// <summary>
         /// List of resources that the given subject has access to
         /// </summary>
-        public List<ResourceAttribute> Resources { get; set; }
+        public List<AttributeMatchV2> Resources { get; set; }
     }
 }

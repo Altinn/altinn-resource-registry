@@ -256,18 +256,18 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpPost("{id}/policy/subjects")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<ActionResult<List<SubjectAttribute>>> FindSubjectsInPolicy(string id, CancellationToken cancellationToken)
+        public async Task<ActionResult<List<AttributeMatchV2>>> FindSubjectsInPolicy(string id, CancellationToken cancellationToken)
         {
-            List<ResourceAttribute> resourceAttributes = new List<ResourceAttribute>();
-            resourceAttributes.Add(new ResourceAttribute() { Type = AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute, Value = id });
+            List<string> resources = new List<string>();
+            resources.Add(AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute + ":" + id);
 
-            List<ResourceSubjects> resourceSubjects = await _resourceRegistry.FindSubjectsForResources(resourceAttributes, cancellationToken);
+            List<ResourceSubjects> resourceSubjects = await _resourceRegistry.FindSubjectsForResources(resources, cancellationToken);
             if (resourceSubjects == null && !resourceSubjects.Any())
             {
                 return new NotFoundResult();
             }
 
-            return resourceSubjects.First().SubjectAttributes;
+            return resourceSubjects.First().Subjects;
         }
 
         /// <summary>
@@ -279,7 +279,7 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpPost("findforsubjects/")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken)
+        public async Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken)
         {
            return await _resourceRegistry.FindResourcesForSubjects(subjects, cancellationToken);
         }

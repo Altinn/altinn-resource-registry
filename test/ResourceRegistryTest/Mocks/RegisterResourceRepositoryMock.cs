@@ -73,13 +73,13 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Resources");
         }
 
-        public Task<List<SubjectResources>> FindResourcesForSubjects(List<SubjectAttribute> subjects, CancellationToken cancellationToken = default)
+        public Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public Task<List<ResourceSubjects>> FindSubjectsForResources(List<ResourceAttribute> resources, CancellationToken cancellationToken = default)
+        public Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

@@ -99,7 +99,14 @@ public static class ResourceRegistryDependencyInjectionExtensions
             builder.MapEnum<ResourceType>("resourceregistry.resourcetype");
             builder.MapComposite<AttributeTypeValue>("resourceregistry.attributetypevalue");
 
-            return builder.Build();
+            return builder.BuildMultiHost();
+        });
+
+        services.TryAddSingleton((IServiceProvider sp) =>
+        {
+            var multiHost = sp.GetRequiredService<NpgsqlMultiHostDataSource>();
+
+            return (NpgsqlDataSource)multiHost;
         });
 
         return services;

@@ -30,7 +30,15 @@ namespace Altinn.ResourceRegistry.Controllers;
 public class AccessListsController 
     : Controller
 {
-    private const string ROUTE_GET_BY_OWNER = "access-lists/get-by-owner";
+    /// <summary>
+    /// Route name for <see cref="GetAccessListsByOwner"/>.
+    /// </summary>
+    public const string ROUTE_GET_BY_OWNER = "access-lists/get-by-owner";
+
+    /// <summary>
+    /// Route name for <see cref="GetAccessListResourceConnections"/>.
+    /// </summary>
+    public const string ROUTE_GET_RESOURCE_CONNECTIONS = "access-lists/get-resource-connections";
 
     private readonly IAccessListService _service;
 
@@ -49,6 +57,10 @@ public class AccessListsController
     /// <param name="owner">The resource owner</param>
     /// <param name="token">Optional continuation token</param>
     /// <param name="include">What additional information to include in the response</param>
+    /// <param name="resourceIdentifier">
+    /// Optional resource identifier. Required if <paramref name="include"/> has flag <see cref="AccessListIncludes.ResourceConnections"/>
+    /// set. This is used to filter the resource connections included in the access lists to only the provided resource.
+    /// </param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
     /// <returns>A paginated set of <see cref="AccessListInfoDto"/></returns>
     [HttpGet("", Name = ROUTE_GET_BY_OWNER)]
@@ -57,19 +69,26 @@ public class AccessListsController
         string owner,
         [FromQuery(Name = "token")] Opaque<string>? token = null,
         [FromQuery(Name = "include")] AccessListIncludes include = AccessListIncludes.None,
+        [FromQuery(Name = "resource")] string? resourceIdentifier = null,
         CancellationToken cancellationToken = default)
     {
-        var page = await _service.GetAccessListsByOwner(owner, Page.ContinueFrom(token?.Value), include, cancellationToken);
+        if (include.HasFlag(AccessListIncludes.ResourceConnections) && string.IsNullOrWhiteSpace(resourceIdentifier))
+        {
+            ModelState.AddModelError("resource", "Resource identifier is required when including resource connections");
+            return BadRequest(ModelState);
+        }
+
+        var page = await _service.GetAccessListsByOwner(owner, Page.ContinueFrom(token?.Value), include, resourceIdentifier, cancellationToken);
         if (page == null)
         {
             return NotFound();
         }
 
-        var nextLink = page.ContinuationToken != null
+        var nextLink = page.ContinuationToken.HasValue
             ? Url.Link(ROUTE_GET_BY_OWNER, new
             {
                 owner,
-                token = Opaque.Create(page.ContinuationToken),
+                token = Opaque.Create(page.ContinuationToken.Value),
                 includes = AccessListIncludesModelBinder.Stringify(include),
             })
             : null;
@@ -267,15 +286,48 @@ public class AccessListsController
     /// </summary>
     /// <param name="owner">The resource owner</param>
     /// <param name="identifier">The resource owner-unique identifier</param>
+    /// <param name="requestConditions">Request conditions</param>
+    /// <param name="token">Optional continuation token</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
     /// <returns>A parinated list of <see cref="AccessListResourceConnectionDto"/></returns>
-    [HttpGet("{identifier:required}/resource-connections")]
+    [HttpGet("{identifier:required}/resource-connections", Name = ROUTE_GET_RESOURCE_CONNECTIONS)]
     [SwaggerOperation(Tags = ["Access List Resource Connections"])]
-    public async Task<ActionResult<Paginated<AccessListResourceConnectionDto>>> GetAccessListResourceConnections(string owner, string identifier, CancellationToken cancellationToken = default)
+    public async Task<ConditionalResult<VersionedPaginated<AccessListResourceConnectionDto, AggregateVersion>, AggregateVersion>> GetAccessListResourceConnections(
+        string owner,
+        string identifier,
+        RequestConditionCollection<AggregateVersion> requestConditions,
+        [FromQuery(Name = "token")] Opaque<AccessListResourceConnectionContinuationToken>? token = null,
+        CancellationToken cancellationToken = default)
     {
-        await Task.Yield();
+        IVersionedEntityCondition<AggregateVersion> conditions = requestConditions;
+        if (token?.Value.Version is { } version)
+        {
+            conditions = conditions.Concat(RequestCondition.IsMatch(AggregateVersion.From(version)));
+        }
 
-        throw new NotImplementedException();
+        var result = await _service.GetAccessListResourceConnections(
+            owner,
+            identifier,
+            Page.ContinueFrom(token?.Value.ContinueFrom),
+            conditions.Select(v => v.Version),
+            cancellationToken);
+
+        return result.Select(
+            page =>
+            {
+                var nextLink = page.ContinuationToken.HasValue
+                    ? Url.Link(ROUTE_GET_RESOURCE_CONNECTIONS, new
+                    {
+                        owner,
+                        identifier,
+                        token = Opaque.Create(new AccessListResourceConnectionContinuationToken(page.Version, page.ContinuationToken.Value)),
+                    })
+                    : null;
+
+                return Paginated.Create(page.Items.Select(AccessListResourceConnectionDto.From), nextLink)
+                    .WithVersion(page.ModifiedAt, AggregateVersion.From(page.Version));
+            },
+            AggregateVersion.From);
     }
 
     /// <summary>
@@ -287,17 +339,30 @@ public class AccessListsController
     /// <param name="owner">The resource owner</param>
     /// <param name="identifier">The resource owner-unique identifier</param>
     /// <param name="resourceIdentifier">The resource identifier</param>
+    /// <param name="conditions">Request conditions</param>
     /// <param name="model">The resource connection info</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
     /// <returns>The newly created/updated <see cref="AccessListResourceConnectionDto"/></returns>
     [HttpPut("{identifier:required}/resource-connections/{resourceIdentifier:required}")]
     [SwaggerOperation(Tags = ["Access List Resource Connections"])]
     [Authorize(Policy = AuthzConstants.POLICY_ACCESS_LIST_WRITE)]
-    public async Task<ActionResult<AccessListResourceConnectionDto>> UpsertAccessListResourceConnection(string owner, string identifier, string resourceIdentifier, [FromBody] UpsertAccessListResourceConnectionDto model, CancellationToken cancellationToken = default)
+    public async Task<ConditionalResult<AccessListResourceConnectionWithVersionDto, AggregateVersion>> UpsertAccessListResourceConnection(
+        string owner,
+        string identifier,
+        string resourceIdentifier,
+        RequestConditionCollection<AggregateVersion> conditions,
+        [FromBody] UpsertAccessListResourceConnectionDto model,
+        CancellationToken cancellationToken = default)
     {
-        await Task.Yield();
+        var result = await _service.UpsertAccessListResourceConnection(
+            owner,
+            identifier,
+            resourceIdentifier,
+            model.Actions,
+            conditions.Select(v => v.Version),
+            cancellationToken);
 
-        throw new NotImplementedException();
+        return result.Select(AccessListResourceConnectionWithVersionDto.From, AggregateVersion.From);
     }
 
     /// <summary>
@@ -309,18 +374,29 @@ public class AccessListsController
     /// <param name="owner">The resource owner</param>
     /// <param name="identifier">The resource owner-unique identifier</param>
     /// <param name="resourceIdentifier">The resource identifier</param>
+    /// <param name="conditions">Request conditions</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
     /// <returns>The newly removed <see cref="AccessListResourceConnectionDto"/>, if it existed, otherwize returns no content</returns>
     [HttpDelete("{identifier:required}/resource-connections/{resourceIdentifier:required}")]
     [SwaggerOperation(Tags = ["Access List Resource Connections"])]
-    [SwaggerResponse(StatusCodes.Status200OK, description: "The resource connection was removed", type: typeof(AccessListResourceConnectionDto))]
+    [SwaggerResponse(StatusCodes.Status200OK, description: "The resource connection was removed", type: typeof(ConditionalResult<AccessListResourceConnectionWithVersionDto, AggregateVersion>))]
     [SwaggerResponse(StatusCodes.Status204NoContent, description: "The resource connection did not exist")]
     [Authorize(Policy = AuthzConstants.POLICY_ACCESS_LIST_WRITE)]
-    public async Task<ActionResult<AccessListResourceConnectionDto?>> DeleteAccessListResourceConnection(string owner, string identifier, string resourceIdentifier, CancellationToken cancellationToken = default)
+    public async Task<ConditionalResult<AccessListResourceConnectionWithVersionDto, AggregateVersion>> DeleteAccessListResourceConnection(
+        string owner, 
+        string identifier, 
+        string resourceIdentifier,
+        RequestConditionCollection<AggregateVersion> conditions,
+        CancellationToken cancellationToken = default)
     {
-        await Task.Yield();
+        var result = await _service.DeleteAccessListResourceConnection(owner, identifier, resourceIdentifier, conditions.Select(v => v.Version), cancellationToken);
 
-        throw new NotImplementedException();
+        if (result.IsNotFound && result.NotFoundType == nameof(AccessListResourceConnection))
+        {
+            return NoContent();
+        }
+
+        return result.Select(AccessListResourceConnectionWithVersionDto.From, AggregateVersion.From);
     }
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
@@ -334,4 +410,11 @@ public class AccessListsController
             }
         }
     }
+
+    /// <summary>
+    /// Continuation token for access list resource connections.
+    /// </summary>
+    /// <param name="Version">The access list version.</param>
+    /// <param name="ContinueFrom">What resource identifier to continue from.</param>
+    public record AccessListResourceConnectionContinuationToken(ulong Version, string ContinueFrom);
 }

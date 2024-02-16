@@ -7,7 +7,8 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using System;
-using System.Data.Common;
+using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -120,32 +121,67 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
             }
 
             {
-                using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}?include=resources");
+                using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}?include=resources&resource=test1");
 
                 var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListInfoDto>>();
                 Assert.NotNull(content);
 
                 content.Items.Should().HaveCount(1);
                 content.Items.Should().Contain(al => al.Identifier == "test1")
-                    .Which.ResourceConnections.Should().HaveCount(2)
+                    .Which.ResourceConnections.Should().HaveCount(1)
                     .And.AllSatisfy(rc => rc.Actions.Should().BeNull())
-                    .And.Contain(rc => rc.ResourceIdentifier == RESOURCE1_NAME)
+                    .And.Contain(rc => rc.ResourceIdentifier == RESOURCE1_NAME);
+            }
+
+            {
+                using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}?include=resources&resource=test2");
+
+                var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListInfoDto>>();
+                Assert.NotNull(content);
+
+                content.Items.Should().HaveCount(1);
+                content.Items.Should().Contain(al => al.Identifier == "test1")
+                    .Which.ResourceConnections.Should().HaveCount(1)
+                    .And.AllSatisfy(rc => rc.Actions.Should().BeNull())
                     .And.Contain(rc => rc.ResourceIdentifier == RESOURCE2_NAME);
             }
 
             {
-                using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}?include=resource-actions");
+                using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}?include=resource-actions&resource=test1");
 
                 var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListInfoDto>>();
                 Assert.NotNull(content);
 
                 content.Items.Should().HaveCount(1);
                 content.Items.Should().Contain(al => al.Identifier == "test1")
-                    .Which.ResourceConnections.Should().HaveCount(2)
+                    .Which.ResourceConnections.Should().HaveCount(1)
                     .And.AllSatisfy(rc => rc.Actions.Should().NotBeNull())
                     .And.Contain(rc => rc.ResourceIdentifier == RESOURCE1_NAME)
+                    .Which.Actions.Should().BeEmpty();
+            }
+
+            {
+                using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}?include=resource-actions&resource=test2");
+
+                var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListInfoDto>>();
+                Assert.NotNull(content);
+
+                content.Items.Should().HaveCount(1);
+                content.Items.Should().Contain(al => al.Identifier == "test1")
+                    .Which.ResourceConnections.Should().HaveCount(1)
+                    .And.AllSatisfy(rc => rc.Actions.Should().NotBeNull())
                     .And.Contain(rc => rc.ResourceIdentifier == RESOURCE2_NAME)
                     .Which.Actions.Should().BeEquivalentTo([ACTION_READ]);
+            }
+
+            {
+                using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}?include=resources");
+                response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            }
+
+            {
+                using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}?include=resource-actions");
+                response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             }
         }
 
@@ -562,6 +598,399 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
     }
     #endregion
 
+    #region GetAccessListResourceConnections
+    public class GetAccessListResourceConnections(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+        : AccessListControllerTests(dbFixture, webApplicationFixture)
+    {
+        [Fact]
+        public async Task Returns_NextPage_Link_When_Enough_Items()
+        {
+            var resources = Enumerable.Range(0, 222).Select(i => new
+            {
+                Identifier = $"resource-{i:D4}",
+                Index = i,
+                Actions = (i % 4) switch
+                {
+                    0 => ImmutableArray<string>.Empty,
+                    1 => ["read"],
+                    2 => ["write"],
+                    3 => ["read", "write"],
+                    _ => throw new UnreachableException()
+                },
+            }).ToDictionary(r => r.Identifier);
+
+            foreach (var resource in resources.Values)
+            {
+                await AddResource(resource.Identifier);
+            }
+
+            var aggregate = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+            foreach (var resource in resources.Values)
+            {
+                aggregate.AddResourceConnection(resource.Identifier, resource.Actions);
+            }
+            await aggregate.SaveChanged();
+
+            using var client = CreateAuthenticatedClient();
+            using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/resource-connections");
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListResourceConnectionDto>>();
+            Assert.NotNull(content);
+
+            content.Items.Should().HaveCount(100);
+            content.Links.Next.Should().NotBeNull();
+
+            foreach (var item in content.Items)
+            {
+                var resource = resources[item.ResourceIdentifier];
+                item.Actions.Should().BeEquivalentTo(resource.Actions);
+            }
+
+            using var nextPageResponse = await client.GetAsync(content.Links.Next);
+            nextPageResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var nextPageContent = await nextPageResponse.Content.ReadFromJsonAsync<Paginated<AccessListResourceConnectionDto>>();
+            Assert.NotNull(nextPageContent);
+
+            nextPageContent.Items.Should().HaveCount(100);
+            nextPageContent.Links.Next.Should().NotBeNull();
+
+            foreach (var item in nextPageContent.Items)
+            {
+                var resource = resources[item.ResourceIdentifier];
+                item.Actions.Should().BeEquivalentTo(resource.Actions);
+            }
+
+            using var lastPageResponse = await client.GetAsync(nextPageContent.Links.Next);
+            lastPageResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var lastPageContent = await lastPageResponse.Content.ReadFromJsonAsync<Paginated<AccessListResourceConnectionDto>>();
+            Assert.NotNull(lastPageContent);
+
+            lastPageContent.Items.Should().HaveCount(22);
+            lastPageContent.Links.Next.Should().BeNull();
+
+            foreach (var item in lastPageContent.Items)
+            {
+                var resource = resources[item.ResourceIdentifier];
+                item.Actions.Should().BeEquivalentTo(resource.Actions);
+            }
+        }
+
+        [Fact]
+        public async Task Returns_PreconditionFailed_If_AccessList_Is_Modified_While_Iterating()
+        {
+            var resources = Enumerable.Range(0, 222).Select(i => new
+            {
+                Identifier = $"resource-{i:D4}",
+                Index = i,
+                Actions = (i % 4) switch
+                {
+                    0 => ImmutableArray<string>.Empty,
+                    1 => ["read"],
+                    2 => ["write"],
+                    3 => ["read", "write"],
+                    _ => throw new UnreachableException()
+                },
+            }).ToDictionary(r => r.Identifier);
+
+            foreach (var resource in resources.Values)
+            {
+                await AddResource(resource.Identifier);
+            }
+
+            var aggregate = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+            foreach (var resource in resources.Values)
+            {
+                aggregate.AddResourceConnection(resource.Identifier, resource.Actions);
+            }
+            await aggregate.SaveChanged();
+
+            using var client = CreateAuthenticatedClient();
+            using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/resource-connections");
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListResourceConnectionDto>>();
+            Assert.NotNull(content);
+
+            content.Items.Should().HaveCount(100);
+            content.Links.Next.Should().NotBeNull();
+
+            // Update access list
+            aggregate.Update(name: "Test 1 updated");
+            await aggregate.SaveChanged();
+
+            using var nextPageResponse = await client.GetAsync(content.Links.Next);
+            nextPageResponse.StatusCode.Should().Be(HttpStatusCode.PreconditionFailed);
+        }
+
+        public class ETagHeaders(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+            : EtagHeadersTests(dbFixture, webApplicationFixture)
+        {
+            protected override async Task<AccessListInfo> Setup()
+            {
+                await AddResource("empty");
+                await AddResource("read");
+                await AddResource("write");
+                await AddResource("readwrite");
+
+                var aggregate = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+                aggregate.AddResourceConnection("empty", []);
+                aggregate.AddResourceConnection("read", ["read"]);
+                aggregate.AddResourceConnection("write", ["write"]);
+                aggregate.AddResourceConnection("readwrite", ["read", "write"]);
+                await aggregate.SaveChanged();
+
+                return aggregate.AsAccessListInfo();
+            }
+
+            protected override HttpRequestMessage CreateRequest(AccessListInfo info)
+            {
+                return new(HttpMethod.Get, $"/resourceregistry/api/v1/access-lists/{info.ResourceOwner}/{info.Identifier}/resource-connections");
+            }
+
+            protected override async Task ValidateResponse(HttpResponseMessage response, AccessListInfo info)
+            {
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+                var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListResourceConnectionDto>>();
+                Assert.NotNull(content);
+
+                content.Links.Next.Should().BeNull();
+                content.Items.Should().HaveCount(4);
+
+                content.Items.Should().Contain(rc => rc.ResourceIdentifier == "empty")
+                    .Which.Actions.Should().BeEmpty();
+
+                content.Items.Should().Contain(rc => rc.ResourceIdentifier == "read")
+                    .Which.Actions.Should().BeEquivalentTo(["read"]);
+
+                content.Items.Should().Contain(rc => rc.ResourceIdentifier == "write")
+                    .Which.Actions.Should().BeEquivalentTo(["write"]);
+
+                content.Items.Should().Contain(rc => rc.ResourceIdentifier == "readwrite")
+                    .Which.Actions.Should().BeEquivalentTo(["read", "write"]);
+            }
+        }
+    }
+    #endregion
+
+    #region UpsertAccessListResourceConnection
+    public class UpsertAccessListResourceConnection(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+        : AccessListControllerTests(dbFixture, webApplicationFixture)
+    {
+        [Fact]
+        public async Task Can_Create_Connection()
+        {
+            await AddResource("test1");
+
+            var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+
+            using var client = CreateAuthenticatedClient();
+
+            var dto = new UpsertAccessListResourceConnectionDto(Actions: ["read", "write"]);
+            var response = await client.PutAsJsonAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/{def.Identifier}/resource-connections/test1", dto);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var body = await response.Content.ReadFromJsonAsync<AccessListResourceConnectionDto>();
+            Assert.NotNull(body);
+
+            body.ResourceIdentifier.Should().Be("test1");
+            body.Actions.Should().BeEquivalentTo(["read", "write"]);
+
+            response.Headers.ETag.Should().NotBeNull();
+            response.Content.Headers.LastModified.Should().NotBeNull();
+
+            var info = await Repository.LoadAccessList(ORG_NR, def.Identifier);
+            Assert.NotNull(info);
+            info.TryGetResourceConnections("test1", out var conn).Should().BeTrue();
+            conn!.Actions.Should().BeEquivalentTo(["read", "write"]);
+        }
+
+        [Fact]
+        public async Task Can_Update_Connection()
+        {
+            await AddResource("test1");
+
+            var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+            def.AddResourceConnection("test1", ["read"]);
+            await def.SaveChanged();
+
+            using var client = CreateAuthenticatedClient();
+
+            var dto = new UpsertAccessListResourceConnectionDto(Actions: ["write"]);
+            var response = await client.PutAsJsonAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/{def.Identifier}/resource-connections/test1", dto);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var body = await response.Content.ReadFromJsonAsync<AccessListResourceConnectionDto>();
+            Assert.NotNull(body);
+
+            body.ResourceIdentifier.Should().Be("test1");
+            body.Actions.Should().BeEquivalentTo(["write"]);
+
+            response.Headers.ETag.Should().NotBeNull();
+            response.Content.Headers.LastModified.Should().NotBeNull();
+
+            var info = await Repository.LoadAccessList(ORG_NR, def.Identifier);
+            Assert.NotNull(info);
+            info.TryGetResourceConnections("test1", out var conn).Should().BeTrue();
+            conn!.Actions.Should().BeEquivalentTo(["write"]);
+        }
+
+        [Fact]
+        public async Task Does_Not_Create_New_Versio_If_Identical()
+        {
+            await AddResource("test1");
+
+            var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+            def.AddResourceConnection("test1", ["read", "write"]);
+            await def.SaveChanged();
+            var version = def.CommittedVersion;
+
+            using var client = CreateAuthenticatedClient();
+
+            var dto = new UpsertAccessListResourceConnectionDto(Actions: ["read", "write"]);
+            var response = await client.PutAsJsonAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/{def.Identifier}/resource-connections/test1", dto);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var body = await response.Content.ReadFromJsonAsync<AccessListResourceConnectionDto>();
+            Assert.NotNull(body);
+
+            body.ResourceIdentifier.Should().Be("test1");
+            body.Actions.Should().BeEquivalentTo(["read", "write"]);
+
+            response.Headers.ETag.Should().NotBeNull();
+            response.Content.Headers.LastModified.Should().NotBeNull();
+
+            var updated = await Repository.LoadAccessList(ORG_NR, def.Identifier);
+            Assert.NotNull(updated);
+            updated.TryGetResourceConnections("test1", out var conn).Should().BeTrue();
+            conn!.Actions.Should().BeEquivalentTo(["read", "write"]);
+            updated.CommittedVersion.Should().Be(version);
+        }
+
+        public class ETagHeaders(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+            : EtagHeadersTests(dbFixture, webApplicationFixture)
+        {
+               protected override async Task<AccessListInfo> Setup()
+            {
+                await AddResource("test1");
+
+                var aggregate = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+                aggregate.AddResourceConnection("test1", ["read"]);
+                await aggregate.SaveChanged();
+
+                return aggregate.AsAccessListInfo();
+            }
+
+            protected override HttpRequestMessage CreateRequest(AccessListInfo info)
+            {
+                var dto = new UpsertAccessListResourceConnectionDto(Actions: ["write"]);
+                return new(HttpMethod.Put, $"/resourceregistry/api/v1/access-lists/{info.ResourceOwner}/{info.Identifier}/resource-connections/test1")
+                {
+                    Content = JsonContent.Create(dto)
+                };
+            }
+
+            protected override async Task ValidateResponse(HttpResponseMessage response, AccessListInfo info)
+            {
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+                var content = await response.Content.ReadFromJsonAsync<AccessListResourceConnectionDto>();
+                Assert.NotNull(content);
+
+                content.ResourceIdentifier.Should().Be("test1");
+                content.Actions.Should().BeEquivalentTo(["write"]);
+            }
+        }
+    }
+    #endregion
+
+    #region DeleteAccessListResourceConnection
+    public class DeleteAccessListResourceConnection(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+        : AccessListControllerTests(dbFixture, webApplicationFixture)
+    {
+        [Fact]
+        public async Task Returns_NotFound_ForMissingAccessList()
+        {
+            using var client = CreateAuthenticatedClient();
+
+            var response = await client.DeleteAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/resource-connections/test1");
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Returns_NoContent_ForMissingConnection()
+        {
+            var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+
+            using var client = CreateAuthenticatedClient();
+
+            var response = await client.DeleteAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/{def.Identifier}/resource-connections/test1");
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+
+        [Fact]
+        public async Task Deletes_Existing_Connection()
+        {
+            await AddResource("test1");
+
+            var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+            def.AddResourceConnection("test1", ["read", "write"]);
+            await def.SaveChanged();
+
+            using var client = CreateAuthenticatedClient();
+
+            var response = await client.DeleteAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/{def.Identifier}/resource-connections/test1");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var data = await response.Content.ReadFromJsonAsync<AccessListResourceConnectionDto>();
+            Assert.NotNull(data);
+            data.ResourceIdentifier.Should().Be("test1");
+            data.Actions.Should().BeEquivalentTo(["read", "write"]);
+
+            var aggregate = await Repository.LoadAccessList(ORG_NR, def.Identifier);
+            Assert.NotNull(aggregate);
+            aggregate.TryGetResourceConnections("test1", out _).Should().BeFalse();
+        }
+
+        public class ETagHeaders(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+            : EtagHeadersTests(dbFixture, webApplicationFixture)
+        {
+            protected override async Task<AccessListInfo> Setup()
+            {
+                await AddResource("test1");
+
+                var aggregate = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+                aggregate.AddResourceConnection("test1", ["read", "write"]);
+                await aggregate.SaveChanged();
+
+                return aggregate.AsAccessListInfo();
+            }
+
+            protected override HttpRequestMessage CreateRequest(AccessListInfo info)
+                => new(HttpMethod.Delete, $"/resourceregistry/api/v1/access-lists/{info.ResourceOwner}/{info.Identifier}/resource-connections/test1");
+
+            protected override async Task ValidateResponse(HttpResponseMessage response, AccessListInfo info)
+            {
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+                var data = await response.Content.ReadFromJsonAsync<AccessListResourceConnectionDto>();
+                Assert.NotNull(data);
+                data.ResourceIdentifier.Should().Be("test1");
+                data.Actions.Should().BeEquivalentTo(["read", "write"]);
+
+                var aggregate = await Repository.LoadAccessList(info.Id);
+                Assert.NotNull(aggregate);
+                aggregate.TryGetResourceConnections("test1", out _).Should().BeFalse();
+            }
+        }
+    }
+    #endregion
+
     #region Authorization
     public class Authorization(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
         : AccessListControllerTests(dbFixture, webApplicationFixture)
@@ -849,6 +1278,19 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
             Assert.NotNull(latest);
             latest.Version.Should().Be(info.Version);
         }
+    }
+    #endregion
+
+    #region Utils
+    private async Task AddResource(string name)
+    {
+        await using var resourceCmd = DataSource.CreateCommand(/*strpsql*/"INSERT INTO resourceregistry.resources (identifier, created, serviceresourcejson) VALUES (@name, NOW(), @json);");
+        var nameParam = resourceCmd.Parameters.Add("name", NpgsqlTypes.NpgsqlDbType.Text);
+        var jsonParam = resourceCmd.Parameters.Add("json", NpgsqlTypes.NpgsqlDbType.Jsonb);
+        jsonParam.Value = "{}";
+
+        nameParam.Value = name;
+        await resourceCmd.ExecuteNonQueryAsync();
     }
     #endregion
 }

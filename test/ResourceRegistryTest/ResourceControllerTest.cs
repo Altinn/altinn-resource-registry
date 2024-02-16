@@ -15,6 +15,9 @@ using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
 using Xunit;
 using Microsoft.Extensions.DependencyInjection;
+using Altinn.ResourceRegistry.Models;
+using System.Net.Http.Json;
+using System.Linq;
 
 namespace Altinn.ResourceRegistry.Tests
 {
@@ -1251,7 +1254,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
-
+            List<AttributeMatchV2>? subjectResources = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
@@ -1264,7 +1267,6 @@ namespace Altinn.ResourceRegistry.Tests
             List<string> subjects = new List<string>();
             subjects.Add("urn:altinn:rolecode:utinn");
 
-
             string requestUri = "resourceregistry/api/v1/resource/findforsubjects/";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
@@ -1276,8 +1278,11 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
-
+            List<SubjectResources>? subjectResources = await response.Content.ReadFromJsonAsync<List<SubjectResources>>();
+           
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(subjectResources);
+            Assert.NotNull(subjectResources.FirstOrDefault(r => r.Subject.Urn.Contains("utinn")));
         }
 
     }

@@ -1,4 +1,4 @@
-using Altinn.ResourceRegistry.Persistence.Configuration;
+﻿using Altinn.ResourceRegistry.Persistence.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Testcontainers.PostgreSql;
@@ -78,7 +78,7 @@ public class DbFixture
                     IsAutoCreateDatabase = false,
                     Environment = "integrationtest",
                     Tokens = [
-                    KeyValuePair.Create("YUNIQL-USER", connectionStringBuilder.Username),
+                        KeyValuePair.Create("YUNIQL-USER", connectionStringBuilder.Username),
                     ],
                 };
 

@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.SqlTypes;
 using System.Resources;
 using System.Text.Json;
+using System.Threading;
 using System.Xml.Linq;
 using Altinn.Platform.Storage.Interface.Models;
 using Altinn.ResourceRegistry.Core;
@@ -306,6 +307,45 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         }
 
         return subjectResources;
+    }
+
+    /// <inheritdoc/>
+    public async Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken = default)
+    {
+        string deleteResourcesSQL = /*strpsql*/@"DELETE from resourceregistry.resourcesubjects WHERE resource_urn = ANY(:resources)";
+        string insertResourceSubjectsSQL = /*strpsql*/@"INSERT INTO resourceregistry.resourcesubjects(resource_type, resource_value, resource_urn, subject_type, subject_value, subject_urn, resource_owner) VALUES(@resourcetype, @resourcevalue, @resourceurn, @subjecttype, @subjectvalue, @subjecturn, @owner)";
+
+        List<string> resourcesToDelete = new List<string>();
+        resourcesToDelete.Add(resourceSubjects.Resource.Urn);
+
+        await using NpgsqlConnection conn = await _conn.OpenConnectionAsync(cancellationToken);
+        await using NpgsqlTransaction tx = await conn.BeginTransactionAsync(IsolationLevel.RepeatableRead, cancellationToken);
+        await using NpgsqlCommand pgcom = _conn.CreateCommand(deleteResourcesSQL);
+        pgcom.Parameters.AddWithValue("resources", resourcesToDelete.ToArray());
+        await pgcom.ExecuteNonQueryAsync();
+        
+        await using var resourceCmd = _conn.CreateCommand(insertResourceSubjectsSQL);
+        NpgsqlParameter resourcetypeParam = resourceCmd.Parameters.Add("resourcetype", NpgsqlTypes.NpgsqlDbType.Text);
+        NpgsqlParameter resourcevalueParam = resourceCmd.Parameters.Add("resourcevalue", NpgsqlTypes.NpgsqlDbType.Text);
+        NpgsqlParameter resourceurnParam = resourceCmd.Parameters.Add("resourceurn", NpgsqlTypes.NpgsqlDbType.Text);
+        NpgsqlParameter subjecttypeParam = resourceCmd.Parameters.AddWithValue("subjecttype", NpgsqlTypes.NpgsqlDbType.Text);
+        NpgsqlParameter subjectvalueParam = resourceCmd.Parameters.AddWithValue("subjectvalue", NpgsqlTypes.NpgsqlDbType.Text);
+        NpgsqlParameter subjecturnParam = resourceCmd.Parameters.AddWithValue("subjecturn", NpgsqlTypes.NpgsqlDbType.Text);
+        NpgsqlParameter ownerParam = resourceCmd.Parameters.AddWithValue("owner", NpgsqlTypes.NpgsqlDbType.Text);
+
+        foreach (AttributeMatchV2 subjectAttribute in resourceSubjects.Subjects)
+        {
+            resourcetypeParam.SetValue(resourceSubjects.Resource.Type);
+            resourcevalueParam.SetValue(resourceSubjects.Resource.Value);
+            resourceurnParam.SetValue(resourceSubjects.Resource.Urn);
+            subjecttypeParam.SetValue(subjectAttribute.Type);
+            subjectvalueParam.SetValue(subjectAttribute.Value);
+            subjecturnParam.SetValue(subjectAttribute.Urn);
+            ownerParam.SetValue(resourceSubjects.ResourceOwner);
+            await resourceCmd.ExecuteNonQueryAsync();
+        }
+
+        tx.Commit();
     }
 
     private static async ValueTask<ServiceResource> GetServiceResource(NpgsqlDataReader reader)

@@ -47,7 +47,9 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     [Fact]
     public async Task GetResourceForSubjects()
     {
-        await AddSubjectResource("urn:altinn:resource:skd_mva", "urn:altinn:rolecode:utinn", "skd");
+        ResourceSubjects resourceSubjects = CreateResourceSubjects("urn:altinn:resource:skd_mva", new List<string>{ "urn:altinn:rolecode:utinn"}, "skd");
+
+        await Repository.SetResourceSubjects(resourceSubjects);
         using var client = CreateAuthenticatedClient();
 
         List<string> subjects = new List<string>();
@@ -72,25 +74,26 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     }
 
     #region Utils
-    private async Task AddSubjectResource(string resourceurn, string subjecturn, string owner)
+    private ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)
     {
-        try
+        ResourceSubjects resourceSubjects = new ResourceSubjects()
         {
-            await using var resourceCmd = DataSource.CreateCommand(/*strpsql*/$"INSERT INTO resourceregistry.resourcesubjects (resource_type, resource_value, resource_urn, subject_type, subject_value, subject_urn, resource_owner) VALUES (@resourcetype,@resourcevalue, @resourceurn, @subjecttype, @subjectvalue, @subjecturn, @owner);");
-            resourceCmd.Parameters.AddWithValue("resourcetype", NpgsqlTypes.NpgsqlDbType.Text, resourceurn.Substring(0, resourceurn.LastIndexOf(":")));
-            resourceCmd.Parameters.AddWithValue("resourcevalue", NpgsqlTypes.NpgsqlDbType.Text, resourceurn.Substring(resourceurn.LastIndexOf(":") + 1));
-            resourceCmd.Parameters.AddWithValue("resourceurn", NpgsqlTypes.NpgsqlDbType.Text, resourceurn);
-            resourceCmd.Parameters.AddWithValue("subjecttype", NpgsqlTypes.NpgsqlDbType.Text, subjecturn.Substring(0, subjecturn.LastIndexOf(":")));
-            resourceCmd.Parameters.AddWithValue("subjectvalue", NpgsqlTypes.NpgsqlDbType.Text, subjecturn.Substring(subjecturn.LastIndexOf(":") + 1));
-            resourceCmd.Parameters.AddWithValue("subjecturn", NpgsqlTypes.NpgsqlDbType.Text, subjecturn);
-            resourceCmd.Parameters.AddWithValue("owner", NpgsqlTypes.NpgsqlDbType.Text, owner);
+            Resource = new AttributeMatchV2()
+            {
+                Type = resourceurn.Substring(0, resourceurn.LastIndexOf(":")),
+                Value = resourceurn.Substring(resourceurn.LastIndexOf(":") + 1),
+                Urn = resourceurn
+            },
+            ResourceOwner = "owner",
+        };
 
-            await resourceCmd.ExecuteNonQueryAsync();
-        }
-        catch (Exception ex)
+        resourceSubjects.Subjects = new List<AttributeMatchV2>();
+        foreach(string subjecturn in subjecturns)
         {
-            Console.WriteLine(ex.ToString());   
+            resourceSubjects.Subjects.Add(new AttributeMatchV2 { Type = subjecturn.Substring(0, subjecturn.LastIndexOf(":")), Value = subjecturn.Substring(subjecturn.LastIndexOf(":") + 1), Urn = subjecturn });
         }
+
+        return resourceSubjects;
     }
     #endregion
 }

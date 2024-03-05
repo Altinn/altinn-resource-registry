@@ -14,5 +14,10 @@
         /// A list of all subjectattribute for that resource 
         /// </summary>
         public List<AttributeMatchV2> Subjects { get; set; }   
+
+        /// <summary>
+        /// The resource owner
+        /// </summary>
+        public string ResourceOwner { get; set; }   
     }
 }

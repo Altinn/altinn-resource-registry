@@ -123,5 +123,9 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return subjectResources;
         }
 
+        public Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

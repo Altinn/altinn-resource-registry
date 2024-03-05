@@ -44,16 +44,21 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         return client;
     }
 
+    /// <summary>
+    /// Scenario: Two different resources is registrated on two different roles.
+    /// </summary>
+    /// <returns></returns>
     [Fact]
     public async Task GetResourceForSubjects()
     {
-        ResourceSubjects resourceSubjects = CreateResourceSubjects("urn:altinn:resource:skd_mva", new List<string>{ "urn:altinn:rolecode:utinn"}, "skd");
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_mva", new List<string> { "urn:altinn:rolecode:utinn" }, "skd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_flyttemelding", new List<string> { "urn:altinn:rolecode:utinn", "urn:altinn:rolecode:dagl" }, "skd"));
 
-        await Repository.SetResourceSubjects(resourceSubjects);
         using var client = CreateAuthenticatedClient();
 
         List<string> subjects = new List<string>();
         subjects.Add("urn:altinn:rolecode:utinn");
+        subjects.Add("urn:altinn:rolecode:dagl");
 
         string requestUri = "resourceregistry/api/v1/resource/findforsubjects/";
 
@@ -70,8 +75,44 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectResources);
+        Assert.Equal(2, subjectResources.Count);
+        Assert.Equal(2, subjectResources[0].Resources.Count);
+        Assert.Single(subjectResources[1].Resources);
         Assert.NotNull(subjectResources.FirstOrDefault(r => r.Subject.Urn.Contains("utinn")));
     }
+
+    /// <summary>
+    /// Scenario: Two different resources is registrated on two different roles.
+    /// </summary>
+    /// <returns></returns>
+    [Fact]
+    public async Task GetSubjectsForPolicy()
+    {
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_mva", new List<string> { "urn:altinn:rolecode:utinn" }, "skd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_flyttemelding", new List<string> { "urn:altinn:rolecode:utinn", "urn:altinn:rolecode:dagl" }, "skd"));
+
+        using var client = CreateAuthenticatedClient();
+
+        List<string> subjects = new List<string>();
+        subjects.Add("urn:altinn:rolecode:utinn");
+        subjects.Add("urn:altinn:rolecode:dagl");
+
+        string requestUri = "resourceregistry/api/v1/resource/skd_mva/policy/subjects";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Add("Accept", "application/json");
+        httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(subjectMatch);
+    }
+
 
     #region Utils
     private ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)

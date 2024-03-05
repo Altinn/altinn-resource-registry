@@ -328,10 +328,10 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         NpgsqlParameter resourcetypeParam = resourceCmd.Parameters.Add("resourcetype", NpgsqlTypes.NpgsqlDbType.Text);
         NpgsqlParameter resourcevalueParam = resourceCmd.Parameters.Add("resourcevalue", NpgsqlTypes.NpgsqlDbType.Text);
         NpgsqlParameter resourceurnParam = resourceCmd.Parameters.Add("resourceurn", NpgsqlTypes.NpgsqlDbType.Text);
-        NpgsqlParameter subjecttypeParam = resourceCmd.Parameters.AddWithValue("subjecttype", NpgsqlTypes.NpgsqlDbType.Text);
-        NpgsqlParameter subjectvalueParam = resourceCmd.Parameters.AddWithValue("subjectvalue", NpgsqlTypes.NpgsqlDbType.Text);
-        NpgsqlParameter subjecturnParam = resourceCmd.Parameters.AddWithValue("subjecturn", NpgsqlTypes.NpgsqlDbType.Text);
-        NpgsqlParameter ownerParam = resourceCmd.Parameters.AddWithValue("owner", NpgsqlTypes.NpgsqlDbType.Text);
+        NpgsqlParameter subjecttypeParam = resourceCmd.Parameters.Add("subjecttype", NpgsqlTypes.NpgsqlDbType.Text);
+        NpgsqlParameter subjectvalueParam = resourceCmd.Parameters.Add("subjectvalue", NpgsqlTypes.NpgsqlDbType.Text);
+        NpgsqlParameter subjecturnParam = resourceCmd.Parameters.Add("subjecturn", NpgsqlTypes.NpgsqlDbType.Text);
+        NpgsqlParameter ownerParam = resourceCmd.Parameters.Add("owner", NpgsqlTypes.NpgsqlDbType.Text);
 
         foreach (AttributeMatchV2 subjectAttribute in resourceSubjects.Subjects)
         {

@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -93,10 +94,6 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         using var client = CreateAuthenticatedClient();
 
-        List<string> subjects = new List<string>();
-        subjects.Add("urn:altinn:rolecode:utinn");
-        subjects.Add("urn:altinn:rolecode:dagl");
-
         string requestUri = "resourceregistry/api/v1/resource/skd_mva/policy/subjects";
 
         HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
@@ -110,6 +107,59 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(subjectMatch);
+    }
+
+    [Fact]
+    public async Task SetResourcePolicy_OK()
+    {
+        ServiceResource resource = new ServiceResource()
+        {
+            Identifier = "altinn_access_management",
+            HasCompetentAuthority = new CompetentAuthority()
+            {
+                Organization = "974761076",
+                Orgcode = "skd"
+            }
+        };
+        await Repository.CreateResource(resource);
+
+        using var client = CreateClient();
+        string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+    
+        string fileName = $"{resource.Identifier}.xml";
+        string filePath = $"Data/ResourcePolicies/{fileName}";
+
+        Uri requestUri = new Uri($"resourceregistry/api/v1/Resource/{resource.Identifier}/policy", UriKind.Relative);
+
+        ByteArrayContent fileContent = new ByteArrayContent(File.ReadAllBytes(filePath));
+        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("text/xml");
+
+        MultipartFormDataContent content = new();
+        content.Add(fileContent, "policyFile", fileName);
+
+        HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Post, RequestUri = requestUri, Content = content };
+        httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        requestUri = new Uri("resourceregistry/api/v1/resource/altinn_access_management/policy/subjects", UriKind.Relative);
+
+        httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Add("Accept", "application/json");
+        httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+        HttpResponseMessage response2 = await client.SendAsync(httpRequestMessage);
+        List<AttributeMatchV2>? subjectMatch = await response2.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
+
+        Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
         Assert.NotNull(subjectMatch);
     }
 

@@ -125,6 +125,16 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc/>
+        public async Task ReloadSubjectResourcesFromPolicy(ServiceResource serviceResource, CancellationToken cancellationToken = default)
+        {
+            Stream policyContent = await _policyRepository.GetPolicyAsync(serviceResource.Identifier, cancellationToken);
+            XacmlPolicy policy = PolicyHelper.ParsePolicy(policyContent);
+            IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
+            ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
+            await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects);
+        }
+
+        /// <inheritdoc/>
         public async Task<Stream> GetPolicy(string resourceId, CancellationToken cancellationToken = default)
         {
               return await _policyRepository.GetPolicyAsync(resourceId, cancellationToken);

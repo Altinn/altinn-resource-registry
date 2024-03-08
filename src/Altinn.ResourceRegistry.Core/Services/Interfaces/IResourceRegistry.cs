@@ -104,5 +104,14 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Based on a serviuce resouce the resource subjects will be reloaded on to database. 
+        /// Created to support migrated apps and resource that was migrated before ResourceSubjecst whent in to production
+        /// </summary>
+        /// <param name="serviceResource">The service resource</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns></returns>
+        Task ReloadSubjectResourcesFromPolicy(ServiceResource serviceResource, CancellationToken cancellationToken = default);
     }
 }

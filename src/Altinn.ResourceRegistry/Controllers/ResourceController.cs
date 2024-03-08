@@ -251,13 +251,20 @@ namespace Altinn.ResourceRegistry.Controllers
         /// Returns the XACML policy for a resource in resource registry.
         /// </summary>
         /// <param name="id">Resource Id</param>
+        /// <param name="reloadFromXacml">Defines if subjects should be reloaded from Xacml</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         [HttpGet("{id}/policy/subjects")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<ActionResult<List<AttributeMatchV2>>> FindSubjectsInPolicy(string id, CancellationToken cancellationToken)
+        public async Task<ActionResult<List<AttributeMatchV2>>> FindSubjectsInPolicy(string id, bool? reloadFromXacml = null, CancellationToken cancellationToken = default)
         {
+            if (reloadFromXacml.HasValue && reloadFromXacml.Value)
+            {
+               ServiceResource serviceResource = await _resourceRegistry.GetResource(id, cancellationToken);
+               await _resourceRegistry.ReloadSubjectResourcesFromPolicy(serviceResource, cancellationToken);
+            }
+
             List<string> resources = new List<string>();
             resources.Add(AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute + ":" + id);
 

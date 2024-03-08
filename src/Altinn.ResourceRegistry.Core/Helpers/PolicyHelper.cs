@@ -88,6 +88,23 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         }
 
         /// <summary>
+        /// Takes the file IO stream and parses the policy file to a XacmlPolicy <see cref="XacmlPolicy"/>
+        /// </summary>
+        /// <param name="stream">The file IO stream</param>
+        /// <returns>XacmlPolicy</returns>
+        public static XacmlPolicy ParsePolicy(Stream stream)
+        {
+            stream.Position = 0;
+            XacmlPolicy policy;
+            using (XmlReader reader = XmlReader.Create(stream))
+            {
+                policy = XacmlParser.ParseXacmlPolicy(reader);
+            }
+
+            return policy;
+        }
+
+        /// <summary>
         /// Gets the authentication level requirement from the obligation expression of the XacmlPolicy if specified 
         /// </summary>
         /// <param name="policy">The policy</param>

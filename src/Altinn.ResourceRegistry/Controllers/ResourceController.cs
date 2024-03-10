@@ -261,8 +261,18 @@ namespace Altinn.ResourceRegistry.Controllers
         {
             if (reloadFromXacml.HasValue && reloadFromXacml.Value)
             {
-               ServiceResource serviceResource = await _resourceRegistry.GetResource(id, cancellationToken);
-               await _resourceRegistry.ReloadSubjectResourcesFromPolicy(serviceResource, cancellationToken);
+                ServiceResource serviceResource = await _resourceRegistry.GetResource(id, cancellationToken);
+                if (serviceResource == null)
+                {
+                    await _resourceRegistry.ReloadSubjectResourcesFromPolicy(serviceResource, cancellationToken);
+                }
+                else if (id.StartsWith("app_") && id.Split("_").Length == 3)
+                {
+                    // Scenario for app not loaded in to resource registry. Need to match pattern app_{org}_{app}
+                    string org = id.Split("_")[1];
+                    string app = id.Split("_")[2];
+                    await _resourceRegistry.ReloadSubjectResourcesFromAppPolicy(org, app, cancellationToken);
+                }
             }
 
             List<string> resources = new List<string>();

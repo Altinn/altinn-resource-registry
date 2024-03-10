@@ -17,6 +17,15 @@ namespace Altinn.ResourceRegistry.Core
         Task<Stream> GetPolicyAsync(string resourceId, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Gets file stream for the App policy file from blob storage
+        /// </summary>
+        /// <param name="org">The org</param>
+        /// <param name="app">the app</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns></returns>
+        Task<Stream> GetAppPolicyAsync(string org, string app, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets file stream for the specified version of a policy file from blob storage, if it exists at the specified path.
         /// </summary>
         /// <param name="resourceId">The resource id</param>

@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Extensions;
+using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Persistence.Configuration;
 using Azure;
 using Azure.Storage;
@@ -44,6 +45,15 @@ internal class PolicyRepository : IPolicyRepository
     public async Task<Stream> GetPolicyAsync(string resourceId, CancellationToken cancellationToken = default)
     {
         string filePath = $"{resourceId.AsFilePath()}/resourcepolicy.xml";
+        BlobClient blobClient = CreateBlobClient(filePath);
+
+        return await GetBlobStreamInternal(blobClient, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task<Stream> GetAppPolicyAsync(string org, string app, CancellationToken cancellationToken = default)
+    {
+        string filePath = PolicyHelper.GetAltinnAppsPolicyPath(org, app);
         BlobClient blobClient = CreateBlobClient(filePath);
 
         return await GetBlobStreamInternal(blobClient, cancellationToken);

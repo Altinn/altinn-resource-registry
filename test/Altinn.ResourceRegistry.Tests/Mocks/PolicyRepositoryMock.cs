@@ -72,5 +72,9 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourcePolicies");
         }
 
+        public Task<Stream> GetAppPolicyAsync(string org, string app, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

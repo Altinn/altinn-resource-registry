@@ -4,6 +4,7 @@ using Altinn.Authorization.ABAC.Constants;
 using Altinn.Authorization.ABAC.Utils;
 using Altinn.Authorization.ABAC.Xacml;
 using Altinn.ResourceRegistry.Core.Constants;
+using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
 using Nerdbank.Streams;
 using static Altinn.ResourceRegistry.Core.Constants.AltinnXacmlConstants;
@@ -125,6 +126,27 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Builds the policy path based on org and app names
+        /// </summary>
+        /// <param name="org">The organization name/identifier</param>
+        /// <param name="app">The altinn app name</param>
+        /// <returns></returns>
+        public static string GetAltinnAppsPolicyPath(string org, string app)
+        {
+            if (string.IsNullOrWhiteSpace(org))
+            {
+                throw new ArgumentException("Org was not defined");
+            }
+
+            if (string.IsNullOrWhiteSpace(app))
+            {
+                throw new ArgumentException("App was not defined");
+            }
+
+            return $"{org.AsFileName()}/{app.AsFileName()}/policy.xml";
         }
 
         private static AttributeMatch GetActionValueFromRule(XacmlRule rule)

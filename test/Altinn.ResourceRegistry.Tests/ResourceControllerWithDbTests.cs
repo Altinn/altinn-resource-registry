@@ -163,6 +163,31 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.NotNull(subjectMatch);
     }
 
+    /// <summary>
+    /// Scenario: Reload subject resources for rrh
+    /// </summary>
+    /// <returns></returns>
+    [Fact]
+    public async Task GetSubjectsForPolicyWithReload()
+    {
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v1/resource/app_brg_rrh-innrapportering/policy/subjects?reloadFromXacml=true";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Add("Accept", "application/json");
+        httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(subjectMatch);
+        Assert.Equal(12, subjectMatch.Count);
+    }
 
     #region Utils
     private ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)

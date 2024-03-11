@@ -22,6 +22,7 @@ internal class PolicyRepository : IPolicyRepository
 {
     private readonly ILogger<PolicyRepository> _logger;
     private readonly AzureStorageConfiguration _storageConfig;
+    private readonly BlobContainerClient _metadataContainerClient;
     private readonly BlobContainerClient _resourceRegisterContainerClient;
 
     /// <summary>
@@ -39,6 +40,10 @@ internal class PolicyRepository : IPolicyRepository
         StorageSharedKeyCredential resourceRegisterCredentials = new StorageSharedKeyCredential(_storageConfig.ResourceRegistryAccountName, _storageConfig.ResourceRegistryAccountKey);
         BlobServiceClient resourceRegisterServiceClient = new BlobServiceClient(new Uri(_storageConfig.ResourceRegistryBlobEndpoint), resourceRegisterCredentials);
         _resourceRegisterContainerClient = resourceRegisterServiceClient.GetBlobContainerClient(_storageConfig.ResourceRegistryContainer);
+
+        StorageSharedKeyCredential metadataCredentials = new StorageSharedKeyCredential(_storageConfig.MetadataAccountName, _storageConfig.MetadataAccountKey);
+        BlobServiceClient metadataServiceClient = new BlobServiceClient(new Uri(_storageConfig.MetadataBlobEndpoint), metadataCredentials);
+        _metadataContainerClient = metadataServiceClient.GetBlobContainerClient(_storageConfig.MetadataContainer);
     }
 
     /// <inheritdoc/>
@@ -54,7 +59,7 @@ internal class PolicyRepository : IPolicyRepository
     public async Task<Stream> GetAppPolicyAsync(string org, string app, CancellationToken cancellationToken = default)
     {
         string filePath = PolicyHelper.GetAltinnAppsPolicyPath(org, app);
-        BlobClient blobClient = CreateBlobClient(filePath);
+        BlobClient blobClient = CreateAppPolicyBlobClient(filePath);
 
         return await GetBlobStreamInternal(blobClient, cancellationToken);
     }
@@ -173,6 +178,11 @@ internal class PolicyRepository : IPolicyRepository
     }
 
     private BlobClient CreateBlobClient(string blobName)
+    {
+        return _resourceRegisterContainerClient.GetBlobClient(blobName);
+    }
+
+    private BlobClient CreateAppPolicyBlobClient(string blobName)
     {
         return _resourceRegisterContainerClient.GetBlobClient(blobName);
     }

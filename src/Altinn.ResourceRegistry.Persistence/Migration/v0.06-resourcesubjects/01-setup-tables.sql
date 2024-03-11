@@ -19,8 +19,7 @@ CREATE TABLE IF NOT EXISTS resourceregistry.resourcesubjects(
 )
 TABLESPACE pg_default;
 
+CREATE INDEX IF NOT EXISTS ix_resourceregistry_resourcesubjects_resourceurn ON resourceregistry.resourcesubjects(resource_urn) TABLESPACE pg_default;
 
-CREATE INDEX IF NOT EXISTS ix_resourceregistry.resourcesubjects_resourceurn ON resourceregistry.resourcesubjects(resource_urn) TABLESPACE pg_default;
-
-CREATE INDEX IF NOT EXISTS ix_resourceregistry.resourcesubjects_subjecturn ON resourceregistry.resourcesubjects(subject_urn) TABLESPACE pg_default;
+CREATE INDEX IF NOT EXISTS ix_resourceregistry_resourcesubjects_subjecturn ON resourceregistry.resourcesubjects(subject_urn) TABLESPACE pg_default;
 

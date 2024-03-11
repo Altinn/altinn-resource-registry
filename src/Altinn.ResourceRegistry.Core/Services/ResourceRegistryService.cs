@@ -127,7 +127,19 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task ReloadSubjectResourcesFromPolicy(ServiceResource serviceResource, CancellationToken cancellationToken = default)
         {
-            Stream policyContent = await _policyRepository.GetPolicyAsync(serviceResource.Identifier, cancellationToken);
+            Stream policyContent = null;
+            if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX) && serviceResource.Identifier.Split("_").Length == 3)
+            {
+                // Scenario for app imported in to resource registry
+                string org = serviceResource.Identifier.Split("_")[1];
+                string app = serviceResource.Identifier.Split("_")[2];
+                policyContent = await _policyRepository.GetAppPolicyAsync(org, app, cancellationToken);
+            }
+            else
+            {
+                policyContent = await _policyRepository.GetPolicyAsync(serviceResource.Identifier, cancellationToken);
+            }
+
             XacmlPolicy policy = PolicyHelper.ParsePolicy(policyContent);
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
@@ -140,7 +152,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             Stream policyContent = await _policyRepository.GetAppPolicyAsync(org, app, cancellationToken);
             XacmlPolicy policy = PolicyHelper.ParsePolicy(policyContent);
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
-            ServiceResource virtualAppResource = new ServiceResource() { Identifier = $"app_{org}_{app}".ToLower() };
+            ServiceResource virtualAppResource = new ServiceResource() { Identifier = $"app_{org.ToLower()}_{app.ToLower()}".ToLower(), HasCompetentAuthority = new CompetentAuthority() { Orgcode = org.ToLower() } };
             ResourceSubjects resourceSubjects = GetResourceSubjects(virtualAppResource, subjectAttributes);
             await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects);
         }
@@ -367,10 +379,14 @@ namespace Altinn.ResourceRegistry.Core.Services
                     AttributeMatchV2 subjectMatch = new AttributeMatchV2()
                     {
                         Type = kvp.Key,
-                        Value = subjectAttributeValue,
-                        Urn = $"{kvp.Key}:{subjectAttributeValue}"
+                        Value = subjectAttributeValue.ToLower(),
+                        Urn = $"{kvp.Key}:{subjectAttributeValue.ToLower()}"
                     };
-                    resourceSubjects.Subjects.Add(subjectMatch);    
+
+                    if (!resourceSubjects.Subjects.Exists(r => r.Urn.Equals(subjectMatch.Urn)))
+                    {
+                        resourceSubjects.Subjects.Add(subjectMatch);
+                    }
                 }
             }
 

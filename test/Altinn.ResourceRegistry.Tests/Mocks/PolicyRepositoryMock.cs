@@ -28,6 +28,17 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return null;
         }
 
+        public async Task<Stream> GetAppPolicyAsync(string org, string app, CancellationToken cancellationToken = default)
+        {
+            string policyFile = Path.Combine(GetAppPolicyContainerPath(), org, app, "policy.xml");
+            if (File.Exists(policyFile))
+            {
+                return new FileStream(policyFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
+
+            return null;
+        }
+
         public Task<Stream> GetPolicyVersionAsync(string filepath, string version, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
@@ -72,9 +83,10 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourcePolicies");
         }
 
-        public Task<Stream> GetAppPolicyAsync(string org, string app, CancellationToken cancellationToken = default)
+        private static string GetAppPolicyContainerPath()
         {
-            throw new NotImplementedException();
+            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
+            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "AppPolicies");
         }
     }
 }

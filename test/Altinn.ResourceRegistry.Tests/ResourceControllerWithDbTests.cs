@@ -164,11 +164,11 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     }
 
     /// <summary>
-    /// Scenario: Reload subject resources for rrh
+    /// Scenario: Reload subject resources for rrh-innlevering. Expects 12 subjects
     /// </summary>
     /// <returns></returns>
     [Fact]
-    public async Task GetSubjectsForPolicyWithReload()
+    public async Task GetSubjectsForAppPolicyWithReload()
     {
         using var client = CreateAuthenticatedClient();
 
@@ -187,6 +187,44 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);
         Assert.Equal(12, subjectMatch.Count);
+    }
+
+
+    /// <summary>
+    /// Scenario: Reload subject resources for rrh-innlevering. Expects 12 subjects
+    /// </summary>
+    /// <returns></returns>
+    [Fact]
+    public async Task GetSubjectsForResourcePolicyWithReload()
+    {
+        ServiceResource resource = new ServiceResource()
+        {
+            Identifier = "altinn_access_management",
+            HasCompetentAuthority = new CompetentAuthority()
+            {
+                Organization = "974761076",
+                Orgcode = "digdir"
+            }
+        };
+
+        await Repository.CreateResource(resource);
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v1/resource/altinn_access_management/policy/subjects?reloadFromXacml=true";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Add("Accept", "application/json");
+        httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(subjectMatch);
+        Assert.Single(subjectMatch);
     }
 
     #region Utils

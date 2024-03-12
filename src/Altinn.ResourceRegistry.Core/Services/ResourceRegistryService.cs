@@ -120,7 +120,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             Response<BlobContentInfo> response = await _policyRepository.WritePolicyAsync(serviceResource.Identifier, policyContent.AsStream(), cancellationToken);
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
-            await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects);
+            await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects, cancellationToken);
             return response?.GetRawResponse()?.Status == (int)HttpStatusCode.Created;
         }
 
@@ -143,7 +143,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             XacmlPolicy policy = PolicyHelper.ParsePolicy(policyContent);
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
-            await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects);
+            await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects, cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -154,7 +154,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ServiceResource virtualAppResource = new ServiceResource() { Identifier = $"app_{org.ToLower()}_{app.ToLower()}".ToLower(), HasCompetentAuthority = new CompetentAuthority() { Orgcode = org.ToLower() } };
             ResourceSubjects resourceSubjects = GetResourceSubjects(virtualAppResource, subjectAttributes);
-            await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects);
+            await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects, cancellationToken);
         }
 
         /// <inheritdoc/>

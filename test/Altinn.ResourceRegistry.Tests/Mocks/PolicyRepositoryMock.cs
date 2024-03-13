@@ -17,23 +17,31 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public async Task<Stream> GetPolicyAsync(string resourceId, CancellationToken cancellationToken)
+        public async Task<Stream?> GetPolicyAsync(string resourceId, CancellationToken cancellationToken)
         {
-            resourceId = Path.Combine(GetPolicyContainerPath(), resourceId, "resourcepolicy.xml");
-            if (File.Exists(resourceId))
+            string? containerPath = GetPolicyContainerPath();
+            if (containerPath != null)
             {
-                return new FileStream(resourceId, FileMode.Open, FileAccess.Read, FileShare.Read); 
+                resourceId = Path.Combine(containerPath, resourceId, "resourcepolicy.xml");
+                if (File.Exists(resourceId))
+                {
+                    return new FileStream(resourceId, FileMode.Open, FileAccess.Read, FileShare.Read);
+                }
             }
 
             return null;
         }
 
-        public async Task<Stream> GetAppPolicyAsync(string org, string app, CancellationToken cancellationToken = default)
+        public async Task<Stream?> GetAppPolicyAsync(string org, string app, CancellationToken cancellationToken = default)
         {
-            string policyFile = Path.Combine(GetAppPolicyContainerPath(), org, app, "policy.xml");
-            if (File.Exists(policyFile))
+            string? containerPath = GetAppPolicyContainerPath();
+            if(containerPath != null)
             {
-                return new FileStream(policyFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+                string policyFile = Path.Combine(containerPath, org, app, "policy.xml");
+                if (File.Exists(policyFile))
+                {
+                   return new FileStream(policyFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+                }
             }
 
             return null;
@@ -77,16 +85,26 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        private static string GetPolicyContainerPath()
+        private static string? GetPolicyContainerPath()
         {
-            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourcePolicies");
+            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
+            if(unitTestFolder != null)
+            {
+                return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourcePolicies");
+            }
+
+            return null;
         }
 
-        private static string GetAppPolicyContainerPath()
+        private static string? GetAppPolicyContainerPath()
         {
-            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "AppPolicies");
+            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
+            if(unitTestFolder != null)
+            {
+                return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "AppPolicies");
+            }
+
+            return null;
         }
     }
 }

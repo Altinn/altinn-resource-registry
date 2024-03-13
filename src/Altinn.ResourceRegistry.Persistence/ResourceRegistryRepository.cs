@@ -1,19 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
+﻿using System.Data;
 using System.Data.SqlTypes;
-using System.Resources;
 using System.Text.Json;
-using System.Threading;
-using System.Xml.Linq;
-using Altinn.Platform.Storage.Interface.Models;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Models;
-using Altinn.ResourceRegistry.Persistence.CustomTypes;
 using Altinn.ResourceRegistry.Persistence.Extensions;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Npgsql.Internal.Postgres;
 using NpgsqlTypes;
 
 namespace Altinn.ResourceRegistry.Persistence;
@@ -222,7 +214,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         Dictionary<string, SubjectResources> allSubjectResources = new Dictionary<string, SubjectResources>();
 
-        while (await reader.ReadAsync())
+        while (await reader.ReadAsync(cancellationToken))
         {
             SubjectResources subjectResources = new SubjectResources();
             subjectResources.Resources = new List<AttributeMatchV2>();
@@ -239,15 +231,14 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             subjectResources.Subject.Value = reader.GetFieldValue<string>("subject_value");
             subjectResources.Subject.Urn = reader.GetFieldValue<string>("subject_urn");
 
-            if (allSubjectResources.ContainsKey(subjectResources.Subject.Urn))
+            if (allSubjectResources.TryGetValue(subjectResources.Subject.Urn, out SubjectResources? subjectResource))
             {
-                allSubjectResources[subjectResources.Subject.Urn].Resources.AddRange(subjectResources.Resources);
+                subjectResource.Resources.AddRange(subjectResources.Resources);
             }
             else
             {
                 allSubjectResources.Add(subjectResources.Subject.Urn, subjectResources);
             }
-
         }
 
         List<SubjectResources> subjectResourcesList = new List<SubjectResources>();
@@ -289,9 +280,9 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
             resourceSubjects.Subjects.Add(subjectAttributeMatch);
 
-            if (allResourceSubjects.ContainsKey(resourceSubjects.Resource.Urn))
+            if (allResourceSubjects.TryGetValue(resourceSubjects.Resource.Urn, out ResourceSubjects? resourceSubjectsExt))
             {
-                allResourceSubjects[resourceSubjects.Resource.Urn].Subjects.AddRange(resourceSubjects.Subjects);
+                resourceSubjectsExt.Subjects.AddRange(resourceSubjects.Subjects);
             }
             else 
             {
@@ -322,7 +313,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         await using NpgsqlTransaction tx = await conn.BeginTransactionAsync(IsolationLevel.RepeatableRead, cancellationToken);
         await using NpgsqlCommand pgcom = _conn.CreateCommand(deleteResourcesSQL);
         pgcom.Parameters.AddWithValue("resources", resourcesToDelete.ToArray());
-        await pgcom.ExecuteNonQueryAsync();
+        await pgcom.ExecuteNonQueryAsync(cancellationToken);
         
         await using var resourceCmd = _conn.CreateCommand(insertResourceSubjectsSQL);
         NpgsqlParameter resourcetypeParam = resourceCmd.Parameters.Add("resourcetype", NpgsqlTypes.NpgsqlDbType.Text);
@@ -342,7 +333,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             subjectvalueParam.SetValue(subjectAttribute.Value);
             subjecturnParam.SetValue(subjectAttribute.Urn);
             ownerParam.SetValue(resourceSubjects.ResourceOwner);
-            await resourceCmd.ExecuteNonQueryAsync();
+            await resourceCmd.ExecuteNonQueryAsync(cancellationToken);
         }
 
         tx.Commit();
@@ -354,27 +345,5 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         return json.Deserialize<ServiceResource>(JsonSerializerOptions) ??
             throw new SqlNullValueException("Got null when trying to parse ServiceResource");
-    }
-
-    private AttributeTypeValue[] MapToAttributeType(List<SubjectAttribute> subjectAttributes)
-    {
-        AttributeTypeValue[] attributeTypeValues = new AttributeTypeValue[subjectAttributes.Count];
-        for (int i = 0; i < subjectAttributes.Count; i++)
-        {
-            attributeTypeValues[i] = new AttributeTypeValue() { Type = subjectAttributes[i].Type, Value = subjectAttributes[i].Value };
-        }
-
-        return attributeTypeValues;
-    }
-
-    private AttributeTypeValue[] MapToAttributeType(List<ResourceAttribute> resourceAttributes)
-    {
-        AttributeTypeValue[] attributeTypeValues = new AttributeTypeValue[resourceAttributes.Count];
-        for (int i = 0; i < resourceAttributes.Count; i++)
-        {
-            attributeTypeValues[i] = new AttributeTypeValue() { Type = resourceAttributes[i].Type, Value = resourceAttributes[i].Value };
-        }
-
-        return attributeTypeValues;
     }
 }

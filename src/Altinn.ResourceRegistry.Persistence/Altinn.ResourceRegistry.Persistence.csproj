@@ -44,4 +44,8 @@
     <InternalsVisibleTo Include="$(AssemblyName).Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CustomTypes\" />
+  </ItemGroup>
+
 </Project>

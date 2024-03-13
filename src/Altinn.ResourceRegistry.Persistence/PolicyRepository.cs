@@ -184,7 +184,7 @@ internal class PolicyRepository : IPolicyRepository
 
     private BlobClient CreateAppPolicyBlobClient(string blobName)
     {
-        return _resourceRegisterContainerClient.GetBlobClient(blobName);
+        return _metadataContainerClient.GetBlobClient(blobName);
     }
 
     private async Task<Stream> GetBlobStreamInternal(BlobClient blobClient, CancellationToken cancellationToken = default)

@@ -3,7 +3,6 @@ using Altinn.ResourceRegistry.Core.AccessLists;
 using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Persistence;
 using Altinn.ResourceRegistry.Persistence.Configuration;
-using Altinn.ResourceRegistry.Persistence.CustomTypes;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -97,7 +96,6 @@ public static class ResourceRegistryDependencyInjectionExtensions
             var builder = new NpgsqlDataSourceBuilder(connectionString);
             builder.UseLoggerFactory(sp.GetRequiredService<ILoggerFactory>());
             builder.MapEnum<ResourceType>("resourceregistry.resourcetype");
-            builder.MapComposite<AttributeTypeValue>("resourceregistry.attributetypevalue");
 
             return builder.BuildMultiHost();
         });

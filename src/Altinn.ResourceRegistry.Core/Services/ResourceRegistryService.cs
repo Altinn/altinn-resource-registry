@@ -356,7 +356,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             return await _repository.FindSubjectsForResources(resources, cancellationToken);
         }
 
-        private ResourceSubjects GetResourceSubjects(ServiceResource resource,  IDictionary<string, ICollection<string>> subjectAttributes )
+        private static ResourceSubjects GetResourceSubjects(ServiceResource resource,  IDictionary<string, ICollection<string>> subjectAttributes)
         {
             ResourceSubjects resourceSubjects = new ResourceSubjects();
             resourceSubjects.Resource = new AttributeMatchV2()
@@ -366,7 +366,7 @@ namespace Altinn.ResourceRegistry.Core.Services
                 Urn = $"{AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute}:{resource.Identifier}"
             };
 
-            if (resource?.HasCompetentAuthority?.Orgcode != null)
+            if (resource.HasCompetentAuthority?.Orgcode != null)
             {
                 resourceSubjects.ResourceOwner = resource.HasCompetentAuthority.Orgcode;
             }

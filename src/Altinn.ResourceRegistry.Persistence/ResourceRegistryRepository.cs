@@ -262,7 +262,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         Dictionary<string, ResourceSubjects> allResourceSubjects = new Dictionary<string, ResourceSubjects>();
 
-        while (await reader.ReadAsync())
+        while (await reader.ReadAsync(cancellationToken))
         {
             ResourceSubjects resourceSubjects = new ResourceSubjects();
             resourceSubjects.Subjects = new List<AttributeMatchV2>();

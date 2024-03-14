@@ -89,7 +89,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         }
 
 
-        private SubjectResources GetSubjectResource(string subjectUrn, List<string> resources)
+        private static SubjectResources GetSubjectResource(string subjectUrn, List<string> resources)
         {
             SubjectResources subjectResources = new SubjectResources();
             subjectResources.Subject = new AttributeMatchV2() { Urn = subjectUrn, Type = subjectUrn.Substring(0, subjectUrn.LastIndexOf(':')), Value = subjectUrn.Substring(subjectUrn.LastIndexOf(':')+1) };
@@ -106,7 +106,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return subjectResources;
         }
 
-        private ResourceSubjects GetResourceSubjects(string resourceUrn, List<string> subjects)
+        private static ResourceSubjects GetResourceSubjects(string resourceUrn, List<string> subjects)
         {
             ResourceSubjects subjectResources = new ResourceSubjects();
             subjectResources.Resource = new AttributeMatchV2() { Urn = resourceUrn, Type = resourceUrn.Substring(0, resourceUrn.LastIndexOf(':')), Value = resourceUrn.Substring(resourceUrn.LastIndexOf(':')+1) };

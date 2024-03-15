@@ -128,12 +128,17 @@ namespace Altinn.ResourceRegistry.Core.Services
         public async Task ReloadSubjectResourcesFromPolicy(ServiceResource serviceResource, CancellationToken cancellationToken = default)
         {
             Stream policyContent = null;
-            if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX) && serviceResource.Identifier.Split("_").Length == 3)
+            if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
             {
+                string[] idParts = serviceResource.Identifier.Split('_');
+
                 // Scenario for app imported in to resource registry
-                string org = serviceResource.Identifier.Split("_")[1];
-                string app = serviceResource.Identifier.Split("_")[2];
-                policyContent = await _policyRepository.GetAppPolicyAsync(org, app, cancellationToken);
+                if (idParts.Length == 3)
+                {
+                    string org = idParts[1];
+                    string app = idParts[2];
+                    policyContent = await _policyRepository.GetAppPolicyAsync(org, app, cancellationToken);
+                }
             }
             else
             {

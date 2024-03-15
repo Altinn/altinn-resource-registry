@@ -253,7 +253,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <param name="id">Resource Id</param>
         /// <param name="reloadFromXacml">Defines if subjects should be reloaded from Xacml</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns></returns>
+        /// <returns>Subjects in policy</returns>
         [HttpGet("{id}/policy/subjects")]
         [Produces("application/json")]
         [Consumes("application/json")]
@@ -266,12 +266,16 @@ namespace Altinn.ResourceRegistry.Controllers
                 {
                     await _resourceRegistry.ReloadSubjectResourcesFromPolicy(serviceResource, cancellationToken);
                 }
-                else if (id.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX) && id.Split("_").Length == 3)
+                else if (id.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
                 {
                     // Scenario for app not loaded in to resource registry. Need to match pattern app_{org}_{app}
-                    string org = id.Split("_")[1];
-                    string app = id.Split("_")[2];
-                    await _resourceRegistry.ReloadSubjectResourcesFromAppPolicy(org, app, cancellationToken);
+                    string[] idValues = id.Split('_');
+                    if (idValues.Length == 3)
+                    {
+                        string org = id.Split("_")[1];
+                        string app = id.Split("_")[2];
+                        await _resourceRegistry.ReloadSubjectResourcesFromAppPolicy(org, app, cancellationToken);
+                    }
                 }
             }
 
@@ -292,7 +296,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// </summary>
         /// <param name="subjects">List of subjects for resource information is needed</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns></returns>
+        /// <returns>Resources where subjects have rights</returns>
         [HttpPost("findforsubjects/")]
         [Produces("application/json")]
         [Consumes("application/json")]

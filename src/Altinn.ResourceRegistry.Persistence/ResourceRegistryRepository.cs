@@ -206,7 +206,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default)
     {
-        string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE subject_urn = ANY(:subjects)";
+        const string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE subject_urn = ANY(:subjects)";
 
         await using NpgsqlCommand pgcom = _conn.CreateCommand(findResourcesSQL);
         pgcom.Parameters.AddWithValue("subjects", subjects.ToArray());
@@ -254,7 +254,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default)
     {
-        string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE resource_urn = ANY(:resources)";
+        const string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE resource_urn = ANY(:resources)";
 
         await using NpgsqlCommand pgcom = _conn.CreateCommand(findResourcesSQL);
         pgcom.Parameters.AddWithValue("resources", resources.ToArray());
@@ -303,8 +303,10 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken = default)
     {
-        string deleteResourcesSQL = /*strpsql*/@"DELETE from resourceregistry.resourcesubjects WHERE resource_urn = ANY(:resources)";
-        string insertResourceSubjectsSQL = /*strpsql*/@"INSERT INTO resourceregistry.resourcesubjects(resource_type, resource_value, resource_urn, subject_type, subject_value, subject_urn, resource_owner) VALUES(@resourcetype, @resourcevalue, @resourceurn, @subjecttype, @subjectvalue, @subjecturn, @owner)";
+        const string deleteResourcesSQL = /*strpsql*/@"DELETE from resourceregistry.resourcesubjects WHERE resource_urn = ANY(:resources)";
+        const string insertResourceSubjectsSQL = /*strpsql*/@"INSERT INTO resourceregistry.resourcesubjects(
+                                                              resource_type, resource_value, resource_urn, subject_type, subject_value, subject_urn, resource_owner) 
+                                                              VALUES(@resourcetype, @resourcevalue, @resourceurn, @subjecttype, @subjectvalue, @subjecturn, @owner)";
 
         List<string> resourcesToDelete = new List<string>();
         resourcesToDelete.Add(resourceSubjects.Resource.Urn);
@@ -336,7 +338,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             await resourceCmd.ExecuteNonQueryAsync(cancellationToken);
         }
 
-        tx.Commit();
+        await tx.CommitAsync();
     }
 
     private static async ValueTask<ServiceResource> GetServiceResource(NpgsqlDataReader reader)

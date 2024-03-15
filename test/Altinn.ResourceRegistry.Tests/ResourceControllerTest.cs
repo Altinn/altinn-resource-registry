@@ -1242,8 +1242,6 @@ namespace Altinn.ResourceRegistry.Tests
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            List<ResourceAttribute> resourceAttributes = new List<ResourceAttribute>();
-
             string requestUri = "resourceregistry/api/v1/resource/skd_mva/policy/subjects";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)

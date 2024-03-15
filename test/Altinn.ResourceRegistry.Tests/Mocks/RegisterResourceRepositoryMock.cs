@@ -75,9 +75,9 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 
         public Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default)
         {
-           List<SubjectResources> resources = new List<SubjectResources>();
-          resources.Add(GetSubjectResource("urn:altinn:rolecode:utinn", new List<string>{ "urn:altinn:resource:skd_mva", "urn:altinn:resource:skd_ax" }));
-           return Task.FromResult(resources);
+            List<SubjectResources> resources = new List<SubjectResources>();
+            resources.Add(GetSubjectResource("urn:altinn:rolecode:utinn", new List<string>{ "urn:altinn:resource:skd_mva", "urn:altinn:resource:skd_ax" }));
+            return Task.FromResult(resources);
         }
 
         /// <inheritdoc/>
@@ -92,7 +92,12 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         private static SubjectResources GetSubjectResource(string subjectUrn, List<string> resources)
         {
             SubjectResources subjectResources = new SubjectResources();
-            subjectResources.Subject = new AttributeMatchV2() { Urn = subjectUrn, Type = subjectUrn.Substring(0, subjectUrn.LastIndexOf(':')), Value = subjectUrn.Substring(subjectUrn.LastIndexOf(':')+1) };
+            subjectResources.Subject = new AttributeMatchV2() 
+            { 
+                Urn = subjectUrn, 
+                Type = subjectUrn.Substring(0, subjectUrn.LastIndexOf(':')), 
+                Value = subjectUrn.Substring(subjectUrn.LastIndexOf(':')+1) 
+            };
             subjectResources.Resources = new List<AttributeMatchV2>();
             foreach(string resource in resources)
             {
@@ -109,7 +114,12 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         private static ResourceSubjects GetResourceSubjects(string resourceUrn, List<string> subjects)
         {
             ResourceSubjects subjectResources = new ResourceSubjects();
-            subjectResources.Resource = new AttributeMatchV2() { Urn = resourceUrn, Type = resourceUrn.Substring(0, resourceUrn.LastIndexOf(':')), Value = resourceUrn.Substring(resourceUrn.LastIndexOf(':')+1) };
+            subjectResources.Resource = new AttributeMatchV2() 
+            { 
+                Urn = resourceUrn, 
+                Type = resourceUrn.Substring(0, resourceUrn.LastIndexOf(':')), 
+                Value = resourceUrn.Substring(resourceUrn.LastIndexOf(':')+1) 
+            };
             subjectResources.Subjects = new List<AttributeMatchV2>();
             foreach (string subject in subjects)
             {

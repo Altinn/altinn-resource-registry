@@ -216,17 +216,25 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         while (await reader.ReadAsync(cancellationToken))
         {
-            AttributeMatchV2 subjectMatch = new AttributeMatchV2(
-                reader.GetFieldValue<string>("subject_type"),
-                reader.GetFieldValue<string>("subject_value"),
-                reader.GetFieldValue<string>("subject_urn"));
+            AttributeMatchV2 subjectMatch = new AttributeMatchV2 
+            {
+                Type = reader.GetFieldValue<string>("subject_type"),
+                Value = reader.GetFieldValue<string>("subject_value"),
+                Urn = reader.GetFieldValue<string>("subject_urn")
+            };
 
-            SubjectResources subjectResources = new SubjectResources(subjectMatch, new List<AttributeMatchV2>());
+            SubjectResources subjectResources = new SubjectResources
+            { 
+                Subject = subjectMatch, 
+                Resources = new List<AttributeMatchV2>()
+            };
 
-            AttributeMatchV2 resourceAttributeMatch = new AttributeMatchV2(
-                reader.GetFieldValue<string>("resource_type"),
-                reader.GetFieldValue<string>("resource_value"),
-                reader.GetFieldValue<string>("resource_urn"));
+            AttributeMatchV2 resourceAttributeMatch = new AttributeMatchV2
+            {
+                Type = reader.GetFieldValue<string>("resource_type"),
+                Value = reader.GetFieldValue<string>("resource_value"),
+                Urn = reader.GetFieldValue<string>("resource_urn")
+            };
             
             subjectResources.Resources.Add(resourceAttributeMatch);
 
@@ -265,15 +273,19 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         {
             List<AttributeMatchV2> subjectMatches = new List<AttributeMatchV2>();
     
-            AttributeMatchV2 subjectAttributeMatch = new AttributeMatchV2(
-                reader.GetFieldValue<string>("subject_type"),
-                reader.GetFieldValue<string>("subject_value"),
-                reader.GetFieldValue<string>("subject_urn"));
+            AttributeMatchV2 subjectAttributeMatch = new AttributeMatchV2
+            {
+                Type = reader.GetFieldValue<string>("subject_type"),
+                Value = reader.GetFieldValue<string>("subject_value"),
+                Urn = reader.GetFieldValue<string>("subject_urn")
+            };
 
-            AttributeMatchV2 resourceAttributeMatch = new AttributeMatchV2(
-                reader.GetFieldValue<string>("resource_type"),
-                reader.GetFieldValue<string>("resource_value"),
-                reader.GetFieldValue<string>("resource_urn"));
+            AttributeMatchV2 resourceAttributeMatch = new AttributeMatchV2
+            {
+                Type = reader.GetFieldValue<string>("resource_type"),
+                Value = reader.GetFieldValue<string>("resource_value"),
+                Urn = reader.GetFieldValue<string>("resource_urn")
+            };
 
             subjectAttributeMatch.Type = reader.GetFieldValue<string>("subject_type");
             subjectAttributeMatch.Value = reader.GetFieldValue<string>("subject_value");
@@ -287,10 +299,12 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             }
             else 
             {
-                ResourceSubjects resourceSubjects = new ResourceSubjects(
-                    resourceAttributeMatch,
-                    new List<AttributeMatchV2>() { subjectAttributeMatch }, 
-                    owner);
+                ResourceSubjects resourceSubjects = new ResourceSubjects
+                {
+                   Resource = resourceAttributeMatch,
+                   Subjects = new List<AttributeMatchV2>() { subjectAttributeMatch },
+                   ResourceOwner = owner
+                };
                 allResourceSubjects.Add(resourceSubjects.Resource.Urn, resourceSubjects);
             }
         }

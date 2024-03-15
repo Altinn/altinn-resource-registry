@@ -363,10 +363,12 @@ namespace Altinn.ResourceRegistry.Core.Services
 
         private static ResourceSubjects GetResourceSubjects(ServiceResource resource,  IDictionary<string, ICollection<string>> subjectAttributes)
         {
-            AttributeMatchV2 resourceAttribute = new AttributeMatchV2(
-                    AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute,
-                    resource.Identifier,
-                    $"{AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute}:{resource.Identifier}");
+            AttributeMatchV2 resourceAttribute = new AttributeMatchV2 
+            {
+                    Type = AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute,
+                    Value = resource.Identifier,
+                    Urn = $"{AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute}:{resource.Identifier}"
+            };
            
             string resourceOwner = string.Empty;
             if (resource.HasCompetentAuthority?.Orgcode != null)
@@ -379,10 +381,12 @@ namespace Altinn.ResourceRegistry.Core.Services
             {
                 foreach (string subjectAttributeValue in kvp.Value) 
                 {
-                    AttributeMatchV2 subjectMatch = new AttributeMatchV2(
-                        kvp.Key,
-                        subjectAttributeValue.ToLower(),
-                        $"{kvp.Key}:{subjectAttributeValue.ToLower()}");
+                    AttributeMatchV2 subjectMatch = new AttributeMatchV2 
+                    {
+                        Type = kvp.Key,
+                        Value = subjectAttributeValue.ToLower(),
+                        Urn = $"{kvp.Key}:{subjectAttributeValue.ToLower()}"
+                    };
 
                     if (!subjectAttributeMatches.Exists(r => r.Urn.Equals(subjectMatch.Urn)))
                     {
@@ -391,7 +395,12 @@ namespace Altinn.ResourceRegistry.Core.Services
                 }
             }
 
-            return new ResourceSubjects(resourceAttribute, subjectAttributeMatches, resourceOwner);
+            return new ResourceSubjects
+            { 
+                Resource = resourceAttribute, 
+                Subjects = subjectAttributeMatches, 
+                ResourceOwner = resourceOwner
+            };
         }
     }
 }

@@ -10,31 +10,21 @@ namespace Altinn.ResourceRegistry.Core.Models
     public class AttributeMatchV2
     {
         /// <summary>
-        /// Constructor with required params
-        /// </summary>
-        public AttributeMatchV2(string type, string value, string urn)
-        {
-            Type = type;
-            Value = value;
-            Urn = urn;
-        }
-
-        /// <summary>
         /// Gets or sets the attribute id for the match
         /// </summary>
         [Required]
-        public string Type { get; set; }
+        public required string Type { get; set; }
 
         /// <summary>
         /// Gets or sets the attribute value for the match
         /// </summary>
         [Required]
-        public string Value { get; set; }
+        public required string Value { get; set; }
 
         /// <summary>
         /// The urn for the attribute
         /// </summary>
         [Required]
-        public string Urn { get; set; }
+        public required string Urn { get; set; }
     }
 }

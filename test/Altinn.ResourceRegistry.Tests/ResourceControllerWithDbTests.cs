@@ -260,23 +260,29 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     #region Utils
     private static ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)
     {
-        AttributeMatchV2 resourceMatch = new AttributeMatchV2(
-                resourceurn.Substring(0, resourceurn.LastIndexOf(':')),
-                resourceurn.Substring(resourceurn.LastIndexOf(':') + 1),
-                resourceurn);
+        AttributeMatchV2 resourceMatch = new AttributeMatchV2
+        {
+            Type = resourceurn.Substring(0, resourceurn.LastIndexOf(':')),
+            Value = resourceurn.Substring(resourceurn.LastIndexOf(':') + 1),
+            Urn = resourceurn
+        };
 
-        ResourceSubjects resourceSubjects = new ResourceSubjects(
-            resourceMatch,
-            new List<AttributeMatchV2>(),
-            owner);
+        ResourceSubjects resourceSubjects = new ResourceSubjects
+        {
+            Resource = resourceMatch,
+            Subjects = new List<AttributeMatchV2>(),
+            ResourceOwner = owner
+        };
 
         resourceSubjects.Subjects = new List<AttributeMatchV2>();
         foreach (string subjecturn in subjecturns)
         {
-            resourceSubjects.Subjects.Add(new AttributeMatchV2(
-                subjecturn.Substring(0, subjecturn.LastIndexOf(':')),
-                subjecturn.Substring(subjecturn.LastIndexOf(':') + 1),
-                subjecturn));
+            resourceSubjects.Subjects.Add(new AttributeMatchV2
+                {
+                    Type = subjecturn.Substring(0, subjecturn.LastIndexOf(':')),
+                    Value = subjecturn.Substring(subjecturn.LastIndexOf(':') + 1),
+                    Urn = subjecturn
+                });
         }
 
         return resourceSubjects;

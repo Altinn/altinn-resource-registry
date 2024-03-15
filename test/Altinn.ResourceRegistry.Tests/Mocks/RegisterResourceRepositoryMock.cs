@@ -91,22 +91,26 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 
         private static SubjectResources GetSubjectResource(string subjectUrn, List<string> resources)
         {
-             AttributeMatchV2 subjectMatch = new AttributeMatchV2(
-                subjectUrn.Substring(0, subjectUrn.LastIndexOf(':')),
-                subjectUrn.Substring(subjectUrn.LastIndexOf(':') + 1),
-                subjectUrn);
+             AttributeMatchV2 subjectMatch = new AttributeMatchV2 {
+                Type = subjectUrn.Substring(0, subjectUrn.LastIndexOf(':')),
+                Value =subjectUrn.Substring(subjectUrn.LastIndexOf(':') + 1),
+                Urn = subjectUrn};
 
-            SubjectResources subjectResources = new SubjectResources(
-                subjectMatch, new List<AttributeMatchV2>());
+            SubjectResources subjectResources = new SubjectResources
+                {
+                   Subject = subjectMatch,
+                   Resources = new List<AttributeMatchV2>()
+                };
+
 
             subjectResources.Resources = new List<AttributeMatchV2>();
             foreach(string resource in resources)
             {
                 subjectResources.Resources.Add(
-                    new AttributeMatchV2(
-                        resource.Substring(0, resource.LastIndexOf(':')),
-                        resource.Substring(resource.LastIndexOf(':') + 1),
-                        resource));
+                    new AttributeMatchV2 {
+                        Type = resource.Substring(0, resource.LastIndexOf(':')),
+                        Value = resource.Substring(resource.LastIndexOf(':') + 1),
+                        Urn = resource});
                
             }
             return subjectResources;
@@ -114,22 +118,27 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 
         private static ResourceSubjects GetResourceSubjects(string resourceUrn, List<string> subjects, string owner)
         {
-            AttributeMatchV2 resourceMathc = new AttributeMatchV2(
-                    resourceUrn.Substring(0, resourceUrn.LastIndexOf(':')),
-                    resourceUrn.Substring(resourceUrn.LastIndexOf(':') + 1),
-                    resourceUrn);
+            AttributeMatchV2 resourceMatch = new AttributeMatchV2 {
+                    Type = resourceUrn.Substring(0, resourceUrn.LastIndexOf(':')),
+                    Value = resourceUrn.Substring(resourceUrn.LastIndexOf(':') + 1),
+                    Urn = resourceUrn};
 
             List<AttributeMatchV2> subjectMatches = new List<AttributeMatchV2>();
 
             foreach (string subject in subjects)
             {
-                subjectMatches.Add(new AttributeMatchV2(
-                                    subject.Substring(0, subject.LastIndexOf(':')),
-                                    subject.Substring(subject.LastIndexOf(':') + 1),
-                                    subject));
+                subjectMatches.Add(new AttributeMatchV2 {
+                                    Type = subject.Substring(0, subject.LastIndexOf(':')),
+                                    Value = subject.Substring(subject.LastIndexOf(':') + 1),
+                                    Urn = subject});
             }
 
-            return new ResourceSubjects(resourceMathc, subjectMatches, owner);
+            return new ResourceSubjects
+            { 
+                Resource =  resourceMatch, 
+                Subjects =  subjectMatches, 
+                ResourceOwner = owner 
+            };
         }
 
         public Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken)

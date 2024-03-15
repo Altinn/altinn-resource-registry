@@ -111,7 +111,7 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// </summary>
         /// <param name="serviceResource">The service resource</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        Task ReloadSubjectResourcesFromPolicy(ServiceResource serviceResource, CancellationToken cancellationToken = default);
+        Task UpdateResourceSubjectsFromResourcePolicy(ServiceResource serviceResource, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Based on org and app loads app policy from policy storage and updates resource subjects for it.
@@ -119,6 +119,6 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="org">The organization</param>
         /// <param name="app">The app</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        Task ReloadSubjectResourcesFromAppPolicy(string org, string app, CancellationToken cancellationToken = default);
+        Task UpdateResourceSubjectsFromAppPolicy(string org, string app, CancellationToken cancellationToken = default);
     }
 }

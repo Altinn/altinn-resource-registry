@@ -118,7 +118,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task ReloadSubjectResourcesFromPolicy(ServiceResource serviceResource, CancellationToken cancellationToken = default)
+        public async Task UpdateResourceSubjectsFromResourcePolicy(ServiceResource serviceResource, CancellationToken cancellationToken = default)
         {
             Stream policyContent = null;
             if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
@@ -145,7 +145,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task ReloadSubjectResourcesFromAppPolicy(string org, string app, CancellationToken cancellationToken = default)
+        public async Task UpdateResourceSubjectsFromAppPolicy(string org, string app, CancellationToken cancellationToken = default)
         {
             Stream policyContent = await _policyRepository.GetAppPolicyAsync(org, app, cancellationToken);
             XacmlPolicy policy = PolicyHelper.ParsePolicy(policyContent);

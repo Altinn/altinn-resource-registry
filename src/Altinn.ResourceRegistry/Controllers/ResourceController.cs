@@ -264,7 +264,7 @@ namespace Altinn.ResourceRegistry.Controllers
                 ServiceResource serviceResource = await _resourceRegistry.GetResource(id, cancellationToken);
                 if (serviceResource != null)
                 {
-                    await _resourceRegistry.ReloadSubjectResourcesFromPolicy(serviceResource, cancellationToken);
+                    await _resourceRegistry.UpdateResourceSubjectsFromResourcePolicy(serviceResource, cancellationToken);
                 }
                 else if (id.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
                 {
@@ -274,7 +274,7 @@ namespace Altinn.ResourceRegistry.Controllers
                     {
                         string org = idValues[1];
                         string app = idValues[2];
-                        await _resourceRegistry.ReloadSubjectResourcesFromAppPolicy(org, app, cancellationToken);
+                        await _resourceRegistry.UpdateResourceSubjectsFromAppPolicy(org, app, cancellationToken);
                     }
                 }
             }

@@ -282,7 +282,6 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             AttributeMatchV2 subjectMatch = GetSubjectAttribute(reader);
             AttributeMatchV2 resourceAttributeMatch = GetResourceAttribute(reader);
 
-
             string owner = reader.GetFieldValue<string>("resource_owner");
 
             if (allResourceSubjects.TryGetValue(resourceAttributeMatch.Urn, out ResourceSubjects? resourceSubjectsExt))

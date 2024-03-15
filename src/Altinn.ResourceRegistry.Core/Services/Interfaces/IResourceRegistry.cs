@@ -106,7 +106,7 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Based on a serviuce resouce the resource subjects will be reloaded on to database. 
+        /// Based on a service resource the resource subjects will be reloaded on to database. 
         /// Created to support migrated apps and resource that was migrated before ResourceSubjecst whent in to production
         /// </summary>
         /// <param name="serviceResource">The service resource</param>

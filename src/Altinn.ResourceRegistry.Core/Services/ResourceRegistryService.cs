@@ -36,14 +36,6 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// Creates a new instance of the <see cref="ResourceRegistryService"/> service.
         /// The ResourceRegistryService is responcible for business logic and implementations for working with the resource registry
         /// </summary>
-        /// <param name="repository">Resource registry repository implementation for dependencies to its operations</param>
-        /// <param name="policyRepository">Repository implementation for operations on policies</param>
-        /// <param name="accessManagementClient">client to send data to AccessManagement</param>
-        /// <param name="altinn2ServicesClient">Used to retrieve information from Altinn 2</param>
-        /// <param name="applicationsClient">Used to retrieve information from Altinn Storage about Altinn 3 apps</param>
-        /// <param name="orgList">Client to retrive orglist</param>
-        /// <param name="memoryCache">Memorycache</param>
-        /// <param name="resourceRegistryRepostory">The Resource registry repository</param>
         public ResourceRegistryService(
             IResourceRegistryRepository repository, 
             IPolicyRepository policyRepository, 

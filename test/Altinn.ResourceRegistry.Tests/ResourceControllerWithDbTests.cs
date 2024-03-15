@@ -1,17 +1,12 @@
 ﻿using Altinn.ResourceRegistry.Core;
-using Altinn.ResourceRegistry.Core.AccessLists;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Models;
-using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Tests.Utils;
 using Altinn.ResourceRegistry.TestUtils;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -68,8 +63,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
             Content = new StringContent(JsonSerializer.Serialize(subjects), Encoding.UTF8, "application/json")
         };
 
-        httpRequestMessage.Headers.Add("Accept", "application/json");
-        httpRequestMessage.Headers.Add("ContentType", "application/json");
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
         List<SubjectResources>? subjectResources = await response.Content.ReadFromJsonAsync<List<SubjectResources>>();
@@ -100,8 +94,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         {
         };
 
-        httpRequestMessage.Headers.Add("Accept", "application/json");
-        httpRequestMessage.Headers.Add("ContentType", "application/json");
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
         List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
@@ -153,8 +146,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         {
         };
 
-        httpRequestMessage.Headers.Add("Accept", "application/json");
-        httpRequestMessage.Headers.Add("ContentType", "application/json");
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response2 = await client.SendAsync(httpRequestMessage);
         List<AttributeMatchV2>? subjectMatch = await response2.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
@@ -178,8 +170,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         {
         };
 
-        httpRequestMessage.Headers.Add("Accept", "application/json");
-        httpRequestMessage.Headers.Add("ContentType", "application/json");
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
         List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
@@ -217,8 +208,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         {
         };
 
-        httpRequestMessage.Headers.Add("Accept", "application/json");
-        httpRequestMessage.Headers.Add("ContentType", "application/json");
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
         List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
@@ -284,7 +274,10 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         resourceSubjects.Subjects = new List<AttributeMatchV2>();
         foreach(string subjecturn in subjecturns)
         {
-            resourceSubjects.Subjects.Add(new AttributeMatchV2 { Type = subjecturn.Substring(0, subjecturn.LastIndexOf(':')), Value = subjecturn.Substring(subjecturn.LastIndexOf(':') + 1), Urn = subjecturn });
+            resourceSubjects.Subjects.Add(new AttributeMatchV2 { 
+                Type = subjecturn.Substring(0, subjecturn.LastIndexOf(':')), 
+                Value = subjecturn.Substring(subjecturn.LastIndexOf(':') + 1), 
+                Urn = subjecturn });
         }
 
         return resourceSubjects;

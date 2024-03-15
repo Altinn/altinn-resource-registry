@@ -21,9 +21,9 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// </summary>
         /// <param name="serviceResources">The resource from the registry</param>
         /// <param name="policyFileData">The xacml policy file stream</param>
-        public static XacmlPolicy IsValidResourcePolicy(ServiceResource serviceResources, ReadOnlySequence<byte> policyFileData)
+        public static bool ParseAndValidatePolicy(ServiceResource serviceResources, ReadOnlySequence<byte> policyFileData, out XacmlPolicy policy) 
         {
-            XacmlPolicy policy = ParsePolicy(policyFileData);
+            policy = ParsePolicy(policyFileData);
 
             foreach (XacmlRule policyRule in policy.Rules)
             {
@@ -40,7 +40,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 }
             }
 
-            return policy;
+            return true; 
         }
 
         /// <summary>

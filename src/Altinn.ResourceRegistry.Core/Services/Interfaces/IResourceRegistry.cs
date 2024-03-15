@@ -86,7 +86,7 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// </summary>
         /// <param name="serviceResource">The resource to add to access management</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns>Bool for update status</returns>
+        /// <returns><see langword="true"/> if the update succeeded, otherwise <see langword="false"/></returns>
         Task<bool> UpdateResourceInAccessManagement(ServiceResource serviceResource, CancellationToken cancellationToken = default);
 
         /// <summary>

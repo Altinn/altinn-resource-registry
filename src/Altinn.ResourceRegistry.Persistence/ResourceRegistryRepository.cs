@@ -223,27 +223,24 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                 Urn = reader.GetFieldValue<string>("subject_urn")
             };
 
-            SubjectResources subjectResources = new SubjectResources
-            { 
-                Subject = subjectMatch, 
-                Resources = new List<AttributeMatchV2>()
-            };
-
             AttributeMatchV2 resourceAttributeMatch = new AttributeMatchV2
             {
                 Type = reader.GetFieldValue<string>("resource_type"),
                 Value = reader.GetFieldValue<string>("resource_value"),
                 Urn = reader.GetFieldValue<string>("resource_urn")
             };
-            
-            subjectResources.Resources.Add(resourceAttributeMatch);
 
-            if (allSubjectResources.TryGetValue(subjectResources.Subject.Urn, out SubjectResources? existingSubjectResource))
+            if (allSubjectResources.TryGetValue(subjectMatch.Urn, out SubjectResources? existingSubjectResource))
             {
-                existingSubjectResource.Resources.AddRange(subjectResources.Resources);
+                existingSubjectResource.Resources.Add(resourceAttributeMatch);
             }
             else
             {
+                SubjectResources subjectResources = new SubjectResources
+                {
+                    Subject = subjectMatch,
+                    Resources = new List<AttributeMatchV2>() { resourceAttributeMatch }
+                };
                 allSubjectResources.Add(subjectResources.Subject.Urn, subjectResources);
             }
         }

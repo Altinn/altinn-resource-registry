@@ -257,7 +257,7 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpGet("{id}/policy/subjects")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<ActionResult<List<AttributeMatchV2>>> FindSubjectsInPolicy(string id, bool? reloadFromXacml = null, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<IEnumerable<AttributeMatchV2>>> FindSubjectsInPolicy(string id, bool? reloadFromXacml = null, CancellationToken cancellationToken = default)
         {
             if (reloadFromXacml.HasValue && reloadFromXacml.Value)
             {
@@ -300,7 +300,7 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpPost("findforsubjects/")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken)
+        public async Task<IEnumerable<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken)
         {
            return await _resourceRegistry.FindResourcesForSubjects(subjects, cancellationToken);
         }

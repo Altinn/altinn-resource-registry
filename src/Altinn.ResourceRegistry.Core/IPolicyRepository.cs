@@ -22,7 +22,7 @@ namespace Altinn.ResourceRegistry.Core
         /// <param name="org">The org</param>
         /// <param name="app">the app</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns></returns>
+        /// <returns>File stream of the policy file</returns>
         Task<Stream> GetAppPolicyAsync(string org, string app, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Altinn.ResourceRegistry.Core
         /// <param name="resourceId">The resourceId</param> 
         /// <param name="version">The blob storage version</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns></returns>
+        /// <returns>The delete response</returns>
         Task<Response> DeletePolicyVersionAsync(string resourceId, string version, CancellationToken cancellationToken = default);
 
         /// <summary>

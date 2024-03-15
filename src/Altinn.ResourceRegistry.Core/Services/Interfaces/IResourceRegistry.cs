@@ -78,7 +78,7 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// </summary>
         /// <param name="resourceId">The resource id</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns></returns>
+        /// <returns>The policy as stream</returns>
         Task<Stream> GetPolicy(string resourceId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// </summary>
         /// <param name="serviceResource">The resource to add to access management</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns></returns>
+        /// <returns>Bool for update status</returns>
         Task<bool> UpdateResourceInAccessManagement(ServiceResource serviceResource, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// </summary>
         /// <param name="subjects">List of subjects</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns></returns>
+        /// <returns>Resources for given subjects</returns>
         Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// </summary>
         /// <param name="resources">List of resource attributes</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns></returns>
+        /// <returns>List of subjects for a given resource</returns>
         Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -111,7 +111,6 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// </summary>
         /// <param name="serviceResource">The service resource</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns></returns>
         Task ReloadSubjectResourcesFromPolicy(ServiceResource serviceResource, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -120,7 +119,6 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="org">The organization</param>
         /// <param name="app">The app</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns></returns>
         Task ReloadSubjectResourcesFromAppPolicy(string org, string app, CancellationToken cancellationToken = default);
     }
 }

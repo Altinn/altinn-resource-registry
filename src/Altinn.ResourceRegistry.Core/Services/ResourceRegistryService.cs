@@ -152,7 +152,14 @@ namespace Altinn.ResourceRegistry.Core.Services
             Stream policyContent = await _policyRepository.GetAppPolicyAsync(org, app, cancellationToken);
             XacmlPolicy policy = PolicyHelper.ParsePolicy(policyContent);
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
-            ServiceResource virtualAppResource = new ServiceResource() { Identifier = $"app_{org.ToLower()}_{app.ToLower()}".ToLower(), HasCompetentAuthority = new CompetentAuthority() { Orgcode = org.ToLower() } };
+            ServiceResource virtualAppResource = new ServiceResource() 
+            { 
+                Identifier = $"app_{org.ToLower()}_{app.ToLower()}".ToLower(), 
+                HasCompetentAuthority = new CompetentAuthority() 
+                { 
+                    Orgcode = org.ToLower() 
+                } 
+            };
             ResourceSubjects resourceSubjects = GetResourceSubjects(virtualAppResource, subjectAttributes);
             await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects, cancellationToken);
         }

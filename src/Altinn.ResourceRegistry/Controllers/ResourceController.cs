@@ -272,8 +272,8 @@ namespace Altinn.ResourceRegistry.Controllers
                     string[] idValues = id.Split('_');
                     if (idValues.Length == 3)
                     {
-                        string org = id.Split("_")[1];
-                        string app = id.Split("_")[2];
+                        string org = idValues[1];
+                        string app = idValues[2];
                         await _resourceRegistry.ReloadSubjectResourcesFromAppPolicy(org, app, cancellationToken);
                     }
                 }

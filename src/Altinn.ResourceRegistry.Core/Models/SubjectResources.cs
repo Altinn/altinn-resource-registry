@@ -2,7 +2,7 @@
 namespace Altinn.ResourceRegistry.Core.Models
 {
     /// <summary>
-    /// Defines related 
+    /// Defines resources that a given subject have access to
     /// </summary>
     public class SubjectResources
     {

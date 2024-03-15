@@ -318,13 +318,12 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                                                               resource_type, resource_value, resource_urn, subject_type, subject_value, subject_urn, resource_owner) 
                                                               VALUES(@resourcetype, @resourcevalue, @resourceurn, @subjecttype, @subjectvalue, @subjecturn, @owner)";
 
-        List<string> resourcesToDelete = new List<string>();
-        resourcesToDelete.Add(resourceSubjects.Resource.Urn);
-
+        string[] resourcesToDelete = [resourceSubjects.Resource.Urn];
+     
         await using NpgsqlConnection conn = await _conn.OpenConnectionAsync(cancellationToken);
         await using NpgsqlTransaction tx = await conn.BeginTransactionAsync(IsolationLevel.RepeatableRead, cancellationToken);
         await using NpgsqlCommand pgcom = _conn.CreateCommand(deleteResourcesSQL);
-        pgcom.Parameters.AddWithValue("resources", resourcesToDelete.ToArray());
+        pgcom.Parameters.AddWithValue("resources", resourcesToDelete);
         await pgcom.ExecuteNonQueryAsync(cancellationToken);
         
         await using var resourceCmd = _conn.CreateCommand(insertResourceSubjectsSQL);

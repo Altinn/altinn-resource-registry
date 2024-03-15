@@ -1,10 +1,20 @@
-﻿namespace Altinn.ResourceRegistry.Core.Models
+﻿#nullable enable
+namespace Altinn.ResourceRegistry.Core.Models
 {
     /// <summary>
     /// Defines related 
     /// </summary>
     public class SubjectResources
     {
+        /// <summary>
+        /// Constructor with required params
+        /// </summary>
+        public SubjectResources(AttributeMatchV2 subject, List<AttributeMatchV2> resources)
+        {
+            Subject = subject;
+            Resources = resources;
+        }
+
         /// <summary>
         /// The subject
         /// </summary>

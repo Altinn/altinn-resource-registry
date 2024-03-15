@@ -216,20 +216,19 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         while (await reader.ReadAsync(cancellationToken))
         {
-            SubjectResources subjectResources = new SubjectResources();
-            subjectResources.Resources = new List<AttributeMatchV2>();
-            subjectResources.Subject = new AttributeMatchV2();
+            AttributeMatchV2 subjectMatch = new AttributeMatchV2(
+                reader.GetFieldValue<string>("subject_type"),
+                reader.GetFieldValue<string>("subject_value"),
+                reader.GetFieldValue<string>("subject_urn"));
 
-            AttributeMatchV2 resourceAttributeMatch = new AttributeMatchV2();
+            SubjectResources subjectResources = new SubjectResources(subjectMatch, new List<AttributeMatchV2>());
 
-            resourceAttributeMatch.Type = reader.GetFieldValue<string>("resource_type");
-            resourceAttributeMatch.Value = reader.GetFieldValue<string>("resource_value");
-            resourceAttributeMatch.Urn = reader.GetFieldValue<string>("resource_urn");
+            AttributeMatchV2 resourceAttributeMatch = new AttributeMatchV2(
+                reader.GetFieldValue<string>("resource_type"),
+                reader.GetFieldValue<string>("resource_value"),
+                reader.GetFieldValue<string>("resource_urn"));
+            
             subjectResources.Resources.Add(resourceAttributeMatch);
-
-            subjectResources.Subject.Type = reader.GetFieldValue<string>("subject_type");
-            subjectResources.Subject.Value = reader.GetFieldValue<string>("subject_value");
-            subjectResources.Subject.Urn = reader.GetFieldValue<string>("subject_urn");
 
             if (allSubjectResources.TryGetValue(subjectResources.Subject.Urn, out SubjectResources? subjectResource))
             {
@@ -264,28 +263,34 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         while (await reader.ReadAsync(cancellationToken))
         {
-            ResourceSubjects resourceSubjects = new ResourceSubjects();
-            resourceSubjects.Subjects = new List<AttributeMatchV2>();
-            resourceSubjects.Resource = new AttributeMatchV2();
+            List<AttributeMatchV2> subjectMatches = new List<AttributeMatchV2>();
+    
+            AttributeMatchV2 subjectAttributeMatch = new AttributeMatchV2(
+                reader.GetFieldValue<string>("subject_type"),
+                reader.GetFieldValue<string>("subject_value"),
+                reader.GetFieldValue<string>("subject_urn"));
 
-            AttributeMatchV2 subjectAttributeMatch = new AttributeMatchV2();
-
-            resourceSubjects.Resource.Type = reader.GetFieldValue<string>("resource_type");
-            resourceSubjects.Resource.Value = reader.GetFieldValue<string>("resource_value");
-            resourceSubjects.Resource.Urn = reader.GetFieldValue<string>("resource_urn");
+            AttributeMatchV2 resourceAttributeMatch = new AttributeMatchV2(
+                reader.GetFieldValue<string>("resource_type"),
+                reader.GetFieldValue<string>("resource_value"),
+                reader.GetFieldValue<string>("resource_urn"));
 
             subjectAttributeMatch.Type = reader.GetFieldValue<string>("subject_type");
             subjectAttributeMatch.Value = reader.GetFieldValue<string>("subject_value");
             subjectAttributeMatch.Urn = reader.GetFieldValue<string>("subject_urn");
 
-            resourceSubjects.Subjects.Add(subjectAttributeMatch);
+            string owner = reader.GetFieldValue<string>("resource_owner");
 
-            if (allResourceSubjects.TryGetValue(resourceSubjects.Resource.Urn, out ResourceSubjects? resourceSubjectsExt))
+            if (allResourceSubjects.TryGetValue(resourceAttributeMatch.Urn, out ResourceSubjects? resourceSubjectsExt))
             {
-                resourceSubjectsExt.Subjects.AddRange(resourceSubjects.Subjects);
+                resourceSubjectsExt.Subjects.Add(subjectAttributeMatch);
             }
             else 
             {
+                ResourceSubjects resourceSubjects = new ResourceSubjects(
+                    resourceAttributeMatch,
+                    new List<AttributeMatchV2>() { subjectAttributeMatch }, 
+                    owner);
                 allResourceSubjects.Add(resourceSubjects.Resource.Urn, resourceSubjects);
             }
         }

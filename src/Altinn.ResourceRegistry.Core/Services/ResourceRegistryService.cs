@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using System.Collections.Generic;
 using System.Net;
 using Altinn.Authorization.ABAC.Constants;
 using Altinn.Authorization.ABAC.Xacml;
@@ -362,39 +363,35 @@ namespace Altinn.ResourceRegistry.Core.Services
 
         private static ResourceSubjects GetResourceSubjects(ServiceResource resource,  IDictionary<string, ICollection<string>> subjectAttributes)
         {
-            ResourceSubjects resourceSubjects = new ResourceSubjects();
-            resourceSubjects.Resource = new AttributeMatchV2()
-            {
-                Type = AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute,
-                Value = resource.Identifier,
-                Urn = $"{AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute}:{resource.Identifier}"
-            };
-
+            AttributeMatchV2 resourceAttribute = new AttributeMatchV2(
+                    AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute,
+                    resource.Identifier,
+                    $"{AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute}:{resource.Identifier}");
+           
+            string resourceOwner = string.Empty;
             if (resource.HasCompetentAuthority?.Orgcode != null)
             {
-                resourceSubjects.ResourceOwner = resource.HasCompetentAuthority.Orgcode;
+                resourceOwner = $"{AltinnXacmlConstants.MatchAttributeIdentifiers.OrgAttribute}:{resource.HasCompetentAuthority.Orgcode}";
             }
 
-            resourceSubjects.Subjects = new List<AttributeMatchV2>();
+            List<AttributeMatchV2> subjectAttributeMatches = new List<AttributeMatchV2>();
             foreach (KeyValuePair<string, ICollection<string>> kvp in subjectAttributes)
             {
                 foreach (string subjectAttributeValue in kvp.Value) 
                 {
-                    AttributeMatchV2 subjectMatch = new AttributeMatchV2()
-                    {
-                        Type = kvp.Key,
-                        Value = subjectAttributeValue.ToLower(),
-                        Urn = $"{kvp.Key}:{subjectAttributeValue.ToLower()}"
-                    };
+                    AttributeMatchV2 subjectMatch = new AttributeMatchV2(
+                        kvp.Key,
+                        subjectAttributeValue.ToLower(),
+                        $"{kvp.Key}:{subjectAttributeValue.ToLower()}");
 
-                    if (!resourceSubjects.Subjects.Exists(r => r.Urn.Equals(subjectMatch.Urn)))
+                    if (!subjectAttributeMatches.Exists(r => r.Urn.Equals(subjectMatch.Urn)))
                     {
-                        resourceSubjects.Subjects.Add(subjectMatch);
+                        subjectAttributeMatches.Add(subjectMatch);
                     }
                 }
             }
 
-            return resourceSubjects;
+            return new ResourceSubjects(resourceAttribute, subjectAttributeMatches, resourceOwner);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Altinn.ResourceRegistry.Core.Models
@@ -8,6 +9,16 @@ namespace Altinn.ResourceRegistry.Core.Models
     /// </summary>
     public class AttributeMatchV2
     {
+        /// <summary>
+        /// Constructor with required params
+        /// </summary>
+        public AttributeMatchV2(string type, string value, string urn)
+        {
+            Type = type;
+            Value = value;
+            Urn = urn;
+        }
+
         /// <summary>
         /// Gets or sets the attribute id for the match
         /// </summary>

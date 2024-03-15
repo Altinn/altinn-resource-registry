@@ -238,9 +238,9 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             
             subjectResources.Resources.Add(resourceAttributeMatch);
 
-            if (allSubjectResources.TryGetValue(subjectResources.Subject.Urn, out SubjectResources? subjectResource))
+            if (allSubjectResources.TryGetValue(subjectResources.Subject.Urn, out SubjectResources? existingSubjectResource))
             {
-                subjectResource.Resources.AddRange(subjectResources.Resources);
+                existingSubjectResource.Resources.AddRange(subjectResources.Resources);
             }
             else
             {

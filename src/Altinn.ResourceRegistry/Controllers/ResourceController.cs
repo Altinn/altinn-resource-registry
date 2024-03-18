@@ -279,10 +279,7 @@ namespace Altinn.ResourceRegistry.Controllers
                 }
             }
 
-            List<string> resources = new List<string>();
-            resources.Add(AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute + ":" + id);
-
-            List<ResourceSubjects> resourceSubjects = await _resourceRegistry.FindSubjectsForResources(resources, cancellationToken);
+            List<ResourceSubjects> resourceSubjects = await _resourceRegistry.FindSubjectsForResources([$"{AltinnXacmlConstants.MatchAttributeIdentifiers.ResourceRegistryAttribute}:{id}"], cancellationToken);
             if (resourceSubjects == null || resourceSubjects.Count == 0)
             {
                 return new NotFoundResult();

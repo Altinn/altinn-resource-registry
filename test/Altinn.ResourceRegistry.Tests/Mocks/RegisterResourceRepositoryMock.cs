@@ -73,7 +73,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Resources");
         }
 
-        public Task<List<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken = default)
+        public Task<List<SubjectResources>> FindResourcesForSubjects(IEnumerable<string> subjects, CancellationToken cancellationToken = default)
         {
             List<SubjectResources> resources = new List<SubjectResources>();
             resources.Add(GetSubjectResource("urn:altinn:rolecode:utinn", new List<string>{ "urn:altinn:resource:skd_mva", "urn:altinn:resource:skd_ax" }));
@@ -81,7 +81,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         }
 
         /// <inheritdoc/>
-        public Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default)
+        public Task<List<ResourceSubjects>> FindSubjectsForResources(IEnumerable<string> resources, CancellationToken cancellationToken = default)
         {
             List<ResourceSubjects> resourceSubjects = new List<ResourceSubjects>();
             resourceSubjects.Add(GetResourceSubjects("urn:altinn:resource:skd_mva", new List<string> { "urn:altinn:rolecode:utinn", "urn:altinn:rolecode:dagl" }, "urn:altinn:org:skd"));
@@ -93,7 +93,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         {
              AttributeMatchV2 subjectMatch = new AttributeMatchV2 {
                 Type = subjectUrn.Substring(0, subjectUrn.LastIndexOf(':')),
-                Value =subjectUrn.Substring(subjectUrn.LastIndexOf(':') + 1),
+                Value = subjectUrn.Substring(subjectUrn.LastIndexOf(':') + 1),
                 Urn = subjectUrn};
 
             SubjectResources subjectResources = new SubjectResources

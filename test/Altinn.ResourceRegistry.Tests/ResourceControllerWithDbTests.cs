@@ -56,7 +56,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         subjects.Add("urn:altinn:rolecode:utinn");
         subjects.Add("urn:altinn:rolecode:dagl");
 
-        string requestUri = "resourceregistry/api/v1/resource/findforsubjects/";
+        string requestUri = "resourceregistry/api/v1/resource/bysubjects/";
 
         HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
         {

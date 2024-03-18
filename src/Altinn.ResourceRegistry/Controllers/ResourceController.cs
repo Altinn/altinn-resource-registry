@@ -294,7 +294,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <param name="subjects">List of subjects for resource information is needed</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>Resources where subjects have rights</returns>
-        [HttpPost("findforsubjects/")]
+        [HttpPost("bysubjects/")]
         [Produces("application/json")]
         [Consumes("application/json")]
         public async Task<IEnumerable<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken)

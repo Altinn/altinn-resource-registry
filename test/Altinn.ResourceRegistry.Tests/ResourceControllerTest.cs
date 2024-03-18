@@ -1252,7 +1252,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
-            List<AttributeMatchV2>? subjectResources = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
+            Paginated<AttributeMatchV2>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
@@ -1265,7 +1265,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<string> subjects = new List<string>();
             subjects.Add("urn:altinn:rolecode:utinn");
 
-            string requestUri = "resourceregistry/api/v1/resource/findforsubjects/";
+            string requestUri = "resourceregistry/api/v1/resource/bysubjects/";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
             {
@@ -1276,11 +1276,11 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
             HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
-            List<SubjectResources>? subjectResources = await response.Content.ReadFromJsonAsync<List<SubjectResources>>();
+            Paginated<SubjectResources>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<SubjectResources>>();
            
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(subjectResources);
-            Assert.NotNull(subjectResources.FirstOrDefault(r => r.Subject.Urn.Contains("utinn")));
+            Assert.NotNull(subjectResources.Items.FirstOrDefault(r => r.Subject.Urn.Contains("utinn")));
         }
 
     }

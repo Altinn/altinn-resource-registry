@@ -1,6 +1,7 @@
 ﻿using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Models;
+using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Tests.Utils;
 using Altinn.ResourceRegistry.TestUtils;
 using Microsoft.Extensions.DependencyInjection;
@@ -66,10 +67,12 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
-        List<SubjectResources>? subjectResources = await response.Content.ReadFromJsonAsync<List<SubjectResources>>();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.NotNull(subjectResources);
+        Paginated<SubjectResources>? subjectResourcesPaginated = await response.Content.ReadFromJsonAsync<Paginated<SubjectResources>>();
+        Assert.NotNull(subjectResourcesPaginated);
+        List<SubjectResources> subjectResources = subjectResourcesPaginated.Items.ToList();
+
         Assert.Equal(2, subjectResources.Count);
         Assert.Equal(2, subjectResources[0].Resources.Count);
         Assert.Single(subjectResources[1].Resources);
@@ -97,7 +100,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
-        List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
+        Paginated<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);
@@ -149,7 +152,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response2 = await client.SendAsync(httpRequestMessage);
-        List<AttributeMatchV2>? subjectMatch = await response2.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
+        Paginated<AttributeMatchV2>? subjectMatch = await response2.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
 
         Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
         Assert.NotNull(subjectMatch);
@@ -173,11 +176,11 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
-        List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
+        Paginated<AttributeMatchV2> subjectMatch = await response.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);
-        Assert.Equal(12, subjectMatch.Count);
+        Assert.Equal(12, subjectMatch.Items.Count());
     }
 
 
@@ -211,11 +214,11 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
-        List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
+        Paginated<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);
-        Assert.Equal(12, subjectMatch.Count);
+        Assert.Equal(12, subjectMatch.Items.Count());
     }
 
 
@@ -250,11 +253,11 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         httpRequestMessage.Headers.Add("ContentType", "application/json");
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
-        List<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<List<AttributeMatchV2>>();
+        Paginated<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);
-        Assert.Single(subjectMatch);
+        Assert.Single(subjectMatch.Items);
     }
 
     #region Utils

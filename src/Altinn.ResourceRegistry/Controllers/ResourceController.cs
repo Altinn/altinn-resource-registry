@@ -4,6 +4,7 @@ using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Extensions;
+using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Utils;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
@@ -257,7 +258,7 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpGet("{id}/policy/subjects")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<ActionResult<IEnumerable<AttributeMatchV2>>> FindSubjectsInPolicy(string id, bool? reloadFromXacml = null, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<Paginated<AttributeMatchV2>>> FindSubjectsInPolicy(string id, bool? reloadFromXacml = null, CancellationToken cancellationToken = default)
         {
             if (reloadFromXacml.HasValue && reloadFromXacml.Value)
             {
@@ -285,7 +286,7 @@ namespace Altinn.ResourceRegistry.Controllers
                 return new NotFoundResult();
             }
 
-            return resourceSubjects[0].Subjects;
+            return Paginated.Create(resourceSubjects[0].Subjects, null);
         }
 
         /// <summary>
@@ -297,9 +298,10 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpPost("bysubjects/")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<IEnumerable<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken)
+        public async Task<Paginated<SubjectResources>> FindResourcesForSubjects(List<string> subjects, CancellationToken cancellationToken)
         {
-           return await _resourceRegistry.FindResourcesForSubjects(subjects, cancellationToken);
+            List<SubjectResources> resources = await _resourceRegistry.FindResourcesForSubjects(subjects, cancellationToken);
+            return Paginated.Create(resources, null);
         }
 
         /// <summary>

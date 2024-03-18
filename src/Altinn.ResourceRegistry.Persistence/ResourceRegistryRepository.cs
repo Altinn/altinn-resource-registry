@@ -206,7 +206,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<SubjectResources>> FindResourcesForSubjects(IEnumerable<string> subjects, CancellationToken cancellationToken = default)
     {
-        const string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE subject_urn = ANY(:subjects)";
+        const string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE subject_urn = ANY(@subjects)";
 
         await using NpgsqlCommand pgcom = _conn.CreateCommand(findResourcesSQL);
         pgcom.Parameters.AddWithValue("subjects", subjects.ToArray());

@@ -109,11 +109,12 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task<bool> StorePolicy(ServiceResource serviceResource, ReadOnlySequence<byte> policyContent, CancellationToken cancellationToken = default)
         {
-            PolicyHelper.ParseAndValidatePolicy(serviceResource, policyContent, out XacmlPolicy policy);
+            XacmlPolicy policy = PolicyHelper.ParsePolicy(policyContent);
+            PolicyHelper.ValidateResourcePolicy(serviceResource, policy);
             Response<BlobContentInfo> response = await _policyRepository.WritePolicyAsync(serviceResource.Identifier, policyContent.AsStream(), cancellationToken);
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
-            await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects, cancellationToken);
+            await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects, CancellationToken.None);
             return response?.GetRawResponse()?.Status == (int)HttpStatusCode.Created;
         }
 

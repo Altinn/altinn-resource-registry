@@ -48,8 +48,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     [Fact]
     public async Task GetResourceForSubjects()
     {
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_mva", new List<string> { "urn:altinn:rolecode:utinn" }, "skd"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_flyttemelding", new List<string> { "urn:altinn:rolecode:utinn", "urn:altinn:rolecode:dagl" }, "skd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_mva", ["urn:altinn:rolecode:utinn"], "skd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_flyttemelding", ["urn:altinn:rolecode:utinn", "urn:altinn:rolecode:dagl" ], "skd"));
 
         using var client = CreateAuthenticatedClient();
 
@@ -86,8 +86,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     [Fact]
     public async Task GetSubjectsForPolicy()
     {
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_mva", new List<string> { "urn:altinn:rolecode:utinn" }, "skd"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_flyttemelding", new List<string> { "urn:altinn:rolecode:utinn", "urn:altinn:rolecode:dagl" }, "skd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_mva", ["urn:altinn:rolecode:utinn"], "skd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:skd_flyttemelding", [ "urn:altinn:rolecode:utinn", "urn:altinn:rolecode:dagl" ], "skd"));
 
         using var client = CreateAuthenticatedClient();
 

@@ -17,14 +17,12 @@ namespace Altinn.ResourceRegistry.Core.Helpers
     public static class PolicyHelper
     {
         /// <summary>
-        /// Validates the content of Xacml policy file stream, for any rules not for the given resource
+        /// Validate XACML Policy for resource information
         /// </summary>
         /// <param name="serviceResources">The resource from the registry</param>
-        /// <param name="policyFileData">The xacml policy file stream</param>
-        public static bool ParseAndValidatePolicy(ServiceResource serviceResources, ReadOnlySequence<byte> policyFileData, out XacmlPolicy policy) 
+        /// <param name="policy">The xacml policy</param>
+        public static bool ValidateResourcePolicy(ServiceResource serviceResources, XacmlPolicy policy) 
         {
-            policy = ParsePolicy(policyFileData);
-
             foreach (XacmlRule policyRule in policy.Rules)
             {
                 List<AttributeMatch> xacmlResources = GetResourceFromXacmlRule(policyRule);

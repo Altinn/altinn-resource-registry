@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS resourceregistry.resourcesubjects(
     -- subject_urn - urn to rolecode, accesspackage. Full URN
     subject_urn text COLLATE pg_catalog."default",
     -- registry_owner - registry_created.registry_owner -- the org. nr of the owning party. Example urn:altinn:org:skd
-    resource_owner text COLLATE pg_catalog."default"
+    resource_owner text COLLATE pg_catalog."default",
 
     PRIMARY KEY(resource_urn, subject_urn)
 )

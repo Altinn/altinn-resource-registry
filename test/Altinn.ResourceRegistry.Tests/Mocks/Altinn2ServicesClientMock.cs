@@ -21,27 +21,33 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
     {
         public async Task<List<AvailableService>> AvailableServices(int languageId, CancellationToken cancellationToken)
         {
-            string availableServiceFilePath = Path.Combine(GetAltinn2TestDatafolder(), $"availableServices{languageId}.json");
-
-            List<AvailableService>? availableServices = null;
-
-            if (File.Exists(availableServiceFilePath))
+            string? testDataFolder = GetAltinn2TestDatafolder();
+            if (testDataFolder != null)
             {
-                string content = await File.ReadAllTextAsync(availableServiceFilePath, cancellationToken);
-                if (!string.IsNullOrEmpty(content))
+                string availableServiceFilePath = Path.Combine(testDataFolder, $"availableServices{languageId}.json");
+
+                List<AvailableService>? availableServices = null;
+
+                if (File.Exists(availableServiceFilePath))
                 {
-                    availableServices = System.Text.Json.JsonSerializer.Deserialize<List<AvailableService>>(content, new System.Text.Json.JsonSerializerOptions());
+                    string content = await File.ReadAllTextAsync(availableServiceFilePath, cancellationToken);
+                    if (!string.IsNullOrEmpty(content))
+                    {
+                        availableServices = System.Text.Json.JsonSerializer.Deserialize<List<AvailableService>>(content, new System.Text.Json.JsonSerializerOptions());
+                    }
+
+                    if (availableServices == null)
+                    {
+                        availableServices = new List<AvailableService>();
+                    }
+
+                    return availableServices;
                 }
 
-                if(availableServices == null)
-                {
-                    availableServices = new List<AvailableService>();
-                }
-
-                return availableServices;
+                throw new FileNotFoundException("Could not find " + availableServiceFilePath);
             }
 
-            throw new FileNotFoundException("Could not find " + availableServiceFilePath);
+            throw new FileNotFoundException($"Could not find tesdata folder for langauge {languageId}" );
         }
 
         public async Task<ServiceResource?> GetServiceResourceFromService(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken)

@@ -461,7 +461,7 @@ namespace Altinn.ResourceRegistry.Tests
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
             Assert.NotNull(errordetails);
 
-            Assert.Equal(1, errordetails.Errors.Count);
+            Assert.Single(errordetails.Errors);
             Assert.Equal(3, errordetails.Errors["InvalidPrefix"].Length);
         }
 
@@ -690,7 +690,7 @@ namespace Altinn.ResourceRegistry.Tests
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
             Assert.NotNull(errordetails);
 
-            Assert.Equal(1, errordetails.Errors.Count);
+            Assert.Single(errordetails.Errors);
             Assert.Equal(3, errordetails.Errors["InvalidPrefix"].Length);
         }
         

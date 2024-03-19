@@ -79,16 +79,27 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return null;
         }
 
-        private static string GetAltinn2TestDatafolder()
+        private static string? GetAltinn2TestDatafolder()
         {
             string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Altinn2");
+
+            if (unitTestFolder != null)
+            {
+                return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Altinn2");
+            }
+
+            return null;
         }
 
-        private static string GetPolicyContainerPath()
+        private static string? GetPolicyContainerPath()
         {
-            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourcePolicies");
+            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
+            if (unitTestFolder != null)
+            {
+                return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "ResourcePolicies");
+            }
+
+            return null;
         }
     }
 }

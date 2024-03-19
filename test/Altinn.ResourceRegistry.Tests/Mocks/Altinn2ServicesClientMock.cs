@@ -44,7 +44,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             throw new FileNotFoundException("Could not find " + availableServiceFilePath);
         }
 
-        public async Task<ServiceResource> GetServiceResourceFromService(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken)
+        public async Task<ServiceResource?> GetServiceResourceFromService(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken)
         {
             List<AvailableService> services = await AvailableServices(1044, cancellationToken);
             AvailableService? service = services.FirstOrDefault(r=> r.ExternalServiceCode == serviceCode);

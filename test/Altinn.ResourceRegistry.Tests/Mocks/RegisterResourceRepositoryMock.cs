@@ -12,7 +12,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
     {
         public async Task<ServiceResource> CreateResource(ServiceResource resource, CancellationToken cancellationToken = default)
         {
-            return await Task.FromResult<ServiceResource>(null);
+            return await Task.FromResult<ServiceResource>(resource);
         }
 
         public async Task<ServiceResource> UpdateResource(ServiceResource resource, CancellationToken cancellationToken = default)
@@ -20,26 +20,20 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return await Task.FromResult<ServiceResource>(resource);
         }
 
-        public async Task<ServiceResource> DeleteResource(string id, CancellationToken cancellationToken = default)
+        public async Task<ServiceResource?> DeleteResource(string id, CancellationToken cancellationToken = default)
         {
             return await GetResource(id);
         }
 
-        public async Task<ServiceResource> GetResource(string id, CancellationToken cancellationToken = default)
+        public async Task<ServiceResource?> GetResource(string id, CancellationToken cancellationToken = default)
         {
             string resourcePath = GetResourcePath(id);
             if (File.Exists(resourcePath))
             {
-                try
-                {
-                    string content = System.IO.File.ReadAllText(resourcePath);
-                    ServiceResource? resource = System.Text.Json.JsonSerializer.Deserialize<ServiceResource>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }) as ServiceResource;
-                    return resource;
-                }
-                catch(Exception ex)
-                {
-                    throw;
-                }
+                string content = await System.IO.File.ReadAllTextAsync(resourcePath);
+                ServiceResource? resource = System.Text.Json.JsonSerializer.Deserialize<ServiceResource>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }) as ServiceResource;
+
+                return resource;
             }
 
             return null;
@@ -53,9 +47,12 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             {
                 foreach (string file in files)
                 {
-                    string content = System.IO.File.ReadAllText(file);
+                    string content = await System.IO.File.ReadAllTextAsync(file);
                     ServiceResource? resource = System.Text.Json.JsonSerializer.Deserialize<ServiceResource>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }) as ServiceResource;
-                    resources.Add(resource);
+                    if (resource != null)
+                    {
+                        resources.Add(resource);
+                    }
                 }
             }
 

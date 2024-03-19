@@ -38,13 +38,15 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             throw new FileNotFoundException("Could not find " + applicationsFilePath);
         }
 
-
-
-
-        private static string GetAltinn2TestDatafolder()
+        private static string? GetAltinn2TestDatafolder()
         {
-            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Altinn3Storage");
+            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(PolicyRepositoryMock).Assembly.Location).LocalPath);
+            if (unitTestFolder != null)
+            {
+                return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Altinn3Storage");
+            }
+
+            return null;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// The identifier of the resource
         /// </summary>
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
 
         /// <summary>
         /// The version of the resource
@@ -22,17 +22,17 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// The title of service
         /// </summary>
-        public Dictionary<string, string> Title { get; set; }
+        public Dictionary<string, string>? Title { get; set; }
 
         /// <summary>
         /// Description
         /// </summary>
-        public Dictionary<string, string> Description { get; set; }
+        public Dictionary<string, string>? Description { get; set; }
 
         /// <summary>
         /// Description explaining the rights a recipient will receive if given access to the resource
         /// </summary>
-        public Dictionary<string, string> RightDescription { get; set;  }
+        public Dictionary<string, string>? RightDescription { get; set;  }
 
         /// <summary>
         /// The homepage
@@ -42,7 +42,7 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// The status
         /// </summary>
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         /// <summary>
         /// spatial coverage
@@ -53,7 +53,7 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// List of possible contact points
         /// </summary>
-        public List<ContactPoint> ContactPoints { get; set; }
+        public List<ContactPoint>? ContactPoints { get; set; }
 
         /// <summary>
         /// Linkes to the outcome of a public service

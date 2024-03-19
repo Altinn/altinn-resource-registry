@@ -60,23 +60,27 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return res;
         }
 
-        public Task<XacmlPolicy> GetXacmlPolicy(string serviceCode, int serviceEditionCode, string identifier, CancellationToken cancellationToken)
+        public Task<XacmlPolicy?> GetXacmlPolicy(string serviceCode, int serviceEditionCode, string identifier, CancellationToken cancellationToken)
         {
-            string resourceId = Path.Combine(GetPolicyContainerPath(), "altinn_access_management", "resourcepolicy.xml");
-            if (File.Exists(resourceId))
+            string? policyContainerPath = GetPolicyContainerPath();
+            if (policyContainerPath != null)
             {
-                Stream stream =  new FileStream(resourceId, FileMode.Open, FileAccess.Read, FileShare.Read);
-                stream.Position = 0;
-                XacmlPolicy policy;
-                using (XmlReader reader = XmlReader.Create(stream))
+                string resourceId = Path.Combine(policyContainerPath, "altinn_access_management", "resourcepolicy.xml");
+                if (File.Exists(resourceId))
                 {
-                    policy = XacmlParser.ParseXacmlPolicy(reader);
+                    Stream stream = new FileStream(resourceId, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    stream.Position = 0;
+                    XacmlPolicy policy;
+                    using (XmlReader reader = XmlReader.Create(stream))
+                    {
+                        policy = XacmlParser.ParseXacmlPolicy(reader);
+                    }
+
+                    return Task.FromResult<XacmlPolicy?>(policy);
                 }
-                
-                return Task.FromResult(policy);
             }
 
-            return null;
+            return Task.FromResult<XacmlPolicy?>(null);
         }
 
         private static string? GetAltinn2TestDatafolder()

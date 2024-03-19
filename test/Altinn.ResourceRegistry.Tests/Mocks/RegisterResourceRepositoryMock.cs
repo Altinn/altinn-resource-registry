@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
 
 namespace Altinn.ResourceRegistry.Tests.Mocks
@@ -28,6 +29,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         public async Task<ServiceResource?> GetResource(string id, CancellationToken cancellationToken = default)
         {
             string? resourcePath = GetResourcePath(id);
+            resourcePath.AsFilePath(true);
             if (File.Exists(resourcePath))
             {
                 string content = await System.IO.File.ReadAllTextAsync(resourcePath);
@@ -43,7 +45,8 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         {
             List<ServiceResource> resources = new List<ServiceResource>();
             string? resourcePath = GetResourcePath();
-            if(resourcePath != null)
+            resourcePath.AsFilePath(true);
+            if (resourcePath != null)
             { 
                 string[] files =  Directory.GetFiles(resourcePath);
                 if(files != null)

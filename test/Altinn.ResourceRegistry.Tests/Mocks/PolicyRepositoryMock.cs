@@ -25,7 +25,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
                 resourceId = Path.Combine(containerPath, resourceId, "resourcepolicy.xml");
                 if (File.Exists(resourceId))
                 {
-                    return new FileStream(resourceId, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    return await Task.Run(() => new FileStream(resourceId, FileMode.Open, FileAccess.Read, FileShare.Read));
                 }
             }
 
@@ -40,7 +40,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
                 string policyFile = Path.Combine(containerPath, org, app, "policy.xml");
                 if (File.Exists(policyFile))
                 {
-                   return new FileStream(policyFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    return await Task.Run(() => new FileStream(policyFile, FileMode.Open, FileAccess.Read, FileShare.Read));
                 }
             }
 
@@ -57,7 +57,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public async Task ReleaseBlobLease(string filepath, string leaseId, CancellationToken cancellationToken)
+        public Task ReleaseBlobLease(string filepath, string leaseId, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

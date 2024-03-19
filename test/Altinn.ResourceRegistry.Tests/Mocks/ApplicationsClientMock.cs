@@ -15,27 +15,33 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
     {
         public async Task<ApplicationList> GetApplicationList(CancellationToken cancellationToken)
         {
-            string applicationsFilePath = Path.Combine(GetAltinn2TestDatafolder(), $"applications.json");
-
-            ApplicationList? applicationList = new ApplicationList();
-
-            if (File.Exists(applicationsFilePath))
+            string? testdataFolder = GetAltinn2TestDatafolder();
+            if(testdataFolder != null)
             {
-                string content = await File.ReadAllTextAsync(applicationsFilePath);
-                if (!string.IsNullOrEmpty(content))
+                string applicationsFilePath = Path.Combine(testdataFolder, $"applications.json");
+
+                ApplicationList? applicationList = new ApplicationList();
+
+                if (File.Exists(applicationsFilePath))
                 {
-                    applicationList = System.Text.Json.JsonSerializer.Deserialize<ApplicationList>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase });
-                }
+                    string content = await File.ReadAllTextAsync(applicationsFilePath);
+                    if (!string.IsNullOrEmpty(content))
+                    {
+                        applicationList = System.Text.Json.JsonSerializer.Deserialize<ApplicationList>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase });
+                    }
                 
-                if(applicationList == null)
-                {
-                    applicationList = new ApplicationList();
+                    if(applicationList == null)
+                    {
+                        applicationList = new ApplicationList();
+                    }
+
+                    return applicationList;
                 }
 
-                return applicationList;
+                throw new FileNotFoundException("Could not find " + applicationsFilePath);
             }
 
-            throw new FileNotFoundException("Could not find " + applicationsFilePath);
+            throw new FileNotFoundException("Could not find testdatafolder");
         }
 
         private static string? GetAltinn2TestDatafolder()

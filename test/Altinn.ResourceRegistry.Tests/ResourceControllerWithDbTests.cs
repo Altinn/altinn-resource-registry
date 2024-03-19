@@ -176,7 +176,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
-        Paginated<AttributeMatchV2> subjectMatch = await response.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
+        Paginated<AttributeMatchV2>? subjectMatch = await response.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);

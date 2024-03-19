@@ -88,7 +88,7 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// HasCompetentAuthority
         /// </summary>
-        public CompetentAuthority HasCompetentAuthority { get; set; }
+        public CompetentAuthority? HasCompetentAuthority { get; set; }
 
         /// <summary>
         /// Keywords

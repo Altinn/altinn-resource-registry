@@ -27,7 +27,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 
         public async Task<ServiceResource?> GetResource(string id, CancellationToken cancellationToken = default)
         {
-            string resourcePath = GetResourcePath(id);
+            string? resourcePath = GetResourcePath(id);
             if (File.Exists(resourcePath))
             {
                 string content = await System.IO.File.ReadAllTextAsync(resourcePath);
@@ -42,16 +42,20 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
         public async Task<List<ServiceResource>> Search(ResourceSearch resourceSearch, CancellationToken cancellationToken = default)
         {
             List<ServiceResource> resources = new List<ServiceResource>();
-            string[] files =  Directory.GetFiles(GetResourcePath());
-            if(files != null)
-            {
-                foreach (string file in files)
+            string? resourcePath = GetResourcePath();
+            if(resourcePath != null)
+            { 
+                string[] files =  Directory.GetFiles(resourcePath);
+                if(files != null)
                 {
-                    string content = await System.IO.File.ReadAllTextAsync(file);
-                    ServiceResource? resource = System.Text.Json.JsonSerializer.Deserialize<ServiceResource>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }) as ServiceResource;
-                    if (resource != null)
+                    foreach (string file in files)
                     {
-                        resources.Add(resource);
+                        string content = await System.IO.File.ReadAllTextAsync(file);
+                        ServiceResource? resource = System.Text.Json.JsonSerializer.Deserialize<ServiceResource>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }) as ServiceResource;
+                        if (resource != null)
+                        {
+                            resources.Add(resource);
+                        }
                     }
                 }
             }
@@ -59,15 +63,26 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return resources;
         }
 
-        private static string GetResourcePath(string id)
+        private static string? GetResourcePath(string id)
         {
-            return Path.Combine(GetResourcePath(), id + ".json");
+            string? resourcePath = GetResourcePath();
+            if (resourcePath != null)
+            {
+                return Path.Combine(resourcePath, id + ".json");
+            }
+
+            return null;
         }
 
-        private static string GetResourcePath()
+        private static string? GetResourcePath()
         {
-            string unitTestFolder = Path.GetDirectoryName(new Uri(typeof(RegisterResourceRepositoryMock).Assembly.Location).LocalPath);
-            return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Resources");
+            string? unitTestFolder = Path.GetDirectoryName(new Uri(typeof(RegisterResourceRepositoryMock).Assembly.Location).LocalPath);
+            if (unitTestFolder != null)
+            {
+                return Path.Combine(unitTestFolder, "..", "..", "..", "Data", "Resources");
+            }
+
+            return null;
         }
 
         public Task<List<SubjectResources>> FindResourcesForSubjects(IEnumerable<string> subjects, CancellationToken cancellationToken = default)

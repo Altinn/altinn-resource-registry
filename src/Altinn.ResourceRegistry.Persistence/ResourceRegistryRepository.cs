@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlTypes;
 using System.Text.Json;
+using Altinn.Authorization.ABAC.Utils;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Persistence.Extensions;
@@ -90,6 +91,8 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             RETURNING identifier, created, modified, serviceresourcejson
             ";
 
+        ArgumentNullException.ThrowIfNull(resource);
+        ArgumentNullException.ThrowIfNull(resource.Identifier);
         var json = JsonSerializer.SerializeToDocument(resource, JsonSerializerOptions);
         try
         {
@@ -179,6 +182,9 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             WHERE identifier = @identifier
             RETURNING identifier, created, modified, serviceresourcejson
             ";
+
+        ArgumentNullException.ThrowIfNull(resource);
+        ArgumentNullException.ThrowIfNull(resource.Identifier);
         var json = JsonSerializer.SerializeToDocument(resource, JsonSerializerOptions);
         try
         {

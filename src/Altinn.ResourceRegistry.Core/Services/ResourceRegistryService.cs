@@ -132,15 +132,15 @@ namespace Altinn.ResourceRegistry.Core.Services
                     string org = idParts[1];
                     string app = idParts[2];
                     policyContent = await _policyRepository.GetAppPolicyAsync(org, app, cancellationToken);
+                    policyContent.Position = 0;
                 }
             }
             else
             {
                 policyContent = await _policyRepository.GetPolicyAsync(serviceResource.Identifier, cancellationToken);
+                policyContent.Position = 0;
             }
 
-            // Reset position
-            policyContent.Position = 0;
             XacmlPolicy policy = await PolicyHelper.ParsePolicy(policyContent);
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);

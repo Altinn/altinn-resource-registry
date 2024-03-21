@@ -32,7 +32,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             resourcePath.AsFilePath(true);
             if (File.Exists(resourcePath))
             {
-                string content = await System.IO.File.ReadAllTextAsync(resourcePath);
+                string content = await System.IO.File.ReadAllTextAsync(resourcePath, cancellationToken);
                 ServiceResource? resource = System.Text.Json.JsonSerializer.Deserialize<ServiceResource>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }) as ServiceResource;
 
                 return resource;
@@ -53,7 +53,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
                 {
                     foreach (string file in files)
                     {
-                        string content = await System.IO.File.ReadAllTextAsync(file);
+                        string content = await System.IO.File.ReadAllTextAsync(file, cancellationToken);
                         ServiceResource? resource = System.Text.Json.JsonSerializer.Deserialize<ServiceResource>(content, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }) as ServiceResource;
                         if (resource != null)
                         {

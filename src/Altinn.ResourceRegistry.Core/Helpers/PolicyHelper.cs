@@ -37,8 +37,6 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                     throw new ArgumentException("Policy not accepted: Contains rule without reference to registry resource id");
                 }
             }
-
-            return true; 
         }
 
         /// <summary>
@@ -106,12 +104,8 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// <returns>XacmlPolicy</returns>
         public static XacmlPolicy ParsePolicy(MemoryStream stream)
         {
-            XacmlPolicy policy;
-            using (XmlReader reader = XmlReader.Create(stream))
-            {
-                policy = XacmlParser.ParseXacmlPolicy(reader);
-            }
-
+            using XmlReader reader = XmlReader.Create(stream);
+            XacmlPolicy policy = XacmlParser.ParseXacmlPolicy(reader);
             return policy;
         }
 

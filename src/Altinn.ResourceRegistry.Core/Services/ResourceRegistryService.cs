@@ -110,7 +110,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         public async Task<bool> StorePolicy(ServiceResource serviceResource, ReadOnlySequence<byte> policyContent, CancellationToken cancellationToken = default)
         {
             XacmlPolicy policy = PolicyHelper.ParsePolicy(policyContent);
-            PolicyHelper.ValidateResourcePolicy(serviceResource, policy);
+            PolicyHelper.EnsureValidPolicy(serviceResource, policy);
             Response<BlobContentInfo> response = await _policyRepository.WritePolicyAsync(serviceResource.Identifier, policyContent.AsStream(), cancellationToken);
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
@@ -139,7 +139,9 @@ namespace Altinn.ResourceRegistry.Core.Services
                 policyContent = await _policyRepository.GetPolicyAsync(serviceResource.Identifier, cancellationToken);
             }
 
-            XacmlPolicy policy = PolicyHelper.ParsePolicy(policyContent);
+            // Reset position
+            policyContent.Position = 0;
+            XacmlPolicy policy = await PolicyHelper.ParsePolicy(policyContent);
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
             await _resourceRegistryRepository.SetResourceSubjects(resourceSubjects, cancellationToken);

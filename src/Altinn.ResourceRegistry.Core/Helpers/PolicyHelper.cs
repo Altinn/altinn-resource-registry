@@ -21,7 +21,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// </summary>
         /// <param name="serviceResources">The resource from the registry</param>
         /// <param name="policy">The xacml policy</param>
-        public static bool ValidateResourcePolicy(ServiceResource serviceResources, XacmlPolicy policy) 
+        public static void EnsureValidPolicy(ServiceResource serviceResources, XacmlPolicy policy) 
         {
             foreach (XacmlRule policyRule in policy.Rules)
             {
@@ -91,9 +91,21 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// </summary>
         /// <param name="stream">The file IO stream</param>
         /// <returns>XacmlPolicy</returns>
-        public static XacmlPolicy ParsePolicy(Stream stream)
+        public static async Task<XacmlPolicy> ParsePolicy(Stream stream)
         {
-            stream.Position = 0;
+            MemoryStream memoryStreamPolicy = new MemoryStream();
+            await stream.CopyToAsync(memoryStreamPolicy);
+            memoryStreamPolicy.Position = 0;
+            return ParsePolicy(memoryStreamPolicy);
+        }
+
+        /// <summary>
+        /// Takes the memorystream and parses the policy file to a XacmlPolicy <see cref="XacmlPolicy"/>
+        /// </summary>
+        /// <param name="stream">The file IO stream</param>
+        /// <returns>XacmlPolicy</returns>
+        public static XacmlPolicy ParsePolicy(MemoryStream stream)
+        {
             XacmlPolicy policy;
             using (XmlReader reader = XmlReader.Create(stream))
             {

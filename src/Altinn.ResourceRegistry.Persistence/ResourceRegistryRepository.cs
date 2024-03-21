@@ -283,8 +283,6 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         while (await reader.ReadAsync(cancellationToken))
         {
-            List<AttributeMatchV2> subjectMatches = new List<AttributeMatchV2>();
-
             AttributeMatchV2 subjectMatch = GetSubjectAttribute(reader);
             AttributeMatchV2 resourceAttributeMatch = GetResourceAttribute(reader);
 
@@ -353,7 +351,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             await resourceCmd.ExecuteNonQueryAsync(cancellationToken);
         }
 
-        await tx.CommitAsync();
+        await tx.CommitAsync(cancellationToken);
     }
 
     private static async ValueTask<ServiceResource> GetServiceResource(NpgsqlDataReader reader)

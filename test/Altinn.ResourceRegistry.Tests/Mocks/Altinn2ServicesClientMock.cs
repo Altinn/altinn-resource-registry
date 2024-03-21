@@ -35,13 +35,8 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
                     {
                         availableServices = System.Text.Json.JsonSerializer.Deserialize<List<AvailableService>>(content, new System.Text.Json.JsonSerializerOptions());
                     }
-
-                    if (availableServices == null)
-                    {
-                        availableServices = new List<AvailableService>();
-                    }
-
-                    return availableServices;
+                     
+                    return availableServices ?? [];
                 }
 
                 throw new FileNotFoundException("Could not find " + availableServiceFilePath);

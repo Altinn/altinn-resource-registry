@@ -1,4 +1,7 @@
-﻿using Altinn.ResourceRegistry.Core.Models;
+﻿using Altinn.ResourceRegistry.Core.Constants;
+using Altinn.ResourceRegistry.Core.Enums;
+using Altinn.ResourceRegistry.Core.Models;
+using System.Text.RegularExpressions;
 
 namespace Altinn.ResourceRegistry.Core.Helpers
 {
@@ -25,6 +28,128 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             }
 
             return searchResults;
+        }
+
+        /// <summary>
+        /// Method to validate service resource
+        /// </summary>
+        public static bool ValidateResource(ServiceResource serviceResource, out string message)
+        {
+            if (serviceResource.Identifier.StartsWith(ResourceConstants.SERVICE_ENGINE_RESOURCE_PREFIX)
+                && (serviceResource.ResourceReferences == null
+                || !serviceResource.ResourceReferences.Any()
+                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceCode))
+                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceEditionCode))))
+            {
+                // Uses Service engine prefix without it beeing a service engine resource
+                message = "Invalid Prefix";
+                return false;
+            }
+
+            if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX)
+                && (serviceResource.ResourceReferences == null
+                || !serviceResource.ResourceReferences.Any()
+                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ApplicationId))))
+            {
+                // Uses app prefix without it beeing a app resource
+                message = "Invalid Prefix. app_ is only for Altinn Studio apps";
+                return false;
+            }
+
+            string pattern = "^[a-z0-9_-]+$";
+
+            if (!Regex.IsMatch(serviceResource.Identifier, pattern))
+            {
+                message = "Invalid id. Only a-z and 0-9 is allowed together with _ and -";   
+            }
+
+            if (serviceResource.Title == null || serviceResource.Title.Count == 0)
+            {
+                // Uses app prefix without it beeing a app resource
+                message = "Missing title";
+                return false;
+            }
+
+            if (!serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            {
+                // Uses app prefix without it beeing a app resource
+                message = $"Missing title in english {ResourceConstants.LANGUAGE_EN}";
+                return false;
+            }
+
+            if (!serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB))
+            {
+                // Uses app prefix without it beeing a app resource
+                message = $"Missing title in bokmål {ResourceConstants.LANGUAGE_NB}";
+                return false;
+            }
+
+            if (!serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            {
+                // Uses app prefix without it beeing a app resource
+                message = $"Missing title in nynorsk {ResourceConstants.LANGUAGE_NN}";
+                return false;
+            }
+
+            if (serviceResource.RightDescription == null || serviceResource.RightDescription.Count == 0)
+            {
+                // Uses app prefix without it beeing a app resource
+                message = "Missing RightDescription";
+                return false;
+            }
+
+            if (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            {
+                // Uses app prefix without it beeing a app resource
+                message = $"Missing RightDescription in english {ResourceConstants.LANGUAGE_EN}";
+                return false;
+            }
+
+            if (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NB))
+            {
+                // Uses app prefix without it beeing a app resource
+                message = $"Missing RightDescription in bokmål {ResourceConstants.LANGUAGE_NB}";
+                return false;
+            }
+
+            if (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            {
+                // Uses app prefix without it beeing a app resource
+                message = $"Missing RightDescription in nynorsk {ResourceConstants.LANGUAGE_NN}";
+                return false;
+            }
+
+            if (serviceResource.Description == null || serviceResource.Description.Count == 0)
+            {
+                // Uses app prefix without it beeing a app resource
+                message = "Missing Description";
+                return false;
+            }
+
+            if (!serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            {
+                // Uses app prefix without it beeing a app resource
+                message = $"Missing Description in english {ResourceConstants.LANGUAGE_EN}";
+                return false;
+            }
+
+            if (!serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NB))
+            {
+                // Uses app prefix without it beeing a app resource
+                message = $"Missing Description in bokmål {ResourceConstants.LANGUAGE_NB}";
+                return false;
+            }
+
+            if (!serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            {
+                // Uses app prefix without it beeing a app resource
+                message = $"Missing Description in nynorsk {ResourceConstants.LANGUAGE_NN}";
+                return false;
+            }
+
+            message = null;
+
+            return true;
         }
 
         private static bool MatchingIdentifier(ServiceResource resource, ResourceSearch resourceSearch)

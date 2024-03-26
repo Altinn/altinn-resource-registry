@@ -152,13 +152,13 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "superdupertjenestene",
-                Title = new Dictionary<string, string>(),
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
                 Keywords = new List<Keyword>(),
-                Description = new Dictionary<string, string>(),
-                RightDescription = new Dictionary<string, string>(),
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
@@ -226,13 +226,13 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "superdupertjenestene",
-                Title = new Dictionary<string, string>(),
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
                 Keywords = new List<Keyword>(),
-                Description = new Dictionary<string, string>(),
-                RightDescription = new Dictionary<string, string>(),
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
@@ -300,13 +300,13 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "app_superdupertjenestene",
-                Title = new Dictionary<string, string>(),
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
                 Keywords = new List<Keyword>(),
-                Description = new Dictionary<string, string>(),
-                RightDescription = new Dictionary<string, string>(),
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
@@ -340,13 +340,13 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "app_superdupertjenestene",
-                Title = new Dictionary<string, string>(),
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
                 Keywords = new List<Keyword>(),
-                Description = new Dictionary<string, string>(),
-                RightDescription = new Dictionary<string, string>(),
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
@@ -393,13 +393,13 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "superdupertjenestene",
-                Title = new Dictionary<string, string>(),
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf  = "Altinn",
                 Keywords = new List<Keyword>(),
-                Description = new Dictionary<string, string>(),
-                RightDescription = new Dictionary<string, string>(),
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
@@ -474,13 +474,13 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "altinn_access_management",
-                Title = new Dictionary<string, string>(),
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
                 Keywords = new List<Keyword>(),
-                Description = new Dictionary<string, string>(),
-                RightDescription = new Dictionary<string, string>(),
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
@@ -548,13 +548,13 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "altinn_access_management",
-                Title = new Dictionary<string, string>(),
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
                 Keywords = new List<Keyword>(),
-                Description = new Dictionary<string, string>(),
-                RightDescription = new Dictionary<string, string>(),
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
@@ -622,13 +622,13 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "altinn_access_management",
-                Title = new Dictionary<string, string>(),
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Active",
                 Homepage = "www.altinn.no",
                 IsPartOf = "Altinn",
                 Keywords = new List<Keyword>(),
-                Description = new Dictionary<string, string>(),
-                RightDescription = new Dictionary<string, string>(),
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
@@ -860,9 +860,9 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "altinn_access_management",
-                Title = new Dictionary<string, string>() { { "en", "Maskinporten Scope Delegation" } },
-                Description = new Dictionary<string, string>() { { "nb", "Maskinporten Scope Delegation" } },
-                RightDescription = new Dictionary<string, string> { { "nb", "Access to Maskinporten Scope Delegation" } },
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Completed",
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
@@ -921,9 +921,9 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource() 
             {
                 Identifier = "superdupertjenestene",
-                Title = new Dictionary<string, string>() { { "en", "Super Duper Tjenestene" } },
-                Description = new Dictionary<string, string>() { { "nb", "Dette er en super duper tjeneste" } },
-                RightDescription = new Dictionary<string, string> { { "nb", "Dette gir mottakere rett til super duper tjeenste" } },
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Completed",
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
@@ -957,9 +957,9 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "superdupertjenestene",
-                Title = new Dictionary<string, string>() { { "en", "Super Duper Tjenestene" } },
-                Description = new Dictionary<string, string>() { { "nb", "Dette er en super duper tjeneste" } },
-                RightDescription = new Dictionary<string, string> { { "nb", "Dette gir mottakere rett til super duper tjeenste" } },
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Completed",
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
@@ -993,9 +993,9 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "superdupertjenestene",
-                Title = new Dictionary<string, string>() { { "en", "Super Duper Tjenestene" } },
-                Description = new Dictionary<string, string>() { { "nb", "Dette er en super duper tjeneste"} },
-                RightDescription = new Dictionary<string, string> { { "nb", "Dette gir mottakere rett til super duper tjeenste"} },
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmål" }, { "nn", "Nynorsk" } },
                 Status = "Completed",
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()

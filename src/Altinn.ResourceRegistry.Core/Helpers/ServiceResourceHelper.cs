@@ -60,7 +60,8 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             if (!Regex.IsMatch(serviceResource.Identifier, pattern))
             {
-                message = "Invalid id. Only a-z and 0-9 is allowed together with _ and -";   
+                message = "Invalid id. Only a-z and 0-9 is allowed together with _ and -";
+                return false;
             }
 
             if (serviceResource.Title == null || serviceResource.Title.Count == 0)

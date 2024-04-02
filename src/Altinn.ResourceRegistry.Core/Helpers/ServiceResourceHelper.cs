@@ -88,25 +88,25 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 return false;
             }
 
-            if (serviceResource.RightDescription == null || serviceResource.RightDescription.Count == 0)
+            if (serviceResource.Delegable && (serviceResource.RightDescription == null || serviceResource.RightDescription.Count == 0))
             {
                 message = "Missing RightDescription";
                 return false;
             }
 
-            if (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            if (serviceResource.Delegable && (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_EN)))
             {
                 message = $"Missing RightDescription in english {ResourceConstants.LANGUAGE_EN}";
                 return false;
             }
 
-            if (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NB))
+            if (serviceResource.Delegable && (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NB)))
             {
                 message = $"Missing RightDescription in bokmal {ResourceConstants.LANGUAGE_NB}";
                 return false;
             }
 
-            if (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            if (serviceResource.Delegable && (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NN)))
             {
                 message = $"Missing RightDescription in nynorsk {ResourceConstants.LANGUAGE_NN}";
                 return false;

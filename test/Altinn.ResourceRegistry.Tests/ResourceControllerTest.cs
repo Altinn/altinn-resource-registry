@@ -140,7 +140,7 @@ namespace Altinn.ResourceRegistry.Tests
 
             Assert.NotNull(errordetails);
 
-            Assert.Equal(4, errordetails.Errors.Count);
+            Assert.Equal(3, errordetails.Errors.Count);
         }
 
         [Fact]

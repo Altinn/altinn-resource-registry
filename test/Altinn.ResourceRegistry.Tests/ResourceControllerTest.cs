@@ -962,7 +962,7 @@ namespace Altinn.ResourceRegistry.Tests
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             string content = await response.Content.ReadAsStringAsync();
-            Assert.Contains("Missing Description in Bokmal nb", content);
+            Assert.Contains("Missing Description in bokmal nb", content);
         }
 
         [Fact]

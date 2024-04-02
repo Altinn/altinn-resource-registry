@@ -78,7 +78,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             if (!serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB))
             {
-                message = $"Missing title in bokmål {ResourceConstants.LANGUAGE_NB}";
+                message = $"Missing title in bokmal {ResourceConstants.LANGUAGE_NB}";
                 return false;
             }
 
@@ -102,7 +102,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             if (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NB))
             {
-                message = $"Missing RightDescription in bokmål {ResourceConstants.LANGUAGE_NB}";
+                message = $"Missing RightDescription in bokmal {ResourceConstants.LANGUAGE_NB}";
                 return false;
             }
 
@@ -126,7 +126,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             if (!serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NB))
             {
-                message = $"Missing Description in bokmål {ResourceConstants.LANGUAGE_NB}";
+                message = $"Missing Description in bokmal {ResourceConstants.LANGUAGE_NB}";
                 return false;
             }
 

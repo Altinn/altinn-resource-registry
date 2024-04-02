@@ -928,7 +928,7 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         [Fact]
-        public async Task UpdateResource_MissingDescriptionBokmål()
+        public async Task UpdateResource_MissingDescriptionBokmal()
         {
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
             ServiceResource resource = new ServiceResource()

@@ -1004,6 +1004,44 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         [Fact]
+        public async Task UpdateResource_MissingRightsDecriptionEngelskButNotDelegatable()
+        {
+            string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+            ServiceResource resource = new ServiceResource()
+            {
+                Identifier = "altinn_access_management",
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                Status = "Completed",
+                Delegable = false,
+                ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
+                HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+                {
+                    Organization = "974761076",
+                    Orgcode = "skd",
+                }
+            };
+
+            HttpClient client = SetupUtil.GetTestClient(_factory);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, requestUri)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+            };
+
+            httpRequestMessage.Headers.Add("Accept", "application/json");
+            httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+
+        [Fact]
         public async Task UpdateResource_BadRequest()
         {
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");

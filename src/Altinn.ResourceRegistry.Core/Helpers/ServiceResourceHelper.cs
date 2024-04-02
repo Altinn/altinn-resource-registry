@@ -10,6 +10,9 @@ namespace Altinn.ResourceRegistry.Core.Helpers
     /// </summary>
     public static class ServiceResourceHelper
     {
+
+        private static readonly Regex ResourceRegex = new Regex("^[a-z0-9_-]+$", RegexOptions.Compiled);
+
         /// <summary>
         /// Gets resources from the resourcelist that fits the search criteria
         /// </summary>
@@ -56,9 +59,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 return false;
             }
 
-            string pattern = "^[a-z0-9_-]+$";
-
-            if (!Regex.IsMatch(serviceResource.Identifier, pattern))
+            if (!ResourceRegex.IsMatch(serviceResource.Identifier))
             {
                 message = "Invalid id. Only a-z and 0-9 is allowed together with _ and -";
                 return false;

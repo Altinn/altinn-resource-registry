@@ -10,7 +10,6 @@ namespace Altinn.ResourceRegistry.Core.Helpers
     /// </summary>
     public static class ServiceResourceHelper
     {
-
         private static readonly Regex ResourceRegex = new Regex("^[a-z0-9_-]+$", RegexOptions.Compiled);
 
         /// <summary>

@@ -1,7 +1,7 @@
-﻿using Altinn.ResourceRegistry.Core.Constants;
+﻿using System.Text.RegularExpressions;
+using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
-using System.Text.RegularExpressions;
 
 namespace Altinn.ResourceRegistry.Core.Helpers
 {

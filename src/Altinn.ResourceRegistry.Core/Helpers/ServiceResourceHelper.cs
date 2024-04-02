@@ -66,84 +66,72 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             if (serviceResource.Title == null || serviceResource.Title.Count == 0)
             {
-                // Uses app prefix without it beeing a app resource
                 message = "Missing title";
                 return false;
             }
 
             if (!serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN))
             {
-                // Uses app prefix without it beeing a app resource
                 message = $"Missing title in english {ResourceConstants.LANGUAGE_EN}";
                 return false;
             }
 
             if (!serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB))
             {
-                // Uses app prefix without it beeing a app resource
                 message = $"Missing title in bokmål {ResourceConstants.LANGUAGE_NB}";
                 return false;
             }
 
             if (!serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN))
             {
-                // Uses app prefix without it beeing a app resource
                 message = $"Missing title in nynorsk {ResourceConstants.LANGUAGE_NN}";
                 return false;
             }
 
             if (serviceResource.RightDescription == null || serviceResource.RightDescription.Count == 0)
             {
-                // Uses app prefix without it beeing a app resource
                 message = "Missing RightDescription";
                 return false;
             }
 
             if (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_EN))
             {
-                // Uses app prefix without it beeing a app resource
                 message = $"Missing RightDescription in english {ResourceConstants.LANGUAGE_EN}";
                 return false;
             }
 
             if (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NB))
             {
-                // Uses app prefix without it beeing a app resource
                 message = $"Missing RightDescription in bokmål {ResourceConstants.LANGUAGE_NB}";
                 return false;
             }
 
             if (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NN))
             {
-                // Uses app prefix without it beeing a app resource
                 message = $"Missing RightDescription in nynorsk {ResourceConstants.LANGUAGE_NN}";
                 return false;
             }
 
             if (serviceResource.Description == null || serviceResource.Description.Count == 0)
             {
-                // Uses app prefix without it beeing a app resource
                 message = "Missing Description";
                 return false;
             }
 
             if (!serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_EN))
             {
-                // Uses app prefix without it beeing a app resource
                 message = $"Missing Description in english {ResourceConstants.LANGUAGE_EN}";
                 return false;
             }
 
             if (!serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NB))
             {
-                // Uses app prefix without it beeing a app resource
                 message = $"Missing Description in bokmål {ResourceConstants.LANGUAGE_NB}";
                 return false;
             }
 
             if (!serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NN))
             {
-                // Uses app prefix without it beeing a app resource
                 message = $"Missing Description in nynorsk {ResourceConstants.LANGUAGE_NN}";
                 return false;
             }

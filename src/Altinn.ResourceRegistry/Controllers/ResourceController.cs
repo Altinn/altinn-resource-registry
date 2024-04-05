@@ -99,9 +99,14 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             // Validate Resource
-            if (!ServiceResourceHelper.ValidateResource(serviceResource, out string message))
+            if (!ServiceResourceHelper.ValidateResource(serviceResource, out Dictionary<string,string> message))
             {
-                return BadRequest(message);
+                foreach (KeyValuePair<string,string> kvp in message)
+                {
+                    ModelState.AddModelError(kvp.Key, kvp.Value);
+                }
+
+                return ValidationProblem(ModelState);
             }
 
             try
@@ -171,9 +176,15 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             // Validate Resource
-            if (!ServiceResourceHelper.ValidateResource(serviceResource, out string message))
+            // Validate Resource
+            if (!ServiceResourceHelper.ValidateResource(serviceResource, out Dictionary<string, string> message))
             {
-                return BadRequest(message);
+                foreach (KeyValuePair<string, string> kvp in message)
+                {
+                    ModelState.AddModelError(kvp.Key, kvp.Value);
+                }
+
+                return ValidationProblem(ModelState);
             }
 
             if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))

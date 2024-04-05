@@ -10,7 +10,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
     /// </summary>
     public static class ServiceResourceHelper
     {
-        private static readonly Regex ResourceRegex = new Regex("^[a-z0-9_-]+$", RegexOptions.Compiled);
+        private static readonly Regex ResourceIdentifierRegex = new Regex("^[a-z0-9_-]+$", RegexOptions.Compiled);
 
         /// <summary>
         /// Gets resources from the resourcelist that fits the search criteria
@@ -35,110 +35,114 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// <summary>
         /// Method to validate service resource
         /// </summary>
-        public static bool ValidateResource(ServiceResource serviceResource, out string message)
+        public static bool ValidateResource(ServiceResource serviceResource, out Dictionary<string, string> validationMessages)
         {
-            if (serviceResource.Identifier.StartsWith(ResourceConstants.SERVICE_ENGINE_RESOURCE_PREFIX)
+            bool isValid = true;
+            validationMessages = new Dictionary<string, string>();
+            if (IsInvalidServiceEngineResource(serviceResource))
+            {
+                // Uses Service engine prefix without it beeing a service engine resource
+                validationMessages.Add("Identifier", "Invalid prefix. Only to be used for Altinn 2 services");
+                isValid = false;
+            }
+
+            if (IsInvalidAppResource(serviceResource))
+            {
+                // Uses app prefix without it beeing a app resource
+                validationMessages.Add("Identifier", "Invalid Prefix. app_ is only for Altinn Studio apps");
+                isValid = false;
+            }
+
+            if (!ResourceIdentifierRegex.IsMatch(serviceResource.Identifier))
+            {
+                validationMessages.Add("Identifier", "Invalid id. Only a-z and 0-9 is allowed together with _ and -");
+                isValid = false;
+            }
+
+            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            {
+                validationMessages.Add("Title", $"Missing title in english {ResourceConstants.LANGUAGE_EN}");
+                isValid = false;
+            }
+
+            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB))
+            {
+                validationMessages.Add("Title", $"Missing title in bokmal {ResourceConstants.LANGUAGE_NB}");
+                isValid = false;
+            }
+
+            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            {
+                validationMessages.Add("Title", $"Missing title in nynorsk {ResourceConstants.LANGUAGE_NN}");
+                isValid = false;
+            }
+       
+            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_EN)))
+            {
+                validationMessages.Add("RightDescription", $"Missing RightDescription in english {ResourceConstants.LANGUAGE_EN}");
+                isValid = false;
+            }
+
+            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NB)))
+            {
+                validationMessages.Add("RightDescription", $"Missing RightDescription in bokmal {ResourceConstants.LANGUAGE_NB}");
+                isValid = false;
+            }
+
+            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NN)))
+            {
+                validationMessages.Add("RightDescription", $"Missing RightDescription in nynorsk {ResourceConstants.LANGUAGE_NN}");
+                isValid = false;
+            }
+
+            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            {
+                validationMessages.Add("Description", $"Missing Description in english {ResourceConstants.LANGUAGE_EN}");
+                isValid = false;
+            }
+
+            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NB))
+            {
+                validationMessages.Add("Description", $"Missing Description in bokmal {ResourceConstants.LANGUAGE_NB}");
+                isValid = false;
+            }
+
+            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            {
+                validationMessages.Add("Description", $"Missing Description in nynorsk {ResourceConstants.LANGUAGE_NN}");
+                isValid = false;
+            }
+
+            return isValid;
+
+            static bool IsInvalidServiceEngineResource(ServiceResource serviceResource)
+            {
+                if (serviceResource.Identifier.StartsWith(ResourceConstants.SERVICE_ENGINE_RESOURCE_PREFIX)
                 && (serviceResource.ResourceReferences == null
                 || !serviceResource.ResourceReferences.Any()
                 || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceCode))
                 || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceEditionCode))))
-            {
-                // Uses Service engine prefix without it beeing a service engine resource
-                message = "Invalid Prefix";
+                {
+                    // Uses Service engine prefix without it beeing a service engine resource
+                    return true;
+                }
+
                 return false;
             }
 
-            if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX)
-                && (serviceResource.ResourceReferences == null
-                || !serviceResource.ResourceReferences.Any()
-                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ApplicationId))))
+            static bool IsInvalidAppResource(ServiceResource serviceResource)
             {
-                // Uses app prefix without it beeing a app resource
-                message = "Invalid Prefix. app_ is only for Altinn Studio apps";
+                if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX)
+              && (serviceResource.ResourceReferences == null
+              || !serviceResource.ResourceReferences.Any()
+              || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ApplicationId))))
+                {
+                    // Uses app prefix without it beeing a app resource
+                    return true;
+                }
+
                 return false;
             }
-
-            if (!ResourceRegex.IsMatch(serviceResource.Identifier))
-            {
-                message = "Invalid id. Only a-z and 0-9 is allowed together with _ and -";
-                return false;
-            }
-
-            if (serviceResource.Title == null || serviceResource.Title.Count == 0)
-            {
-                message = "Missing title";
-                return false;
-            }
-
-            if (!serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN))
-            {
-                message = $"Missing title in english {ResourceConstants.LANGUAGE_EN}";
-                return false;
-            }
-
-            if (!serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB))
-            {
-                message = $"Missing title in bokmal {ResourceConstants.LANGUAGE_NB}";
-                return false;
-            }
-
-            if (!serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN))
-            {
-                message = $"Missing title in nynorsk {ResourceConstants.LANGUAGE_NN}";
-                return false;
-            }
-
-            if (serviceResource.Delegable && (serviceResource.RightDescription == null || serviceResource.RightDescription.Count == 0))
-            {
-                message = "Missing RightDescription";
-                return false;
-            }
-
-            if (serviceResource.Delegable && (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_EN)))
-            {
-                message = $"Missing RightDescription in english {ResourceConstants.LANGUAGE_EN}";
-                return false;
-            }
-
-            if (serviceResource.Delegable && (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NB)))
-            {
-                message = $"Missing RightDescription in bokmal {ResourceConstants.LANGUAGE_NB}";
-                return false;
-            }
-
-            if (serviceResource.Delegable && (!serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NN)))
-            {
-                message = $"Missing RightDescription in nynorsk {ResourceConstants.LANGUAGE_NN}";
-                return false;
-            }
-
-            if (serviceResource.Description == null || serviceResource.Description.Count == 0)
-            {
-                message = "Missing Description";
-                return false;
-            }
-
-            if (!serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_EN))
-            {
-                message = $"Missing Description in english {ResourceConstants.LANGUAGE_EN}";
-                return false;
-            }
-
-            if (!serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NB))
-            {
-                message = $"Missing Description in bokmal {ResourceConstants.LANGUAGE_NB}";
-                return false;
-            }
-
-            if (!serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NN))
-            {
-                message = $"Missing Description in nynorsk {ResourceConstants.LANGUAGE_NN}";
-                return false;
-            }
-
-            message = null;
-
-            return true;
         }
 
         private static bool MatchingIdentifier(ServiceResource resource, ResourceSearch resourceSearch)

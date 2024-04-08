@@ -40,7 +40,23 @@ policy. An authorization policy defines who can perform operations on the resour
 ### Altinn Studio Resource Admin
 
 - It is possible to create a new resource from resource dasbhoard
-- 
+- Users should be warned if there is missing information for the resource attributes
+
+## User scenarios
+
+### Create new resource with Policy from API
+
+This scenario covers that flow where resource is created and posted to Resource Registry API
+
+It checks 
+
+- Validation
+- Creation
+- Usage
+
+Valid result 
+
+### Create new resource from Altinn Studio and publish
 
 
 

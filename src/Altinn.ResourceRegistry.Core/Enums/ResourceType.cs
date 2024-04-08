@@ -27,5 +27,8 @@ namespace Altinn.ResourceRegistry.Core.Enums
 
         [PgName("genericaccessresource")]
         GenericAccessResource = 16,
+
+        [PgName("brokerservice")]
+        BrokerService = 32,
     }
 }

@@ -59,55 +59,55 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 isValid = false;
             }
 
-            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN) || string.IsNullOrEmpty(serviceResource.Title[ResourceConstants.LANGUAGE_EN]?.Trim()))
             {
                 AddValidationMessage(validationMessages, "Title", $"Missing title in english {ResourceConstants.LANGUAGE_EN}");
                 isValid = false;
             }
 
-            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB))
+            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB) || string.IsNullOrEmpty(serviceResource.Title[ResourceConstants.LANGUAGE_NB]?.Trim()))
             {
                 AddValidationMessage(validationMessages, "Title", $"Missing title in bokmal {ResourceConstants.LANGUAGE_NB}");
                 isValid = false;
             }
 
-            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN) || string.IsNullOrEmpty(serviceResource.Title[ResourceConstants.LANGUAGE_NN]?.Trim()))
             {
                 AddValidationMessage(validationMessages, "Title", $"Missing title in nynorsk {ResourceConstants.LANGUAGE_NN}");
                 isValid = false;
             }
        
-            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_EN)))
+            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_EN) || string.IsNullOrEmpty(serviceResource.RightDescription[ResourceConstants.LANGUAGE_NN]?.Trim())))
             {
                 AddValidationMessage(validationMessages, "RightDescription", $"Missing RightDescription in english {ResourceConstants.LANGUAGE_EN}");
                 isValid = false;
             }
 
-            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NB)))
+            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NB) || string.IsNullOrEmpty(serviceResource.RightDescription[ResourceConstants.LANGUAGE_NB]?.Trim())))
             {
                 AddValidationMessage(validationMessages, "RightDescription", $"Missing RightDescription in bokmal {ResourceConstants.LANGUAGE_NB}");
                 isValid = false;
             }
 
-            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NN)))
+            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NN) || string.IsNullOrEmpty(serviceResource.RightDescription[ResourceConstants.LANGUAGE_NN]?.Trim())))
             {
                 AddValidationMessage(validationMessages, "RightDescription", $"Missing RightDescription in nynorsk {ResourceConstants.LANGUAGE_NN}");
                 isValid = false;
             }
 
-            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_EN) || string.IsNullOrEmpty(serviceResource.Description[ResourceConstants.LANGUAGE_EN]?.Trim()))
             {
                 AddValidationMessage(validationMessages, "Description", $"Missing Description in english {ResourceConstants.LANGUAGE_EN}");
                 isValid = false;
             }
 
-            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NB))
+            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NB) || string.IsNullOrEmpty(serviceResource.Description[ResourceConstants.LANGUAGE_NB]?.Trim()))
             {
                 AddValidationMessage(validationMessages, "Description", $"Missing Description in bokmal {ResourceConstants.LANGUAGE_NB}");
                 isValid = false;
             }
 
-            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NN) || string.IsNullOrEmpty(serviceResource.Description[ResourceConstants.LANGUAGE_NN]?.Trim()))
             {
                 AddValidationMessage(validationMessages, "Description", $"Missing Description in nynorsk {ResourceConstants.LANGUAGE_NN}");
                 isValid = false;

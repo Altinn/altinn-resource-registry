@@ -896,7 +896,7 @@ namespace Altinn.ResourceRegistry.Tests
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "altinn_access_management",
-                Title = new Dictionary<string, string> { { "en", "English" }},
+                Title = new Dictionary<string, string> { { "en", " " }, { "nb", "" } },
                 Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
                 RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
                 Status = "Completed",
@@ -925,6 +925,8 @@ namespace Altinn.ResourceRegistry.Tests
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             string content  = await response.Content.ReadAsStringAsync();
             Assert.Contains("Missing title in nynorsk", content);
+            Assert.Contains("Missing title in english", content);
+            Assert.Contains("Missing title in bokmal", content);
         }
 
         [Fact]
@@ -965,6 +967,47 @@ namespace Altinn.ResourceRegistry.Tests
             Assert.Contains("Missing Description in bokmal nb", content);
         }
 
+
+        [Fact]
+        public async Task UpdateResource_EmptyDescriptionBokmal()
+        {
+            string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+            ServiceResource resource = new ServiceResource()
+            {
+                Identifier = "altinn_access_management",
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                Description = new Dictionary<string, string> { { "en", "" }, { "nb", " " } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                Status = "Completed",
+                ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
+                HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+                {
+                    Organization = "974761076",
+                    Orgcode = "skd",
+                }
+            };
+
+            HttpClient client = SetupUtil.GetTestClient(_factory);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, requestUri)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+            };
+
+            httpRequestMessage.Headers.Add("Accept", "application/json");
+            httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            string content = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Missing Description in bokmal nb", content);
+            Assert.Contains("Missing Description in english en", content);
+            Assert.Contains("Missing Description in nynorsk nn", content);
+        }
+
         [Fact]
         public async Task UpdateResource_MissingRightsDecriptionEngelsk()
         {
@@ -974,7 +1017,7 @@ namespace Altinn.ResourceRegistry.Tests
                 Identifier = "altinn_access_management",
                 Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
                 Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
-                RightDescription = new Dictionary<string, string> { { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "nb", "" }, { "nn", " " } },
                 Status = "Completed",
                 ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
@@ -1001,6 +1044,8 @@ namespace Altinn.ResourceRegistry.Tests
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             string content = await response.Content.ReadAsStringAsync();
             Assert.Contains("Missing RightDescription in english en", content);
+            Assert.Contains("Missing RightDescription in nynorsk nn", content);
+            Assert.Contains("Missing RightDescription in bokmal nb", content);
         }
 
         [Fact]

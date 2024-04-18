@@ -59,10 +59,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 isValid = false;
             }
 
-            if (serviceResource.HasCompetentAuthority == null || 
-                ((string.IsNullOrEmpty(serviceResource.HasCompetentAuthority.Orgcode) 
-                || !serviceResource.HasCompetentAuthority.Orgcode.ToLower().Equals("ttd")) 
-                && string.IsNullOrWhiteSpace(serviceResource.HasCompetentAuthority.Organization)))
+            if (!ValidateResourceOwner(serviceResource))
             {
                 AddValidationMessage(validationMessages, "HasCompetentAuthority.Organization", "HasCompetentAuthority needs to be set with valid organization number");
                 isValid = false;
@@ -74,55 +71,55 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 isValid = false;
             }
 
-            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN) || string.IsNullOrWhiteSpace(serviceResource.Title[ResourceConstants.LANGUAGE_EN]))
+            if (!HasLanguage(serviceResource.Title, ResourceConstants.LANGUAGE_EN))
             {
                 AddValidationMessage(validationMessages, "Title", $"Missing title in english {ResourceConstants.LANGUAGE_EN}");
                 isValid = false;
             }
 
-            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB) || string.IsNullOrWhiteSpace(serviceResource.Title[ResourceConstants.LANGUAGE_NB]))
+            if (!HasLanguage(serviceResource.Title, ResourceConstants.LANGUAGE_NB))
             {
                 AddValidationMessage(validationMessages, "Title", $"Missing title in bokmal {ResourceConstants.LANGUAGE_NB}");
                 isValid = false;
             }
 
-            if (serviceResource.Title == null || !serviceResource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN) || string.IsNullOrWhiteSpace(serviceResource.Title[ResourceConstants.LANGUAGE_NN]))
+            if (!HasLanguage(serviceResource.Title, ResourceConstants.LANGUAGE_NN))
             {
                 AddValidationMessage(validationMessages, "Title", $"Missing title in nynorsk {ResourceConstants.LANGUAGE_NN}");
                 isValid = false;
             }
        
-            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_EN) || string.IsNullOrWhiteSpace(serviceResource.RightDescription[ResourceConstants.LANGUAGE_NN])))
+            if (serviceResource.Delegable && (!HasLanguage(serviceResource.RightDescription, ResourceConstants.LANGUAGE_EN)))
             {
                 AddValidationMessage(validationMessages, "RightDescription", $"Missing RightDescription in english {ResourceConstants.LANGUAGE_EN}");
                 isValid = false;
             }
 
-            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NB) || string.IsNullOrWhiteSpace(serviceResource.RightDescription[ResourceConstants.LANGUAGE_NB])))
+            if (serviceResource.Delegable && (!HasLanguage(serviceResource.RightDescription, ResourceConstants.LANGUAGE_NB)))
             {
                 AddValidationMessage(validationMessages, "RightDescription", $"Missing RightDescription in bokmal {ResourceConstants.LANGUAGE_NB}");
                 isValid = false;
             }
 
-            if (serviceResource.Delegable && (serviceResource.RightDescription == null || !serviceResource.RightDescription.ContainsKey(ResourceConstants.LANGUAGE_NN) || string.IsNullOrWhiteSpace(serviceResource.RightDescription[ResourceConstants.LANGUAGE_NN])))
+            if (serviceResource.Delegable && (!HasLanguage(serviceResource.RightDescription, ResourceConstants.LANGUAGE_NN)))
             {
                 AddValidationMessage(validationMessages, "RightDescription", $"Missing RightDescription in nynorsk {ResourceConstants.LANGUAGE_NN}");
                 isValid = false;
             }
 
-            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_EN) || string.IsNullOrWhiteSpace(serviceResource.Description[ResourceConstants.LANGUAGE_EN]))
+            if (!HasLanguage(serviceResource.Description, ResourceConstants.LANGUAGE_EN))
             {
                 AddValidationMessage(validationMessages, "Description", $"Missing Description in english {ResourceConstants.LANGUAGE_EN}");
                 isValid = false;
             }
 
-            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NB) || string.IsNullOrWhiteSpace(serviceResource.Description[ResourceConstants.LANGUAGE_NB]))
+            if (!HasLanguage(serviceResource.Description, ResourceConstants.LANGUAGE_NB))
             {
                 AddValidationMessage(validationMessages, "Description", $"Missing Description in bokmal {ResourceConstants.LANGUAGE_NB}");
                 isValid = false;
             }
 
-            if (serviceResource.Description == null || !serviceResource.Description.ContainsKey(ResourceConstants.LANGUAGE_NN) || string.IsNullOrWhiteSpace(serviceResource.Description[ResourceConstants.LANGUAGE_NN]))
+            if (!HasLanguage(serviceResource.Description, ResourceConstants.LANGUAGE_NN))
             {
                 AddValidationMessage(validationMessages, "Description", $"Missing Description in nynorsk {ResourceConstants.LANGUAGE_NN}");
                 isValid = false;
@@ -164,6 +161,22 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
                 return false;
             }
+
+            /// <summary>
+            /// Validates that orgs that is not TTD needs to have orgnumber set.
+            /// </summary>
+            static bool ValidateResourceOwner(ServiceResource serviceResource)
+            {
+                if (serviceResource.HasCompetentAuthority == null ||
+                    ((string.IsNullOrEmpty(serviceResource.HasCompetentAuthority.Orgcode)
+                    || !serviceResource.HasCompetentAuthority.Orgcode.Equals("ttd", StringComparison.OrdinalIgnoreCase))
+                    && string.IsNullOrWhiteSpace(serviceResource.HasCompetentAuthority.Organization)))
+                {
+                    return false;
+                }
+                return true;
+            }
+
         }
 
         private static void AddValidationMessage(Dictionary<string, List<string>> validationMessages, string key, string message)
@@ -176,6 +189,16 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             {
                 validationMessages.Add(key, [message]);
             }
+        }
+
+        private static bool HasLanguage(Dictionary<string, string> textDictionary, string language)
+        {
+            if (textDictionary == null || !textDictionary.ContainsKey(language) || string.IsNullOrWhiteSpace(textDictionary[language]))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private static bool MatchingIdentifier(ServiceResource resource, ResourceSearch resourceSearch)

@@ -167,10 +167,18 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             /// </summary>
             static bool ValidateResourceOwner(ServiceResource serviceResource)
             {
-                if (serviceResource.HasCompetentAuthority == null ||
-                    ((string.IsNullOrEmpty(serviceResource.HasCompetentAuthority.Orgcode)
-                    || !serviceResource.HasCompetentAuthority.Orgcode.Equals("ttd", StringComparison.OrdinalIgnoreCase))
-                    && string.IsNullOrWhiteSpace(serviceResource.HasCompetentAuthority.Organization)))
+                if (serviceResource.HasCompetentAuthority == null)
+                {
+                    return false;
+                }
+
+                if (serviceResource.HasCompetentAuthority.Orgcode != null && serviceResource.HasCompetentAuthority.Orgcode.Equals("ttd", StringComparison.OrdinalIgnoreCase))
+                {
+                    // TTD does not have orgnumber
+                    return true;
+                }
+
+                if (string.IsNullOrWhiteSpace(serviceResource.HasCompetentAuthority.Organization))
                 {
                     return false;
                 }

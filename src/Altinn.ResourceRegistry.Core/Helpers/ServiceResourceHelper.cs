@@ -174,9 +174,9 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 {
                     return false;
                 }
+
                 return true;
             }
-
         }
 
         private static void AddValidationMessage(Dictionary<string, List<string>> validationMessages, string key, string message)

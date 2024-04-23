@@ -221,6 +221,8 @@ namespace Altinn.ResourceRegistry.Core.Services
 
                 List<ServiceResource> resources = await Search(resourceSearch, cancellationToken);
 
+                OrgList orgList = await GetOrgList(cancellationToken);
+
                 foreach (ServiceResource resource in resources)
                 {
                     resource.AuthorizationReference = new List<AuthorizationReferenceAttribute>
@@ -229,6 +231,15 @@ namespace Altinn.ResourceRegistry.Core.Services
                     };
 
                     PopulateMissingText(resource.Title, resource.Identifier);
+
+                    if (orgList.Orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out Org orgDef))
+                    {
+                        PopulateOrgName(resource.HasCompetentAuthority, orgDef.Name);
+                    }
+                    else
+                    {
+                        PopulateOrgName(resource.HasCompetentAuthority, null);
+                    }
                 }
 
                 return resources;
@@ -513,6 +524,79 @@ namespace Altinn.ResourceRegistry.Core.Services
             else if (string.IsNullOrWhiteSpace(textDictionary[ResourceConstants.LANGUAGE_NN]))
             {
                 textDictionary[ResourceConstants.LANGUAGE_NN] = textDictionary[ResourceConstants.LANGUAGE_NB];
+            }
+        }
+
+        /// <summary>
+        /// Since name is optional on resouce owner we set the name to the resource owner name if available or the orgcode if not present
+        /// </summary>
+        private void PopulateOrgName(CompetentAuthority competentAuthority, Dictionary<string, string> titleFromList)
+        {
+            if (competentAuthority.Name == null) 
+            {
+                if (titleFromList != null)
+                {
+                    competentAuthority.Name = titleFromList;
+                }
+                else
+                {
+                    competentAuthority.Name = new Dictionary<string, string>
+                    {
+                        { ResourceConstants.LANGUAGE_EN, competentAuthority.Orgcode },
+                        { ResourceConstants.LANGUAGE_NB, competentAuthority.Orgcode },
+                        { ResourceConstants.LANGUAGE_NN, competentAuthority.Orgcode }
+                    };
+                }
+
+                return;
+            }
+
+            if (competentAuthority.Name.ContainsKey(ResourceConstants.LANGUAGE_EN) 
+                && string.IsNullOrWhiteSpace(competentAuthority.Name[ResourceConstants.LANGUAGE_EN]))
+            { 
+                if (titleFromList != null && titleFromList.ContainsKey(ResourceConstants.LANGUAGE_EN))
+                {
+                    competentAuthority.Name[ResourceConstants.LANGUAGE_EN] = titleFromList[ResourceConstants.LANGUAGE_EN];
+                }
+            }
+            else if (!competentAuthority.Name.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            {
+                if (titleFromList != null && titleFromList.ContainsKey(ResourceConstants.LANGUAGE_EN))
+                {
+                    competentAuthority.Name.Add(ResourceConstants.LANGUAGE_EN, titleFromList[ResourceConstants.LANGUAGE_EN]);
+                }
+            }
+
+            if (competentAuthority.Name.ContainsKey(ResourceConstants.LANGUAGE_NB)
+                && string.IsNullOrWhiteSpace(competentAuthority.Name[ResourceConstants.LANGUAGE_NB]))
+            {
+                if (titleFromList != null && titleFromList.ContainsKey(ResourceConstants.LANGUAGE_NB))
+                {
+                    competentAuthority.Name[ResourceConstants.LANGUAGE_NB] = titleFromList[ResourceConstants.LANGUAGE_NB];
+                }
+            }
+            else if (!competentAuthority.Name.ContainsKey(ResourceConstants.LANGUAGE_NB))
+            {
+                if (titleFromList != null && titleFromList.ContainsKey(ResourceConstants.LANGUAGE_NB))
+                {
+                    competentAuthority.Name.Add(ResourceConstants.LANGUAGE_NB, titleFromList[ResourceConstants.LANGUAGE_NB]);
+                }
+            }
+
+            if (competentAuthority.Name.ContainsKey(ResourceConstants.LANGUAGE_NN)
+               && string.IsNullOrWhiteSpace(competentAuthority.Name[ResourceConstants.LANGUAGE_NN]))
+            {
+                if (titleFromList != null && titleFromList.ContainsKey(ResourceConstants.LANGUAGE_NN))
+                {
+                    competentAuthority.Name[ResourceConstants.LANGUAGE_NN] = titleFromList[ResourceConstants.LANGUAGE_NN];
+                }
+            }
+            else if (!competentAuthority.Name.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            {
+                if (titleFromList != null && titleFromList.ContainsKey(ResourceConstants.LANGUAGE_NN))
+                {
+                    competentAuthority.Name.Add(ResourceConstants.LANGUAGE_NN, titleFromList[ResourceConstants.LANGUAGE_NN]);
+                }
             }
         }
     }

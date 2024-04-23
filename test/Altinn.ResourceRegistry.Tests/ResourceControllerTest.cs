@@ -104,6 +104,14 @@ namespace Altinn.ResourceRegistry.Tests
 
             Assert.NotNull(resource);
             Assert.Equal(439, resource.Count);
+
+            ServiceResource? navResource = resource.FirstOrDefault(r => r.Identifier != null &&  r.Identifier.Equals("nav_tiltakAvtaleOmArbeidstrening"));
+            Assert.NotNull(navResource);
+            Assert.NotNull(navResource.Title);
+            Assert.Equal(3, navResource.Title.Count());
+            Assert.Equal(navResource.Title["nb"], navResource.Title["nn"]);
+            Assert.NotNull(navResource.HasCompetentAuthority?.Name);
+            Assert.Equal(3, navResource.HasCompetentAuthority.Name.Count());
         }
 
         [Fact]

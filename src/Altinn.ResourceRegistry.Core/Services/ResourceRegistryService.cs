@@ -228,7 +228,7 @@ namespace Altinn.ResourceRegistry.Core.Services
                         new AuthorizationReferenceAttribute() { Id = "urn:altinn:resource", Value = resource.Identifier }
                     };
 
-                    PopulateMissingTitle(resource);
+                    PopulateMissingText(resource.Title, resource.Identifier);
                 }
 
                 return resources;
@@ -409,83 +409,86 @@ namespace Altinn.ResourceRegistry.Core.Services
             };
         }
 
-        private void PopulateMissingTitle(ServiceResource resource)
+        /// <summary>
+        /// Method to popuplate all title fields. If one or all of them of thems is empty. 
+        /// </summary>
+        private void PopulateMissingText(Dictionary<string,string> textDictionary, string defaultTextIfNotSet)
         {
-            if (resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB)
-                && !string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_NB])
-                && resource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN)
-                && !string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_EN])
-                && resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN)
-                && !string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_NN]))
+            if (textDictionary.ContainsKey(ResourceConstants.LANGUAGE_NB)
+                && !string.IsNullOrWhiteSpace(textDictionary[ResourceConstants.LANGUAGE_NB])
+                && textDictionary.ContainsKey(ResourceConstants.LANGUAGE_EN)
+                && !string.IsNullOrWhiteSpace(textDictionary[ResourceConstants.LANGUAGE_EN])
+                && textDictionary.ContainsKey(ResourceConstants.LANGUAGE_NN)
+                && !string.IsNullOrWhiteSpace(textDictionary[ResourceConstants.LANGUAGE_NN]))
             {
                 // Everything is ok
                 return;
             }
 
-            if (resource.Title == null)
+            if (textDictionary == null)
             {
                 // Should not happen, but if it happens we set id as title to help idenitfy the resource with correct
-                resource.Title = new Dictionary<string, string>
+                textDictionary = new Dictionary<string, string>
                         {
-                            { ResourceConstants.LANGUAGE_EN, resource.Identifier },
-                            { ResourceConstants.LANGUAGE_NB, resource.Identifier },
-                            { ResourceConstants.LANGUAGE_NN, resource.Identifier }
+                            { ResourceConstants.LANGUAGE_EN, defaultTextIfNotSet },
+                            { ResourceConstants.LANGUAGE_NB, defaultTextIfNotSet },
+                            { ResourceConstants.LANGUAGE_NN, defaultTextIfNotSet }
                         };
 
                 return;
             }
 
-            if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB)
-                || string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_NB]))
+            if (!textDictionary.ContainsKey(ResourceConstants.LANGUAGE_NB)
+                || string.IsNullOrWhiteSpace(textDictionary[ResourceConstants.LANGUAGE_NB]))
              {
                     // Bokmål is not set
-                if (resource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN) &&
-                    !string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_EN]))
+                if (textDictionary.ContainsKey(ResourceConstants.LANGUAGE_EN) &&
+                    !string.IsNullOrWhiteSpace(textDictionary[ResourceConstants.LANGUAGE_EN]))
                 {
                     // English is set. Copy values from english to bokmål
-                    if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB))
+                    if (!textDictionary.ContainsKey(ResourceConstants.LANGUAGE_NB))
                     {
-                        resource.Title.Add(ResourceConstants.LANGUAGE_NB, resource.Title[ResourceConstants.LANGUAGE_EN]);
+                        textDictionary.Add(ResourceConstants.LANGUAGE_NB, textDictionary[ResourceConstants.LANGUAGE_EN]);
                     }
                     else
                     {
-                        resource.Title[ResourceConstants.LANGUAGE_NB] = resource.Title[ResourceConstants.LANGUAGE_EN];
+                        textDictionary[ResourceConstants.LANGUAGE_NB] = textDictionary[ResourceConstants.LANGUAGE_EN];
                     }
                 }
-                else if (resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN)
-                && !string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_NN]))
+                else if (textDictionary.ContainsKey(ResourceConstants.LANGUAGE_NN)
+                && !string.IsNullOrWhiteSpace(textDictionary[ResourceConstants.LANGUAGE_NN]))
                 {
                     // Only nynorsk is set. Copy nynorsk both to english and bokmål
                     // English is set. Copy values from english to bokmål
-                    if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN))
+                    if (!textDictionary.ContainsKey(ResourceConstants.LANGUAGE_EN))
                     {
-                        resource.Title.Add(ResourceConstants.LANGUAGE_EN, resource.Title[ResourceConstants.LANGUAGE_NN]);
+                        textDictionary.Add(ResourceConstants.LANGUAGE_EN, textDictionary[ResourceConstants.LANGUAGE_NN]);
                     }
                     else
                     {
-                        resource.Title[ResourceConstants.LANGUAGE_EN] = resource.Title[ResourceConstants.LANGUAGE_NN];
+                        textDictionary[ResourceConstants.LANGUAGE_EN] = textDictionary[ResourceConstants.LANGUAGE_NN];
                     }
 
-                    if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB))
+                    if (!textDictionary.ContainsKey(ResourceConstants.LANGUAGE_NB))
                     {
-                        resource.Title.Add(ResourceConstants.LANGUAGE_NB, resource.Title[ResourceConstants.LANGUAGE_NN]);
+                        textDictionary.Add(ResourceConstants.LANGUAGE_NB, textDictionary[ResourceConstants.LANGUAGE_NN]);
                     }
                     else
                     {
-                        resource.Title[ResourceConstants.LANGUAGE_NB] = resource.Title[ResourceConstants.LANGUAGE_NN];
+                        textDictionary[ResourceConstants.LANGUAGE_NB] = textDictionary[ResourceConstants.LANGUAGE_NN];
                     }
 
-                    resource.Title[ResourceConstants.LANGUAGE_NB] = resource.Title[ResourceConstants.LANGUAGE_NN];
-                    resource.Title[ResourceConstants.LANGUAGE_EN] = resource.Title[ResourceConstants.LANGUAGE_NN];
+                    textDictionary[ResourceConstants.LANGUAGE_NB] = textDictionary[ResourceConstants.LANGUAGE_NN];
+                    textDictionary[ResourceConstants.LANGUAGE_EN] = textDictionary[ResourceConstants.LANGUAGE_NN];
                 }
                 else
                 {
                     // Every language is empty or not set
-                    resource.Title = new Dictionary<string, string>
+                    textDictionary = new Dictionary<string, string>
                         {
-                            { ResourceConstants.LANGUAGE_EN, resource.Identifier },
-                            { ResourceConstants.LANGUAGE_NB, resource.Identifier },
-                            { ResourceConstants.LANGUAGE_NN, resource.Identifier }
+                            { ResourceConstants.LANGUAGE_EN, defaultTextIfNotSet },
+                            { ResourceConstants.LANGUAGE_NB, defaultTextIfNotSet },
+                            { ResourceConstants.LANGUAGE_NN, defaultTextIfNotSet }
                         };
 
                     return;
@@ -493,23 +496,23 @@ namespace Altinn.ResourceRegistry.Core.Services
             }
            
             // Enligsh is not set or is empty. Copy bokmål text
-            if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            if (!textDictionary.ContainsKey(ResourceConstants.LANGUAGE_EN))
             {
-                resource.Title.Add(ResourceConstants.LANGUAGE_EN, resource.Title[ResourceConstants.LANGUAGE_NB]);
+                textDictionary.Add(ResourceConstants.LANGUAGE_EN, textDictionary[ResourceConstants.LANGUAGE_NB]);
             }
-            else if (string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_EN]))
+            else if (string.IsNullOrWhiteSpace(textDictionary[ResourceConstants.LANGUAGE_EN]))
             {
-                resource.Title[ResourceConstants.LANGUAGE_EN] = resource.Title[ResourceConstants.LANGUAGE_NB];
+                textDictionary[ResourceConstants.LANGUAGE_EN] = textDictionary[ResourceConstants.LANGUAGE_NB];
             }
 
             // Nynorsk is not set. Copy bokmål tekst
-            if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            if (!textDictionary.ContainsKey(ResourceConstants.LANGUAGE_NN))
             {
-                resource.Title.Add(ResourceConstants.LANGUAGE_NN, resource.Title[ResourceConstants.LANGUAGE_NB]);
+                textDictionary.Add(ResourceConstants.LANGUAGE_NN, textDictionary[ResourceConstants.LANGUAGE_NB]);
             }
-            else if (string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_NN]))
+            else if (string.IsNullOrWhiteSpace(textDictionary[ResourceConstants.LANGUAGE_NN]))
             {
-                resource.Title[ResourceConstants.LANGUAGE_NN] = resource.Title[ResourceConstants.LANGUAGE_NB];
+                textDictionary[ResourceConstants.LANGUAGE_NN] = textDictionary[ResourceConstants.LANGUAGE_NB];
             }
         }
     }

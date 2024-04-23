@@ -185,7 +185,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc />
         public async Task<List<ServiceResource>> GetResourceList(bool includeApps, bool includeAltinn2, CancellationToken cancellationToken = default)
         {
-            var tasks = new List<Task<List<ServiceResource>>>(3)
+            List<Task<List<ServiceResource>>> tasks = new List<Task<List<ServiceResource>>>(3)
             {
                 GetResourceListInner(cancellationToken),
             };
@@ -227,6 +227,8 @@ namespace Altinn.ResourceRegistry.Core.Services
                     {
                         new AuthorizationReferenceAttribute() { Id = "urn:altinn:resource", Value = resource.Identifier }
                     };
+
+                    PopulateMissingTitle(resource);
                 }
 
                 return resources;
@@ -405,6 +407,110 @@ namespace Altinn.ResourceRegistry.Core.Services
                 Subjects = subjectAttributeMatches, 
                 ResourceOwner = resourceOwner
             };
+        }
+
+        private void PopulateMissingTitle(ServiceResource resource)
+        {
+            if (resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB)
+                && !string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_NB])
+                && resource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN)
+                && !string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_EN])
+                && resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN)
+                && !string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_NN]))
+            {
+                // Everything is ok
+                return;
+            }
+
+            if (resource.Title == null)
+            {
+                // Should not happen, but if it happens we set id as title to help idenitfy the resource with correct
+                resource.Title = new Dictionary<string, string>
+                        {
+                            { ResourceConstants.LANGUAGE_EN, resource.Identifier },
+                            { ResourceConstants.LANGUAGE_NB, resource.Identifier },
+                            { ResourceConstants.LANGUAGE_NN, resource.Identifier }
+                        };
+
+                return;
+            }
+
+            if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB)
+                || string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_NB]))
+             {
+                    // Bokmål is not set
+                if (resource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN) &&
+                    !string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_EN]))
+                {
+                    // English is set. Copy values from english to bokmål
+                    if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB))
+                    {
+                        resource.Title.Add(ResourceConstants.LANGUAGE_NB, resource.Title[ResourceConstants.LANGUAGE_EN]);
+                    }
+                    else
+                    {
+                        resource.Title[ResourceConstants.LANGUAGE_NB] = resource.Title[ResourceConstants.LANGUAGE_EN];
+                    }
+                }
+                else if (resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN)
+                && !string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_NN]))
+                {
+                    // Only nynorsk is set. Copy nynorsk both to english and bokmål
+                    // English is set. Copy values from english to bokmål
+                    if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN))
+                    {
+                        resource.Title.Add(ResourceConstants.LANGUAGE_EN, resource.Title[ResourceConstants.LANGUAGE_NN]);
+                    }
+                    else
+                    {
+                        resource.Title[ResourceConstants.LANGUAGE_EN] = resource.Title[ResourceConstants.LANGUAGE_NN];
+                    }
+
+                    if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NB))
+                    {
+                        resource.Title.Add(ResourceConstants.LANGUAGE_NB, resource.Title[ResourceConstants.LANGUAGE_NN]);
+                    }
+                    else
+                    {
+                        resource.Title[ResourceConstants.LANGUAGE_NB] = resource.Title[ResourceConstants.LANGUAGE_NN];
+                    }
+
+                    resource.Title[ResourceConstants.LANGUAGE_NB] = resource.Title[ResourceConstants.LANGUAGE_NN];
+                    resource.Title[ResourceConstants.LANGUAGE_EN] = resource.Title[ResourceConstants.LANGUAGE_NN];
+                }
+                else
+                {
+                    // Every language is empty or not set
+                    resource.Title = new Dictionary<string, string>
+                        {
+                            { ResourceConstants.LANGUAGE_EN, resource.Identifier },
+                            { ResourceConstants.LANGUAGE_NB, resource.Identifier },
+                            { ResourceConstants.LANGUAGE_NN, resource.Identifier }
+                        };
+
+                    return;
+                }
+            }
+           
+            // Enligsh is not set or is empty. Copy bokmål text
+            if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_EN))
+            {
+                resource.Title.Add(ResourceConstants.LANGUAGE_EN, resource.Title[ResourceConstants.LANGUAGE_NB]);
+            }
+            else if (string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_EN]))
+            {
+                resource.Title[ResourceConstants.LANGUAGE_EN] = resource.Title[ResourceConstants.LANGUAGE_NB];
+            }
+
+            // Nynorsk is not set. Copy bokmål tekst
+            if (!resource.Title.ContainsKey(ResourceConstants.LANGUAGE_NN))
+            {
+                resource.Title.Add(ResourceConstants.LANGUAGE_NN, resource.Title[ResourceConstants.LANGUAGE_NB]);
+            }
+            else if (string.IsNullOrWhiteSpace(resource.Title[ResourceConstants.LANGUAGE_NN]))
+            {
+                resource.Title[ResourceConstants.LANGUAGE_NN] = resource.Title[ResourceConstants.LANGUAGE_NB];
+            }
         }
     }
 }

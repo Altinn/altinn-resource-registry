@@ -334,7 +334,7 @@ public class AccessListsRepositoryTests : DbTests
 
         // Check that we have no members
         {
-            var memberships = await Repository.GetAccessListMemberships(info.Id);
+            var memberships = await Repository.GetAccessListMemberships(info.Id, null, 100);
             Assert.NotNull(memberships);
             memberships.Value.Should().BeEmpty();
         }
@@ -343,54 +343,54 @@ public class AccessListsRepositoryTests : DbTests
         {
             var aggregate = await Repository.LoadAccessList(info.Id);
             Assert.NotNull(aggregate);
-            aggregate.AddMembers(ImmutableArray.Create(member1, member2));
+            aggregate.AddMembers([member1, member2]);
             await aggregate.SaveChanged();
 
-            var memberships = await Repository.GetAccessListMemberships(info.Id);
+            var memberships = await Repository.GetAccessListMemberships(info.Id, null, 100);
             Assert.NotNull(memberships);
             memberships.Value.Should().HaveCount(2)
-                .And.Contain(m => m.PartyId == member1)
-                .And.Contain(m => m.PartyId == member2);
+                .And.Contain(m => m.PartyUuid == member1)
+                .And.Contain(m => m.PartyUuid == member2);
         }
 
         // Add more members
         {
             var aggregate = await Repository.LoadAccessList(info.Id);
             Assert.NotNull(aggregate);
-            aggregate.AddMembers(ImmutableArray.Create(member3, member4));
+            aggregate.AddMembers([member3, member4]);
             await aggregate.SaveChanged();
 
-            var memberships = await Repository.GetAccessListMemberships(info.Id);
+            var memberships = await Repository.GetAccessListMemberships(info.Id, null, 100);
             Assert.NotNull(memberships);
             memberships.Value.Should().HaveCount(4)
-                .And.Contain(m => m.PartyId == member1)
-                .And.Contain(m => m.PartyId == member2)
-                .And.Contain(m => m.PartyId == member3)
-                .And.Contain(m => m.PartyId == member4);
+                .And.Contain(m => m.PartyUuid == member1)
+                .And.Contain(m => m.PartyUuid == member2)
+                .And.Contain(m => m.PartyUuid == member3)
+                .And.Contain(m => m.PartyUuid == member4);
         }
 
         // Remove members
         {
             var aggregate = await Repository.LoadAccessList(info.Id);
             Assert.NotNull(aggregate);
-            aggregate.RemoveMembers(ImmutableArray.Create(member2, member3));
+            aggregate.RemoveMembers([member2, member3]);
             await aggregate.SaveChanged();
 
-            var memberships = await Repository.GetAccessListMemberships(info.Id);
+            var memberships = await Repository.GetAccessListMemberships(info.Id, null, 100);
             Assert.NotNull(memberships);
             memberships.Value.Should().HaveCount(2)
-                .And.Contain(m => m.PartyId == member1)
-                .And.Contain(m => m.PartyId == member4);
+                .And.Contain(m => m.PartyUuid == member1)
+                .And.Contain(m => m.PartyUuid == member4);
         }
 
         // Remove remaining members
         {
             var aggregate = await Repository.LoadAccessList(info.Id);
             Assert.NotNull(aggregate);
-            aggregate.RemoveMembers(ImmutableArray.Create(member1, member4));
+            aggregate.RemoveMembers([member1, member4]);
             await aggregate.SaveChanged();
 
-            var memberships = await Repository.GetAccessListMemberships(info.Id);
+            var memberships = await Repository.GetAccessListMemberships(info.Id, null, 100);
             Assert.NotNull(memberships);
             memberships.Value.Should().BeEmpty();
         }
@@ -450,19 +450,19 @@ public class AccessListsRepositoryTests : DbTests
 
         original.Update(name: "name2");
         original.Update(name: "name3");
-        original.AddMembers(ImmutableArray.Create(party1, party2, party3));
-        original.RemoveMembers(ImmutableArray.Create(party2));
+        original.AddMembers([party1, party2, party3]);
+        original.RemoveMembers([party2]);
         await original.SaveChanged();
 
         var newVersion = original.CommittedVersion;
         newVersion.Value.Should().BeGreaterThan(originalVersion.Value!.Value);
 
         await CheckRegistryLookup(original.AsAccessListInfo());
-        var memberships = await Repository.GetAccessListMemberships(original.Id);
+        var memberships = await Repository.GetAccessListMemberships(original.Id, null, 100);
         Assert.NotNull(memberships);
         memberships.Value.Should().HaveCount(2)
-            .And.Contain(m => m.PartyId == party1)
-            .And.Contain(m => m.PartyId == party3);
+            .And.Contain(m => m.PartyUuid == party1)
+            .And.Contain(m => m.PartyUuid == party3);
     }
 
     [Fact]

@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Altinn.ResourceRegistry.Core.Register;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -44,13 +45,15 @@ public class UpsertAccessListPartyMembersListDto(
         /// <inheritdoc/>
         public override UpsertAccessListPartyMembersListDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            var repr = JsonSerializer.Deserialize<Repr>(ref reader, options);
+            
+            return new UpsertAccessListPartyMembersListDto(repr.Data);
         }
 
         /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, UpsertAccessListPartyMembersListDto value, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 
@@ -64,5 +67,11 @@ public class UpsertAccessListPartyMembersListDto(
             schema.Required.Clear();
             schema.Required.Add("data");
         }
+    }
+
+    private sealed class Repr
+    {
+        [JsonPropertyName("data")]
+        public required IReadOnlyList<PartyReference> Data { get; init; }
     }
 }

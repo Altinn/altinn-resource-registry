@@ -1,0 +1,26 @@
+meta {
+  name: Upser access lists for resource owner
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/resourceregistry/api/v1/access-lists/{{resourceOwner}}/{{identifier}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Test"
+  }
+}
+
+vars:pre-request {
+  auth_tokenType: Enterprise
+  auth_org: digdir
+  resourceOwner: digdir
+  auth_orgNo: 991825827
+  auth_scopes: altinn:resourceregistry/access-list.write
+  identifier: test01
+}

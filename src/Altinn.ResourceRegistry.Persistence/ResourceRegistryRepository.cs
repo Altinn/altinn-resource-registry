@@ -4,6 +4,7 @@ using System.Text.Json;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Persistence.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using NpgsqlTypes;
@@ -29,10 +30,10 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <param name="conn">The database connection</param>
     /// <param name="logger">Logger</param>
     public ResourceRegistryRepository(
-        NpgsqlDataSource conn,
+        IServiceProvider services,
         ILogger<ResourceRegistryRepository> logger)
     {
-        _conn = conn;
+        _conn = services.GetRequiredKeyedService<NpgsqlDataSource>("resource_registry");
         _logger = logger;
     }
 

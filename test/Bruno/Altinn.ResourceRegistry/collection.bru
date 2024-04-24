@@ -7,7 +7,7 @@ auth:bearer {
 }
 
 script:pre-request {
-  const tokenGenerator = require("./TestToolsTokenGenerator.js");
+  await require("./TestToolsTokenGenerator.js").getToken();
 }
 
 script:post-response {

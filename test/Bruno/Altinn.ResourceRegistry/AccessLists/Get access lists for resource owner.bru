@@ -1,0 +1,19 @@
+meta {
+  name: Get access lists for resource owner
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/resourceregistry/api/v1/access-lists/{{resourceOwner}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  auth_tokenType: Enterprise
+  auth_org: digdir
+  resourceOwner: digdir
+  auth_orgNo: 991825827
+  auth_scopes: altinn:resourceregistry/access-list.write
+}

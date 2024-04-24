@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Altinn.ResourceRegistry.Core.AccessLists;
 using Altinn.ResourceRegistry.Persistence.Aggregates;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 
@@ -25,11 +26,11 @@ internal partial class AccessListsRepository
     /// <param name="logger">Logger</param>
     /// <param name="timeProvider">Time provider</param>
     public AccessListsRepository(
-        NpgsqlDataSource conn,
+        IServiceProvider services,
         ILogger<ResourceRegistryRepository> logger,
         TimeProvider timeProvider)
     {
-        _conn = conn;
+        _conn = services.GetRequiredKeyedService<NpgsqlDataSource>("resource_registry");
         _logger = logger;
         _timeProvider = timeProvider;
     }
@@ -74,15 +75,19 @@ internal partial class AccessListsRepository
     /// <inheritdoc/>
     public Task<AccessListData<IReadOnlyList<AccessListMembership>>?> GetAccessListMemberships(
         Guid id,
+        Guid? continueFrom,
+        int count,
         CancellationToken cancellationToken = default)
-        => InTransaction(repo => repo.GetAccessListMemberships(new(id), cancellationToken), cancellationToken);
+        => InTransaction(repo => repo.GetAccessListMemberships(new(id), continueFrom, count, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
     public Task<AccessListData<IReadOnlyList<AccessListMembership>>?> GetAccessListMemberships(
         string registryOwner,
         string identifier,
+        Guid? continueFrom,
+        int count,
         CancellationToken cancellationToken = default)
-        => InTransaction(repo => repo.GetAccessListMemberships(new(registryOwner, identifier), cancellationToken), cancellationToken);
+        => InTransaction(repo => repo.GetAccessListMemberships(new(registryOwner, identifier), continueFrom, count, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
     public async Task<IAccessListAggregate> CreateAccessList(string resourceOwner, string identifier, string name, string description, CancellationToken cancellationToken = default)
@@ -122,7 +127,14 @@ internal partial class AccessListsRepository
 
     /// <inheritdoc/>
     Task IAggregateRepository<AccessListAggregate, AccessListEvent>.ApplyChanges(AccessListAggregate aggregate, CancellationToken cancellationToken)
-        => InTransaction(repo => repo.ApplyChanges(aggregate, cancellationToken), cancellationToken);
+    {
+        if (!aggregate.HasUncommittedEvents)
+        {
+            return Task.CompletedTask;
+        }
+
+        return InTransaction(repo => repo.ApplyChanges(aggregate, cancellationToken), cancellationToken);
+    }
 
     private Task<AccessListAggregate?> Load(AccessListIdentifier identifier, CancellationToken cancellationToken)
         => InTransaction(repo => repo.Load(identifier, cancellationToken), cancellationToken);

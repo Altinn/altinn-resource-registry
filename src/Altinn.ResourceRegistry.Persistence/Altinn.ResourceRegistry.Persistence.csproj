@@ -8,17 +8,18 @@
 
   <ItemGroup>
     <PackageReference Include="Altinn.Authorization.ABAC" Version="0.0.7" />
+    <PackageReference Include="Aspire.Npgsql" Version="8.0.0-preview.3.24105.21" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.1" />
-    <PackageReference Include="Npgsql" Version="8.0.2" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Altinn.ResourceRegistry.Core\Altinn.ResourceRegistry.Core.csproj" />
+    <ProjectReference Include="..\Altinn.ServiceDefaults.Npgsql\Altinn.ServiceDefaults.Npgsql.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)'=='Debug'">

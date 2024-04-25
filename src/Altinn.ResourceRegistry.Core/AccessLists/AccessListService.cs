@@ -502,7 +502,7 @@ internal class AccessListService
         }
 
         var identifiers = await _register.GetPartyIdentifiers(parties, cancellationToken).ToListAsync(cancellationToken);
-        var toRemove = new HashSet<Guid>();
+        var toAdd = new HashSet<Guid>();
 
         foreach (var partyRef in parties)
         {
@@ -519,15 +519,15 @@ internal class AccessListService
                 return Conditional.NotFound(nameof(PartyReference));
             }
 
-            if (aggregate.Members.Contains(match.PartyUuid))
+            if (!aggregate.Members.Contains(match.PartyUuid))
             {
-                toRemove.Add(match.PartyUuid);
+                toAdd.Add(match.PartyUuid);
             }
         }
 
-        if (toRemove.Count > 0)
+        if (toAdd.Count > 0)
         {
-            aggregate.RemoveMembers(toRemove);
+            aggregate.AddMembers(toAdd);
         }
 
         await aggregate.SaveChanges(cancellationToken);
@@ -567,7 +567,7 @@ internal class AccessListService
         }
 
         var identifiers = await _register.GetPartyIdentifiers(parties, cancellationToken).ToListAsync(cancellationToken);
-        var toAdd = new HashSet<Guid>();
+        var toRemove = new HashSet<Guid>();
 
         foreach (var partyRef in parties)
         {
@@ -584,15 +584,15 @@ internal class AccessListService
                 return Conditional.NotFound(nameof(PartyReference));
             }
 
-            if (!aggregate.Members.Contains(match.PartyUuid))
+            if (aggregate.Members.Contains(match.PartyUuid))
             {
-                toAdd.Add(match.PartyUuid);
+                toRemove.Add(match.PartyUuid);
             }
         }
 
-        if (toAdd.Count > 0)
+        if (toRemove.Count > 0)
         {
-            aggregate.AddMembers(toAdd);
+            aggregate.RemoveMembers(toRemove);
         }
 
         await aggregate.SaveChanges(cancellationToken);

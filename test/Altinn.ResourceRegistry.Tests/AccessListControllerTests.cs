@@ -1291,6 +1291,164 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
     }
     #endregion
 
+    #region AddAccessListMembers
+    public class AddAccessListMembers(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+        : AccessListControllerTests(dbFixture, webApplicationFixture)
+    {
+        [Fact]
+        public async Task Returns_NotFound_ForMissingAccessList()
+        {
+            using var client = CreateAuthenticatedClient();
+
+            using var body = JsonContent.Create(new UpsertAccessListPartyMembersListDto([
+                PartyReference.PartyUuid.Create(GenerateUserId()),
+                PartyReference.PartyUuid.Create(GenerateUserId()),
+            ]));
+            var response = await client.PostAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/members", body);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Adds_MembersInList()
+        {
+            var user1 = GenerateUserId();
+            var user2 = GenerateUserId();
+            var user3 = GenerateUserId();
+            var user4 = GenerateUserId();
+
+            var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+            def.AddMembers([user1, user2]);
+            await def.SaveChanges();
+
+            using var client = CreateAuthenticatedClient();
+
+            using var body = JsonContent.Create(new UpsertAccessListPartyMembersListDto([
+                PartyReference.PartyUuid.Create(user3),
+                PartyReference.PartyUuid.Create(user4),
+            ]));
+            var response = await client.PostAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/members", body);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
+            Assert.NotNull(content);
+
+            content.Items.Should().HaveCount(4);
+            content.Links.Next.Should().BeNull();
+
+            content.Items.Should().Contain(m => m.Id.Value == user1);
+            content.Items.Should().Contain(m => m.Id.Value == user2);
+            content.Items.Should().Contain(m => m.Id.Value == user3);
+            content.Items.Should().Contain(m => m.Id.Value == user4);
+        }
+
+        [Fact]
+        public async Task IsIdempotent()
+        {
+            var user1 = GenerateUserId();
+            var user2 = GenerateUserId();
+            var user3 = GenerateUserId();
+            var user4 = GenerateUserId();
+
+            var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+            def.AddMembers([user1, user2]);
+            await def.SaveChanges();
+
+            using var client = CreateAuthenticatedClient();
+
+            using var body = JsonContent.Create(new UpsertAccessListPartyMembersListDto([
+                PartyReference.PartyUuid.Create(user3),
+                PartyReference.PartyUuid.Create(user4),
+            ]));
+            var response = await client.PostAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/members", body);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
+            var etag = response.Headers.ETag;
+            Assert.NotNull(content);
+            Assert.NotNull(etag);
+
+            content.Items.Should().HaveCount(4);
+            content.Links.Next.Should().BeNull();
+
+            content.Items.Should().Contain(m => m.Id.Value == user1);
+            content.Items.Should().Contain(m => m.Id.Value == user2);
+            content.Items.Should().Contain(m => m.Id.Value == user3);
+            content.Items.Should().Contain(m => m.Id.Value == user4);
+
+            response = await client.PostAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/members", body);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
+            Assert.NotNull(content);
+
+            response.Headers.ETag.Should().Be(etag);
+            content.Items.Should().HaveCount(4);
+            content.Links.Next.Should().BeNull();
+
+            content.Items.Should().Contain(m => m.Id.Value == user1);
+            content.Items.Should().Contain(m => m.Id.Value == user2);
+            content.Items.Should().Contain(m => m.Id.Value == user3);
+            content.Items.Should().Contain(m => m.Id.Value == user4);
+        }
+
+        public class ETagHeaders
+            : EtagHeadersTests
+        {
+            private Guid _user1;
+            private Guid _user2;
+            private Guid _user3;
+            private Guid _user4;
+
+            public ETagHeaders(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+                : base(dbFixture, webApplicationFixture)
+            {
+                _user1 = GenerateUserId();
+                _user2 = GenerateUserId();
+                _user3 = GenerateUserId();
+                _user4 = GenerateUserId();
+            }
+
+            protected override async Task<AccessListInfo> Setup()
+            {
+                var aggregate = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+                aggregate.AddMembers([_user1, _user2]);
+                await aggregate.SaveChanges();
+
+                return aggregate.AsAccessListInfo();
+            }
+
+            protected override HttpRequestMessage CreateRequest(AccessListInfo info)
+            {
+                var body = JsonContent.Create(new UpsertAccessListPartyMembersListDto([
+                    PartyReference.PartyUuid.Create(_user3),
+                    PartyReference.PartyUuid.Create(_user4),
+                ]));
+
+                return new(HttpMethod.Post, $"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/members")
+                {
+                    Content = body,
+                };
+            }
+
+            protected override async Task ValidateResponse(HttpResponseMessage response, AccessListInfo info)
+            {
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+                var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
+                Assert.NotNull(content);
+
+                content.Items.Should().HaveCount(4);
+                content.Links.Next.Should().BeNull();
+
+                content.Items.Should().Contain(m => m.Id.Value == _user1);
+                content.Items.Should().Contain(m => m.Id.Value == _user2);
+                content.Items.Should().Contain(m => m.Id.Value == _user3);
+                content.Items.Should().Contain(m => m.Id.Value == _user4);
+            }
+        }
+    }
+    #endregion
+
     #region Authorization
     public class Authorization(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
         : AccessListControllerTests(dbFixture, webApplicationFixture)

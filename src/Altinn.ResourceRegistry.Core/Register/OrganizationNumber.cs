@@ -35,11 +35,19 @@ public class OrganizationNumber
         yield return new OrganizationNumber("987654321");
     }
 
+    /// <inheritdoc cref="IParsable{TSelf}.Parse(string, IFormatProvider?)"/>
+    public static OrganizationNumber Parse(string s)
+        => Parse(s, provider: null);
+
     /// <inheritdoc/>
-    public static OrganizationNumber Parse(string s, IFormatProvider? provider = null)
+    public static OrganizationNumber Parse(string s, IFormatProvider? provider)
         => TryParse(s, provider, out var result)
         ? result
         : throw new FormatException("Invalid SSN");
+
+    /// <inheritdoc cref="ISpanParsable{TSelf}.Parse(ReadOnlySpan{char}, IFormatProvider?)"/>
+    public static OrganizationNumber Parse(ReadOnlySpan<char> s)
+        => Parse(s, provider: null);
 
     /// <inheritdoc/>
     public static OrganizationNumber Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
@@ -49,13 +57,13 @@ public class OrganizationNumber
 
     /// <inheritdoc/>
     public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out OrganizationNumber result)
-    => TryParse(s.AsSpan(), provider, s, out result);
+        => TryParse(s.AsSpan(), s, out result);
 
     /// <inheritdoc/>
     public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, [MaybeNullWhen(false)] out OrganizationNumber result)
-    => TryParse(s, provider, null, out result);
+        => TryParse(s, original: null, out result);
 
-    private static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, string? original, [MaybeNullWhen(false)] out OrganizationNumber result)
+    private static bool TryParse(ReadOnlySpan<char> s, string? original, [MaybeNullWhen(false)] out OrganizationNumber result)
     {
         if (s.Length != 9)
         {

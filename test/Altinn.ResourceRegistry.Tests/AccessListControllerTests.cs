@@ -1227,7 +1227,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
             content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
             Assert.NotNull(content);
 
-            response.Headers.ETag.Should().Be(etag);
+            response.Headers.ETag.Should().Be(etag, ETagComparer.Instance);
             content.Items.Should().HaveCount(2);
             content.Links.Next.Should().BeNull();
 
@@ -1381,7 +1381,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
             content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
             Assert.NotNull(content);
 
-            response.Headers.ETag.Should().Be(etag);
+            response.Headers.ETag.Should().Be(etag, ETagComparer.Instance);
             content.Items.Should().HaveCount(4);
             content.Links.Next.Should().BeNull();
 
@@ -1535,7 +1535,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
             content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
             Assert.NotNull(content);
 
-            response.Headers.ETag.Should().Be(etag);
+            response.Headers.ETag.Should().Be(etag, ETagComparer.Instance);
             content.Items.Should().HaveCount(2);
             content.Links.Next.Should().BeNull();
 

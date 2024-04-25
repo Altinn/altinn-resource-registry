@@ -2,6 +2,7 @@
 
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Models.Versioned;
 using Altinn.ResourceRegistry.Core.Register;
@@ -432,23 +433,14 @@ internal class AccessListService
 
         var identifiers = await _register.GetPartyIdentifiers(parties, cancellationToken).ToListAsync(cancellationToken);
         var membersBuilder = ImmutableHashSet.CreateBuilder<Guid>();
-
-        foreach (var partyRef in parties)
+        await foreach (var partyIds in ResolvePartyIdentifiers(parties, cancellationToken))
         {
-            var match = partyRef switch
-            {
-                PartyReference.PartyId partyId => identifiers.Find(v => v.PartyId == partyId.Value),
-                PartyReference.PartyUuid partyUuid => identifiers.Find(v => v.PartyUuid == partyUuid.Value),
-                PartyReference.OrganizationIdentifier orgNo => identifiers.Find(v => v.OrgNumber == orgNo.Value.ToString()),
-                _ => null
-            };
-
-            if (match is null)
+            if (partyIds is null)
             {
                 return Conditional.NotFound(nameof(PartyReference));
             }
 
-            membersBuilder.Add(match.PartyUuid);
+            membersBuilder.Add(partyIds.PartyUuid);
         }
 
         var newMembers = membersBuilder.ToImmutable();
@@ -501,27 +493,17 @@ internal class AccessListService
             }
         }
 
-        var identifiers = await _register.GetPartyIdentifiers(parties, cancellationToken).ToListAsync(cancellationToken);
         var toAdd = new HashSet<Guid>();
-
-        foreach (var partyRef in parties)
+        await foreach (var partyIds in ResolvePartyIdentifiers(parties, cancellationToken))
         {
-            var match = partyRef switch
-            {
-                PartyReference.PartyId partyId => identifiers.Find(v => v.PartyId == partyId.Value),
-                PartyReference.PartyUuid partyUuid => identifiers.Find(v => v.PartyUuid == partyUuid.Value),
-                PartyReference.OrganizationIdentifier orgNo => identifiers.Find(v => v.OrgNumber == orgNo.Value.ToString()),
-                _ => null
-            };
-
-            if (match is null)
+            if (partyIds is null)
             {
                 return Conditional.NotFound(nameof(PartyReference));
             }
 
-            if (!aggregate.Members.Contains(match.PartyUuid))
+            if (!aggregate.Members.Contains(partyIds.PartyUuid))
             {
-                toAdd.Add(match.PartyUuid);
+                toAdd.Add(partyIds.PartyUuid);
             }
         }
 
@@ -566,27 +548,17 @@ internal class AccessListService
             }
         }
 
-        var identifiers = await _register.GetPartyIdentifiers(parties, cancellationToken).ToListAsync(cancellationToken);
         var toRemove = new HashSet<Guid>();
-
-        foreach (var partyRef in parties)
+        await foreach (var partyIds in ResolvePartyIdentifiers(parties, cancellationToken))
         {
-            var match = partyRef switch
-            {
-                PartyReference.PartyId partyId => identifiers.Find(v => v.PartyId == partyId.Value),
-                PartyReference.PartyUuid partyUuid => identifiers.Find(v => v.PartyUuid == partyUuid.Value),
-                PartyReference.OrganizationIdentifier orgNo => identifiers.Find(v => v.OrgNumber == orgNo.Value.ToString()),
-                _ => null
-            };
-
-            if (match is null)
+            if (partyIds is null)
             {
                 return Conditional.NotFound(nameof(PartyReference));
             }
 
-            if (aggregate.Members.Contains(match.PartyUuid))
+            if (aggregate.Members.Contains(partyIds.PartyUuid))
             {
-                toRemove.Add(match.PartyUuid);
+                toRemove.Add(partyIds.PartyUuid);
             }
         }
 
@@ -598,5 +570,30 @@ internal class AccessListService
         await aggregate.SaveChanges(cancellationToken);
 
         return await GetAccessListMembers(owner, identifier, Page.DefaultRequest(), null, cancellationToken);
+    }
+
+    private async IAsyncEnumerable<PartyIdentifiers?> ResolvePartyIdentifiers(
+        IReadOnlyList<PartyReference> parties, 
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        if (parties.Count == 0)
+        {
+            yield break;
+        }
+
+        var identifiers = await _register.GetPartyIdentifiers(parties, cancellationToken).ToListAsync(cancellationToken);
+
+        foreach (var partyRef in parties)
+        {
+            var match = partyRef switch
+            {
+                PartyReference.PartyId partyId => identifiers.Find(v => v.PartyId == partyId.Value),
+                PartyReference.PartyUuid partyUuid => identifiers.Find(v => v.PartyUuid == partyUuid.Value),
+                PartyReference.OrganizationIdentifier orgNo => identifiers.Find(v => v.OrgNumber == orgNo.Value.ToString()),
+                _ => null
+            };
+
+            yield return match;
+        }
     }
 }

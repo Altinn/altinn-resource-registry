@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
@@ -136,10 +136,10 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             static bool IsInvalidServiceEngineResource(ServiceResource serviceResource)
             {
                 if (serviceResource.Identifier.StartsWith(ResourceConstants.SERVICE_ENGINE_RESOURCE_PREFIX)
-                && (serviceResource.ResourceReferences == null
-                || !serviceResource.ResourceReferences.Any()
-                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceCode))
-                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceEditionCode))))
+                    && (serviceResource.ResourceReferences == null
+                    || !serviceResource.ResourceReferences.Any()
+                    || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceCode))
+                    || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceEditionCode))))
                 {
                     // Uses Service engine prefix without it beeing a service engine resource
                     return true;
@@ -151,9 +151,9 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             static bool IsInvalidAppResource(ServiceResource serviceResource)
             {
                 if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX)
-              && (serviceResource.ResourceReferences == null
-              || !serviceResource.ResourceReferences.Any()
-              || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ApplicationId))))
+                    && (serviceResource.ResourceReferences == null
+                    || !serviceResource.ResourceReferences.Any()
+                    || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ApplicationId))))
                 {
                     // Uses app prefix without it beeing a app resource
                     return true;

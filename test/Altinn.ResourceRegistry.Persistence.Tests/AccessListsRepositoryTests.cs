@@ -98,7 +98,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(original.Id);
             Assert.NotNull(aggregate);
             aggregate.Update(identifier: "identifier2");
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             var info = await Repository.LookupInfo(original.Id);
             Assert.NotNull(info);
@@ -115,7 +115,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(original.Id);
             Assert.NotNull(aggregate);
             aggregate.Update(identifier: "identifier");
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             var info = await Repository.LookupInfo(original.Id);
             Assert.NotNull(info);
@@ -131,7 +131,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(original.Id);
             Assert.NotNull(aggregate);
             aggregate.Update(name: "name2", description: "description2");
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             var info = await Repository.LookupInfo(original.Id);
             Assert.NotNull(info);
@@ -152,7 +152,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(original.Id);
             Assert.NotNull(aggregate);
             aggregate.Delete();
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             (await Repository.LookupInfo("owner", "identifier")).Should().BeNull();
         }
@@ -198,7 +198,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(original1.Id);
             Assert.NotNull(aggregate);
             var connection = aggregate.AddResourceConnection(RESOURCE1_NAME, ImmutableArray<string>.Empty);
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             connection.ResourceIdentifier.Should().Be(RESOURCE1_NAME);
             connection.Actions.Should().BeEmpty();
@@ -222,7 +222,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(original1.ResourceOwner, original1.Identifier);
             Assert.NotNull(aggregate);
             var connection = aggregate.AddResourceConnectionActions(RESOURCE1_NAME, ImmutableArray.Create(ACTION_READ, ACTION_WRITE));
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             connection.ResourceIdentifier.Should().Be(RESOURCE1_NAME);
             connection.Actions.Should().HaveCount(2)
@@ -243,7 +243,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(original1.ResourceOwner, original1.Identifier);
             Assert.NotNull(aggregate);
             var connection = aggregate.AddResourceConnection(RESOURCE2_NAME, ImmutableArray.Create(ACTION_READ));
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             connection.ResourceIdentifier.Should().Be(RESOURCE2_NAME);
             connection.Actions.Should().HaveCount(1)
@@ -266,7 +266,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(original1.ResourceOwner, original1.Identifier);
             Assert.NotNull(aggregate);
             var connection = aggregate.RemoveResourceConnectionActions(RESOURCE1_NAME, ImmutableArray.Create(ACTION_READ));
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             connection.ResourceIdentifier.Should().Be(RESOURCE1_NAME);
             connection.Actions.Should().HaveCount(1)
@@ -288,7 +288,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(original1.ResourceOwner, original1.Identifier);
             Assert.NotNull(aggregate);
             var connection = aggregate.RemoveResourceConnection(RESOURCE1_NAME);
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             connection.ResourceIdentifier.Should().Be(RESOURCE1_NAME);
             connection.Actions.Should().HaveCount(1)
@@ -308,7 +308,7 @@ public class AccessListsRepositoryTests : DbTests
             Assert.NotNull(aggregate2);
             aggregate2.AddResourceConnection(RESOURCE1_NAME, ImmutableArray.Create(ACTION_READ));
             aggregate2.AddResourceConnection(RESOURCE2_NAME, ImmutableArray.Create(ACTION_WRITE));
-            await aggregate2.SaveChanged();
+            await aggregate2.SaveChanges();
 
             var infos = await Repository.GetAccessListsByOwner(original1.ResourceOwner, continueFrom: null, 10, AccessListIncludes.ResourceConnections);
             Assert.NotNull(infos);
@@ -344,7 +344,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(info.Id);
             Assert.NotNull(aggregate);
             aggregate.AddMembers([member1, member2]);
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             var memberships = await Repository.GetAccessListMemberships(info.Id, null, 100);
             Assert.NotNull(memberships);
@@ -358,7 +358,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(info.Id);
             Assert.NotNull(aggregate);
             aggregate.AddMembers([member3, member4]);
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             var memberships = await Repository.GetAccessListMemberships(info.Id, null, 100);
             Assert.NotNull(memberships);
@@ -374,7 +374,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(info.Id);
             Assert.NotNull(aggregate);
             aggregate.RemoveMembers([member2, member3]);
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             var memberships = await Repository.GetAccessListMemberships(info.Id, null, 100);
             Assert.NotNull(memberships);
@@ -388,7 +388,7 @@ public class AccessListsRepositoryTests : DbTests
             var aggregate = await Repository.LoadAccessList(info.Id);
             Assert.NotNull(aggregate);
             aggregate.RemoveMembers([member1, member4]);
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             var memberships = await Repository.GetAccessListMemberships(info.Id, null, 100);
             Assert.NotNull(memberships);
@@ -415,10 +415,10 @@ public class AccessListsRepositoryTests : DbTests
         aggregate2.AddMembers(ImmutableArray.Create(Guid.NewGuid()));
 
         // save aggregate 1
-        await aggregate1.SaveChanged();
+        await aggregate1.SaveChanges();
 
         // try to save aggregate 2
-        var exn = await aggregate2.Awaiting(x => x.SaveChanged()).Should().ThrowAsync<OptimisticConcurrencyException>();
+        var exn = await aggregate2.Awaiting(x => x.SaveChanges()).Should().ThrowAsync<OptimisticConcurrencyException>();
         exn.Which.AggregateId.Should().Be(original.Id);
     }
 
@@ -428,12 +428,12 @@ public class AccessListsRepositoryTests : DbTests
         var aggregate = await Repository.CreateAccessList("owner", "identifier", "name", "description");
 
         aggregate.Update(name: "name2");
-        await aggregate.SaveChanged();
+        await aggregate.SaveChanges();
 
         await CheckRegistryLookup(aggregate.AsAccessListInfo());
 
         aggregate.Update(name: "name3");
-        await aggregate.SaveChanged();
+        await aggregate.SaveChanges();
 
         await CheckRegistryLookup(aggregate.AsAccessListInfo());
     }
@@ -452,7 +452,7 @@ public class AccessListsRepositoryTests : DbTests
         original.Update(name: "name3");
         original.AddMembers([party1, party2, party3]);
         original.RemoveMembers([party2]);
-        await original.SaveChanged();
+        await original.SaveChanges();
 
         var newVersion = original.CommittedVersion;
         newVersion.Value.Should().BeGreaterThan(originalVersion.Value!.Value);

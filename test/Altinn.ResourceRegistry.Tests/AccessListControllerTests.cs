@@ -1,4 +1,4 @@
-﻿using Altinn.ResourceRegistry.Core.AccessLists;
+using Altinn.ResourceRegistry.Core.AccessLists;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Tests.Utils;
@@ -629,7 +629,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
             {
                 aggregate.AddResourceConnection(resource.Identifier, resource.Actions);
             }
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             using var client = CreateAuthenticatedClient();
             using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/resource-connections");
@@ -706,7 +706,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
             {
                 aggregate.AddResourceConnection(resource.Identifier, resource.Actions);
             }
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             using var client = CreateAuthenticatedClient();
             using var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/resource-connections");
@@ -721,7 +721,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
 
             // Update access list
             aggregate.Update(name: "Test 1 updated");
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             using var nextPageResponse = await client.GetAsync(content.Links.Next);
             nextPageResponse.StatusCode.Should().Be(HttpStatusCode.PreconditionFailed);
@@ -742,7 +742,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
                 aggregate.AddResourceConnection("read", ["read"]);
                 aggregate.AddResourceConnection("write", ["write"]);
                 aggregate.AddResourceConnection("readwrite", ["read", "write"]);
-                await aggregate.SaveChanged();
+                await aggregate.SaveChanges();
 
                 return aggregate.AsAccessListInfo();
             }
@@ -817,7 +817,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
 
             var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
             def.AddResourceConnection("test1", ["read"]);
-            await def.SaveChanged();
+            await def.SaveChanges();
 
             using var client = CreateAuthenticatedClient();
 
@@ -847,7 +847,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
 
             var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
             def.AddResourceConnection("test1", ["read", "write"]);
-            await def.SaveChanged();
+            await def.SaveChanges();
             var version = def.CommittedVersion;
 
             using var client = CreateAuthenticatedClient();
@@ -881,7 +881,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
 
                 var aggregate = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
                 aggregate.AddResourceConnection("test1", ["read"]);
-                await aggregate.SaveChanged();
+                await aggregate.SaveChanges();
 
                 return aggregate.AsAccessListInfo();
             }
@@ -940,7 +940,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
 
             var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
             def.AddResourceConnection("test1", ["read", "write"]);
-            await def.SaveChanged();
+            await def.SaveChanges();
 
             using var client = CreateAuthenticatedClient();
 
@@ -966,7 +966,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
 
                 var aggregate = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
                 aggregate.AddResourceConnection("test1", ["read", "write"]);
-                await aggregate.SaveChanged();
+                await aggregate.SaveChanges();
 
                 return aggregate.AsAccessListInfo();
             }
@@ -1088,7 +1088,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
             Assert.NotNull(aggregate);
 
             aggregate.Update(name: $"{info.Name} updated", description: $"{info.Description} updated");
-            await aggregate.SaveChanged();
+            await aggregate.SaveChanges();
 
             return aggregate.AsAccessListInfo();
         }

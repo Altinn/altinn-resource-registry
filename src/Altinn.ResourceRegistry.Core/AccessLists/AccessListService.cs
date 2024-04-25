@@ -116,7 +116,7 @@ internal class AccessListService
         }
 
         aggregate.Delete();
-        await aggregate.SaveChanged(cancellationToken);
+        await aggregate.SaveChanges(cancellationToken);
 
         return aggregate.AsAccessListInfo();
     }
@@ -190,7 +190,7 @@ internal class AccessListService
         if (newName is not null || newDescription is not null)
         {
             aggregate.Update(name: newName, description: newDescription);
-            await aggregate.SaveChanged(cancellationToken);
+            await aggregate.SaveChanges(cancellationToken);
         }
 
         // Return the maybe updated list.
@@ -297,7 +297,7 @@ internal class AccessListService
                 break;
         }
 
-        await aggregate.SaveChanged(cancellationToken);
+        await aggregate.SaveChanges(cancellationToken);
         
         if (!aggregate.TryGetResourceConnections(resourceIdentifier, out connection))
         {
@@ -344,7 +344,7 @@ internal class AccessListService
         }
 
         aggregate.RemoveResourceConnection(resourceIdentifier);
-        await aggregate.SaveChanged(cancellationToken);
+        await aggregate.SaveChanges(cancellationToken);
 
         return AccessListData.Create(aggregate.AsAccessListInfo(), connection);
     }
@@ -465,7 +465,7 @@ internal class AccessListService
             aggregate.AddMembers(toAdd);
         }
 
-        await aggregate.SaveChanged(cancellationToken);
+        await aggregate.SaveChanges(cancellationToken);
 
         return await GetAccessListMembers(owner, identifier, Page.DefaultRequest(), null, cancellationToken);
     }
@@ -530,7 +530,7 @@ internal class AccessListService
             aggregate.RemoveMembers(toRemove);
         }
 
-        await aggregate.SaveChanged(cancellationToken);
+        await aggregate.SaveChanges(cancellationToken);
 
         return await GetAccessListMembers(owner, identifier, Page.DefaultRequest(), null, cancellationToken);
     }
@@ -595,7 +595,7 @@ internal class AccessListService
             aggregate.AddMembers(toAdd);
         }
 
-        await aggregate.SaveChanged(cancellationToken);
+        await aggregate.SaveChanges(cancellationToken);
 
         return await GetAccessListMembers(owner, identifier, Page.DefaultRequest(), null, cancellationToken);
     }

@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using Altinn.Common.AccessTokenClient.Services;
+﻿using Altinn.Common.AccessTokenClient.Services;
 using CommunityToolkit.Diagnostics;
 
 namespace Altinn.ResourceRegistry.Integration;

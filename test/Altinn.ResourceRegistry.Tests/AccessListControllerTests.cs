@@ -1,5 +1,6 @@
-using Altinn.ResourceRegistry.Core.AccessLists;
+﻿using Altinn.ResourceRegistry.Core.AccessLists;
 using Altinn.ResourceRegistry.Core.Constants;
+using Altinn.ResourceRegistry.Core.Register;
 using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Tests.Utils;
 using Altinn.ResourceRegistry.TestUtils;
@@ -7,6 +8,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
@@ -14,6 +16,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -28,6 +32,8 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
     protected AdvanceableTimeProvider TimeProvider => Services.GetRequiredService<AdvanceableTimeProvider>();
     protected NpgsqlDataSource DataSource => Services.GetRequiredService<NpgsqlDataSource>();
 
+    private int _nextUserId = 1;
+
 
     private HttpClient CreateAuthenticatedClient()
     {
@@ -37,6 +43,14 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         return client;
+    }
+
+    protected override void ConfigureServices(IServiceCollection services)
+    {
+
+        services.AddSingleton<IRegisterClient, MockRegisterClient>();
+
+        base.ConfigureServices(services);
     }
 
     #region GetAccessListsByOwner
@@ -105,7 +119,7 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
             var def1 = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
             def1.AddResourceConnection(RESOURCE1_NAME, []);
             def1.AddResourceConnection(RESOURCE2_NAME, [ACTION_READ]);
-            await def1.SaveChanged();
+            await def1.SaveChanges();
 
             using var client = CreateAuthenticatedClient();
 
@@ -991,6 +1005,139 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
     }
     #endregion
 
+    #region GetAccessListMembers
+    public class GetAccessListMembers(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+        : AccessListControllerTests(dbFixture, webApplicationFixture)
+    {
+        [Fact]
+        public async Task Returns_NotFound_ForMissingAccessList()
+        {
+            using var client = CreateAuthenticatedClient();
+
+            var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/members");
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Returns_MembersInList()
+        {
+            var user1 = GenerateUserId();
+            var user2 = GenerateUserId();
+
+            var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+            def.AddMembers([user1, user2]);
+            await def.SaveChanges();
+
+            using var client = CreateAuthenticatedClient();
+
+            var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/members");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
+            Assert.NotNull(content);
+
+            content.Items.Should().HaveCount(2);
+            content.Links.Next.Should().BeNull();
+
+            content.Items.Should().Contain(m => m.Id.Value == user1);
+            content.Items.Should().Contain(m => m.Id.Value == user2);
+        }
+
+        [Fact]
+        public async Task Paginates()
+        {
+            var users = new List<Guid>(250);
+            var received = new List<Guid>(250);
+            for (var i = 0; i < 250; i++)
+            {
+                var user = GenerateUserId();
+                users.Add(user);
+            }
+
+            var def = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+            def.AddMembers(users);
+            await def.SaveChanges();
+
+            using var client = CreateAuthenticatedClient();
+
+            var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/members");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
+            Assert.NotNull(content);
+
+            content.Items.Should().HaveCount(100);
+            content.Links.Next.Should().NotBeNull();
+            received.AddRange(content.Items.Select(m => m.Id.Value));
+
+            response = await client.GetAsync(content.Links.Next);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
+            Assert.NotNull(content);
+
+            content.Items.Should().HaveCount(100);
+            content.Links.Next.Should().NotBeNull();
+            received.AddRange(content.Items.Select(m => m.Id.Value));
+
+            response = await client.GetAsync(content.Links.Next);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
+            Assert.NotNull(content);
+
+            content.Items.Should().HaveCount(50);
+            content.Links.Next.Should().BeNull();
+            received.AddRange(content.Items.Select(m => m.Id.Value));
+
+            foreach (var user in users)
+            {
+                received.Should().Contain(user);
+            }
+        }
+
+        public class ETagHeaders
+            : EtagHeadersTests
+        {
+            private Guid _user1;
+            private Guid _user2;
+
+            public ETagHeaders(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+                : base(dbFixture, webApplicationFixture)
+            {
+                _user1 = GenerateUserId();
+                _user2 = GenerateUserId();
+            }
+
+            protected override async Task<AccessListInfo> Setup()
+            {
+                var aggregate = await Repository.CreateAccessList(ORG_NR, "test1", "Test 1", "test 1 description");
+                aggregate.AddMembers([_user1, _user2]);
+                await aggregate.SaveChanges();
+
+                return aggregate.AsAccessListInfo();
+            }
+
+            protected override HttpRequestMessage CreateRequest(AccessListInfo info)
+                => new(HttpMethod.Get, $"/resourceregistry/api/v1/access-lists/{ORG_NR}/test1/members");
+
+            protected override async Task ValidateResponse(HttpResponseMessage response, AccessListInfo info)
+            {
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+                var content = await response.Content.ReadFromJsonAsync<Paginated<AccessListMembershipDto>>();
+                Assert.NotNull(content);
+
+                content.Items.Should().HaveCount(2);
+                content.Links.Next.Should().BeNull();
+
+                content.Items.Should().Contain(m => m.Id.Value == _user1);
+                content.Items.Should().Contain(m => m.Id.Value == _user2);
+            }
+        }
+    }
+    #endregion
+
     #region Authorization
     public class Authorization(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
         : AccessListControllerTests(dbFixture, webApplicationFixture)
@@ -1291,6 +1438,123 @@ public class AccessListControllerTests(DbFixture dbFixture, WebApplicationFixtur
 
         nameParam.Value = name;
         await resourceCmd.ExecuteNonQueryAsync();
+    }
+
+    protected Guid GenerateUserId()
+    {
+        var id = Interlocked.Increment(ref _nextUserId) - 1;
+        var lastGuidPart = id.ToString("D12");
+        var guidString = $"00000000-0000-0000-0000-{lastGuidPart}";
+
+        return Guid.Parse(guidString);
+    }
+
+    private class MockRegisterClient
+        : IRegisterClient
+    {
+        public IAsyncEnumerable<PartyIdentifiers> GetPartyIdentifiers(IEnumerable<PartyReference> parties, CancellationToken cancellationToken = default)
+        {
+            List<int>? partyIds = null;
+            List<Guid>? partyUuids = null;
+            List<string>? orgNos = null;
+
+            foreach (var party in parties)
+            {
+                switch (party)
+                {
+                    case PartyReference.PartyId partyId:
+                        partyIds ??= new List<int>();
+                        partyIds.Add(partyId.Value);
+                        break;
+
+                    case PartyReference.PartyUuid partyUuid:
+                        partyUuids ??= new List<Guid>();
+                        partyUuids.Add(partyUuid.Value);
+                        break;
+
+                    case PartyReference.OrganizationIdentifier orgNo:
+                        orgNos ??= new List<string>();
+                        orgNos.Add(orgNo.Value.ToString());
+                        break;
+                }
+            }
+
+            return GetPartyIdentifiers(partyIds, partyUuids, orgNos, cancellationToken);
+        }
+
+        public IAsyncEnumerable<PartyIdentifiers> GetPartyIdentifiers(IEnumerable<Guid> partyUuids, CancellationToken cancellationToken = default)
+        {
+            return GetPartyIdentifiers(partyIds: null, partyUuids, orgNos: null, cancellationToken);
+        }
+
+        private static async IAsyncEnumerable<PartyIdentifiers> GetPartyIdentifiers(
+            IEnumerable<int>? partyIds,
+            IEnumerable<Guid>? partyUuids,
+            IEnumerable<string>? orgNos,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            await Task.Yield();
+
+            if (partyIds is { } ids)
+            {
+                foreach (var id in ids)
+                {
+                    yield return MakePartyIdentifiers(id);
+                }
+            }
+
+            if (partyUuids is { } uuids)
+            {
+                foreach (var uuid in uuids)
+                {
+                    yield return MakePartyIdentifiers(uuid);
+                }
+            }
+
+            if (orgNos is { } orgs)
+            {
+                foreach (var org in orgs)
+                {
+                    yield return MakePartyIdentifiers(org);
+                }
+            }
+        }
+
+        private static PartyIdentifiers MakePartyIdentifiers(int id)
+        {
+            var orgNo = id.ToString("D9");
+            var lastGuidPart = id.ToString("D12");
+            var guidString = $"00000000-0000-0000-0000-{lastGuidPart}";
+            var guid = Guid.Parse(guidString);
+
+            return new PartyIdentifiers
+            {
+                PartyId = id,
+                PartyUuid = guid,
+                OrgNumber = orgNo,
+            };
+        }
+
+        private static PartyIdentifiers MakePartyIdentifiers(Guid guid)
+        {
+            var lastGuidPart = guid.ToString().AsSpan()[^12..];
+            var id = int.Parse(lastGuidPart);
+            var orgNo = id.ToString("D9");
+
+            return new PartyIdentifiers
+            {
+                PartyId = id,
+                PartyUuid = guid,
+                OrgNumber = orgNo,
+            };
+        }
+
+        private static PartyIdentifiers MakePartyIdentifiers(string orgNo)
+        {
+            var id = int.Parse(orgNo);
+
+            return MakePartyIdentifiers(id);
+        }
     }
     #endregion
 }

@@ -78,9 +78,8 @@ public class UpsertAccessListPartyMembersListDto(
         public override void Write(Utf8JsonWriter writer, UpsertAccessListPartyMembersListDto value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
-            writer.WriteStartArray("data");
+            writer.WritePropertyName("data"u8);
             JsonSerializer.Serialize(writer, value._items, options);
-            writer.WriteEndArray();
             writer.WriteEndObject();
         }
     }

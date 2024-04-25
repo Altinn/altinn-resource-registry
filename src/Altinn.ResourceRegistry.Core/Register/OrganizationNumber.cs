@@ -95,7 +95,7 @@ public class OrganizationNumber
         return true;
     }
 
-    private class JsonConverter : JsonConverter<OrganizationNumber>
+    private sealed class JsonConverter : JsonConverter<OrganizationNumber>
     {
         public override OrganizationNumber? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

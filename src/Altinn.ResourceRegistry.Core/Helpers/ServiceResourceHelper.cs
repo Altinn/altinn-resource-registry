@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
@@ -162,9 +162,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 return false;
             }
 
-            /// <summary>
-            /// Validates that orgs that is not TTD needs to have orgnumber set.
-            /// </summary>
+            // Validates that orgs that is not TTD needs to have orgnumber set.
             static bool ValidateResourceOwner(ServiceResource serviceResource)
             {
                 if (serviceResource.HasCompetentAuthority == null)

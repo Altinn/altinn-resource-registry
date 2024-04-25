@@ -85,8 +85,12 @@ public class OrganizationNumber
     public override string ToString()
         => _value;
 
+    /// <inheritdoc cref="IFormattable.ToString(string?, IFormatProvider?)"/>
+    public string ToString(string? format)
+        => _value;
+
     /// <inheritdoc/>
-    public string ToString(string? format = null, IFormatProvider? formatProvider = null)
+    public string ToString(string? format, IFormatProvider? formatProvider)
         => _value;
 
     /// <inheritdoc/>

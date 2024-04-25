@@ -431,7 +431,6 @@ internal class AccessListService
             }
         }
 
-        var identifiers = await _register.GetPartyIdentifiers(parties, cancellationToken).ToListAsync(cancellationToken);
         var membersBuilder = ImmutableHashSet.CreateBuilder<Guid>();
         await foreach (var partyIds in ResolvePartyIdentifiers(parties, cancellationToken))
         {

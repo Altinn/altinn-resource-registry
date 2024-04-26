@@ -35,8 +35,7 @@ public abstract partial record PartyReference
     [UrnKey("altinn:organization:identifier-no")]
     public partial bool IsOrganizationIdentifier(out OrganizationNumber organizationNumber);
 
-    // TODO: Enable this once it's fixed in the Urn library
-    ////// Manually overridden to disallow negative party ids
-    ////private static bool TryParsePartyId(ReadOnlySpan<char> segment, IFormatProvider? provider, out int value)
-    ////    => int.TryParse(segment, NumberStyles.None, provider, out value);
+    // Manually overridden to disallow negative party ids
+    private static bool TryParsePartyId(ReadOnlySpan<char> segment, IFormatProvider? provider, out int value)
+        => int.TryParse(segment, NumberStyles.None, provider, out value);
 }

@@ -14,21 +14,21 @@ namespace Altinn.ResourceRegistry.Core.Enums
         Default = 0,
 
         [PgName("systemresource")]
-        Systemresource = 1 << 1,
+        Systemresource = 1 << 0,
 
         [PgName("maskinportenschema")]
-        MaskinportenSchema = 1 << 2,
+        MaskinportenSchema = 1 << 1,
 
         [PgName("altinn2service")]
-        Altinn2Service = 1 << 3,
+        Altinn2Service = 1 << 2,
 
         [PgName("altinnapp")]
-        AltinnApp = 1 << 4,
+        AltinnApp = 1 << 3,
 
         [PgName("genericaccessresource")]
-        GenericAccessResource = 1 << 5,
+        GenericAccessResource = 1 << 4,
 
         [PgName("brokerservice")]
-        BrokerService = 1 << 6,
+        BrokerService = 1 << 5,
     }
 }

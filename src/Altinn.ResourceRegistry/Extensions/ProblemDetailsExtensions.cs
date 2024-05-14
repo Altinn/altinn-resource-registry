@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+namespace Altinn.ResourceRegistry.Extensions;
+
 /// <summary>
 /// Extensions for <see cref="ProblemDetails"/>.
 /// </summary>

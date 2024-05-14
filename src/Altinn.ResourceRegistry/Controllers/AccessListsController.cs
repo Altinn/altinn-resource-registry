@@ -8,6 +8,7 @@ using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Models.Versioned;
 using Altinn.ResourceRegistry.Core.Register;
 using Altinn.ResourceRegistry.Errors;
+using Altinn.ResourceRegistry.Extensions;
 using Altinn.ResourceRegistry.JsonPatch;
 using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Models.ModelBinding;

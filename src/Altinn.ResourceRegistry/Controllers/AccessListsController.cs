@@ -7,6 +7,7 @@ using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Models.Versioned;
 using Altinn.ResourceRegistry.Core.Register;
+using Altinn.ResourceRegistry.Errors;
 using Altinn.ResourceRegistry.JsonPatch;
 using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Models.ModelBinding;
@@ -78,10 +79,14 @@ public class AccessListsController
         [FromQuery(Name = "resource")] string? resourceIdentifier = null,
         CancellationToken cancellationToken = default)
     {
+        if (include.HasFlag(AccessListIncludes.Members))
+        {
+            return AltinnProblemDetails.AccessList_IncludeMembers_NotImplemented().ToActionResult();
+        }
+
         if (include.HasFlag(AccessListIncludes.ResourceConnections) && string.IsNullOrWhiteSpace(resourceIdentifier))
         {
-            ModelState.AddModelError("resource", "Resource identifier is required when including resource connections");
-            return BadRequest(ModelState);
+            return AltinnProblemDetails.AccessList_IncludeResourceConnections_MissingResourceIdentifier().ToActionResult();
         }
 
         var page = await _service.GetAccessListsByOwner(owner, Page.ContinueFrom(token?.Value), include, resourceIdentifier, cancellationToken);
@@ -192,6 +197,7 @@ public class AccessListsController
     /// <param name="patch">The patch document containing what to update</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
     /// <returns>A <see cref="AccessListInfoDto"/></returns>
+    /// <remarks>This method is not implemented yet. See the put method instead.</remarks>
     [HttpPatch("{identifier:required}")]
     [SwaggerOperation(Tags = ["Access List"])]
     [Consumes("application/json-patch+json")]
@@ -276,7 +282,7 @@ public class AccessListsController
     {
         if (members.Count > 100)
         {
-            return BadRequest("Cannot replace more than 100 members at a time. Use POST and DELETE methods instead.");
+            return AltinnProblemDetails.AccessList_UpdateMembers_TooMany().ToActionResult();
         }
 
         var result = await _service.ReplaceAccessListMembers(
@@ -288,7 +294,7 @@ public class AccessListsController
 
         if (result.IsNotFound && result.NotFoundType == nameof(PartyReference))
         {
-            return BadRequest("Party reference not found");
+            return AltinnProblemDetails.PartyReference_NotFound().ToActionResult();
         }
 
         return result.Select(
@@ -333,7 +339,7 @@ public class AccessListsController
     {
         if (members.Count > 100)
         {
-            return BadRequest("Cannot add more than 100 members at a time.");
+            return AltinnProblemDetails.AccessList_AddRemoveMembers_TooMany().ToActionResult();
         }
 
         var result = await _service.AddAccessListMembers(
@@ -345,7 +351,7 @@ public class AccessListsController
 
         if (result.IsNotFound && result.NotFoundType == nameof(PartyReference))
         {
-            return BadRequest("Party reference not found");
+            return AltinnProblemDetails.PartyReference_NotFound().ToActionResult();
         }
 
         return result.Select(
@@ -390,7 +396,7 @@ public class AccessListsController
     {
         if (members.Count > 100)
         {
-            return BadRequest("Cannot remove more than 100 members at a time.");
+            return AltinnProblemDetails.AccessList_AddRemoveMembers_TooMany().ToActionResult();
         }
 
         var result = await _service.RemoveAccessListMembers(
@@ -402,7 +408,7 @@ public class AccessListsController
 
         if (result.IsNotFound && result.NotFoundType == nameof(PartyReference))
         {
-            return BadRequest("Party reference not found");
+            return AltinnProblemDetails.PartyReference_NotFound().ToActionResult();
         }
 
         return result.Select(
@@ -431,7 +437,7 @@ public class AccessListsController
     /// <param name="requestConditions">Request conditions</param>
     /// <param name="token">Optional continuation token</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-    /// <returns>A parinated list of <see cref="AccessListResourceConnectionDto"/></returns>
+    /// <returns>A paginated list of <see cref="AccessListResourceConnectionDto"/></returns>
     [HttpGet("{identifier:required}/resource-connections", Name = ROUTE_GET_RESOURCE_CONNECTIONS)]
     [SwaggerOperation(Tags = ["Access List Resource Connections"])]
     public async Task<ConditionalResult<VersionedPaginated<AccessListResourceConnectionDto, AggregateVersion>, AggregateVersion>> GetAccessListResourceConnections(

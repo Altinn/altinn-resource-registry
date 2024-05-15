@@ -292,12 +292,27 @@ namespace Altinn.ResourceRegistry.Core.Services
                     { "nn", nntext }
                 };
 
-                serviceResource.RightDescription = new Dictionary<string, string>
+                if (!string.IsNullOrEmpty(availableService.DelegationDescription)
+                    || !string.IsNullOrEmpty(endelegationDescription)
+                    || !string.IsNullOrEmpty(nndelegationDescription))
                 {
-                    { "nb", availableService.DelegationDescription },
-                    { "en", endelegationDescription },
-                    { "nn", nndelegationDescription }
-                };
+                    serviceResource.RightDescription = new Dictionary<string, string>();
+                }
+
+                if (!string.IsNullOrEmpty(availableService.DelegationDescription))
+                {
+                    serviceResource.RightDescription.Add("nb", availableService.DelegationDescription);
+                }
+
+                if (!string.IsNullOrEmpty(endelegationDescription))
+                {
+                    serviceResource.RightDescription.Add("en", endelegationDescription);
+                }
+
+                if (!string.IsNullOrEmpty(endelegationDescription))
+                {
+                    serviceResource.RightDescription.Add("nn", nndelegationDescription);
+                }
 
                 serviceResource.ResourceReferences = new List<ResourceReference>();
                 serviceResource.Identifier = $"{ResourceConstants.SERVICE_ENGINE_RESOURCE_PREFIX}{availableService.ExternalServiceCode}_{availableService.ExternalServiceEditionCode.ToString()}";

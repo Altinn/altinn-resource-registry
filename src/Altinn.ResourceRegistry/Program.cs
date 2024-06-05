@@ -40,6 +40,8 @@ using Yuniql.AspNetCore;
 using Yuniql.PostgreSql;
 using KeyVaultSettings = Altinn.Common.AccessToken.Configuration.KeyVaultSettings;
 
+const string REQUESTINFO_LOGGER_NAME = "ResourceRegistry.RequestInfo";
+
 ILogger logger;
 
 string applicationInsightsKeySecretName = "ApplicationInsights--InstrumentationKey";
@@ -212,14 +214,24 @@ void Configure(IConfiguration config)
     app.Use((ctx, next) =>
     {
         var loggerFactory = ctx.RequestServices.GetRequiredService<ILoggerFactory>();
-        var logger = loggerFactory.CreateLogger("RequestInfo");
+        var logger = loggerFactory.CreateLogger(REQUESTINFO_LOGGER_NAME);
+        var options = ctx.RequestServices.GetRequiredService<IOptions<ForwardedHeadersOptions>>().Value;
+
+        Dictionary<string, StringValues> forwardsHeaders = new()
+        {
+            { options.ForwardedForHeaderName, ctx.Request.Headers[options.ForwardedForHeaderName] },
+            { options.ForwardedHostHeaderName, ctx.Request.Headers[options.ForwardedHostHeaderName] },
+            { options.ForwardedProtoHeaderName, ctx.Request.Headers[options.ForwardedProtoHeaderName] },
+            { options.ForwardedPrefixHeaderName, ctx.Request.Headers[options.ForwardedPrefixHeaderName] },
+        };
         logger.LogInformation(
-            "Request received: {method} {protocol} {host} {pathBase} {path}", 
+            "Request received: {method} {protocol} {host} {pathBase} {path}\nHeaders: {headers}", 
             ctx.Request.Method, 
             ctx.Request.Protocol,
             ctx.Request.Host,
             ctx.Request.PathBase, 
-            ctx.Request.Path);
+            ctx.Request.Path,
+            forwardsHeaders);
 
         return next();
     });
@@ -373,6 +385,9 @@ void ConfigureLogging(ILoggingBuilder logging)
         // Adding the filter below to ensure logs of all severity from Program.cs
         // is sent to ApplicationInsights.
         logging.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(typeof(Program).FullName, LogLevel.Trace);
+
+        // Include request info logs in Application Insights
+        logging.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(REQUESTINFO_LOGGER_NAME, LogLevel.Information);
     }
     else
     {

@@ -32,6 +32,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Npgsql;

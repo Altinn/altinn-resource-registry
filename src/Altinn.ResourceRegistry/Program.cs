@@ -214,6 +214,11 @@ void Configure(IConfiguration config)
     // TODO: Remove (or move to proper middleware) once URL generation is fixed
     app.Use((ctx, next) =>
     {
+        if (ctx.Request.Path.StartsWithSegments("/health"))
+        {
+            return next();
+        }
+
         var loggerFactory = ctx.RequestServices.GetRequiredService<ILoggerFactory>();
         var logger = loggerFactory.CreateLogger(REQUESTINFO_LOGGER_NAME);
         var options = ctx.RequestServices.GetRequiredService<IOptions<ForwardedHeadersOptions>>().Value;

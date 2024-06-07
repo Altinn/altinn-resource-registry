@@ -601,7 +601,7 @@ internal class AccessListService
     ///   <item>Includes <see langword="null"/> if a resource could not be resolved.</item>
     /// </list>
     /// </remarks>
-    private IReadOnlySet<string?> ResolveResourceIdentifiers(IEnumerable<ResourceUrn> resourceUrns)
+    private static HashSet<string?> ResolveResourceIdentifiers(IEnumerable<ResourceUrn> resourceUrns)
     {
         HashSet<string?> ids = resourceUrns is IReadOnlyCollection<PartyUrn> c
             ? new(c.Count)
@@ -661,38 +661,6 @@ internal class AccessListService
             }
 
             return uuids;
-        }
-    }
-
-    private ValueTask<Guid> ResolvePartyUuid(PartyUrn partyReference, CancellationToken cancellationToken)
-    {
-        return partyReference switch
-        {
-            PartyUrn.PartyUuid partyUuid => new(partyUuid.Value),
-            _ => new(ResolvePartyIdentifiers(partyReference, cancellationToken)),
-        };
-
-        async Task<Guid> ResolvePartyIdentifiers(PartyUrn partyReference, CancellationToken cancellationToken)
-        {
-            await foreach (var identifiers in _register.GetPartyIdentifiers([partyReference], cancellationToken))
-            {
-                Debug.Assert(Matches(partyReference, identifiers), "The resolved identifiers should match the reference");
-
-                return identifiers.PartyUuid;
-            }
-
-            return Guid.Empty;
-        }
-
-        static bool Matches(PartyUrn partyReference, PartyIdentifiers identifiers)
-        {
-            return partyReference switch
-            {
-                PartyUrn.PartyId partyId => identifiers.PartyId == partyId.Value,
-                PartyUrn.PartyUuid partyUuid => identifiers.PartyUuid == partyUuid.Value,
-                PartyUrn.OrganizationIdentifier orgNo => string.Equals(identifiers.OrgNumber, orgNo.Value.ToString(), StringComparison.Ordinal),
-                _ => false
-            };
         }
     }
 

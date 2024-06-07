@@ -71,7 +71,7 @@ public sealed record ResourceIdentifier
 
     private static bool TryParse(ReadOnlySpan<char> s, string? original, [MaybeNullWhen(false)] out ResourceIdentifier result)
     {
-        if (!ServiceResourceHelper.ResourceIdentifierRegex.IsMatch(s))
+        if (!ServiceResourceHelper.ResourceIdentifierRegex().IsMatch(s))
         {
             result = null;
             return false;

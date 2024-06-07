@@ -26,7 +26,7 @@ namespace Altinn.ResourceRegistry.Controllers;
 [ResourceOwnerFromRouteValue("owner")]
 [Authorize(Policy = AuthzConstants.POLICY_ACCESS_LIST_READ)]
 public class AccessListMembershipsController
-    : Controller
+    : ControllerBase
 {
     private readonly IAccessListService _service;
 

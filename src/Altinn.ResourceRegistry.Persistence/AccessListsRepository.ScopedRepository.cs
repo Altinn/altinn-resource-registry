@@ -439,6 +439,100 @@ internal partial class AccessListsRepository
             return memberships;
         }
 
+        public async Task<IReadOnlyCollection<KeyValuePair<AccessListResourceConnection, AccessListMembership>>> GetMembershipsForPartiesAndResources(
+            IReadOnlyCollection<Guid>? partyUuids,
+            IReadOnlyCollection<string>? resourceIds,
+            CancellationToken cancellationToken)
+        {
+            await using var cmd = CreateCommand(_conn, partyUuids, resourceIds);
+
+            await cmd.PrepareAsync(cancellationToken);
+            await using var reader = await cmd.ExecuteReaderAsync(cancellationToken);
+
+            var memberships = new List<KeyValuePair<AccessListResourceConnection, AccessListMembership>>();
+            while (await reader.ReadAsync(cancellationToken))
+            {
+                var connection = CreateResourceConnection(reader, includeActions: true);
+
+                var partyId = reader.GetGuid("party_id");
+                var since = reader.GetFieldValue<DateTimeOffset>("since");
+
+                var membership = new AccessListMembership(partyId, since);
+
+                memberships.Add(KeyValuePair.Create(connection, membership));
+            }
+
+            return memberships;
+
+            static NpgsqlCommand CreateCommand(NpgsqlConnection conn, IReadOnlyCollection<Guid>? partyUuids, IReadOnlyCollection<string>? resourceIds)
+            {
+                return (partyUuids, resourceIds) switch
+                {
+                    (null or { Count: 0 }, null or { Count: 0 }) => ThrowHelper.ThrowInvalidOperationException<NpgsqlCommand>("Either parties or resources must be specified"),
+                    ({ Count: 1 }, null or { Count: 0 }) => CreateCommandForParty(conn, partyUuids!.Single()),
+                    ({ Count: 1 }, { Count: 1 }) => CreateCommandForPartyAndResource(conn, partyUuids!.Single(), resourceIds!.Single()),
+                    _ => ThrowCreateCommandNotImplemented(),
+                };
+            }
+
+            static NpgsqlCommand CreateCommandForParty(NpgsqlConnection conn, Guid partyUuid)
+            {
+                const string QUERY =
+                    /*strpsql*/"""
+                    SELECT m.party_id, m.since, c.resource_identifier, c.actions, c.created, c.modified
+                    FROM resourceregistry.access_list_resource_connections_state c
+                    INNER JOIN resourceregistry.access_list_members_state m ON c.aggregate_id = m.aggregate_id
+                    WHERE m.party_id = @party_id;
+                    """;
+
+                NpgsqlCommand? cmd = null;
+                try
+                {
+                    cmd = conn.CreateCommand(QUERY);
+                    cmd.Parameters.AddWithValue("party_id", NpgsqlDbType.Uuid, partyUuid);
+
+                    var ret = cmd;
+                    cmd = null;
+                    return ret;
+                }
+                finally
+                {
+                    cmd?.Dispose();
+                }
+            }
+
+            static NpgsqlCommand CreateCommandForPartyAndResource(NpgsqlConnection conn, Guid partyUuid, string resourceId)
+            {
+                const string QUERY =
+                    /*strpsql*/"""
+                    SELECT m.party_id, m.since, c.resource_identifier, c.actions, c.created, c.modified
+                    FROM resourceregistry.access_list_resource_connections_state c
+                    INNER JOIN resourceregistry.access_list_members_state m ON c.aggregate_id = m.aggregate_id
+                    WHERE c.resource_identifier = @resource_identifier
+                    AND m.party_id = @party_id;
+                    """;
+
+                NpgsqlCommand? cmd = null;
+                try
+                {
+                    cmd = conn.CreateCommand(QUERY);
+                    cmd.Parameters.AddWithValue("resource_identifier", NpgsqlDbType.Text, resourceId);
+                    cmd.Parameters.AddWithValue("party_id", NpgsqlDbType.Uuid, partyUuid);
+
+                    var ret = cmd;
+                    cmd = null;
+                    return ret;
+                }
+                finally
+                {
+                    cmd?.Dispose();
+                }
+            }
+
+            static NpgsqlCommand ThrowCreateCommandNotImplemented()
+                => throw new NotImplementedException("Not implemented for multiple parties and/or resources yet.");
+        }
+
         private async IAsyncEnumerable<AccessListEvent> LoadEvents(
             Guid accessListId,
             [EnumeratorCancellation] CancellationToken cancellationToken)

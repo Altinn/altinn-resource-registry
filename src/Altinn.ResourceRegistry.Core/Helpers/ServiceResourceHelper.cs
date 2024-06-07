@@ -10,7 +10,10 @@ namespace Altinn.ResourceRegistry.Core.Helpers
     /// </summary>
     public static class ServiceResourceHelper
     {
-        private static readonly Regex ResourceIdentifierRegex = new Regex("^[a-z0-9_-]{4,}$", RegexOptions.Compiled);
+        /// <summary>
+        /// Resource identifier regex.
+        /// </summary>
+        internal static readonly Regex ResourceIdentifierRegex = new Regex("^[a-z0-9_-]{4,}$", RegexOptions.Compiled);
 
         /// <summary>
         /// Gets resources from the resourcelist that fits the search criteria

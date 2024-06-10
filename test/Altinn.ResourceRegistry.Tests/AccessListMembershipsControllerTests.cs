@@ -9,6 +9,7 @@ using Altinn.ResourceRegistry.Tests.Utils;
 using Altinn.ResourceRegistry.TestUtils;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -133,6 +134,22 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         problemDetails.Errors.Should().ContainSingle(e => e.ErrorCode == ValidationErrors.AccessListMemberships_TooManyResources.ErrorCode)
             .Which.Paths.Should().HaveCount(1)
             .And.ContainSingle(v => string.Equals(v, "/$QUERY/resource"));
+    }
+
+    [Fact]
+    public async Task NonExistingParty_Returns_BadRequest()
+    {
+        var nonExistingUser = PartyUrn.PartyUuid.Create(Guid.Empty);
+
+        using var client = CreateAuthenticatedClient();
+
+        var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/memberships?party={nonExistingUser}");
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<AltinnValidationProblemDetails>();
+        Assert.NotNull(problemDetails);
+
+        problemDetails.ErrorCode.Should().Be(Problems.PartyReference_NotFound.ErrorCode);
     }
 
     [Fact]

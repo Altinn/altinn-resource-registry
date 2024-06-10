@@ -1,5 +1,7 @@
-﻿using Altinn.ResourceRegistry.Core.AccessLists;
+﻿using Altinn.Authorization.ProblemDetails;
+using Altinn.ResourceRegistry.Core.AccessLists;
 using Altinn.ResourceRegistry.Core.Constants;
+using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Register;
 using Altinn.ResourceRegistry.Models;
@@ -32,6 +34,105 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         return client;
+    }
+
+    [Fact]
+    public async Task InvalidPartyUrn_Returns_BadRequest()
+    {
+        using var client = CreateAuthenticatedClient();
+
+        var response = await client.GetAsync("/resourceregistry/api/v1/access-lists/memberships?party=invalid");
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<AltinnValidationProblemDetails>();
+        Assert.NotNull(problemDetails);
+
+        problemDetails.ErrorCode.Should().Be(new AltinnValidationProblemDetails().ErrorCode);
+        problemDetails.Errors.Should().HaveCount(2);
+        problemDetails.Errors.Should().ContainSingle(e => e.ErrorCode == ValidationErrors.AccessListMemberships_Requires_Party.ErrorCode)
+            .Which.Paths.Should().HaveCount(1)
+            .And.ContainSingle(v => string.Equals(v, "/$QUERY/party"));
+        problemDetails.Errors.Should().ContainSingle(e => e.ErrorCode == ValidationErrors.InvalidPartyUrn.ErrorCode)
+            .Which.Paths.Should().HaveCount(1)
+            .And.ContainSingle(v => string.Equals(v, "/$QUERY/party"));
+    }
+
+    [Fact]
+    public async Task InvalidResourceUrn_Returns_BadRequest()
+    {
+        var user1 = PartyUrn.PartyUuid.Create(GenerateUserId());
+        using var client = CreateAuthenticatedClient();
+
+        var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/memberships?party={user1}&resource=invalid");
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<AltinnValidationProblemDetails>();
+        Assert.NotNull(problemDetails);
+
+        problemDetails.ErrorCode.Should().Be(new AltinnValidationProblemDetails().ErrorCode);
+        problemDetails.Errors.Should().HaveCount(1);
+        problemDetails.Errors.Should().ContainSingle(e => e.ErrorCode == ValidationErrors.InvalidResourceUrn.ErrorCode)
+            .Which.Paths.Should().HaveCount(1)
+            .And.ContainSingle(v => string.Equals(v, "/$QUERY/resource"));
+    }
+
+    [Fact]
+    public async Task No_Party_Returns_BadRequest()
+    {
+        using var client = CreateAuthenticatedClient();
+
+        var response = await client.GetAsync("/resourceregistry/api/v1/access-lists/memberships");
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<AltinnValidationProblemDetails>();
+        Assert.NotNull(problemDetails);
+
+        problemDetails.ErrorCode.Should().Be(new AltinnValidationProblemDetails().ErrorCode);
+        problemDetails.Errors.Should().HaveCount(1);
+        problemDetails.Errors.Should().ContainSingle(e => e.ErrorCode == ValidationErrors.AccessListMemberships_Requires_Party.ErrorCode)
+            .Which.Paths.Should().HaveCount(1)
+            .And.ContainSingle(v => string.Equals(v, "/$QUERY/party"));
+    }
+
+    [Fact]
+    public async Task Multiple_Parties_Returns_BadRequest()
+    {
+        var user1 = PartyUrn.PartyUuid.Create(GenerateUserId());
+        var user2 = PartyUrn.PartyUuid.Create(GenerateUserId());
+        using var client = CreateAuthenticatedClient();
+
+        var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/memberships?party={user1},{user2}");
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<AltinnValidationProblemDetails>();
+        Assert.NotNull(problemDetails);
+
+        problemDetails.ErrorCode.Should().Be(new AltinnValidationProblemDetails().ErrorCode);
+        problemDetails.Errors.Should().HaveCount(1);
+        problemDetails.Errors.Should().ContainSingle(e => e.ErrorCode == ValidationErrors.AccessListMemberships_TooManyParties.ErrorCode)
+            .Which.Paths.Should().HaveCount(1)
+            .And.ContainSingle(v => string.Equals(v, "/$QUERY/party"));
+    }
+
+    [Fact]
+    public async Task Multiple_Resources_Returns_BadRequest()
+    {
+        var user1 = PartyUrn.PartyUuid.Create(GenerateUserId());
+        var resource1 = ResourceUrn.ResourceId.Create(ResourceIdentifier.CreateUnchecked("resource1"));
+        var resource2 = ResourceUrn.ResourceId.Create(ResourceIdentifier.CreateUnchecked("resource2"));
+        using var client = CreateAuthenticatedClient();
+
+        var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/memberships?party={user1}&resource={resource1},{resource2}");
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        var problemDetails = await response.Content.ReadFromJsonAsync<AltinnValidationProblemDetails>();
+        Assert.NotNull(problemDetails);
+
+        problemDetails.ErrorCode.Should().Be(new AltinnValidationProblemDetails().ErrorCode);
+        problemDetails.Errors.Should().HaveCount(1);
+        problemDetails.Errors.Should().ContainSingle(e => e.ErrorCode == ValidationErrors.AccessListMemberships_TooManyResources.ErrorCode)
+            .Which.Paths.Should().HaveCount(1)
+            .And.ContainSingle(v => string.Equals(v, "/$QUERY/resource"));
     }
 
     [Fact]

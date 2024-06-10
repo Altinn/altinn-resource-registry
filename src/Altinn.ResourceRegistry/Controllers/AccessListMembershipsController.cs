@@ -93,18 +93,18 @@ public class AccessListMembershipsController
             }
         }
 
-        if (partiesQuery is not { Count: > 0 })
+        if (parties is not { Count: > 0 })
         {
             errors ??= [];
             errors.Add(ValidationErrors.AccessListMemberships_Requires_Party.ToValidationError("/$QUERY/party"));
         }
-        else if (partiesQuery.Count > 1)
+        else if (parties.Count > 1)
         {
             errors ??= [];
             errors.Add(ValidationErrors.AccessListMemberships_TooManyParties.ToValidationError("/$QUERY/party"));
         }
 
-        if (resourcesQuery is { Count: > 1 })
+        if (resources is { Count: > 1 })
         {
             errors ??= [];
             errors.Add(ValidationErrors.AccessListMemberships_TooManyResources.ToValidationError("/$QUERY/resource"));

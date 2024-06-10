@@ -207,6 +207,8 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
         options.AddPolicy(AuthzConstants.POLICY_ACCESS_LIST_WRITE, policy => policy
             .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN, AuthzConstants.SCOPE_ACCESS_LIST_WRITE)
             .RequireUserOwnsResource());
+        options.AddPolicy(AuthzConstants.POLICY_ADMIN, policy => policy
+            .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN));
     });
     services.AddResourceRegistryAuthorizationHandlers();
 }

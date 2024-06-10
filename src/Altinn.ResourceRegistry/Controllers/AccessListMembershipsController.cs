@@ -39,13 +39,19 @@ public class AccessListMembershipsController
     }
 
     /// <summary>
-    /// Gets memberships for a party for a set of resources/parties.
+    /// <para>
+    ///   Gets memberships for a party for a set of resources/parties.
+    /// </para>
+    /// <para>
+    ///   This is an internal API and requires an administrative token.
+    /// </para>
     /// </summary>
     /// <param name="partiesQuery">Parties to include.</param>
     /// <param name="resourcesQuery">Resources to include.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A list-object of access-list memberships that include <paramref name="partiesQuery"/> and <paramref name="resourcesQuery"/>.</returns>
     [HttpGet("")]
+    [Authorize(Policy = AuthzConstants.POLICY_ADMIN)]
     public async Task<ActionResult<ListObject<AccessListResourceMembershipDto>>> GetMembershipsForResourceForParty(
         [FromQuery(Name = "party")] List<string?>? partiesQuery = null,
         [FromQuery(Name = "resource")] List<string?>? resourcesQuery = null,

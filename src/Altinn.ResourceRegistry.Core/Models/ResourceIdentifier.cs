@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -12,6 +13,7 @@ namespace Altinn.ResourceRegistry.Core.Models;
 /// A valid resource identifier.
 /// </summary>
 [JsonConverter(typeof(JsonConverter))]
+[DebuggerDisplay("{_value}")]
 public sealed record ResourceIdentifier
     : IParsable<ResourceIdentifier>
     , ISpanParsable<ResourceIdentifier>

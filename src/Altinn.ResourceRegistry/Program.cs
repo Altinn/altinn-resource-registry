@@ -4,6 +4,7 @@ using Altinn.Common.AccessTokenClient.Services;
 using Altinn.Common.Authentication.Configuration;
 using Altinn.Common.PEP.Authorization;
 using Altinn.Platform.Events.Formatters;
+using Altinn.ResourceRegistry;
 using Altinn.ResourceRegistry.Configuration;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Clients;

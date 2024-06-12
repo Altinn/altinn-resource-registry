@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 
+namespace Altinn.ResourceRegistry;
+
 /// <summary>
 /// Middleware for logging requests before and after applying X-Forwarded headers.
 /// </summary>

@@ -1,7 +1,7 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Net;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using System.Net;
 
 namespace Altinn.ResourceRegistry;
 

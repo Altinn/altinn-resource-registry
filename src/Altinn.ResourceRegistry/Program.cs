@@ -138,6 +138,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IResourceRegistry, ResourceRegistryService>();
     services.AddSingleton<IPRP, PRPClient>();
     services.AddSingleton<IAuthorizationHandler, ScopeAccessHandler>();
+    services.AddTransient<IAuthorizationHandler, ClaimAccessHandler>();
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     services.AddSingleton<IAccessTokenGenerator, AccessTokenGenerator>();
     services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
@@ -210,6 +211,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
             .RequireUserOwnsResource());
         options.AddPolicy(AuthzConstants.POLICY_ADMIN, policy => policy
             .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN));
+        options.AddPolicy(AuthzConstants.POLICY_STUDIO_DESIGNER, policy => policy.Requirements.Add(new ClaimAccessRequirement("urn:altinn:app", "studio.designer")));
     });
     services.AddResourceRegistryAuthorizationHandlers();
 }

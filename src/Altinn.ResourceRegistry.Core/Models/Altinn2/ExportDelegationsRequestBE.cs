@@ -1,0 +1,28 @@
+﻿namespace Altinn.ResourceRegistry.Core.Models.Altinn2
+{
+    /// <summary>
+    /// Model to request delegation export
+    /// </summary>
+    public class ExportDelegationsRequestBE
+    {
+        /// <summary>
+        /// Gets or sets the ServiceCode for identifying service
+        /// </summary>
+        public string ServiceCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ServiceEditionCode for identifying service
+        /// </summary>
+        public int ServiceEditionCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resourceId
+        /// </summary>
+        public string ResourceId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the time and date for when to include in delegationExport-batch
+        /// </summary>
+        public DateTime DateTimeForExport { get; set; }
+    }
+}

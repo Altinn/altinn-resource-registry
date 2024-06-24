@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
 using System.Xml;
 using Altinn.Authorization.ABAC.Utils;
 using Altinn.Authorization.ABAC.Xacml;
@@ -53,6 +54,39 @@ namespace Altinn.ResourceRegistry.Integration.Clients
             {
                 throw new Exception($"Something went wrong when retrieving Action options", ex);
             }
+        }
+
+        /// <inheritdoc/>
+        public async Task ExportDelegations(ExportDelegationsRequestBE exportDelegationsRequestBE, CancellationToken cancellationToken = default)
+        {
+            string bridgeBaseUrl = _settings.BridgeApiEndpoint;
+            string url = $"{bridgeBaseUrl}authorization/api/delegationexport";
+
+            using HttpContent content = JsonContent.Create(exportDelegationsRequestBE);
+
+            HttpResponseMessage response = await _client.PostAsync(url, content, cancellationToken);
+            response.EnsureSuccessStatusCode();
+
+            return;
+        }
+
+        /// <inheritdoc/>
+        public async Task<DelegationCountOverview?> GetDelegationCount(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken = default)
+        {
+            string bridgeBaseUrl = _settings.BridgeApiEndpoint;
+            string url = $"{bridgeBaseUrl}authorization/api/rights/delegation/delegationcount?serviceCode={serviceCode}&serviceEditionCode={serviceEditionCode}";
+
+            HttpResponseMessage response = await _client.GetAsync(url, cancellationToken);
+            response.EnsureSuccessStatusCode();
+
+            string contentString = await response.Content.ReadAsStringAsync(cancellationToken);
+            if (string.IsNullOrEmpty(contentString))
+            {
+                return null;
+            }
+
+            DelegationCountOverview? serviceResource = JsonSerializer.Deserialize<DelegationCountOverview>(contentString, SerializerOptions);
+            return serviceResource;
         }
 
         /// <inheritdoc/>

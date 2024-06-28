@@ -96,5 +96,15 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 
             return null;
         }
+
+        public Task<DelegationCountOverview> GetDelegationCount(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(new DelegationCountOverview() { NumberOfDelegations = 13337, NumberOfRelations = 13336 });
+        }
+
+        public Task ExportDelegations(ExportDelegationsRequestBE exportDelegationsRequestBE, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

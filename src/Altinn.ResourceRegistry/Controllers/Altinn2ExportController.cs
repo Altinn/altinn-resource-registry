@@ -3,9 +3,12 @@ using System.Text;
 using System.Xml;
 using Altinn.Authorization.ABAC.Utils;
 using Altinn.Authorization.ABAC.Xacml;
+using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Models;
+using Altinn.ResourceRegistry.Core.Models.Altinn2;
 using Altinn.ResourceRegistry.Core.Services;
 using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Altinn.ResourceRegistry.Controllers
@@ -64,6 +67,30 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             return Ok(xsd);
+        }
+
+        /// <summary>
+        /// Information about asd
+        /// </summary>
+        [Authorize(Policy = AuthzConstants.POLICY_STUDIO_DESIGNER)]
+        [HttpGet("delegationcount")]
+        public async Task<ActionResult<DelegationCountOverview>> GetDelegationCount([FromQueryAttribute] string serviceCode, [FromQueryAttribute] int serviceEditionCode, CancellationToken cancellationToken = default)
+        {
+            DelegationCountOverview delegationCount = await _altinn2ServicesClient.GetDelegationCount(serviceCode, serviceEditionCode, cancellationToken);
+
+            return Ok(delegationCount);
+        }
+
+        /// <summary>
+        /// Information about asd
+        /// </summary>
+        [Authorize(Policy = AuthzConstants.POLICY_STUDIO_DESIGNER)]
+        [HttpPost("exportdelegations")]
+        public async Task<ActionResult> ExportDelegations([FromBody] ExportDelegationsRequestBE exportDelegationsRequestBE)
+        {
+            await _altinn2ServicesClient.ExportDelegations(exportDelegationsRequestBE);
+
+            return Created();
         }
     }
 }

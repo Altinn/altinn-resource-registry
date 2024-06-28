@@ -23,5 +23,15 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// GEts the xacml policy for a service
         /// </summary>
         Task<XacmlPolicy> GetXacmlPolicy(string serviceCode, int serviceEditionCode, string identifier, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get delegation count 
+        /// </summary>
+        Task<DelegationCountOverview> GetDelegationCount(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Request delegations 
+        /// </summary>
+        Task ExportDelegations(ExportDelegationsRequestBE exportDelegationsRequestBE, CancellationToken cancellationToken = default);
     }
 }

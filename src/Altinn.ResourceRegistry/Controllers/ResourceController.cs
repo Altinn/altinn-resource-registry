@@ -1,4 +1,5 @@
-﻿using Altinn.ResourceRegistry.Core.Constants;
+﻿using Altinn.Platform.Events.Formatters;
+using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
@@ -59,7 +60,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         [HttpGet("export")]
-        [Produces("application/xml+rdf")]
+        [Produces(RdfOutputFormatter.RDFMimeType)]
         public async Task<string> Export(CancellationToken cancellationToken)
         {
             ResourceSearch search = new ResourceSearch();

@@ -72,9 +72,9 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <summary>
         /// Information about asd
         /// </summary>
-        ///         [Authorize(Policy = AuthzConstants.POLICY_STUDIO_DESIGNER)]
+        [Authorize(Policy = AuthzConstants.POLICY_STUDIO_DESIGNER)]
         [HttpGet("delegationcount")]
-        public async Task<ActionResult> GetDelegationCount([FromQueryAttribute] string serviceCode, [FromQueryAttribute] int serviceEditionCode, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<DelegationCountOverview>> GetDelegationCount([FromQueryAttribute] string serviceCode, [FromQueryAttribute] int serviceEditionCode, CancellationToken cancellationToken = default)
         {
             DelegationCountOverview delegationCount = await _altinn2ServicesClient.GetDelegationCount(serviceCode, serviceEditionCode, cancellationToken);
 

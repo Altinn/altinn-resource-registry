@@ -67,7 +67,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 
 builder.Services.AddControllers(opts =>
 {
-    opts.OutputFormatters.Insert(0, new RdfOutputFormatter());
+    opts.OutputFormatters.Add(new RdfOutputFormatter());
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

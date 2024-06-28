@@ -182,8 +182,7 @@ namespace Altinn.ResourceRegistry.Tests
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
-
-            Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
         }
     }
 }

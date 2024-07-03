@@ -41,25 +41,6 @@ using Yuniql.PostgreSql;
 var builder = WebApplication.CreateBuilder(args);
 builder.AddDefaultConfiguration();
 
-var applicationInsightsConnectionString = builder.Configuration.GetValue<string>("ApplicationInsights:InstrumentationKey");
-
-if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
-{
-    // NOTE: due to a bug in application insights, this must be registered before anything else
-    // See https://github.com/microsoft/ApplicationInsights-dotnet/issues/2879
-    builder.Services.AddSingleton(typeof(ITelemetryChannel), new ServerTelemetryChannel() { StorageFolder = "/tmp/logtelemetry" });
-    builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
-    {
-        ConnectionString = applicationInsightsConnectionString
-    });
-
-    builder.Services.AddApplicationInsightsTelemetryProcessor<HealthTelemetryFilter>();
-    builder.Services.AddApplicationInsightsTelemetryProcessor<IdentityTelemetryFilter>();
-    builder.Services.AddSingleton<ITelemetryInitializer, CustomTelemetryInitializer>();
-
-    Console.WriteLine($"Startup // ApplicationInsightsConnectionString = {applicationInsightsConnectionString}");
-}
-
 builder.AddAltinnServiceDefaults("resource-registry");
 
 ConfigureLogging(builder.Logging);
@@ -75,7 +56,15 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 builder.Services.AddControllers(opts =>
 {
     opts.OutputFormatters.Insert(0, new RdfOutputFormatter());
-});
+    opts.ModelBinderProviders.InsertSingleton<RequestConditionCollection.ModelBinderProvider>(0);
+    opts.ModelBinderProviders.InsertSingleton<AccessListIncludesModelBinder>(0);
+})
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.WriteIndented = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer()
@@ -126,18 +115,6 @@ app.Run();
 
 void ConfigureServices(IServiceCollection services, IConfiguration config)
 {
-    services.AddControllers(options =>
-    {
-        options.ModelBinderProviders.InsertSingleton<RequestConditionCollection.ModelBinderProvider>(0);
-        options.ModelBinderProviders.InsertSingleton<AccessListIncludesModelBinder>(0);
-    })
-        .AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions.WriteIndented = true;
-            options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-        });
-
     services.AddMemoryCache();
     services.AddSingleton(config);
 

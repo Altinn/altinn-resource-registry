@@ -1,4 +1,11 @@
-﻿using Azure.Identity;
+﻿using Altinn.ResourceRegistry.Configuration;
+using Altinn.ResourceRegistry.Filters;
+using Altinn.ResourceRegistry.Health;
+using Azure.Identity;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 
 namespace Altinn.ResourceRegistry;
 
@@ -23,6 +30,7 @@ internal static class TempExtensions
         builder.Configuration.AddJsonFile(configJsonFile1, optional: true, reloadOnChange: true);
 
         builder.AddKeyVaultConfiguration();
+        builder.AddApplicationInsights();
 
         return builder;
     }
@@ -45,6 +53,30 @@ internal static class TempExtensions
                 clientId: clientId,
                 clientSecret: clientSecret);
             builder.Configuration.AddAzureKeyVault(new Uri(keyVaultUri), credential);
+        }
+
+        return builder;
+    }
+
+    private static IHostApplicationBuilder AddApplicationInsights(this IHostApplicationBuilder builder)
+    {
+        var applicationInsightsConnectionString = builder.Configuration.GetValue<string>("ApplicationInsights:InstrumentationKey");
+
+        if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
+        {
+            // NOTE: due to a bug in application insights, this must be registered before anything else
+            // See https://github.com/microsoft/ApplicationInsights-dotnet/issues/2879
+            builder.Services.AddSingleton(typeof(ITelemetryChannel), new ServerTelemetryChannel() { StorageFolder = "/tmp/logtelemetry" });
+            builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
+            {
+                ConnectionString = applicationInsightsConnectionString
+            });
+
+            builder.Services.AddApplicationInsightsTelemetryProcessor<HealthTelemetryFilter>();
+            builder.Services.AddApplicationInsightsTelemetryProcessor<IdentityTelemetryFilter>();
+            builder.Services.AddSingleton<ITelemetryInitializer, CustomTelemetryInitializer>();
+
+            Console.WriteLine($"Startup // ApplicationInsightsConnectionString = {applicationInsightsConnectionString}");
         }
 
         return builder;

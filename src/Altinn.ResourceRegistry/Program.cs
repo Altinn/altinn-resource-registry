@@ -264,6 +264,8 @@ void ConfigureLogging(ILoggingBuilder logging)
     // Clear log providers
     logging.ClearProviders();
 
+    var applicationInsightsConnectionString = builder.Configuration.GetValue<string>("ApplicationInsights:InstrumentationKey");
+
     // Setup up application insight if ApplicationInsightsConnectionString is available
     if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
     {

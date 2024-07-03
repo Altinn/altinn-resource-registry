@@ -140,7 +140,6 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
 
     services.AddMemoryCache();
     services.AddSingleton(config);
-    services.AddHealthChecks().AddCheck<HealthCheck>("resourceregistry_health_check");
 
     services.AddResourceRegistryCoreServices();
     services.AddResourceRegistryPersistence();

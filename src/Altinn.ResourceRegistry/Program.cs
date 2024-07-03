@@ -57,7 +57,7 @@ if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
     builder.Services.AddApplicationInsightsTelemetryProcessor<IdentityTelemetryFilter>();
     builder.Services.AddSingleton<ITelemetryInitializer, CustomTelemetryInitializer>();
 
-    Console.WriteLine("Startup // ApplicationInsightsConnectionString = {applicationInsightsConnectionString}", applicationInsightsConnectionString);
+    Console.WriteLine($"Startup // ApplicationInsightsConnectionString = {applicationInsightsConnectionString}");
 }
 
 builder.AddAltinnServiceDefaults("resource-registry");

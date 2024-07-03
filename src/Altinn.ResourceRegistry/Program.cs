@@ -22,8 +22,6 @@ using Altinn.ResourceRegistry.Models.ApiDescriptions;
 using Altinn.ResourceRegistry.Models.ModelBinding;
 using Altinn.ResourceRegistry.Persistence.Configuration;
 using AltinnCore.Authentication.JwtCookie;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -39,18 +37,11 @@ using Npgsql;
 using Swashbuckle.AspNetCore.Filters;
 using Yuniql.AspNetCore;
 using Yuniql.PostgreSql;
-using KeyVaultSettings = Altinn.Common.AccessToken.Configuration.KeyVaultSettings;
-
-ILogger logger;
-
-string applicationInsightsKeySecretName = "ApplicationInsights--InstrumentationKey";
-
-string applicationInsightsConnectionString = string.Empty;
 
 var builder = WebApplication.CreateBuilder(args);
-ConfigureSetupLogging();
+builder.AddDefaultConfiguration();
 
-await SetConfigurationProviders(builder.Configuration);
+var applicationInsightsConnectionString = builder.Configuration.GetValue<string>("ApplicationInsights:InstrumentationKey");
 
 if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
 {
@@ -66,7 +57,7 @@ if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
     builder.Services.AddApplicationInsightsTelemetryProcessor<IdentityTelemetryFilter>();
     builder.Services.AddSingleton<ITelemetryInitializer, CustomTelemetryInitializer>();
 
-    logger.LogInformation("Startup // ApplicationInsightsConnectionString = {applicationInsightsConnectionString}", applicationInsightsConnectionString);
+    Console.WriteLine("Startup // ApplicationInsightsConnectionString = {applicationInsightsConnectionString}", applicationInsightsConnectionString);
 }
 
 builder.AddAltinnServiceDefaults("resource-registry");
@@ -126,6 +117,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+app.MapDefaultAltinnEndpoints();
 
 Configure(builder.Configuration);
 
@@ -217,11 +210,11 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
 
 void Configure(IConfiguration config)
 {
-    logger.LogInformation("Startup // Configure");
+    Console.WriteLine("Startup // Configure");
 
     if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
     {
-        logger.LogInformation("IsDevelopment || IsStaging");
+        Console.WriteLine("IsDevelopment || IsStaging");
 
         app.UseDeveloperExceptionPage();
 
@@ -251,25 +244,6 @@ void Configure(IConfiguration config)
     app.UseAuthorization();
 
     app.MapControllers();
-    app.MapHealthChecks("/health");
-}
-
-async Task SetConfigurationProviders(ConfigurationManager config)
-{
-    string basePath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
-
-    logger.LogInformation($"Program // Loading Configuration from basePath={basePath}");
-
-    config.SetBasePath(basePath);
-    string configJsonFile1 = $"{basePath}/altinn-appsettings/altinn-dbsettings-secret.json";
-
-    logger.LogInformation($"Loading configuration file: '{configJsonFile1}'");
-    config.AddJsonFile(configJsonFile1, optional: true, reloadOnChange: true);
-
-    config.AddEnvironmentVariables();
-    config.AddCommandLine(args);
-
-    await ConnectToKeyVaultAndSetApplicationInsights(config);
 }
 
 void ConfigurePostgreSql()
@@ -307,62 +281,6 @@ void ConfigurePostgreSql()
                 ]
             });
     }
-}
-
-async Task ConnectToKeyVaultAndSetApplicationInsights(ConfigurationManager config)
-{
-    logger.LogInformation("Program // Connect to key vault and set up application insights");
-
-    KeyVaultSettings keyVaultSettings = new();
-    config.GetSection("kvSetting").Bind(keyVaultSettings);
-
-    if (!string.IsNullOrEmpty(keyVaultSettings.ClientId) &&
-        !string.IsNullOrEmpty(keyVaultSettings.TenantId) &&
-        !string.IsNullOrEmpty(keyVaultSettings.ClientSecret) &&
-        !string.IsNullOrEmpty(keyVaultSettings.SecretUri))
-    {
-        Environment.SetEnvironmentVariable("AZURE_CLIENT_ID", keyVaultSettings.ClientId);
-        Environment.SetEnvironmentVariable("AZURE_CLIENT_SECRET", keyVaultSettings.ClientSecret);
-        Environment.SetEnvironmentVariable("AZURE_TENANT_ID", keyVaultSettings.TenantId);
-
-        try
-        {
-            SecretClient client = new SecretClient(new Uri(keyVaultSettings.SecretUri), new EnvironmentCredential());
-            KeyVaultSecret secret = await client.GetSecretAsync(applicationInsightsKeySecretName);
-            applicationInsightsConnectionString = string.Format("InstrumentationKey={0}", secret.Value);
-        }
-        catch (Exception vaultException)
-        {
-            logger.LogError(vaultException, $"Unable to read application insights key.");
-        }
-
-        try
-        {
-            var azureCredentials = new DefaultAzureCredential();
-            config.AddAzureKeyVault(new Uri(keyVaultSettings.SecretUri), azureCredentials);
-        }
-        catch (Exception vaultException)
-        {
-            logger.LogError(vaultException, $"Unable to add key vault secrets to config.");
-        }
-    }
-}
-
-void ConfigureSetupLogging()
-{
-    // Setup logging for the web host creation
-    var logFactory = LoggerFactory.Create(builder =>
-    {
-        builder
-            .AddFilter("Microsoft", LogLevel.Warning)
-            .AddFilter("System", LogLevel.Warning)
-            .AddFilter("Altinn.ResourceRegistryService.Program", LogLevel.Debug)
-            .AddConsole();
-    });
-
-    logger = logFactory.CreateLogger<Program>();
-
-    NpgsqlLoggingConfiguration.InitializeLogging(logFactory);
 }
 
 void ConfigureLogging(ILoggingBuilder logging)

@@ -1,12 +1,15 @@
 ﻿using System.Net;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using Altinn.Authorization.ABAC.Utils;
 using Altinn.Authorization.ABAC.Xacml;
+using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Models.Altinn2;
 using Altinn.ResourceRegistry.Core.Services;
+using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,13 +25,17 @@ namespace Altinn.ResourceRegistry.Controllers
     public class Altinn2ExportController : ControllerBase
     {
         private readonly IAltinn2Services _altinn2ServicesClient;
+        private readonly IResourceRegistryRepository _resourceRegistryRepository;
+        private readonly IResourceRegistry _resourceRegistry;
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public Altinn2ExportController(IAltinn2Services altinnService2Client)
+        public Altinn2ExportController(IAltinn2Services altinnService2Client, IResourceRegistryRepository resourceRegistryRepository, IResourceRegistry resourceRegistry)
         {
-            _altinn2ServicesClient = altinnService2Client;   
+            _altinn2ServicesClient = altinnService2Client;
+            _resourceRegistryRepository = resourceRegistryRepository;
+            _resourceRegistry = resourceRegistry;
         }
 
         /// <summary>
@@ -86,11 +93,44 @@ namespace Altinn.ResourceRegistry.Controllers
         /// </summary>
         [Authorize(Policy = AuthzConstants.POLICY_STUDIO_DESIGNER)]
         [HttpPost("exportdelegations")]
-        public async Task<ActionResult> ExportDelegations([FromBody] ExportDelegationsRequestBE exportDelegationsRequestBE)
+        public async Task<ActionResult> ExportDelegations([FromBody] ExportDelegationsRequestBE exportDelegationsRequestBE, CancellationToken cancellationToken = default)
         {
+            ServiceResource resource = await _resourceRegistryRepository.GetResource(exportDelegationsRequestBE.ResourceId, cancellationToken);
+            if (resource == null)
+            {
+                return BadRequest("Invalid resource");
+            }
+
+            if (!await ValidateMatchingOrgForDelegaton(exportDelegationsRequestBE, resource.HasCompetentAuthority.Orgcode, cancellationToken))
+            {
+                return BadRequest("No matching resource for org");
+            }
+
             await _altinn2ServicesClient.ExportDelegations(exportDelegationsRequestBE);
 
             return Created();
+        }
+
+        private async Task<bool> ValidateMatchingOrgForDelegaton(ExportDelegationsRequestBE exportRequest, string org,  CancellationToken cancellationToken = default)
+        {
+            List<ServiceResource> altinnService = await _resourceRegistry.GetResourceList(false, true, true, cancellationToken);
+            if (altinnService == null)
+            {
+                return false;
+            }
+
+            foreach (ServiceResource resource in altinnService)
+            {
+                if (resource.Identifier.Equals($"se_{exportRequest.ServiceCode}_{exportRequest.ServiceEditionCode}"))
+                {       
+                    if (resource.HasCompetentAuthority.Orgcode.Equals(org, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

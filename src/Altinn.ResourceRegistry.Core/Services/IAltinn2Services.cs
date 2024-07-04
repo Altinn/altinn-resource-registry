@@ -12,7 +12,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <summary>
         /// Return a list of Available services from Altinn 2
         /// </summary>
-        public Task<List<AvailableService>> AvailableServices(int languageId, CancellationToken cancellationToken = default);
+        public Task<List<AvailableService>> AvailableServices(int languageId, bool includeExpired = false,  CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Create a service resources based on a Altinn 2 service

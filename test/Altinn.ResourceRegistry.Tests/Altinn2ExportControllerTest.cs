@@ -172,10 +172,10 @@ namespace Altinn.ResourceRegistry.Tests
             string requestUri = "resourceregistry/api/v1/altinn2export/exportdelegations";
 
             ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE();
-            exportDelegationsRequestBE.ServiceCode = "123";
-            exportDelegationsRequestBE.ServiceEditionCode = 12314;
+            exportDelegationsRequestBE.ServiceCode = "4795";
+            exportDelegationsRequestBE.ServiceEditionCode = 1;
             exportDelegationsRequestBE.DateTimeForExport = DateTime.Now;
-            exportDelegationsRequestBE.ResourceId = "export_id";
+            exportDelegationsRequestBE.ResourceId = "nav_tiltakAvtaleOmArbeidstrening";
 
             using HttpContent content = JsonContent.Create(exportDelegationsRequestBE);
             HttpResponseMessage response = await client.PostAsync(requestUri, content);

@@ -9,7 +9,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 {
     public class Altinn2ServicesClientMock : IAltinn2Services
     {
-        public async Task<List<AvailableService>> AvailableServices(int languageId, CancellationToken cancellationToken)
+        public async Task<List<AvailableService>> AvailableServices(int languageId, bool includeExpired,  CancellationToken cancellationToken)
         {
             string? testDataFolder = GetAltinn2TestDatafolder();
             if (testDataFolder != null)
@@ -37,7 +37,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 
         public async Task<ServiceResource?> GetServiceResourceFromService(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken)
         {
-            List<AvailableService> services = await AvailableServices(1044, cancellationToken);
+            List<AvailableService> services = await AvailableServices(1044,false, cancellationToken);
             AvailableService? service = services.FirstOrDefault(r=> r.ExternalServiceCode == serviceCode);
 
             if(service == null) 

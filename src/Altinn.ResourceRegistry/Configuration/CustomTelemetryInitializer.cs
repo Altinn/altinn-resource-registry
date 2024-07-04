@@ -8,6 +8,8 @@ namespace Altinn.ResourceRegistry.Configuration
     /// </summary>
     public class CustomTelemetryInitializer : ITelemetryInitializer
     {
+        private static int _logged = 0;
+
         /// <summary>
         /// Custom TelemetryInitializer that sets some specific values for the component
         /// </summary>
@@ -16,6 +18,11 @@ namespace Altinn.ResourceRegistry.Configuration
             if (string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
             {
                 telemetry.Context.Cloud.RoleName = "resource-registry";
+            }
+
+            if (Interlocked.CompareExchange(ref _logged, 1, 0) == 0)
+            {
+                Console.WriteLine($"Cloud.RoleName: {telemetry.Context.Cloud.RoleName}");
             }
         }
     }

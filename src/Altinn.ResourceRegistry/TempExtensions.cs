@@ -60,10 +60,12 @@ internal static class TempExtensions
 
     private static IHostApplicationBuilder AddApplicationInsights(this IHostApplicationBuilder builder)
     {
-        var applicationInsightsConnectionString = builder.Configuration.GetValue<string>("ApplicationInsights:InstrumentationKey");
+        var applicationInsightsInstrumentationKey = builder.Configuration.GetValue<string>("ApplicationInsights:InstrumentationKey");
 
-        if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
+        if (!string.IsNullOrEmpty(applicationInsightsInstrumentationKey))
         {
+            var applicationInsightsConnectionString = $"InstrumentationKey={applicationInsightsInstrumentationKey}";
+
             // NOTE: due to a bug in application insights, this must be registered before anything else
             // See https://github.com/microsoft/ApplicationInsights-dotnet/issues/2879
             builder.Services.AddSingleton(typeof(ITelemetryChannel), new ServerTelemetryChannel() { StorageFolder = "/tmp/logtelemetry" });

@@ -184,5 +184,30 @@ namespace Altinn.ResourceRegistry.Tests
 
             Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
         }
+
+        /// <summary>
+        /// Tries to trigger batch required parameters but org for resource and service does not match
+        /// </summary>
+        [Fact]
+        public async Task Trigger_Batch_NoMatchingORg()
+        {
+            HttpClient client = SetupUtil.GetTestClient(_factory);
+            string token = PrincipalUtil.GetAccessToken("studio.designer");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string requestUri = "resourceregistry/api/v1/altinn2export/exportdelegations";
+
+            ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE();
+            exportDelegationsRequestBE.ServiceCode = "4804";
+            exportDelegationsRequestBE.ServiceEditionCode = 170223;
+            exportDelegationsRequestBE.DateTimeForExport = DateTime.Now;
+            exportDelegationsRequestBE.ResourceId = "nav_tiltakAvtaleOmArbeidstrening";
+
+            using HttpContent content = JsonContent.Create(exportDelegationsRequestBE);
+            HttpResponseMessage response = await client.PostAsync(requestUri, content);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+        }
     }
 }

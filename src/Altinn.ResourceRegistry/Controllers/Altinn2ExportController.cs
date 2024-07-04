@@ -127,6 +127,10 @@ namespace Altinn.ResourceRegistry.Controllers
                     {
                         return true;
                     }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
 

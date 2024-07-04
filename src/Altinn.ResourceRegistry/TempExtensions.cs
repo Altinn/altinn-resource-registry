@@ -65,13 +65,17 @@ internal static class TempExtensions
         if (!string.IsNullOrEmpty(applicationInsightsInstrumentationKey))
         {
             var applicationInsightsConnectionString = $"InstrumentationKey={applicationInsightsInstrumentationKey}";
+            builder.Configuration.AddInMemoryCollection([
+                KeyValuePair.Create("ApplicationInsights:ConnectionString", applicationInsightsConnectionString),
+                KeyValuePair.Create("ConnectionStrings:ApplicationInsights", applicationInsightsConnectionString),
+            ]);
 
             // NOTE: due to a bug in application insights, this must be registered before anything else
             // See https://github.com/microsoft/ApplicationInsights-dotnet/issues/2879
             builder.Services.AddSingleton(typeof(ITelemetryChannel), new ServerTelemetryChannel() { StorageFolder = "/tmp/logtelemetry" });
             builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions
             {
-                ConnectionString = applicationInsightsConnectionString
+                ConnectionString = applicationInsightsConnectionString,
             });
 
             builder.Services.AddApplicationInsightsTelemetryProcessor<HealthTelemetryFilter>();

@@ -258,11 +258,13 @@ void ConfigureLogging(ILoggingBuilder logging)
     // Clear log providers
     logging.ClearProviders();
 
-    var applicationInsightsConnectionString = builder.Configuration.GetValue<string>("ApplicationInsights:InstrumentationKey");
+    var applicationInsightsInstrumentationKey = builder.Configuration.GetValue<string>("ApplicationInsights:InstrumentationKey");
 
     // Setup up application insight if ApplicationInsightsConnectionString is available
-    if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
+    if (!string.IsNullOrEmpty(applicationInsightsInstrumentationKey))
     {
+        var applicationInsightsConnectionString = $"InstrumentationKey={applicationInsightsInstrumentationKey}";
+
         // Add application insights https://docs.microsoft.com/en-us/azure/azure-monitor/app/ilogger
         logging.AddApplicationInsights(
              configureTelemetryConfiguration: (config) => config.ConnectionString = applicationInsightsConnectionString,

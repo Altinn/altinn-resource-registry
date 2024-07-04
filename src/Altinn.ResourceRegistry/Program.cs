@@ -263,11 +263,6 @@ void ConfigureLogging(ILoggingBuilder logging)
     // Setup up application insight if ApplicationInsightsConnectionString is available
     if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
     {
-        // Add application insights https://docs.microsoft.com/en-us/azure/azure-monitor/app/ilogger
-        logging.AddApplicationInsights(
-             configureTelemetryConfiguration: (config) => config.ConnectionString = applicationInsightsConnectionString,
-             configureApplicationInsightsLoggerOptions: (options) => { });
-
         // Optional: Apply filters to control what logs are sent to Application Insights.
         // The following configures LogLevel Information or above to be sent to
         // Application Insights for all categories.

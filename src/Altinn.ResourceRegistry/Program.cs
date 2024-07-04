@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
@@ -36,8 +37,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddDefaultConfiguration();
 
 builder.AddAltinnServiceDefaults("resource-registry");
-
-ConfigureLogging(builder.Logging);
 
 // Add services to the container.
 ConfigureServices(builder.Services, builder.Configuration);
@@ -250,34 +249,6 @@ void ConfigurePostgreSql()
                     KeyValuePair.Create("YUNIQL-USER", user)
                 ]
             });
-    }
-}
-
-void ConfigureLogging(ILoggingBuilder logging)
-{
-    var applicationInsightsConnectionString = builder.Configuration.GetConnectionString("ApplicationInsights");
-
-    // Setup up application insight if ApplicationInsightsConnectionString is available
-    if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
-    {
-        // Optional: Apply filters to control what logs are sent to Application Insights.
-        // The following configures LogLevel Information or above to be sent to
-        // Application Insights for all categories.
-        logging.AddFilter(string.Empty, LogLevel.Warning);
-
-        // Adding the filter below to ensure logs of all severity from Program.cs
-        // is sent to ApplicationInsights.
-        logging.AddFilter(typeof(Program).FullName, LogLevel.Trace);
-
-        // Include request info logs in Application Insights
-        logging.AddFilter(typeof(RequestForwarderLogMiddleware).FullName, LogLevel.Information);
-        logging.AddFilter(typeof(ForwardedHeadersMiddleware).FullName, LogLevel.Trace);
-    }
-    else
-    {
-        // If not application insight is available log to console
-        logging.AddFilter("Microsoft", LogLevel.Warning);
-        logging.AddFilter("System", LogLevel.Warning);
     }
 }
 

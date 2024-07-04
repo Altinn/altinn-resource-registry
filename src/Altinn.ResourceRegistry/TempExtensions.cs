@@ -84,9 +84,9 @@ internal static class TempExtensions
 
             Console.WriteLine($"Startup // ApplicationInsightsConnectionString = {applicationInsightsConnectionString}");
 
-            builder.Logging.AddApplicationInsights(
-                configureTelemetryConfiguration: (config) => config.ConnectionString = applicationInsightsConnectionString,
-                configureApplicationInsightsLoggerOptions: (options) => { });
+            //builder.Logging.AddApplicationInsights(
+            //    configureTelemetryConfiguration: (config) => config.ConnectionString = applicationInsightsConnectionString,
+            //    configureApplicationInsightsLoggerOptions: (options) => { });
         }
 
         return builder;

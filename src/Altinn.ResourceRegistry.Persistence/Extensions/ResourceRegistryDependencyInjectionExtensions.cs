@@ -16,9 +16,9 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ResourceRegistryDependencyInjectionExtensions 
 {
     /// <summary>
-    /// Registers resource registry persistence services with the dependency injection container.
+    /// Registers resource registry persistence services with the dependency injection container of a host application.
     /// </summary>
-    /// <param name="builder">The <see cref="IServiceCollection"/>.</param>
+    /// <param name="builder">The <see cref="IHostApplicationBuilder"/>.</param>
     /// <returns><paramref name="builder"/> for further chaining.</returns>
     public static IHostApplicationBuilder AddResourceRegistryPersistence(
         this IHostApplicationBuilder builder)
@@ -31,9 +31,9 @@ public static class ResourceRegistryDependencyInjectionExtensions
     }
 
     /// <summary>
-    /// Registers a <see cref="IResourceRegistryRepository"/> with the dependency injection container.
+    /// Registers a <see cref="IResourceRegistryRepository"/> with the dependency injection container of a host application.
     /// </summary>
-    /// <param name="builder">The <see cref="IServiceCollection"/>.</param>
+    /// <param name="builder">The <see cref="IHostApplicationBuilder"/>.</param>
     /// <returns><paramref name="builder"/> for further chaining.</returns>
     public static IHostApplicationBuilder AddResourceRegistryRepository(
         this IHostApplicationBuilder builder)
@@ -46,9 +46,9 @@ public static class ResourceRegistryDependencyInjectionExtensions
     }
 
     /// <summary>
-    /// Registers a <see cref="IAccessListsRepository"/> with the dependency injection container.
+    /// Registers a <see cref="IAccessListsRepository"/> with the dependency injection container of a host application.
     /// </summary>
-    /// <param name="builder">The <see cref="IServiceCollection"/>.</param>
+    /// <param name="builder">The <see cref="IHostApplicationBuilder"/>.</param>
     /// <returns><paramref name="builder"/> for further chaining.</returns>
     public static IHostApplicationBuilder AddPartyRegistryRepository(
         this IHostApplicationBuilder builder)
@@ -62,9 +62,9 @@ public static class ResourceRegistryDependencyInjectionExtensions
     }
 
     /// <summary>
-    /// Registers a <see cref="IPolicyRepository"/> with the dependency injection container.
+    /// Registers a <see cref="IPolicyRepository"/> with the dependency injection container of a host application.
     /// </summary>
-    /// <param name="builder">The <see cref="IServiceCollection"/>.</param>
+    /// <param name="builder">The <see cref="IHostApplicationBuilder"/>.</param>
     /// <returns><paramref name="builder"/> for further chaining.</returns>
     public static IHostApplicationBuilder AddResourceRegistryPolicyRepository(
         this IHostApplicationBuilder builder)

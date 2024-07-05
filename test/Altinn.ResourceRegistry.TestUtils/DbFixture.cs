@@ -99,22 +99,6 @@ public class DbFixture
             _throtler.Dispose();
             _dbLock.Dispose();
         }
-
-        static string FindWorkspace()
-        {
-            var dir = Environment.CurrentDirectory;
-            while (dir != null)
-            {
-                if (Directory.Exists(Path.Combine(dir, ".git")))
-                {
-                    return dir;
-                }
-
-                dir = Directory.GetParent(dir)?.FullName;
-            }
-
-            throw new InvalidOperationException("Workspace directory not found");
-        }
     }
 
     public sealed class OwnedDb : IAsyncDisposable

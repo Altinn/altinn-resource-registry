@@ -40,11 +40,11 @@ public abstract class WebApplicationTests
         return ValueTask.CompletedTask;
     }
 
-    protected virtual void ConfigureServices(IServiceCollection services)
+    protected virtual void ConfigureTestServices(IServiceCollection services)
     {
     }
 
-    protected virtual void ConfigureConfiguration(IConfigurationBuilder builder)
+    protected virtual void ConfigureTestConfiguration(IConfigurationBuilder builder)
     {
     }
 
@@ -67,14 +67,14 @@ public abstract class WebApplicationTests
             configureConfiguration: config =>
             {
                 _db.ConfigureConfiguration(config, "resource-registry");
-                ConfigureConfiguration(config);
+                ConfigureTestConfiguration(config);
             },
             configureServices: services =>
             {
                 _db.ConfigureServices(services, "resource-registry");
                 services.AddSingleton<MockRegisterClient>();
                 services.AddSingleton<IRegisterClient>(s => s.GetRequiredService<MockRegisterClient>());
-                ConfigureServices(services);
+                ConfigureTestServices(services);
             });
 
         _services = _webApp.Services;

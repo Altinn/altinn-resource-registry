@@ -19,12 +19,12 @@ namespace Altinn.ResourceRegistry.Tests
     public class ResourceControllerTest(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
         : WebApplicationTests(dbFixture, webApplicationFixture)
     {
-        protected override void ConfigureServices(IServiceCollection services)
+        protected override void ConfigureTestServices(IServiceCollection services)
         {
             services.AddSingleton<IResourceRegistryRepository, RegisterResourceRepositoryMock>();
             services.AddSingleton<IApplications, ApplicationsClientMock>();
 
-            base.ConfigureServices(services);
+            base.ConfigureTestServices(services);
         }
 
         [Fact]

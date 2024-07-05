@@ -231,6 +231,12 @@ static void MapPostgreSqlConfiguration(IHostApplicationBuilder builder)
     var connectionString = string.Format(connectionStringFmt, connectionStringPwd);
 
     var serviceDescriptor = builder.Services.GetAltinnServiceDescriptor();
+    var existing = builder.Configuration.GetValue<string>($"ConnectionStrings:{serviceDescriptor.Name}_db");
+    if (!string.IsNullOrEmpty(existing))
+    {
+        return;
+    }
+
     builder.Configuration.AddInMemoryCollection([
         KeyValuePair.Create($"ConnectionStrings:{serviceDescriptor.Name}_db", connectionString),
         KeyValuePair.Create($"ConnectionStrings:{serviceDescriptor.Name}_db_migrate", adminConnectionString),

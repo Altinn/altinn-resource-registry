@@ -27,10 +27,19 @@ public class WebApplicationFixture
         await _factory.DisposeAsync();
     }
 
-    public WebApplicationFactory<Program> CreateServer(Action<IServiceCollection>? configureServices = null)
+    public WebApplicationFactory<Program> CreateServer(
+        Action<IConfigurationBuilder>? configureConfiguration = null,
+        Action<IServiceCollection>? configureServices = null)
     {
         return _factory.WithWebHostBuilder(builder =>
         {
+            if (configureConfiguration is not null)
+            {
+                var settings = new ConfigurationBuilder();
+                configureConfiguration(settings);
+                builder.UseConfiguration(settings.Build());
+            }
+
             if (configureServices is not null)
             {
                 builder.ConfigureTestServices(configureServices);
@@ -42,12 +51,11 @@ public class WebApplicationFixture
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.ConfigureAppConfiguration(config =>
-            {
-                config.AddConfiguration(new ConfigurationBuilder()
-                        .AddJsonFile("appsettings.test.json")
-                        .Build());
-            });
+            var settings = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.test.json")
+                .Build();
+
+            builder.UseConfiguration(settings);
 
             builder.ConfigureTestServices(services =>
             {

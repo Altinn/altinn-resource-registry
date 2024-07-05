@@ -1,13 +1,9 @@
 ﻿using Altinn.Authorization.ServiceDefaults.Npgsql.Yuniql;
-using Altinn.ResourceRegistry.Persistence.Configuration;
-using Google.Protobuf.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Npgsql;
 using Testcontainers.PostgreSql;
-using Yuniql.Core;
 
 namespace Altinn.ResourceRegistry.TestUtils;
 

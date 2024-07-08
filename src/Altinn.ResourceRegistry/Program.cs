@@ -1,7 +1,7 @@
 using Altinn.ResourceRegistry;
 using Microsoft.IdentityModel.Logging;
 
-var app = ResourceRegistryHost.Create(args);
+WebApplication app = ResourceRegistryHost.Create(args);
 
 app.MapDefaultAltinnEndpoints();
 

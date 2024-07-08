@@ -107,12 +107,13 @@ internal static class ResourceRegistryHost
             options.ForwardedHeaders = ForwardedHeaders.All;
         });
 
-        builder.Services.AddControllers(opts =>
-        {
-            opts.OutputFormatters.Insert(0, new RdfOutputFormatter());
-            opts.ModelBinderProviders.InsertSingleton<RequestConditionCollection.ModelBinderProvider>(0);
-            opts.ModelBinderProviders.InsertSingleton<AccessListIncludesModelBinder>(0);
-        })
+        builder.Services.AddControllers()
+            .AddMvcOptions(opts =>
+            {
+                opts.OutputFormatters.Insert(0, new RdfOutputFormatter());
+                opts.ModelBinderProviders.InsertSingleton<RequestConditionCollection.ModelBinderProvider>(0);
+                opts.ModelBinderProviders.InsertSingleton<AccessListIncludesModelBinder>(0);
+            })
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.WriteIndented = true;

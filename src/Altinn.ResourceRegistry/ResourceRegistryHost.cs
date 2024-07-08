@@ -88,19 +88,18 @@ internal static class ResourceRegistryHost
         services.AddHttpClient<IApplications, ApplicationsClient>();
         services.AddAltinnRegisterClient();
 
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy(AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE, policy => policy
-                .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN, AuthzConstants.SCOPE_RESOURCE_WRITE));
-            options.AddPolicy(AuthzConstants.POLICY_ACCESS_LIST_READ, policy => policy
+        services.AddAuthorizationBuilder()
+            .AddPolicy(AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE, policy => policy
+                .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN, AuthzConstants.SCOPE_RESOURCE_WRITE))
+            .AddPolicy(AuthzConstants.POLICY_ACCESS_LIST_READ, policy => policy
                 .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN, AuthzConstants.SCOPE_ACCESS_LIST_READ, AuthzConstants.SCOPE_ACCESS_LIST_WRITE)
-                .RequireUserOwnsResource());
-            options.AddPolicy(AuthzConstants.POLICY_ACCESS_LIST_WRITE, policy => policy
+                .RequireUserOwnsResource())
+            .AddPolicy(AuthzConstants.POLICY_ACCESS_LIST_WRITE, policy => policy
                 .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN, AuthzConstants.SCOPE_ACCESS_LIST_WRITE)
-                .RequireUserOwnsResource());
-            options.AddPolicy(AuthzConstants.POLICY_ADMIN, policy => policy
+                .RequireUserOwnsResource())
+            .AddPolicy(AuthzConstants.POLICY_ADMIN, policy => policy
                 .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN));
-        });
+
         services.AddResourceRegistryAuthorizationHandlers();
 
         builder.Services.Configure<ForwardedHeadersOptions>(options =>

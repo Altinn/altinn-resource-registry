@@ -1,4 +1,6 @@
-﻿namespace Altinn.ResourceRegistry.Core.Models.Altinn2
+﻿#nullable enable
+
+namespace Altinn.ResourceRegistry.Core.Models.Altinn2
 {
     /// <summary>
     /// Model for holding counts of delegations and relations

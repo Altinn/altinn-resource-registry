@@ -1,12 +1,9 @@
 using Altinn.ResourceRegistry.Controllers;
 using Altinn.ResourceRegistry.Core.Models.Altinn2;
 using Altinn.ResourceRegistry.Tests.Utils;
-using AngleSharp.Dom;
-using Npgsql.Internal;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Threading;
 
 namespace Altinn.ResourceRegistry.Tests
 {
@@ -124,10 +121,13 @@ namespace Altinn.ResourceRegistry.Tests
             HttpClient client = SetupUtil.GetTestClient(_factory);
             string requestUri = "resourceregistry/api/v1/altinn2export/exportdelegations";
 
-            ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE();
-            exportDelegationsRequestBE.ServiceCode = "123";
-            exportDelegationsRequestBE.ServiceEditionCode = 12314;
-            exportDelegationsRequestBE.DateTimeForExport = DateTime.Now;
+            ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE()
+               {
+                ServiceCode = "123",
+                ServiceEditionCode = 12314,
+                DateTimeForExport = DateTime.Now,
+                ResourceId = "nav_tiltakAvtaleOmArbeidstrening"
+            };
 
             using HttpContent content = JsonContent.Create(exportDelegationsRequestBE);
             HttpResponseMessage response = await client.PostAsync(requestUri, content);
@@ -146,10 +146,15 @@ namespace Altinn.ResourceRegistry.Tests
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/altinn2export/exportdelegations";
 
-            ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE();
-            exportDelegationsRequestBE.ServiceCode = "123";
-            exportDelegationsRequestBE.ServiceEditionCode = 12314;
-            exportDelegationsRequestBE.DateTimeForExport = DateTime.Now;
+            ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE()
+            {
+                ServiceCode = "123",
+                ServiceEditionCode = 12314,
+                DateTimeForExport = DateTime.Now,
+                ResourceId = string.Empty
+            };
+
+            exportDelegationsRequestBE.ResourceId = null;
 
             using HttpContent content = JsonContent.Create(exportDelegationsRequestBE);
             HttpResponseMessage response = await client.PostAsync(requestUri, content);
@@ -158,6 +163,7 @@ namespace Altinn.ResourceRegistry.Tests
 
 
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Contains("The ResourceId field is required", responseContent);
         }
 
         /// <summary>
@@ -171,11 +177,13 @@ namespace Altinn.ResourceRegistry.Tests
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/altinn2export/exportdelegations";
 
-            ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE();
-            exportDelegationsRequestBE.ServiceCode = "4795";
-            exportDelegationsRequestBE.ServiceEditionCode = 1;
-            exportDelegationsRequestBE.DateTimeForExport = DateTime.Now;
-            exportDelegationsRequestBE.ResourceId = "nav_tiltakAvtaleOmArbeidstrening";
+            ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE()
+            {
+                ServiceCode = "4795",
+                ServiceEditionCode = 1,
+                DateTimeForExport = DateTime.Now,
+                ResourceId = "nav_tiltakAvtaleOmArbeidstrening"
+            };
 
             using HttpContent content = JsonContent.Create(exportDelegationsRequestBE);
             HttpResponseMessage response = await client.PostAsync(requestUri, content);
@@ -196,12 +204,14 @@ namespace Altinn.ResourceRegistry.Tests
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/altinn2export/exportdelegations";
 
-            ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE();
-            exportDelegationsRequestBE.ServiceCode = "4804";
-            exportDelegationsRequestBE.ServiceEditionCode = 170223;
-            exportDelegationsRequestBE.DateTimeForExport = DateTime.Now;
-            exportDelegationsRequestBE.ResourceId = "nav_tiltakAvtaleOmArbeidstrening";
-
+            ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE() 
+            { 
+                ResourceId = "nav_tiltakAvtaleOmArbeidstrening" , 
+                DateTimeForExport = DateTime.Now, 
+                ServiceCode = "4804", 
+                ServiceEditionCode = 170223
+            };
+            
             using HttpContent content = JsonContent.Create(exportDelegationsRequestBE);
             HttpResponseMessage response = await client.PostAsync(requestUri, content);
 

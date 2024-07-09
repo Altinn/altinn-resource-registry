@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿#nullable enable
+using System.ComponentModel.DataAnnotations;
 
 namespace Altinn.ResourceRegistry.Core.Models.Altinn2
 {
@@ -11,7 +12,7 @@ namespace Altinn.ResourceRegistry.Core.Models.Altinn2
         /// Gets or sets the ServiceCode for identifying service
         /// </summary>
         [Required]
-        public string ServiceCode { get; set; }
+        public required string ServiceCode { get; set; }
 
         /// <summary>
         /// Gets or sets the ServiceEditionCode for identifying service
@@ -23,7 +24,7 @@ namespace Altinn.ResourceRegistry.Core.Models.Altinn2
         /// Gets or sets the resourceId
         /// </summary>
         [Required]
-        public string ResourceId { get; set; }
+        public required string ResourceId { get; set; }
 
         /// <summary>
         /// Gets or sets the time and date for when to include in delegationExport-batch

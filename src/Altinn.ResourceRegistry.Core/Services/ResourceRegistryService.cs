@@ -102,7 +102,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task<List<ServiceResource>> GetSearchResults(ResourceSearch resourceSearch, CancellationToken cancellationToken = default)
         {
-            List<ServiceResource> resourceList = await GetResourceList(false, false, false, cancellationToken);
+            List<ServiceResource> resourceList = await GetResourceList(includeApps: false, includeAltinn2: false, includeExpired: false, cancellationToken);
             return ServiceResourceHelper.GetSearchResultsFromResourceList(resourceList, resourceSearch);
         }
 
@@ -196,7 +196,7 @@ namespace Altinn.ResourceRegistry.Core.Services
                 
                 if (includeAltinn2)
                 {
-                    tasks.Add(GetAltinn2AvailableServices(orgListTask, false, cancellationToken));
+                    tasks.Add(GetAltinn2AvailableServices(orgListTask, includeExpired: false, cancellationToken));
                 }
                 
                 if (includeApps)

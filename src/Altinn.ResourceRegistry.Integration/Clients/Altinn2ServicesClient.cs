@@ -33,7 +33,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<AvailableService>?> AvailableServices(int languageId, bool includeExpired = default, CancellationToken cancellationToken = default)
+        public async Task<List<AvailableService>?> AvailableServices(int languageId, bool includeExpired = false, CancellationToken cancellationToken = default)
         {
             List<AvailableService>? availableServices = null;
             string availabbleServicePath = _settings.BridgeApiEndpoint + $"metadata/api/availableServices?languageID={languageId}&appTypesToInclude=0&includeExpired={includeExpired}";

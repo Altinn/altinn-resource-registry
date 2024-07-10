@@ -51,7 +51,7 @@ namespace Altinn.ResourceRegistry.Controllers
             bool includeAltinn2 = true,
             CancellationToken cancellationToken = default)
         {
-            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, false,  cancellationToken);
+            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, includeExpired: false,  cancellationToken);
         }
 
         /// <summary>

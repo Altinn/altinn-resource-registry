@@ -116,7 +116,7 @@ namespace Altinn.ResourceRegistry.Controllers
         [NonAction]
         private async Task<bool> ValidateMatchingOrgForDelegaton(ExportDelegationsRequestBE exportRequest, string org,  CancellationToken cancellationToken = default)
         {
-            List<ServiceResource> altinnService = await _resourceRegistry.GetResourceList(false, true, true, cancellationToken);
+            List<ServiceResource> altinnService = await _resourceRegistry.GetResourceList(includeApps: false, includeAltinn2: true, includeExpired: true, cancellationToken);
             if (altinnService == null)
             {
                 return false;

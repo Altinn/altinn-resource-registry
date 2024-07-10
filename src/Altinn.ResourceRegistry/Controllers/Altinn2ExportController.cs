@@ -4,8 +4,10 @@ using System.Threading;
 using System.Xml;
 using Altinn.Authorization.ABAC.Utils;
 using Altinn.Authorization.ABAC.Xacml;
+using Altinn.Authorization.ProblemDetails;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Constants;
+using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Models.Altinn2;
 using Altinn.ResourceRegistry.Core.Services;
@@ -98,12 +100,12 @@ namespace Altinn.ResourceRegistry.Controllers
             ServiceResource resource = await _resourceRegistryRepository.GetResource(exportDelegationsRequestBE.ResourceId, cancellationToken);
             if (resource == null)
             {
-                return BadRequest("Invalid resource");
-            }
+                return Problems.ResourceReference_NotFound.ToActionResult();
+             }
 
             if (!await ValidateMatchingOrgForDelegaton(exportDelegationsRequestBE, resource.HasCompetentAuthority.Orgcode, cancellationToken))
             {
-                return BadRequest("No matching resource for org");
+                return Problems.IncorrectMatchingOrgForResource.ToActionResult();
             }
 
             await _altinn2ServicesClient.ExportDelegations(exportDelegationsRequestBE);

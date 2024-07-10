@@ -66,8 +66,6 @@ namespace Altinn.ResourceRegistry.Integration.Clients
 
             HttpResponseMessage response = await _client.PostAsync(url, content, cancellationToken);
             response.EnsureSuccessStatusCode();
-
-            return;
         }
 
         /// <inheritdoc/>

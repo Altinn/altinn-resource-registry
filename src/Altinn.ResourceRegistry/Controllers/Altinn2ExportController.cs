@@ -113,6 +113,7 @@ namespace Altinn.ResourceRegistry.Controllers
             return Created();
         }
 
+        [NonAction]
         private async Task<bool> ValidateMatchingOrgForDelegaton(ExportDelegationsRequestBE exportRequest, string org,  CancellationToken cancellationToken = default)
         {
             List<ServiceResource> altinnService = await _resourceRegistry.GetResourceList(false, true, true, cancellationToken);

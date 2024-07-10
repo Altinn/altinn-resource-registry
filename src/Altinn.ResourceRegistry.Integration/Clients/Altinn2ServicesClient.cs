@@ -62,7 +62,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
             string bridgeBaseUrl = _settings.BridgeApiEndpoint;
             string url = $"{bridgeBaseUrl}authorization/api/delegationexport";
 
-            using HttpContent content = JsonContent.Create(exportDelegationsRequestBE);
+            using HttpContent content = JsonContent.Create(exportDelegationsRequestBE, options: SerializerOptions);
 
             HttpResponseMessage response = await _client.PostAsync(url, content, cancellationToken);
             response.EnsureSuccessStatusCode();

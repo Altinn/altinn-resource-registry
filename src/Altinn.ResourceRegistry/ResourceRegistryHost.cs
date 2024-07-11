@@ -101,7 +101,6 @@ internal static class ResourceRegistryHost
                 .RequireScopeAnyOf(AuthzConstants.SCOPE_RESOURCE_ADMIN))
             .AddPolicy(AuthzConstants.POLICY_STUDIO_DESIGNER, policy => policy.Requirements.Add(new ClaimAccessRequirement("urn:altinn:app", "studio.designer")));
 
-
         services.AddResourceRegistryAuthorizationHandlers();
 
         builder.Services.Configure<ForwardedHeadersOptions>(options =>

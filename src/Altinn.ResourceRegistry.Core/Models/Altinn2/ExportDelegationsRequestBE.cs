@@ -30,6 +30,6 @@ namespace Altinn.ResourceRegistry.Core.Models.Altinn2
         /// Gets or sets the time and date for when to include in delegationExport-batch
         /// </summary>
         [Required]
-        public DateTime DateTimeForExport { get; set; }
+        public required DateTimeOffset DateTimeForExport { get; set; }
     }
 }

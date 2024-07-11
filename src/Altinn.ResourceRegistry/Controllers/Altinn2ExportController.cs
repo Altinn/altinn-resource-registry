@@ -108,7 +108,7 @@ namespace Altinn.ResourceRegistry.Controllers
                 return Problems.IncorrectMatchingOrgForResource.ToActionResult();
             }
 
-            await _altinn2ServicesClient.ExportDelegations(exportDelegationsRequestBE);
+            await _altinn2ServicesClient.ExportDelegations(exportDelegationsRequestBE, cancellationToken);
 
             return Created();
         }

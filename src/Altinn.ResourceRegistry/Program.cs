@@ -1,6 +1,4 @@
 using Altinn.ResourceRegistry;
-using Altinn.ResourceRegistry.Core.Constants;
-using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.IdentityModel.Logging;
 
 WebApplication app = ResourceRegistryHost.Create(args);

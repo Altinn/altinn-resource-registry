@@ -16,9 +16,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
     /// </summary>
     public class Altinn2ServicesClient : IAltinn2Services
     {
-        private static readonly JsonSerializerOptions SerializerOptions = new()
-        {
-        };
+        private static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
         private readonly HttpClient _client;
         private readonly PlatformSettings _settings;
@@ -77,14 +75,9 @@ namespace Altinn.ResourceRegistry.Integration.Clients
             HttpResponseMessage response = await _client.GetAsync(url, cancellationToken);
             response.EnsureSuccessStatusCode();
 
-            string contentString = await response.Content.ReadAsStringAsync(cancellationToken);
-            if (string.IsNullOrEmpty(contentString))
-            {
-                return null;
-            }
-
-            DelegationCountOverview? serviceResource = JsonSerializer.Deserialize<DelegationCountOverview>(contentString, SerializerOptions);
-            return serviceResource;
+            DelegationCountOverview? delegationCouunt = await response.Content.ReadFromJsonAsync<DelegationCountOverview>(SerializerOptions,cancellationToken);
+           
+            return delegationCouunt;
         }
 
         /// <inheritdoc/>

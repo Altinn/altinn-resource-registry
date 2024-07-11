@@ -79,7 +79,7 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
-        /// Information about asd
+        /// Information about number of delegations for a service
         /// </summary>
         [Authorize(Policy = AuthzConstants.POLICY_STUDIO_DESIGNER)]
         [HttpGet("delegationcount")]
@@ -91,7 +91,7 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
-        /// Information about asd
+        /// Request a batch run of delegations from service in Altinn 2 to resource in Altinn 3
         /// </summary>
         [Authorize(Policy = AuthzConstants.POLICY_STUDIO_DESIGNER)]
         [HttpPost("exportdelegations")]

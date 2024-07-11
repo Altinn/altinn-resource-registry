@@ -112,7 +112,7 @@ internal static class ResourceRegistryHost
         builder.Services.AddControllers()
             .AddMvcOptions(opts =>
             {
-                opts.OutputFormatters.Insert(0, new RdfOutputFormatter());
+                opts.OutputFormatters.Add(new RdfOutputFormatter());
                 opts.ModelBinderProviders.InsertSingleton<RequestConditionCollection.ModelBinderProvider>(0);
                 opts.ModelBinderProviders.InsertSingleton<AccessListIncludesModelBinder>(0);
             })

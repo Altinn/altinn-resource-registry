@@ -1,6 +1,10 @@
+using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Models.Altinn2;
+using Altinn.ResourceRegistry.Core.Services.Interfaces;
+using Altinn.ResourceRegistry.Tests.Mocks;
 using Altinn.ResourceRegistry.Tests.Utils;
 using Altinn.ResourceRegistry.TestUtils;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -10,6 +14,12 @@ namespace Altinn.ResourceRegistry.Tests
     public class Altinn2ExportControllerTest(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
         : WebApplicationTests(dbFixture, webApplicationFixture)
     {
+        protected override void ConfigureTestServices(IServiceCollection services)
+        {
+            services.AddSingleton<IResourceRegistryRepository, RegisterResourceRepositoryMock>();
+            base.ConfigureTestServices(services);
+        }
+
         [Fact]
         public async Task Export_Resource()
         {

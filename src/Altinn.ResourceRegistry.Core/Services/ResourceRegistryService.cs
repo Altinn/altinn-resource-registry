@@ -60,7 +60,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task CreateResource(ServiceResource serviceResource, CancellationToken cancellationToken = default)
         {
-            bool result = true; ////await UpdateResourceInAccessManagement(serviceResource, cancellationToken);
+            bool result = await UpdateResourceInAccessManagement(serviceResource, cancellationToken);
             if (!result)
             {
                 throw new AccessManagementUpdateException("Updating Access management failed");

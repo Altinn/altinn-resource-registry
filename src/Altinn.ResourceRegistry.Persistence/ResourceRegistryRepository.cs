@@ -212,7 +212,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<SubjectResources>> FindResourcesForSubjects(IEnumerable<string> subjects, CancellationToken cancellationToken = default)
     {
-        const string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE subject_urn = ANY(@subjects)";
+        const string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE subject_urn = ANY(@subjects) AND deleted = false";
 
         await using NpgsqlCommand pgcom = _conn.CreateCommand(findResourcesSQL);
         pgcom.Parameters.AddWithValue("subjects", subjects.ToArray());
@@ -273,7 +273,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<ResourceSubjects>> FindSubjectsForResources(IEnumerable<string> resources, CancellationToken cancellationToken = default)
     {
-        const string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE resource_urn = ANY(@resources)";
+        const string findResourcesSQL = /*strpsql*/@"select * from resourceregistry.resourcesubjects WHERE resource_urn = ANY(@resources) AND deleted = false";
 
         await using NpgsqlCommand pgcom = _conn.CreateCommand(findResourcesSQL);
         pgcom.Parameters.AddWithValue("resources", resources.ToArray());
@@ -317,38 +317,77 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken = default)
     {
-        const string deleteResourcesSQL = /*strpsql*/@"DELETE from resourceregistry.resourcesubjects WHERE resource_urn = ANY(@resources)";
-        const string insertResourceSubjectsSQL = /*strpsql*/@"INSERT INTO resourceregistry.resourcesubjects(
-                                                              resource_type, resource_value, resource_urn, subject_type, subject_value, subject_urn, resource_owner) 
-                                                              VALUES(@resourcetype, @resourcevalue, @resourceurn, @subjecttype, @subjectvalue, @subjecturn, @owner)";
+        const string selectExistingPairsSQL = /*strpsql*/@"SELECT resource_urn, subject_urn FROM resourceregistry.resourcesubjects WHERE resource_urn = @resourceurn AND deleted = false";
+        const string updateResourceSubjectsSQL = /*strpsql*/@"UPDATE resourceregistry.resourcesubjects SET deleted = true WHERE resource_urn = @resourceurn AND subject_urn = @subjecturn";
+        const string insertOrUpdateResourceSubjectsSQL = /*strpsql*/@"
+            INSERT INTO resourceregistry.resourcesubjects (
+                resource_type, resource_value, resource_urn, subject_type, subject_value, subject_urn, resource_owner, deleted
+            ) VALUES (
+                @resourcetype, @resourcevalue, @resourceurn, @subjecttype, @subjectvalue, @subjecturn, @owner, false
+            )
+            ON CONFLICT (resource_urn, subject_urn) 
+            DO UPDATE SET 
+                resource_type = EXCLUDED.resource_type,
+                resource_value = EXCLUDED.resource_value,
+                subject_type = EXCLUDED.subject_type,
+                subject_value = EXCLUDED.subject_value,
+                resource_owner = EXCLUDED.resource_owner,
+                deleted = false;";
 
-        string[] resourcesToDelete = [resourceSubjects.Resource.Urn];
-     
         await using NpgsqlConnection conn = await _conn.OpenConnectionAsync(cancellationToken);
         await using NpgsqlTransaction tx = await conn.BeginTransactionAsync(IsolationLevel.RepeatableRead, cancellationToken);
-        await using NpgsqlCommand pgcom = _conn.CreateCommand(deleteResourcesSQL);
-        pgcom.Parameters.AddWithValue("resources", resourcesToDelete);
-        await pgcom.ExecuteNonQueryAsync(cancellationToken);
-        
-        await using var resourceCmd = _conn.CreateCommand(insertResourceSubjectsSQL);
-        NpgsqlParameter resourcetypeParam = resourceCmd.Parameters.Add("resourcetype", NpgsqlTypes.NpgsqlDbType.Text);
-        NpgsqlParameter resourcevalueParam = resourceCmd.Parameters.Add("resourcevalue", NpgsqlTypes.NpgsqlDbType.Text);
-        NpgsqlParameter resourceurnParam = resourceCmd.Parameters.Add("resourceurn", NpgsqlTypes.NpgsqlDbType.Text);
-        NpgsqlParameter subjecttypeParam = resourceCmd.Parameters.Add("subjecttype", NpgsqlTypes.NpgsqlDbType.Text);
-        NpgsqlParameter subjectvalueParam = resourceCmd.Parameters.Add("subjectvalue", NpgsqlTypes.NpgsqlDbType.Text);
-        NpgsqlParameter subjecturnParam = resourceCmd.Parameters.Add("subjecturn", NpgsqlTypes.NpgsqlDbType.Text);
-        NpgsqlParameter ownerParam = resourceCmd.Parameters.Add("owner", NpgsqlTypes.NpgsqlDbType.Text);
 
-        foreach (AttributeMatchV2 subjectAttribute in resourceSubjects.Subjects)
+        // Step 1: Retrieve existing resource-subject pairs from the database
+        var existingPairs = new HashSet<(string resourceUrn, string subjectUrn)>();
+
+        await using (var selectCmd = _conn.CreateCommand(selectExistingPairsSQL))
         {
-            resourcetypeParam.SetValue(resourceSubjects.Resource.Type);
-            resourcevalueParam.SetValue(resourceSubjects.Resource.Value);
-            resourceurnParam.SetValue(resourceSubjects.Resource.Urn);
-            subjecttypeParam.SetValue(subjectAttribute.Type);
-            subjectvalueParam.SetValue(subjectAttribute.Value);
-            subjecturnParam.SetValue(subjectAttribute.Urn);
-            ownerParam.SetValue(resourceSubjects.ResourceOwner);
-            await resourceCmd.ExecuteNonQueryAsync(cancellationToken);
+            selectCmd.Parameters.AddWithValue("resourceurn", resourceSubjects.Resource.Urn);
+            await using (var reader = await selectCmd.ExecuteReaderAsync(cancellationToken))
+            {
+                while (await reader.ReadAsync(cancellationToken))
+                {
+                    existingPairs.Add((reader.GetString(0), reader.GetString(1)));
+                }
+            }
+        }
+
+        // Step 2: Mark pairs as deleted if they are no longer in resourceSubjects
+        foreach (var existingPair in existingPairs)
+        {
+            if (!resourceSubjects.Subjects.Any(s => s.Urn == existingPair.subjectUrn))
+            {
+                await using (var updateCmd = _conn.CreateCommand(updateResourceSubjectsSQL))
+                {
+                    updateCmd.Parameters.AddWithValue("resourceurn", existingPair.resourceUrn);
+                    updateCmd.Parameters.AddWithValue("subjecturn", existingPair.subjectUrn);
+                    await updateCmd.ExecuteNonQueryAsync(cancellationToken);
+                }
+            }
+        }
+
+        // Step 3: Insert or update resource-subject pairs
+        await using (var resourceCmd = _conn.CreateCommand(insertOrUpdateResourceSubjectsSQL))
+        {
+            resourceCmd.Parameters.Add("resourcetype", NpgsqlTypes.NpgsqlDbType.Text);
+            resourceCmd.Parameters.Add("resourcevalue", NpgsqlTypes.NpgsqlDbType.Text);
+            resourceCmd.Parameters.Add("resourceurn", NpgsqlTypes.NpgsqlDbType.Text);
+            resourceCmd.Parameters.Add("subjecttype", NpgsqlTypes.NpgsqlDbType.Text);
+            resourceCmd.Parameters.Add("subjectvalue", NpgsqlTypes.NpgsqlDbType.Text);
+            resourceCmd.Parameters.Add("subjecturn", NpgsqlTypes.NpgsqlDbType.Text);
+            resourceCmd.Parameters.Add("owner", NpgsqlTypes.NpgsqlDbType.Text);
+
+            foreach (var subjectAttribute in resourceSubjects.Subjects)
+            {
+                resourceCmd.Parameters["resourcetype"].Value = resourceSubjects.Resource.Type;
+                resourceCmd.Parameters["resourcevalue"].Value = resourceSubjects.Resource.Value;
+                resourceCmd.Parameters["resourceurn"].Value = resourceSubjects.Resource.Urn;
+                resourceCmd.Parameters["subjecttype"].Value = subjectAttribute.Type;
+                resourceCmd.Parameters["subjectvalue"].Value = subjectAttribute.Value;
+                resourceCmd.Parameters["subjecturn"].Value = subjectAttribute.Urn;
+                resourceCmd.Parameters["owner"].Value = resourceSubjects.ResourceOwner;
+                await resourceCmd.ExecuteNonQueryAsync(cancellationToken);
+            }
         }
 
         await tx.CommitAsync(cancellationToken);

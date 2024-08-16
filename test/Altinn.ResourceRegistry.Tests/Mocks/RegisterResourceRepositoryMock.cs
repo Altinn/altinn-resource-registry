@@ -103,6 +103,19 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return Task.FromResult(resourceSubjects);
         }
 
+        public Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, CancellationToken cancellationToken = default)
+        {
+            List<UpdatedResourceSubject> updatedResourceSubjects = new List<UpdatedResourceSubject>();
+            updatedResourceSubjects.Add(new UpdatedResourceSubject
+            {
+                ResourceUrn = new Uri("urn:altinn:resource:skd_mva"),
+                SubjectUrn = new Uri("urn:altinn:rolecode:utinn"),
+                UpdatedAt = DateTimeOffset.Parse("2024-01-01T00:00:00Z"),
+                Deleted = false
+            });
+            return Task.FromResult(updatedResourceSubjects);
+        }
+
 
         private static SubjectResources GetSubjectResource(string subjectUrn, List<string> resources)
         {

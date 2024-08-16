@@ -398,6 +398,19 @@ namespace Altinn.ResourceRegistry.Controllers
         {
             return await _resourceRegistry.GetSearchResults(search, cancellationToken);
         }
+
+        /// <summary>
+        /// Gets the updated resources since the provided last updated time
+        /// </summary>
+        /// <param name="since">Date time used for filtering</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A list of updated subject/resource pairs since provided timestamp</returns>
+        [HttpGet("Updated")]
+        [Produces("application/json")]
+        public async Task<List<UpdatedResourceSubject>> UpdatedResourceSubjects([FromQuery] DateTimeOffset since, CancellationToken cancellationToken)
+        {
+            return await _resourceRegistry.FindUpdatedResourceSubjects(since, cancellationToken);
+        }
     }
 
     /// <summary>

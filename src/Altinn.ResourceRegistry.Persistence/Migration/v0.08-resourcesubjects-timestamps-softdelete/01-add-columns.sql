@@ -1,5 +1,5 @@
 ALTER TABLE resourceregistry.resourcesubjects
-    ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ADD COLUMN updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     ADD COLUMN deleted BOOLEAN DEFAULT FALSE;
 
 CREATE INDEX ix_resourceregistry_resourcesubjects_updatedat

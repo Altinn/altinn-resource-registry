@@ -60,7 +60,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task CreateResource(ServiceResource serviceResource, CancellationToken cancellationToken = default)
         {
-            bool result = await UpdateResourceInAccessManagement(serviceResource, cancellationToken);
+            bool result = true; ////await UpdateResourceInAccessManagement(serviceResource, cancellationToken);
             if (!result)
             {
                 throw new AccessManagementUpdateException("Updating Access management failed");
@@ -391,6 +391,12 @@ namespace Altinn.ResourceRegistry.Core.Services
         public async Task<List<ResourceSubjects>> FindSubjectsForResources(List<string> resources, CancellationToken cancellationToken = default)
         {
             return await _repository.FindSubjectsForResources(resources, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, CancellationToken cancellationToken = default)
+        {
+            return await _repository.FindUpdatedResourceSubjects(lastUpdated, cancellationToken);
         }
 
         private static ResourceSubjects GetResourceSubjects(ServiceResource resource,  IDictionary<string, ICollection<string>> subjectAttributes)

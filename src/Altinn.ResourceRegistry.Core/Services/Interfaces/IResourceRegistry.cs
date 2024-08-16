@@ -120,5 +120,13 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="app">The app</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         Task UpdateResourceSubjectsFromAppPolicy(string org, string app, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Returns a list of resource/subject pairs (including deleted) that has been updated since lastUpdated
+        /// </summary>
+        /// <param name="lastUpdated">The timestamp from which to return updated entries</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>List of resource/subject pairs updated since lastUpdated</returns>
+        Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, CancellationToken cancellationToken = default);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlTypes;
 using System.Text.Json;
-using Altinn.Authorization.ABAC.Utils;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Persistence.Extensions;
@@ -314,6 +313,31 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         return subjectResources;
     }
 
+    /// <inheritdoc />
+    public async Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, CancellationToken cancellationToken = default)
+    {
+        const string selecUpdatedPairs = /*strpsql*/@"SELECT resource_urn, subject_urn, updated_at, deleted FROM resourceregistry.resourcesubjects WHERE updated_at > @updated_at";
+
+        await using NpgsqlCommand pgcom = _conn.CreateCommand(selecUpdatedPairs);
+        pgcom.Parameters.AddWithValue("updated_at", NpgsqlDbType.TimestampTz, lastUpdated);
+        await using NpgsqlDataReader reader = await pgcom.ExecuteReaderAsync(cancellationToken);
+
+        List<UpdatedResourceSubject> updatedResourceSubjects = new List<UpdatedResourceSubject>();
+
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            updatedResourceSubjects.Add(new UpdatedResourceSubject
+            {
+                ResourceUrn = new Uri(reader.GetFieldValue<string>("resource_urn")),
+                SubjectUrn = new Uri(reader.GetFieldValue<string>("subject_urn")),
+                UpdatedAt = reader.GetFieldValue<DateTimeOffset>("updated_at"),
+                Deleted = reader.GetFieldValue<bool>("deleted")
+            });
+        }
+
+        return updatedResourceSubjects;
+    }
+
     /// <inheritdoc/>
     public async Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken = default)
     {
@@ -338,7 +362,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         await using NpgsqlTransaction tx = await conn.BeginTransactionAsync(IsolationLevel.RepeatableRead, cancellationToken);
 
         // Step 1: Retrieve existing resource-subject pairs from the database
-        var existingPairs = new HashSet<(string resourceUrn, string subjectUrn)>();
+        var existingPairs = new HashSet<(string ResourceUrn, string SubjectUrn)>();
 
         await using (var selectCmd = _conn.CreateCommand(selectExistingPairsSQL))
         {
@@ -353,17 +377,14 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         }
 
         // Step 2: Mark pairs as deleted if they are no longer in resourceSubjects
-        foreach (var existingPair in existingPairs)
+        foreach (var existingPair in
+                 existingPairs.Where(existingPair =>
+                     resourceSubjects.Subjects.All(s => s.Urn != existingPair.SubjectUrn)))
         {
-            if (!resourceSubjects.Subjects.Any(s => s.Urn == existingPair.subjectUrn))
-            {
-                await using (var updateCmd = _conn.CreateCommand(updateResourceSubjectsSQL))
-                {
-                    updateCmd.Parameters.AddWithValue("resourceurn", existingPair.resourceUrn);
-                    updateCmd.Parameters.AddWithValue("subjecturn", existingPair.subjectUrn);
-                    await updateCmd.ExecuteNonQueryAsync(cancellationToken);
-                }
-            }
+            await using var updateCmd = _conn.CreateCommand(updateResourceSubjectsSQL);
+            updateCmd.Parameters.AddWithValue("resourceurn", existingPair.ResourceUrn);
+            updateCmd.Parameters.AddWithValue("subjecturn", existingPair.SubjectUrn);
+            await updateCmd.ExecuteNonQueryAsync(cancellationToken);
         }
 
         // Step 3: Insert or update resource-subject pairs

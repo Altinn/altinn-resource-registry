@@ -329,6 +329,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         pgcom.Parameters.AddWithValue("resource_urn", NpgsqlDbType.Text, skipPast?.ResourceUrn.ToString() ?? string.Empty);
         pgcom.Parameters.AddWithValue("subject_urn", NpgsqlDbType.Text, skipPast?.SubjectUrn.ToString() ?? string.Empty);
         pgcom.Parameters.AddWithValue("limit", NpgsqlDbType.Integer, limit);
+        await pgcom.PrepareAsync(cancellationToken);
         await using NpgsqlDataReader reader = await pgcom.ExecuteReaderAsync(cancellationToken);
 
         List<UpdatedResourceSubject> updatedResourceSubjects = new List<UpdatedResourceSubject>();
@@ -380,6 +381,8 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         await using (var selectCmd = new NpgsqlCommand(selectExistingPairsSQL, conn, tx))
         {
             selectCmd.Parameters.AddWithValue("resourceurn", resourceSubjects.Resource.Urn);
+
+            await selectCmd.PrepareAsync(cancellationToken);
             await using (var reader = await selectCmd.ExecuteReaderAsync(cancellationToken))
             {
                 while (await reader.ReadAsync(cancellationToken))
@@ -400,6 +403,8 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             {
                 updateCmd.Parameters.AddWithValue("resourceurn", resourceSubjects.Resource.Urn);
                 updateCmd.Parameters.AddWithValue("subjecturns", NpgsqlDbType.Array | NpgsqlDbType.Text, subjectUrnsToDelete);
+
+                await updateCmd.PrepareAsync(cancellationToken);
                 await updateCmd.ExecuteNonQueryAsync(cancellationToken);
             }
         }
@@ -421,6 +426,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             resourceCmd.Parameters.AddWithValue("subjectvalue", NpgsqlDbType.Array | NpgsqlDbType.Text, subjectValues);
             resourceCmd.Parameters.AddWithValue("subjecturn", NpgsqlDbType.Array | NpgsqlDbType.Text, subjectUrns);
 
+            await resourceCmd.PrepareAsync(cancellationToken);
             await resourceCmd.ExecuteNonQueryAsync(cancellationToken);
         }
 

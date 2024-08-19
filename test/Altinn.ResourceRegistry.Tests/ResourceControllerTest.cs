@@ -1786,9 +1786,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task GetUpdatedResourceSubjects_WithoutParameters()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/resource/updated/";
 
-            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            HttpResponseMessage response = await client.GetAsync(requestUri);
             Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -1799,9 +1800,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task GetUpdatedResourceSubjects_HasNextLink()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/resource/updated/?limit=2";
 
-            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            HttpResponseMessage response = await client.GetAsync(requestUri);
             Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -1814,9 +1816,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task GetUpdatedResourceSubjects_WithSkipPast()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/resource/updated/?Since=2024-02-01T00:00:00.0000000%2B00:00&SkipPast=urn:altinn:resource:second,urn:altinn:rolecode:foobar&limit=2";
 
-            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            HttpResponseMessage response = await client.GetAsync(requestUri);
             Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -1826,9 +1829,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task GetUpdatedResourceSubjects_WithInvalidLimit()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/resource/updated/?limit=100000";
 
-            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            HttpResponseMessage response = await client.GetAsync(requestUri);
             ValidationProblemDetails? errordetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -1838,9 +1842,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task GetUpdatedResourceSubjects_WithInvalidDateTime()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/resource/updated/?since=xxx";
 
-            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            HttpResponseMessage response = await client.GetAsync(requestUri);
             ValidationProblemDetails? errordetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -1853,9 +1858,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task GetUpdatedResourceSubjects_WithInvalidSkipPast()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/resource/updated/?skippast=xxx";
 
-            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            HttpResponseMessage response = await client.GetAsync(requestUri);
             ValidationProblemDetails? errordetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

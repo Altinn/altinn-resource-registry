@@ -1,9 +1,7 @@
 using Altinn.Authorization.ProblemDetails;
-using Altinn.Platform.Events.Formatters
-using Altinn.ResourceRegistry.Core.Constants;
-using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.Platform.Events.Formatters;
 using Altinn.ResourceRegistry.Core.Constants;
+using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
@@ -14,9 +12,7 @@ using Altinn.ResourceRegistry.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Altinn.ResourceRegistry.Controllers
 {

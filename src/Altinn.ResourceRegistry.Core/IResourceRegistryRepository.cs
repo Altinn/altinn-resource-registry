@@ -79,5 +79,6 @@ namespace Altinn.ResourceRegistry.Core
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken = default);
+
     }
 }

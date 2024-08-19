@@ -1,4 +1,6 @@
-﻿using Altinn.ResourceRegistry.Core.Constants;
+﻿using Altinn.Authorization.ProblemDetails;
+using Altinn.ResourceRegistry.Core.Constants;
+using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
@@ -409,14 +411,15 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <param name="limit">Maximum number of pairs returned (1-1000, default: 1000)</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>A list of updated subject/resource pairs since provided timestamp (inclusive)</returns>
-        [HttpGet("Updated")]
+        [HttpGet("updated", Name = "updated")]
         [Produces("application/json")]
         public async Task<ActionResult<Paginated<UpdatedResourceSubject>>> UpdatedResourceSubjects([FromQuery] DateTimeOffset since, [FromQuery] string skipPast, [FromQuery] int limit = 1000, CancellationToken cancellationToken = default)
         {
             if (limit is < 1 or > 1000)
             {
-                ModelState.AddModelError("limit", "Limit must be between 1 and 1000");
-                return ValidationProblem();
+                return new AltinnValidationProblemDetails([
+                    ValidationErrors.UpdatedResourceSubjects_InvalidLimit.ToValidationError(),
+                ]).ToActionResult();
             }
 
             (Uri ResourceUrn, Uri SubjectUrn)? skipPastPair = null;
@@ -426,8 +429,9 @@ namespace Altinn.ResourceRegistry.Controllers
                 string[] pair = skipPast.Split(',');
                 if (pair.Length != 2 || !Uri.TryCreate(pair[0], UriKind.Absolute, out Uri resourceUrn) || !Uri.TryCreate(pair[1], UriKind.Absolute, out Uri subjectUrn))
                 {
-                    ModelState.AddModelError("skipPast", "Invalid skipPast parameter; must be a comma-separated pair of URNs");
-                    return ValidationProblem();
+                    return new AltinnValidationProblemDetails([
+                        ValidationErrors.UpdatedResourceSubjects_InvalidSkipPast.ToValidationError(),
+                    ]).ToActionResult();
                 }
 
                 skipPastPair = (resourceUrn, subjectUrn);
@@ -444,7 +448,12 @@ namespace Altinn.ResourceRegistry.Controllers
             updatedResourceSubjects.RemoveAt(limit);
             UpdatedResourceSubject last = updatedResourceSubjects.Last();
 
-            string nextUrl = string.Format("?Since={0}&SkipPast={1}&limit={2}", last.UpdatedAt.ToString("O").Replace("+", "%2B"), $"{last.ResourceUrn},{last.SubjectUrn}", limit);
+            string nextUrl = Url.Link("updated", new
+            {
+                since = last.UpdatedAt.ToString("O"),
+                skipPast = $"{last.ResourceUrn},{last.SubjectUrn}",
+                limit
+            });
 
             return Paginated.Create(updatedResourceSubjects, nextUrl);
         }

@@ -180,11 +180,12 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.NotNull(subjectResources);
         Assert.Single(subjectResources.Items);
         Assert.NotNull(subjectResources.Links.Next);
-        Assert.Contains("?Since=20", subjectResources.Links.Next);
-        Assert.Contains("&SkipPast=urn:altinn:resource:foo,urn:altinn:rolecode:r001&limit=1", subjectResources.Links.Next);
+        Assert.Contains("?since=20", subjectResources.Links.Next);
+        Assert.Contains("&skipPast=urn%3Aaltinn%3Aresource%3Afoo,urn%3Aaltinn%3Arolecode%3Ar001&limit=1", subjectResources.Links.Next);
 
-        requestUri = "resourceregistry/api/v1/resource/updated/" + subjectResources.Links.Next;
-        response = await client.GetAsync(requestUri);
+        Assert.True(Uri.TryCreate(subjectResources.Links.Next, UriKind.Absolute, out Uri? nextUri));
+        Assert.NotNull(nextUri);
+        response = await client.GetAsync(nextUri.PathAndQuery);
         subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
 
         Assert.NotNull(subjectResources);

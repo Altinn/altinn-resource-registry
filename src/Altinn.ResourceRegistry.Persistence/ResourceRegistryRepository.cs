@@ -313,10 +313,10 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         return subjectResources;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public async Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default)
     {
-        const string selecUpdatedPairs = /*strpsql*/
+        const string selectUpdatedPairs = /*strpsql*/
             """
             SELECT resource_urn, subject_urn, updated_at, deleted
             FROM resourceregistry.resourcesubjects 
@@ -324,13 +324,14 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             ORDER BY updated_at, resource_urn, subject_urn LIMIT @limit
             """;
 
-        await using NpgsqlCommand pgcom = _conn.CreateCommand(selecUpdatedPairs);
-        pgcom.Parameters.AddWithValue("updated_at", NpgsqlDbType.TimestampTz, lastUpdated);
-        pgcom.Parameters.AddWithValue("resource_urn", NpgsqlDbType.Text, skipPast?.ResourceUrn.ToString() ?? string.Empty);
-        pgcom.Parameters.AddWithValue("subject_urn", NpgsqlDbType.Text, skipPast?.SubjectUrn.ToString() ?? string.Empty);
-        pgcom.Parameters.AddWithValue("limit", NpgsqlDbType.Integer, limit);
-        await pgcom.PrepareAsync(cancellationToken);
-        await using NpgsqlDataReader reader = await pgcom.ExecuteReaderAsync(cancellationToken);
+        await using NpgsqlConnection conn = await _conn.OpenConnectionAsync(cancellationToken);
+        await using NpgsqlCommand selectCmd = new NpgsqlCommand(selectUpdatedPairs, conn);
+        selectCmd.Parameters.AddWithValue("updated_at", NpgsqlDbType.TimestampTz, lastUpdated);
+        selectCmd.Parameters.AddWithValue("resource_urn", NpgsqlDbType.Text, skipPast?.ResourceUrn.ToString() ?? string.Empty);
+        selectCmd.Parameters.AddWithValue("subject_urn", NpgsqlDbType.Text, skipPast?.SubjectUrn.ToString() ?? string.Empty);
+        selectCmd.Parameters.AddWithValue("limit", NpgsqlDbType.Integer, limit);
+        await selectCmd.PrepareAsync(cancellationToken);
+        await using NpgsqlDataReader reader = await selectCmd.ExecuteReaderAsync(cancellationToken);
 
         List<UpdatedResourceSubject> updatedResourceSubjects = new List<UpdatedResourceSubject>();
 
@@ -357,18 +358,16 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         """
         INSERT INTO resourceregistry.resourcesubjects (
             resource_type, resource_value, resource_urn, subject_type, subject_value, subject_urn, resource_owner, deleted
-        ) 
-        SELECT resource_type, resource_value, resource_urn, subject_type, subject_value, subject_urn, resource_owner, false 
-        FROM (
-            SELECT 
-                @resourcetype AS resource_type, 
-                @resourcevalue AS resource_value,
-                @resourceurn AS resource_urn,
-                @owner AS resource_owner,
-                unnest(@subjecttype) AS subject_type,
-                unnest(@subjectvalue) AS subject_value,
-                unnest(@subjecturn) AS subject_urn
-        ) AS data
+        )
+        SELECT 
+            @resourcetype AS resource_type, 
+            @resourcevalue AS resource_value,
+            @resourceurn AS resource_urn,
+            unnest(@subjecttype) AS subject_type,
+            unnest(@subjectvalue) AS subject_value,
+            unnest(@subjecturn) AS subject_urn,
+            @owner AS resource_owner,
+            false AS deleted
         ON CONFLICT (resource_urn, subject_urn) DO UPDATE SET deleted = false, updated_at = NOW()
         """;
 

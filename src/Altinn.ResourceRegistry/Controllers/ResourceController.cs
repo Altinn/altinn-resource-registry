@@ -421,7 +421,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             (Uri ResourceUrn, Uri SubjectUrn)? skipPastPair = null;
 
-            if (!skipPast.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(skipPast))
             {
                 string[] pair = skipPast.Split(',');
                 if (pair.Length != 2 || !Uri.TryCreate(pair[0], UriKind.Absolute, out Uri resourceUrn) || !Uri.TryCreate(pair[1], UriKind.Absolute, out Uri subjectUrn))

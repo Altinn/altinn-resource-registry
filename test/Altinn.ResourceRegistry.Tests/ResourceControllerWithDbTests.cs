@@ -109,6 +109,9 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     [Fact]
     public async Task SetResourcePolicy_OK()
     {
+        // Add one that should be marked as deleted when updating with policy
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:altinn_access_management", ["urn:altinn:rolecode:tobedeleted"], "skd"));
+
         ServiceResource resource = new ServiceResource()
         {
             Identifier = "altinn_access_management",
@@ -156,6 +159,38 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
         Assert.NotNull(subjectMatch);
+
+        // ensure we don't get the deleted subject
+        Assert.Single(subjectMatch.Items);
+        Assert.Equal("admai", subjectMatch.Items.First().Value);
+
+    }
+
+    [Fact]
+    public async Task GetUpdatedResourceSubjects_Paginates()
+    {
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002"], "ttd"));
+
+        using var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/resource/updated/?limit=1";
+
+        HttpResponseMessage response = await client.GetAsync(requestUri);
+        Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+        Assert.NotNull(subjectResources);
+        Assert.Single(subjectResources.Items);
+        Assert.NotNull(subjectResources.Links.Next);
+        Assert.Contains("?Since=20", subjectResources.Links.Next);
+        Assert.Contains("&SkipPast=urn:altinn:resource:foo,urn:altinn:rolecode:r001&limit=1", subjectResources.Links.Next);
+
+        requestUri = "resourceregistry/api/v1/resource/updated/" + subjectResources.Links.Next;
+        response = await client.GetAsync(requestUri);
+        subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+        Assert.NotNull(subjectResources);
+        Assert.Single(subjectResources.Items);
+        Assert.Equal("urn:altinn:rolecode:r002", subjectResources.Items.First().SubjectUrn.ToString());
+        Assert.Null(subjectResources.Links.Next);
     }
 
     /// <summary>

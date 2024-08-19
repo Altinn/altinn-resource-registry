@@ -9,7 +9,9 @@ using Altinn.ResourceRegistry.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Altinn.ResourceRegistry.Controllers
 {
@@ -400,16 +402,51 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
-        /// Gets the updated resources since the provided last updated time
+        /// Gets the updated resources since the provided last updated time (inclusive)
         /// </summary>
         /// <param name="since">Date time used for filtering</param>
+        /// <param name="skipPast">Optional ResourceUrn,SubjectUrn pair to skip past on rows matching "since" exactly</param>
+        /// <param name="limit">Maximum number of pairs returned (1-1000, default: 1000)</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns>A list of updated subject/resource pairs since provided timestamp</returns>
+        /// <returns>A list of updated subject/resource pairs since provided timestamp (inclusive)</returns>
         [HttpGet("Updated")]
         [Produces("application/json")]
-        public async Task<List<UpdatedResourceSubject>> UpdatedResourceSubjects([FromQuery] DateTimeOffset since, CancellationToken cancellationToken)
+        public async Task<ActionResult<Paginated<UpdatedResourceSubject>>> UpdatedResourceSubjects([FromQuery] DateTimeOffset since, [FromQuery] string skipPast, [FromQuery] int limit = 1000, CancellationToken cancellationToken = default)
         {
-            return await _resourceRegistry.FindUpdatedResourceSubjects(since, cancellationToken);
+            if (limit is < 1 or > 1000)
+            {
+                ModelState.AddModelError("limit", "Limit must be between 1 and 1000");
+                return ValidationProblem();
+            }
+
+            (Uri ResourceUrn, Uri SubjectUrn)? skipPastPair = null;
+
+            if (!skipPast.IsNullOrEmpty())
+            {
+                string[] pair = skipPast.Split(',');
+                if (pair.Length != 2 || !Uri.TryCreate(pair[0], UriKind.Absolute, out Uri resourceUrn) || !Uri.TryCreate(pair[1], UriKind.Absolute, out Uri subjectUrn))
+                {
+                    ModelState.AddModelError("skipPast", "Invalid skipPast parameter; must be a comma-separated pair of URNs");
+                    return ValidationProblem();
+                }
+
+                skipPastPair = (resourceUrn, subjectUrn);
+            }
+
+            // Use maxItems + 1 in order to determine if there are more items to fetch
+            List<UpdatedResourceSubject> updatedResourceSubjects = await _resourceRegistry.FindUpdatedResourceSubjects(since.ToUniversalTime(), limit + 1, skipPastPair, cancellationToken);
+
+            if (updatedResourceSubjects.Count != limit + 1)
+            {
+                return Paginated.Create(updatedResourceSubjects, null);
+            }
+
+            updatedResourceSubjects.RemoveAt(limit);
+            UpdatedResourceSubject last = updatedResourceSubjects.Last();
+
+            string nextUrl = string.Format("?Since={0}&SkipPast={1}&limit={2}", last.UpdatedAt.ToString("O").Replace("+", "%2B"), $"{last.ResourceUrn},{last.SubjectUrn}", limit);
+
+            return Paginated.Create(updatedResourceSubjects, nextUrl);
         }
     }
 

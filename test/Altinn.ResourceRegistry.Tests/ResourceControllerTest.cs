@@ -1750,5 +1750,89 @@ namespace Altinn.ResourceRegistry.Tests
             Assert.NotNull(subjectResources.Items.FirstOrDefault(r => r.Subject.Urn.Contains("utinn")));
         }
 
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_WithoutParameters()
+        {
+            string requestUri = "resourceregistry/api/v1/resource/updated/";
+
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(subjectResources);
+            Assert.NotNull(subjectResources.Items.FirstOrDefault(r => r.ResourceUrn.ToString().Contains("first")));
+        }
+
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_HasNextLink()
+        {
+            string requestUri = "resourceregistry/api/v1/resource/updated/?limit=2";
+
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(subjectResources);
+            Assert.NotNull(subjectResources.Items.FirstOrDefault(r => r.ResourceUrn.ToString().Contains("altinn")));
+            Assert.NotNull(subjectResources.Links.Next);
+            Assert.Equal("?Since=2024-02-01T00:00:00.0000000%2B00:00&SkipPast=urn:altinn:resource:second,urn:altinn:rolecode:foobar&limit=2", subjectResources.Links.Next);
+        }
+
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_WithSkipPast()
+        {
+            string requestUri = "resourceregistry/api/v1/resource/updated/?Since=2024-02-01T00:00:00.0000000%2B00:00&SkipPast=urn:altinn:resource:second,urn:altinn:rolecode:foobar&limit=2";
+
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(subjectResources);
+        }
+
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_WithInvalidLimit()
+        {
+            string requestUri = "resourceregistry/api/v1/resource/updated/?limit=100000";
+
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            ValidationProblemDetails? errordetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.NotNull(errordetails);
+
+            Assert.Single(errordetails.Errors);
+            Assert.NotNull(errordetails.Errors["limit"]);
+        }
+
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_WithInvalidDateTime()
+        {
+            string requestUri = "resourceregistry/api/v1/resource/updated/?since=xxx";
+
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            ValidationProblemDetails? errordetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.NotNull(errordetails);
+
+            Assert.Single(errordetails.Errors);
+            Assert.NotNull(errordetails.Errors["since"]);
+        }
+
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_WithInvalidSkipPast()
+        {
+            string requestUri = "resourceregistry/api/v1/resource/updated/?skippast=xxx";
+
+            HttpResponseMessage response = await _client.GetAsync(requestUri);
+            ValidationProblemDetails? errordetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.NotNull(errordetails);
+
+            Assert.Single(errordetails.Errors);
+            Assert.NotNull(errordetails.Errors["skipPast"]);
+        }
     }
 }

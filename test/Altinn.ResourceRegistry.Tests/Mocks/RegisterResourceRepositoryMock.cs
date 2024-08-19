@@ -103,16 +103,31 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return Task.FromResult(resourceSubjects);
         }
 
-        public Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, CancellationToken cancellationToken = default)
+        public Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default)
         {
             List<UpdatedResourceSubject> updatedResourceSubjects = new List<UpdatedResourceSubject>();
             updatedResourceSubjects.Add(new UpdatedResourceSubject
             {
-                ResourceUrn = new Uri("urn:altinn:resource:skd_mva"),
-                SubjectUrn = new Uri("urn:altinn:rolecode:utinn"),
+                ResourceUrn = new Uri("urn:altinn:resource:first"),
+                SubjectUrn = new Uri("urn:altinn:rolecode:foobar"),
                 UpdatedAt = DateTimeOffset.Parse("2024-01-01T00:00:00Z"),
                 Deleted = false
             });
+            updatedResourceSubjects.Add(new UpdatedResourceSubject
+            {
+                ResourceUrn = new Uri("urn:altinn:resource:second"),
+                SubjectUrn = new Uri("urn:altinn:rolecode:foobar"),
+                UpdatedAt = DateTimeOffset.Parse("2024-02-01T00:00:00Z"),
+                Deleted = false
+            });
+            updatedResourceSubjects.Add(new UpdatedResourceSubject
+            {
+                ResourceUrn = new Uri("urn:altinn:resource:third"),
+                SubjectUrn = new Uri("urn:altinn:rolecode:foobar"),
+                UpdatedAt = DateTimeOffset.Parse("2024-03-01T00:00:00Z"),
+                Deleted = false
+            });
+
             return Task.FromResult(updatedResourceSubjects);
         }
 

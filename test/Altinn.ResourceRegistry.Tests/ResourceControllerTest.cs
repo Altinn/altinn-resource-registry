@@ -1,48 +1,43 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-
 using Altinn.ResourceRegistry.Tests.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Altinn.ResourceRegistry.Controllers;
 using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
-using Xunit;
-using Microsoft.Extensions.DependencyInjection;
 using Altinn.ResourceRegistry.Models;
 using System.Net.Http.Json;
-using System.Linq;
+using Altinn.ResourceRegistry.TestUtils;
+using Microsoft.Extensions.DependencyInjection;
+using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Tests.Mocks;
+using Altinn.ResourceRegistry.Core.Services.Interfaces;
 
 namespace Altinn.ResourceRegistry.Tests
 {
-    public class ResourceControllerTest : IClassFixture<CustomWebApplicationFactory<ResourceController>>
+    public class ResourceControllerTest(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
+        : WebApplicationTests(dbFixture, webApplicationFixture)
     {
-        private readonly CustomWebApplicationFactory<ResourceController> _factory;
-        private readonly HttpClient _client;
-
-        public ResourceControllerTest(CustomWebApplicationFactory<ResourceController> factory)
+        protected override void ConfigureTestServices(IServiceCollection services)
         {
-            _factory = factory;
-            _client = SetupUtil.GetTestClient(factory);
-            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            services.AddSingleton<IResourceRegistryRepository, RegisterResourceRepositoryMock>();
+            services.AddSingleton<IApplications, ApplicationsClientMock>();
+
+            base.ConfigureTestServices(services);
         }
 
         [Fact]
         public async Task GetResource_altinn_access_management_OK()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
             };
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
@@ -54,13 +49,14 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task Test_Nav_Get()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/Resource/nav_tiltakAvtaleOmArbeidstrening";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
             };
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
@@ -73,13 +69,14 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task Search_Get()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/Resource/Search?Id=altinn";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
             };
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
@@ -91,13 +88,14 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task ResourceList()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/Resource/resourcelist";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
             };
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
@@ -116,13 +114,14 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task ResourceList_NoApps()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/Resource/resourcelist?includeApps=false";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
             };
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
@@ -134,13 +133,14 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task ResourceList_NoAltinn2()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/Resource/resourcelist?includeAltinn2=false";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
             };
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
@@ -152,13 +152,14 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task ResourceList_NoAltinn2AndNoApps()
         {
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/Resource/resourcelist?includeAltinn2=false&includeApps=false";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {
             };
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
@@ -170,8 +171,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_WithErrors()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -193,7 +195,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -207,8 +209,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_WithAdminScope()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.admin");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -273,7 +276,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -281,9 +284,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_WithValidPrefix()
         {
+            var client = CreateClient();
             string[] prefixes = { "altinn", "digdir", "difi", "krr", "test", "digdirintern", "idporten", "digitalpostinnbygger", "minid", "move", "difitest"};
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write", prefixes);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -348,7 +352,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -356,9 +360,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_With_APPrefixWithoutRequiredResourceReference()
         {
+            var client = CreateClient();
             string[] prefixes = { "altinn", "digdir", "difi", "krr", "test", "digdirintern", "idporten", "digitalpostinnbygger", "minid", "move", "difitest" };
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write", prefixes);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -388,7 +393,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -396,9 +401,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_With_APPrefixWithRequiredResourceReference()
         {
+            var client = CreateClient();
             string[] prefixes = { "altinn", "digdir", "difi", "krr", "test", "digdirintern", "idporten", "digitalpostinnbygger", "minid", "move", "difitest" };
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write", prefixes);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -440,7 +446,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -448,9 +454,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateMaskinportenSchemaResource_WithoutScope_BadRequest()
         {
+            var client = CreateClient();
             string[] prefixes = { "altinn", "digdir", "difi", "krr", "test", "digdirintern", "idporten", "digitalpostinnbygger", "minid", "move", "difitest" };
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write", prefixes);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -481,7 +488,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             string content = await response.Content.ReadAsStringAsync();
@@ -492,9 +499,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateMaskinportenSchemaResource_WitScope_Ceated()
         {
+            var client = CreateClient();
             string[] prefixes = { "altinn", "digdir", "difi", "krr", "test", "digdirintern", "idporten", "digitalpostinnbygger", "minid", "move", "difitest" };
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write", prefixes);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -558,7 +566,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -566,9 +574,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_WithInvalidPrefix()
         {
+            var client = CreateClient();
             string[] prefixes = {"altinn", "digdir"};
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write", prefixes);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -633,7 +642,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -649,8 +658,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResource_WithAdminScope()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.admin");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -715,7 +725,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -723,9 +733,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResource_WithValidPrefix()
         {
+            var client = CreateClient();
             string[] prefixes = { "altinn", "digdir", "difi", "krr", "test", "digdirintern", "idporten", "digitalpostinnbygger", "minid", "move", "difitest" };
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write", prefixes);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -790,7 +801,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -798,9 +809,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResource_WithInvalidPrefix()
         {
+            var client = CreateClient();
             string[] prefixes = { "altinn", "digdir" };
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write", prefixes);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -865,7 +877,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -881,8 +893,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task SetResourcePolicy_OK()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource() 
             { 
@@ -902,7 +915,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Post, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -910,8 +923,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task SetResourcePolicy_Invalid_UnknownResource()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource() { Identifier = "altinn_access_management" };
             string fileName = $"{resource.Identifier}.xml";
@@ -929,7 +943,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Post, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -940,6 +954,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task GetResourcePolicy_OK()
         {
+            var client = CreateClient();
             ServiceResource resource = new ServiceResource() { Identifier = "altinn_access_management" };
             string fileName = $"{resource.Identifier}.xml";
             string filePath = $"Data/ResourcePolicies/{fileName}";
@@ -949,7 +964,6 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Get, RequestUri = requestUri };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -958,8 +972,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResourcePolicy_OK()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource() { Identifier = "altinn_access_management" };
             string fileName = $"{resource.Identifier}.xml";
@@ -976,7 +991,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -984,8 +999,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResourcePolicy_InvalidResourceId()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             ServiceResource resource = new ServiceResource() { Identifier = "altinn_access_management" };
             string fileName = $"{resource.Identifier}_invalid_resourceid.xml";
             string filePath = $"Data/ResourcePolicies/{fileName}";
@@ -1001,7 +1017,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -1012,8 +1028,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResourcePolicy_MissingResourceId()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             ServiceResource resource = new ServiceResource() { Identifier = "altinn_access_management" };
             string fileName = $"{resource.Identifier}_invalid_missing_resourceid.xml";
             string filePath = $"Data/ResourcePolicies/{fileName}";
@@ -1029,7 +1046,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
@@ -1040,6 +1057,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResource_Ok()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
             ServiceResource resource = new ServiceResource()
             {
@@ -1057,7 +1075,6 @@ namespace Altinn.ResourceRegistry.Tests
                 ResourceType = ResourceType.GenericAccessResource
             };
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
 
@@ -1077,6 +1094,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResource_MissingTitleNynorsk()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
             ServiceResource resource = new ServiceResource()
             {
@@ -1093,7 +1111,6 @@ namespace Altinn.ResourceRegistry.Tests
                 }
             };
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
 
@@ -1117,6 +1134,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResource_MissingDescriptionBokmal()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
             ServiceResource resource = new ServiceResource()
             {
@@ -1133,7 +1151,6 @@ namespace Altinn.ResourceRegistry.Tests
                 }
             };
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
 
@@ -1156,6 +1173,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResource_EmptyDescriptionBokmal()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
             ServiceResource resource = new ServiceResource()
             {
@@ -1172,7 +1190,6 @@ namespace Altinn.ResourceRegistry.Tests
                 }
             };
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
 
@@ -1196,6 +1213,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResource_MissingRightsDecriptionEngelsk()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
             ServiceResource resource = new ServiceResource()
             {
@@ -1212,7 +1230,6 @@ namespace Altinn.ResourceRegistry.Tests
                 }
             };
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
 
@@ -1236,6 +1253,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResource_MissingRightsDecriptionEngelskButNotDelegatable()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
             ServiceResource resource = new ServiceResource()
             {
@@ -1254,7 +1272,6 @@ namespace Altinn.ResourceRegistry.Tests
                 ResourceType = ResourceType.GenericAccessResource
             };
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
 
@@ -1275,10 +1292,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResource_BadRequest()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
             ServiceResource resource = new ServiceResource() { Identifier = "wrong_non_matcing_id" };
 
-            HttpClient client = SetupUtil.GetTestClient(_factory);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
 
@@ -1298,8 +1315,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_Ok()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource() 
             {
@@ -1327,7 +1345,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -1339,8 +1357,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_InvalidId()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -1368,7 +1387,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             string content = await response.Content.ReadAsStringAsync();
@@ -1378,8 +1397,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_ThoShortIdId()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -1406,7 +1426,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             string content = await response.Content.ReadAsStringAsync();
@@ -1416,8 +1436,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_Forbidden_NotResourceOwner()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -1445,7 +1466,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         }
@@ -1453,8 +1474,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_AdminScope_OK_NotResourceOwner()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource()
             {
@@ -1482,7 +1504,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -1490,6 +1512,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task CreateResource_UnAuthorized()
         {
+            var client = CreateClient();
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "superdupertjenestene",
@@ -1514,7 +1537,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
@@ -1522,8 +1545,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResourcePolicy_OK_AdminScope_NotResourceOwner()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource() { Identifier = "altinn_access_management_skd" };
             string fileName = $"{resource.Identifier}.xml";
@@ -1540,7 +1564,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -1548,8 +1572,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResourcePolicy_Forbidden_NotResourceOwner()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("ttd", "991825888", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             ServiceResource resource = new ServiceResource() { Identifier = "altinn_access_management_skd" };
             string fileName = $"{resource.Identifier}.xml";
@@ -1566,7 +1591,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         }
@@ -1574,6 +1599,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task UpdateResourcePolicy_UnAuthorized()
         {
+            var client = CreateClient();
             ServiceResource resource = new ServiceResource() { Identifier = "altinn_access_management" };
             string fileName = $"{resource.Identifier}.xml";
             string filePath = $"Data/ResourcePolicies/{fileName}";
@@ -1589,7 +1615,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
             httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
@@ -1601,9 +1627,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task Delete_AuthorizedUser_ValidResource_ReturnsNoContent()
         {
+            var client = CreateClient();
             // Arrange            
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             string resourceId = "altinn_access_management_skd";
             string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
@@ -1611,7 +1638,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);            
 
             // Act
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
@@ -1624,9 +1651,11 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task Delete_AdminScope_ValidResource_ReturnsForbidden()
         {
-            // Arrange            
+            // Arrange
+            var client = CreateClient();
+
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             string resourceId = "altinn_access_management_skd";
             string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
@@ -1634,7 +1663,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
 
             // Act
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
@@ -1648,6 +1677,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task Delete_UnAuthorized_ValidResource_ReturnsUnauthorized()
         {
+            var client = CreateClient();
             // Arrange
             string resourceId = "altinn_access_management_skd";
             string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
@@ -1655,7 +1685,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
 
             // Act
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -1668,9 +1698,10 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task Delete_Forbidden_ValidResource_ReturnsForbidden()
         {
+            var client = CreateClient();
             // Arrange            
             string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             string resourceId = "altinn_access_management_skd";
             string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
@@ -1678,7 +1709,7 @@ namespace Altinn.ResourceRegistry.Tests
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
 
             // Act
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             // Assert
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
@@ -1687,7 +1718,7 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task Export_OK()
         {
-            HttpClient client = SetupUtil.GetTestClient(_factory);
+            var client = CreateClient();
             string requestUri = "resourceregistry/api/v1/Resource/export";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
@@ -1706,8 +1737,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task GetSubjectsForResource()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             string requestUri = "resourceregistry/api/v1/resource/skd_mva/policy/subjects";
 
@@ -1718,7 +1750,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
             Paginated<AttributeMatchV2>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -1726,8 +1758,9 @@ namespace Altinn.ResourceRegistry.Tests
         [Fact]
         public async Task GetResourceForSubjects()
         {
+            var client = CreateClient();
             string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             List<string> subjects = new List<string>();
             subjects.Add("urn:altinn:rolecode:utinn");
@@ -1742,7 +1775,7 @@ namespace Altinn.ResourceRegistry.Tests
             httpRequestMessage.Headers.Add("Accept", "application/json");
             httpRequestMessage.Headers.Add("ContentType", "application/json");
 
-            HttpResponseMessage response = await _client.SendAsync(httpRequestMessage);
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
             Paginated<SubjectResources>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<SubjectResources>>();
            
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

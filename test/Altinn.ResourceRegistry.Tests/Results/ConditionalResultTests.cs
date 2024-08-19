@@ -2,13 +2,9 @@
 using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Results;
 using Altinn.ResourceRegistry.Tests.Utils;
-using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Net;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Altinn.ResourceRegistry.Tests.Results;
 
@@ -29,7 +25,7 @@ public class  ConditionalResultTests
 
         var response = await client.GetAsync("/precondition-failed");
 
-        response.StatusCode.Should().Be(HttpStatusCode.PreconditionFailed);
+        response.Should().HaveStatusCode(HttpStatusCode.PreconditionFailed);
     }
 
     [Fact]
@@ -39,7 +35,7 @@ public class  ConditionalResultTests
 
         var response = await client.GetAsync("/not-modified");
 
-        response.StatusCode.Should().Be(HttpStatusCode.NotModified);
+        response.Should().HaveStatusCode(HttpStatusCode.NotModified);
         Assert.NotNull(response.Headers.ETag);
         response.Headers.ETag.ToString().Should().Be(RequestCondition.SerializeETag("5"));
 
@@ -54,7 +50,7 @@ public class  ConditionalResultTests
 
         var response = await client.GetAsync("/not-found");
 
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        response.Should().HaveStatusCode(HttpStatusCode.NotFound);
     }
 
     [Fact]
@@ -64,7 +60,7 @@ public class  ConditionalResultTests
 
         var response = await client.GetAsync("/not-found-action-result");
 
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        response.Should().HaveStatusCode(HttpStatusCode.NotFound);
     }
 
     [Fact]
@@ -74,7 +70,7 @@ public class  ConditionalResultTests
 
         var response = await client.GetAsync("/ok");
 
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.Should().HaveStatusCode(HttpStatusCode.OK);
         Assert.NotNull(response.Headers.ETag);
         response.Headers.ETag.ToString().Should().Be(RequestCondition.SerializeETag("5"));
 
@@ -94,7 +90,7 @@ public class  ConditionalResultTests
 
         var response = await client.GetAsync("/ok-conditional");
 
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.Should().HaveStatusCode(HttpStatusCode.OK);
         Assert.NotNull(response.Headers.ETag);
         response.Headers.ETag.ToString().Should().Be(RequestCondition.SerializeETag("5"));
 

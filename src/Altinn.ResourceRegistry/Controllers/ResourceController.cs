@@ -1,6 +1,9 @@
-﻿using Altinn.Authorization.ProblemDetails;
+using Altinn.Authorization.ProblemDetails;
+using Altinn.Platform.Events.Formatters
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Errors;
+using Altinn.Platform.Events.Formatters;
+using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
@@ -54,7 +57,7 @@ namespace Altinn.ResourceRegistry.Controllers
             bool includeAltinn2 = true,
             CancellationToken cancellationToken = default)
         {
-            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, cancellationToken);
+            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, includeExpired: false,  cancellationToken);
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         [HttpGet("export")]
-        [Produces("application/xml+rdf")]
+        [Produces(RdfOutputFormatter.RDFMimeType)]
         public async Task<string> Export(CancellationToken cancellationToken)
         {
             ResourceSearch search = new ResourceSearch();

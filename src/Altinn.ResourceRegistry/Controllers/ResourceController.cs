@@ -445,7 +445,7 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             updatedResourceSubjects.RemoveAt(limit);
-            UpdatedResourceSubject last = updatedResourceSubjects.Last();
+            UpdatedResourceSubject last = updatedResourceSubjects[^1];
 
             string nextUrl = Url.Link("updated", new
             {

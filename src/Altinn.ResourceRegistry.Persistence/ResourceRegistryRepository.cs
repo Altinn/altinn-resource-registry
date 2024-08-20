@@ -401,7 +401,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             await using (var updateCmd = new NpgsqlCommand(softDeletePairSQL, conn, tx))
             {
                 updateCmd.Parameters.AddWithValue("resourceurn", resourceSubjects.Resource.Urn);
-                updateCmd.Parameters.AddWithValue("subjecturns", NpgsqlDbType.Array, subjectUrnsToDelete);
+                updateCmd.Parameters.AddWithValue("subjecturns", NpgsqlDbType.Array | NpgsqlDbType.Text, subjectUrnsToDelete);
 
                 await updateCmd.PrepareAsync(cancellationToken);
                 await updateCmd.ExecuteNonQueryAsync(cancellationToken);
@@ -421,9 +421,9 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             resourceCmd.Parameters.AddWithValue("resourcevalue", NpgsqlDbType.Text, resourceSubjects.Resource.Value);
             resourceCmd.Parameters.AddWithValue("resourceurn", NpgsqlDbType.Text, resourceSubjects.Resource.Urn);
             resourceCmd.Parameters.AddWithValue("owner", NpgsqlDbType.Text, resourceSubjects.ResourceOwner);
-            resourceCmd.Parameters.AddWithValue("subjecttype", NpgsqlDbType.Array, subjectTypes);
-            resourceCmd.Parameters.AddWithValue("subjectvalue", NpgsqlDbType.Array, subjectValues);
-            resourceCmd.Parameters.AddWithValue("subjecturn", NpgsqlDbType.Array, subjectUrns);
+            resourceCmd.Parameters.AddWithValue("subjecttype", NpgsqlDbType.Array | NpgsqlDbType.Text, subjectTypes);
+            resourceCmd.Parameters.AddWithValue("subjectvalue", NpgsqlDbType.Array | NpgsqlDbType.Text, subjectValues);
+            resourceCmd.Parameters.AddWithValue("subjecturn", NpgsqlDbType.Array | NpgsqlDbType.Text, subjectUrns);
 
             await resourceCmd.PrepareAsync(cancellationToken);
             await resourceCmd.ExecuteNonQueryAsync(cancellationToken);

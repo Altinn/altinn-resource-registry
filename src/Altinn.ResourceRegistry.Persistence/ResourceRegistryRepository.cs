@@ -417,7 +417,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         await using (var resourceCmd = new NpgsqlCommand(insertOrUpdatePairsSQL, conn, tx))
         {
-            resourceCmd.Parameters.AddWithValue("resourcetype",NpgsqlDbType.Text, resourceSubjects.Resource.Type);
+            resourceCmd.Parameters.AddWithValue("resourcetype", NpgsqlDbType.Text, resourceSubjects.Resource.Type);
             resourceCmd.Parameters.AddWithValue("resourcevalue", NpgsqlDbType.Text, resourceSubjects.Resource.Value);
             resourceCmd.Parameters.AddWithValue("resourceurn", NpgsqlDbType.Text, resourceSubjects.Resource.Urn);
             resourceCmd.Parameters.AddWithValue("owner", NpgsqlDbType.Text, resourceSubjects.ResourceOwner);

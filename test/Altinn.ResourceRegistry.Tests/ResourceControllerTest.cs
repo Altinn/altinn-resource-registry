@@ -8,6 +8,7 @@ using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Models;
 using System.Net.Http.Json;
+using Altinn.ResourceRegistry.Controllers;
 using Altinn.ResourceRegistry.TestUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Altinn.ResourceRegistry.Core;
@@ -1810,14 +1811,16 @@ namespace Altinn.ResourceRegistry.Tests
             Assert.NotNull(subjectResources);
             Assert.NotNull(subjectResources.Items.FirstOrDefault(r => r.ResourceUrn.ToString().Contains("altinn")));
             Assert.NotNull(subjectResources.Links.Next);
-            Assert.Contains("?since=2024-02-01T00%3A00%3A00.0000000%2B00%3A00&skipPast=urn%3Aaltinn%3Aresource%3Asecond,urn%3Aaltinn%3Arolecode%3Afoobar&limit=2", subjectResources.Links.Next);
+            var token = Opaque.Create(new UpdatedResourceSubjectsContinuationToken(subjectResources.Items.Last().ResourceUrn, subjectResources.Items.Last().SubjectUrn));
+            Assert.Contains($"?since=2024-02-01T00%3A00%3A00.0000000%2B00%3A00&token={token}&limit=2", subjectResources.Links.Next);
         }
 
         [Fact]
         public async Task GetUpdatedResourceSubjects_WithSkipPast()
         {
             var client = CreateClient();
-            string requestUri = "resourceregistry/api/v1/resource/updated/?Since=2024-02-01T00:00:00.0000000%2B00:00&SkipPast=urn:altinn:resource:second,urn:altinn:rolecode:foobar&limit=2";
+            var token = Opaque.Create(new UpdatedResourceSubjectsContinuationToken(new Uri("urn:altinn:resource:second"), new Uri("urn:altinn:rolecode:foobar")));
+            string requestUri = $"resourceregistry/api/v1/resource/updated/?Since=2024-02-01T00:00:00.0000000%2B00:00&token={token}&limit=2";
 
             HttpResponseMessage response = await client.GetAsync(requestUri);
             Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
@@ -1859,7 +1862,7 @@ namespace Altinn.ResourceRegistry.Tests
         public async Task GetUpdatedResourceSubjects_WithInvalidSkipPast()
         {
             var client = CreateClient();
-            string requestUri = "resourceregistry/api/v1/resource/updated/?skippast=xxx";
+            string requestUri = "resourceregistry/api/v1/resource/updated/?token=xxx";
 
             HttpResponseMessage response = await client.GetAsync(requestUri);
             ValidationProblemDetails? errordetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();

@@ -10,6 +10,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using Altinn.ResourceRegistry.Controllers;
 using AngleSharp.Text;
 using VDS.RDF;
 
@@ -174,7 +175,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Single(subjectResources.Items);
         Assert.NotNull(subjectResources.Links.Next);
         Assert.Contains("?since=20", subjectResources.Links.Next);
-        Assert.Contains("&skipPast=urn%3Aaltinn%3Aresource%3Afoo,urn%3Aaltinn%3Arolecode%3Ar001&limit=1", subjectResources.Links.Next);
+        var token = Opaque.Create(new UpdatedResourceSubjectsContinuationToken(subjectResources.Items.Last().ResourceUrn, subjectResources.Items.Last().SubjectUrn));
+        Assert.Contains($"&token={token}&limit=1", subjectResources.Links.Next);
 
         Assert.True(Uri.TryCreate(subjectResources.Links.Next, UriKind.Absolute, out Uri? nextUri));
         Assert.NotNull(nextUri);

@@ -406,13 +406,13 @@ namespace Altinn.ResourceRegistry.Controllers
         /// Gets the updated resources since the provided last updated time (inclusive)
         /// </summary>
         /// <param name="since">Date time used for filtering</param>
-        /// <param name="skipPast">Optional ResourceUrn,SubjectUrn pair to skip past on rows matching "since" exactly</param>
+        /// <param name="token">Opaque continuation token containing ResourceUrn,SubjectUrn pair to skip past on rows matching "since" exactly</param>
         /// <param name="limit">Maximum number of pairs returned (1-1000, default: 1000)</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>A list of updated subject/resource pairs since provided timestamp (inclusive)</returns>
         [HttpGet("updated", Name = "updated")]
         [Produces("application/json")]
-        public async Task<ActionResult<Paginated<UpdatedResourceSubject>>> UpdatedResourceSubjects([FromQuery] DateTimeOffset since, [FromQuery] string skipPast, [FromQuery] int limit = 1000, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<Paginated<UpdatedResourceSubject>>> UpdatedResourceSubjects([FromQuery] DateTimeOffset since, [FromQuery(Name = "token")] Opaque<UpdatedResourceSubjectsContinuationToken> token = null, [FromQuery] int limit = 1000, CancellationToken cancellationToken = default)
         {
             if (limit is < 1 or > 1000)
             {
@@ -423,17 +423,9 @@ namespace Altinn.ResourceRegistry.Controllers
 
             (Uri ResourceUrn, Uri SubjectUrn)? skipPastPair = null;
 
-            if (!string.IsNullOrEmpty(skipPast))
+            if (token is not null)
             {
-                string[] pair = skipPast.Split(',');
-                if (pair.Length != 2 || !Uri.TryCreate(pair[0], UriKind.Absolute, out Uri resourceUrn) || !Uri.TryCreate(pair[1], UriKind.Absolute, out Uri subjectUrn))
-                {
-                    return new AltinnValidationProblemDetails([
-                        ValidationErrors.UpdatedResourceSubjects_InvalidSkipPast.ToValidationError(),
-                    ]).ToActionResult();
-                }
-
-                skipPastPair = (resourceUrn, subjectUrn);
+                skipPastPair = (token.Value.ResourceUrn, token.Value.SubjectUrn);
             }
 
             // Use maxItems + 1 in order to determine if there are more items to fetch
@@ -450,7 +442,7 @@ namespace Altinn.ResourceRegistry.Controllers
             string nextUrl = Url.Link("updated", new
             {
                 since = last.UpdatedAt.ToString("O"),
-                skipPast = $"{last.ResourceUrn},{last.SubjectUrn}",
+                token = Opaque.Create(new UpdatedResourceSubjectsContinuationToken(last.ResourceUrn, last.SubjectUrn)),
                 limit
             });
 
@@ -478,4 +470,13 @@ namespace Altinn.ResourceRegistry.Controllers
             }
         }
     }
+
+    /// <summary>
+    /// Continuation token for updated resource subjects. Used with "since" value to serve
+    /// as tiebreaker when paginating over resource subjects having the same "updatedAt" value
+    /// split across pages
+    /// </summary>
+    /// <param name="ResourceUrn">The resourceUrn.</param>
+    /// <param name="SubjectUrn">The subjectUrn.</param>
+    public record UpdatedResourceSubjectsContinuationToken(Uri ResourceUrn, Uri SubjectUrn);
 }

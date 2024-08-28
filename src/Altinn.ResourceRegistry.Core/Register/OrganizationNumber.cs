@@ -15,7 +15,7 @@ namespace Altinn.ResourceRegistry.Core.Register;
 /// </summary>
 [JsonConverter(typeof(OrganizationNumber.JsonConverter))]
 [DebuggerDisplay("{_value}")]
-public class OrganizationNumber
+public sealed class OrganizationNumber
     : IParsable<OrganizationNumber>
     , ISpanParsable<OrganizationNumber>
     , IFormattable

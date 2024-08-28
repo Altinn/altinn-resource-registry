@@ -43,7 +43,7 @@ public class OrganizationNumber
     public static OrganizationNumber Parse(string s, IFormatProvider? provider)
         => TryParse(s, provider, out var result)
         ? result
-        : throw new FormatException("Invalid SSN");
+        : throw new FormatException("Invalid organization number");
 
     /// <inheritdoc cref="ISpanParsable{TSelf}.Parse(ReadOnlySpan{char}, IFormatProvider?)"/>
     public static OrganizationNumber Parse(ReadOnlySpan<char> s)
@@ -53,7 +53,7 @@ public class OrganizationNumber
     public static OrganizationNumber Parse(ReadOnlySpan<char> s, IFormatProvider? provider)
         => TryParse(s, provider, out var result)
         ? result
-        : throw new FormatException("Invalid SSN");
+        : throw new FormatException("Invalid organization number");
 
     /// <inheritdoc/>
     public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out OrganizationNumber result)

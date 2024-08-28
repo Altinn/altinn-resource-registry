@@ -32,7 +32,7 @@ internal class OwnedResourceAuthorizationHandler
     private Task HandleRequirementAsync(AuthorizationHandlerContext context, UserOwnsResourceRequirement requirement, HttpContext httpContext)
     {
         var providers = httpContext.GetEndpoint()?.Metadata.GetOrderedMetadata<IResourceOwnerProvider<HttpContext>>();
-        if (providers == null)
+        if (providers is null)
         {
             return Task.CompletedTask;
         }

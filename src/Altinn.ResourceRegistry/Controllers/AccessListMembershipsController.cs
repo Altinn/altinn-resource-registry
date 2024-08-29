@@ -24,7 +24,6 @@ namespace Altinn.ResourceRegistry.Controllers;
 [Route("resourceregistry/api/v1/access-lists/memberships")]
 [NotImplementedFilter]
 [ResourceOwnerFromRouteValue("owner")]
-[Authorize(Policy = AuthzConstants.POLICY_ACCESS_LIST_READ)]
 public class AccessListMembershipsController
     : ControllerBase
 {

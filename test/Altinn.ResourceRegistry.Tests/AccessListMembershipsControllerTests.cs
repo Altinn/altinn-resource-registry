@@ -26,7 +26,7 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
     {
         var client = CreateClient();
 
-        var token = PrincipalUtil.GetOrgToken("skd", "974761076", $"{AuthzConstants.SCOPE_RESOURCE_ADMIN}");
+        var token = PrincipalUtil.GetOrgToken("skd", "974761076", $"{AuthzConstants.SCOPE_ACCESS_LIST_PDP}");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         return client;

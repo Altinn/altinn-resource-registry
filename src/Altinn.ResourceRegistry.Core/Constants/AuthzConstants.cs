@@ -68,7 +68,7 @@
         /// <summary>
         /// Scope for access list info for PDP
         /// </summary>
-        public const string SCOPE_ACCESS_LIST_PDP = "altinn:resourceregistry/pdp.accesslist.read";
+        public const string SCOPE_ACCESS_LIST_PDP = "altinn:resourceregistry/pdp:accesslist.read";
 
         /// <summary>
         /// Claim for scopes from maskinporten token

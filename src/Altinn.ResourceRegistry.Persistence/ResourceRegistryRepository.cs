@@ -173,7 +173,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Result<CompetentAuthorityReference?>> GetResourceOwner(string id, CancellationToken cancellationToken = default)
+    public async Task<Result<CompetentAuthorityReference>> GetResourceOwner(string id, CancellationToken cancellationToken = default)
     {
         const string QUERY =
             /*strpsql*/"""

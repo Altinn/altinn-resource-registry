@@ -587,16 +587,16 @@ public class AccessListsController
     /// </summary>
     /// <param name="Version">The access list version.</param>
     /// <param name="ContinueFrom">What resource identifier to continue from.</param>
-    public record AccessListResourceConnectionContinuationToken(ulong Version, string ContinueFrom);
+    public sealed record AccessListResourceConnectionContinuationToken(ulong Version, string ContinueFrom);
 
     /// <summary>
     /// Continuation token for access list members.
     /// </summary>
     /// <param name="Version">The access list version.</param>
     /// <param name="ContinueFrom">What member to continue from.</param>
-    public record AccessListMembersContinuationToken(ulong Version, Guid ContinueFrom);
+    public sealed record AccessListMembersContinuationToken(ulong Version, Guid ContinueFrom);
 
-    private record ResourceOwner(CompetentAuthorityReference Owner)
+    private sealed record ResourceOwner(CompetentAuthorityReference Owner)
         : IHasResourceOwner
     {
         string IHasResourceOwner.ResourceOwner => Owner.Orgcode;

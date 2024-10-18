@@ -11,7 +11,7 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// The Subject target in rule
         /// </summary>
-        public List<UrnJsonTypeValue> Subject { get; set; }
+        public IReadOnlyList<UrnJsonTypeValue> Subject { get; set; }
 
         /// <summary>
         /// Defines the action that the subject is allowed to perform on the resource
@@ -21,6 +21,6 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// The Resource attributes that identy one unique resource 
         /// </summary>
-        public List<UrnJsonTypeValue> Resource { get; set; }    
+        public IReadOnlyList<UrnJsonTypeValue> Resource { get; set; }    
     }
 }

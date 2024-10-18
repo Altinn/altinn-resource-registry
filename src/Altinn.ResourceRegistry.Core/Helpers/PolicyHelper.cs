@@ -226,11 +226,13 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 foreach (XacmlAllOf allOfAction in anyOfActions.AllOf)
                 {
                     foreach (XacmlAllOf allOfResource in anyOfResourcs.AllOf)
-                    {                         
-                        PolicyRule policyRule = new PolicyRule();
-                        policyRule.Subject = GetMatchValuesFromAllOff(allOfSubject);
-                        policyRule.Action = GetMatchValueFromAllOff(allOfAction);
-                        policyRule.Resource = GetMatchValuesFromAllOff(allOfResource);
+                    {
+                        PolicyRule policyRule = new PolicyRule()
+                        {
+                            Subject = GetMatchValuesFromAllOff(allOfSubject),
+                            Action = GetMatchValueFromAllOff(allOfAction),
+                            Resource = GetMatchValuesFromAllOff(allOfResource)
+                        };
                         policyRules.Add(policyRule);
                     }
                 }

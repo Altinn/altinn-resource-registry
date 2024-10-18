@@ -9,6 +9,7 @@ using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Extensions;
 using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Utils;
+using Altinn.Urn;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;

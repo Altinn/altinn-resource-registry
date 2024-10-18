@@ -242,14 +242,14 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// <summary>
         /// Convert all matches in a allOf to a list of KeyValueUrn
         /// </summary>
-        private static List<AttributeMatchV3> GetMatchValuesFromAllOff(XacmlAllOf allOfs)
+        private static List<UrnJsonTypeValue> GetMatchValuesFromAllOff(XacmlAllOf allOfs)
         {
-            List<AttributeMatchV3> subjectMatches = new List<AttributeMatchV3>();
+            List<UrnJsonTypeValue> subjectMatches = new List<UrnJsonTypeValue>();
 
             foreach (XacmlMatch match in allOfs.Matches)
             {
-                subjectMatches.Add(new AttributeMatchV3(match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant(), match.AttributeValue.Value));
-               }
+                subjectMatches.Add(KeyValueUrn.Create($"{match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant()}: {match.AttributeValue.Value}", match.AttributeDesignator.AttributeId.ToString().Length +1));
+            }
 
             return subjectMatches;
         }
@@ -257,7 +257,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// <summary>
         /// Convert all matches in a allOf to a list of KeyValueUrn
         /// </summary>
-        private static AttributeMatchV3 GetMatchValueFromAllOff(XacmlAllOf allOfs)
+        private static UrnJsonTypeValue GetMatchValueFromAllOff(XacmlAllOf allOfs)
         {
             if (allOfs.Matches.Count > 1)
             {
@@ -266,7 +266,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             foreach (XacmlMatch match in allOfs.Matches)
             {
-                return new AttributeMatchV3(match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant(), match.AttributeValue.Value);
+                return KeyValueUrn.Create($"{match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant()}: {match.AttributeValue.Value}", match.AttributeDesignator.AttributeId.ToString().Length + 1);
             }
 
             throw new ArgumentException("No match found in allOf for action category");

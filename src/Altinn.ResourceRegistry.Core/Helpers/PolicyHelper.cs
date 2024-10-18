@@ -1,4 +1,5 @@
 using System.Buffers;
+using System.Data;
 using System.Xml;
 using Altinn.Authorization.ABAC.Constants;
 using Altinn.Authorization.ABAC.Utils;
@@ -6,6 +7,8 @@ using Altinn.Authorization.ABAC.Xacml;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
+using Altinn.Urn;
+using Altinn.Urn.Json;
 using Nerdbank.Streams;
 using static Altinn.ResourceRegistry.Core.Constants.AltinnXacmlConstants;
 
@@ -151,6 +154,122 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             }
 
             return $"{org.AsFileName()}/{app.AsFileName()}/policy.xml";
+        }
+
+        /// <summary>
+        /// Converts a XACML policy to a list of PolicyRule
+        /// </summary>
+        public static List<PolicyRule> ConvertToPolicyRules(XacmlPolicy xacmlPolicy)
+        {
+            List<PolicyRule> rules = new List<PolicyRule>();
+            foreach (XacmlRule xacmlRule in xacmlPolicy.Rules)
+            {
+                rules.AddRange(FlattenXacmlRule(xacmlRule));    
+            }
+
+            return rules;
+        }
+
+        /// <summary>
+        /// This method will flatten the XACML rule into a list of PolicyRule where each PolicyRule contains a list of KeyValueUrn for subject, action and resource
+        /// The list will cotain duplicates if there is duplicate rules in XACML.
+        /// 
+        /// The code also enforce some extra rules:
+        /// For each of the three categories (subject, action, resource) they need to be in a separate AnyOf element in the Target element.
+        /// Action can only be one match in a AllOf element.(you cant do both read and write at the same time)
+        /// Subject have multiple matches in a AllOf element, but it is not used in the current implementation in Altinn. (requiring a user to have multiple roles to access a resource)
+        /// A resource can have multiple matched in a AllOf element to be able to match on multiple attributes. (app, task1 , task2 etc)
+        /// </summary>
+        private static List<PolicyRule> FlattenXacmlRule(XacmlRule xacmlRule)
+        {
+            XacmlAnyOf anyOfSubjects = null;
+            XacmlAnyOf anyOfActions = null;
+            XacmlAnyOf anyOfResourcs = null;
+
+            foreach (XacmlAnyOf anyOf in xacmlRule.Target.AnyOf)
+            {
+                string category = null;
+
+                foreach (XacmlAllOf allOf in anyOf.AllOf)
+                {
+                    foreach (XacmlMatch match in allOf.Matches)
+                    {
+                        if (category == null)
+                        {
+                            category = match.AttributeDesignator.Category.ToString();
+                        }
+                        else if (!category.Equals(match.AttributeDesignator.Category.ToString()))
+                        {
+                            throw new ArgumentException("All matches in a all must have the same category ruleId " + xacmlRule.RuleId);
+                        }
+                    }
+                }
+
+                if (category.Equals(XacmlConstants.MatchAttributeCategory.Action))
+                {
+                    anyOfActions = anyOf;
+                }
+                else if (category.Equals(XacmlConstants.MatchAttributeCategory.Subject))
+                {
+                    anyOfSubjects = anyOf;
+                }
+                else if (category.Equals(XacmlConstants.MatchAttributeCategory.Resource))
+                {
+                    anyOfResourcs = anyOf;
+                }
+            }
+
+            List<PolicyRule> policyRules = new List<PolicyRule>();
+
+            foreach (XacmlAllOf allOfSubject in anyOfSubjects.AllOf)
+            {
+                foreach (XacmlAllOf allOfAction in anyOfActions.AllOf)
+                {
+                    foreach (XacmlAllOf allOfResource in anyOfResourcs.AllOf)
+                    {                         
+                        PolicyRule policyRule = new PolicyRule();
+                        policyRule.Subject = GetMatchValuesFromAllOff(allOfSubject);
+                        policyRule.Action = GetMatchValueFromAllOff(allOfAction);
+                        policyRule.Resource = GetMatchValuesFromAllOff(allOfResource);
+                        policyRules.Add(policyRule);
+                    }
+                }
+            }
+
+            return policyRules;
+        }
+
+        /// <summary>
+        /// Convert all matches in a allOf to a list of KeyValueUrn
+        /// </summary>
+        private static List<AttributeMatchV3> GetMatchValuesFromAllOff(XacmlAllOf allOfs)
+        {
+            List<AttributeMatchV3> subjectMatches = new List<AttributeMatchV3>();
+
+            foreach (XacmlMatch match in allOfs.Matches)
+            {
+                subjectMatches.Add(new AttributeMatchV3(match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant(), match.AttributeValue.Value));
+               }
+
+            return subjectMatches;
+        }
+
+        /// <summary>
+        /// Convert all matches in a allOf to a list of KeyValueUrn
+        /// </summary>
+        private static AttributeMatchV3 GetMatchValueFromAllOff(XacmlAllOf allOfs)
+        {
+            if (allOfs.Matches.Count > 1)
+            {
+                throw new ArgumentException("Only one match is allowed in a allOf for action category");
+            }
+
+            foreach (XacmlMatch match in allOfs.Matches)
+            {
+                return new AttributeMatchV3(match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant(), match.AttributeValue.Value);
+            }
+
+            throw new ArgumentException("No match found in allOf for action category");
         }
 
         private static AttributeMatch GetActionValueFromRule(XacmlRule rule)

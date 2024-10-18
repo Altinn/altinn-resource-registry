@@ -287,6 +287,24 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
+        /// Returns 
+        /// </summary>
+        [HttpGet("{id}/policy/rules")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        public async Task<ActionResult<List<PolicyRule>>> GetFlattenRules(string id, CancellationToken cancellationToken = default)
+        {
+            List<PolicyRule> policyRule = await _resourceRegistry.GetFlattenPolicyRules(id, cancellationToken);
+
+            if (policyRule != null)
+            {
+               return Ok(policyRule);
+            }
+
+            return new NotFoundResult();
+        }
+
+        /// <summary>
         /// Returns a list of Subject resources. For each which subject and then a list of all resources that are connected.
         /// </summary>
         /// <param name="subjects">List of subjects for resource information is needed</param>

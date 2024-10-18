@@ -92,6 +92,14 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         Task<Stream> GetPolicy(string resourceId, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Returns a list of flatten policy rules for a every unqie combinatiotion of subject, action, 
+        /// </summary>
+        /// <param name="resourceId">The resourceID. Support both App and resource</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns></returns>
+        Task<List<PolicyRule>> GetFlattenPolicyRules(string resourceId, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Updates Access management with changes in recource registry
         /// </summary>
         /// <param name="serviceResource">The resource to add to access management</param>

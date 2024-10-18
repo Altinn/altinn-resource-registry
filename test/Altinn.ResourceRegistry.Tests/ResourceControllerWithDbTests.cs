@@ -292,6 +292,31 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Equal(12, subjectMatch.Items.Count());
     }
 
+    /// <summary>
+    /// Scenario: Get Policy rules for RRH innrapportering
+    /// </summary>
+    [Fact]
+    public async Task GetpolicyRulesRRH()
+    {
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v1/resource/app_brg_rrh-innrapportering/policy/rules";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        string content = await response.Content.ReadAsStringAsync();
+        List<PolicyRule>? subjectMatch = await response.Content.ReadFromJsonAsync<List<PolicyRule>>();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(subjectMatch);
+        Assert.Equal(238, subjectMatch.Count());
+    }
+
 
     /// <summary>
     /// Scenario: Reload subject resources for rrh-innlevering. App os imported to registry. Expects 12 subjects

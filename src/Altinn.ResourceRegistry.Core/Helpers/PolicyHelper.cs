@@ -171,6 +171,38 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         }
 
         /// <summary>
+        /// Returns a list of rights for a resource. A right is a combination of resource and action. The response list the subjects in policy that is granted the right.
+        /// Response is grouped by right.
+        /// </summary>
+        public static List<PolicyRights> ConvertToPolicyRight(XacmlPolicy policy)
+        {
+            List<PolicyRule> policyRules = ConvertToPolicyRules(policy);
+
+            Dictionary<string, PolicyRights> resourceActions = new Dictionary<string, PolicyRights>();
+
+            foreach (PolicyRule rule in policyRules)
+            {
+                PolicyRights policyResourceAction = new PolicyRights()
+                { 
+                    Action = rule.Action, 
+                    Resource = rule.Resource,
+                    Subjects = new List<PolicySubject> { new PolicySubject { SubjectAttributes = rule.Subject } }
+                };
+                
+                if (resourceActions.ContainsKey(policyResourceAction.RightKey()))
+                {
+                    resourceActions[policyResourceAction.RightKey()].Subjects.AddRange(policyResourceAction.Subjects);
+                }
+                else
+                {
+                    resourceActions.Add(policyResourceAction.RightKey(), policyResourceAction);
+                }
+            }
+
+            return resourceActions.Values.ToList();
+        }
+
+        /// <summary>
         /// This method will flatten the XACML rule into a list of PolicyRule where each PolicyRule contains a list of KeyValueUrn for subject, action and resource
         /// The list will cotain duplicates if there is duplicate rules in XACML.
         /// 
@@ -250,7 +282,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             foreach (XacmlMatch match in allOfs.Matches)
             {
-                subjectMatches.Add(KeyValueUrn.Create($"{match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant()}: {match.AttributeValue.Value}", match.AttributeDesignator.AttributeId.ToString().Length +1));
+                subjectMatches.Add(KeyValueUrn.Create($"{match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant()}:{match.AttributeValue.Value}", match.AttributeDesignator.AttributeId.ToString().Length + 1));
             }
 
             return subjectMatches;
@@ -268,7 +300,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             foreach (XacmlMatch match in allOfs.Matches)
             {
-                return KeyValueUrn.Create($"{match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant()}: {match.AttributeValue.Value}", match.AttributeDesignator.AttributeId.ToString().Length + 1);
+                return KeyValueUrn.Create($"{match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant()}:{match.AttributeValue.Value}", match.AttributeDesignator.AttributeId.ToString().Length + 1);
             }
 
             throw new ArgumentException("No match found in allOf for action category");
@@ -313,5 +345,6 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             return result;
         }
+       
     }
 }

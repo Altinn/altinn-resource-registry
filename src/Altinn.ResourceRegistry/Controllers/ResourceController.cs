@@ -306,6 +306,25 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
+        /// Returns a list of rights for a resource. A right is a combination of resource and action. The response list the subjects in policy that is granted the right.
+        /// Response is grouped by right.
+        /// </summary>
+        [HttpGet("{id}/policy/rights")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        public async Task<ActionResult<List<PolicyRights>>> GetRights(string id, CancellationToken cancellationToken = default)
+        {
+            List<PolicyRights> resourceAction = await _resourceRegistry.GetPolicyRights(id, cancellationToken);
+
+            if (resourceAction != null)
+            {
+                return Ok(resourceAction);
+            }
+
+            return new NotFoundResult();
+        }
+
+        /// <summary>
         /// Returns a list of Subject resources. For each which subject and then a list of all resources that are connected.
         /// </summary>
         /// <param name="subjects">List of subjects for resource information is needed</param>

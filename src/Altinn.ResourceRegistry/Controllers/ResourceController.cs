@@ -9,6 +9,7 @@ using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Extensions;
 using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Utils;
+using Altinn.Urn;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -284,6 +285,43 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             return Paginated.Create(resourceSubjects[0].Subjects, null);
+        }
+
+        /// <summary>
+        /// Returns 
+        /// </summary>
+        [HttpGet("{id}/policy/rules")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        public async Task<ActionResult<List<PolicyRule>>> GetFlattenRules(string id, CancellationToken cancellationToken = default)
+        {
+            List<PolicyRule> policyRule = await _resourceRegistry.GetFlattenPolicyRules(id, cancellationToken);
+
+            if (policyRule != null)
+            {
+               return Ok(policyRule);
+            }
+
+            return new NotFoundResult();
+        }
+
+        /// <summary>
+        /// Returns a list of rights for a resource. A right is a combination of resource and action. The response list the subjects in policy that is granted the right.
+        /// Response is grouped by right.
+        /// </summary>
+        [HttpGet("{id}/policy/rights")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        public async Task<ActionResult<List<PolicyRights>>> GetRights(string id, CancellationToken cancellationToken = default)
+        {
+            List<PolicyRights> resourceAction = await _resourceRegistry.GetPolicyRights(id, cancellationToken);
+
+            if (resourceAction != null)
+            {
+                return Ok(resourceAction);
+            }
+
+            return new NotFoundResult();
         }
 
         /// <summary>

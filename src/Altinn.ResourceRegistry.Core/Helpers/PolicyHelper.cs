@@ -164,7 +164,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             List<PolicyRule> rules = new List<PolicyRule>();
             foreach (XacmlRule xacmlRule in xacmlPolicy.Rules)
             {
-                rules.AddRange(FlattenXacmlRule(xacmlRule));    
+                FlattenXacmlRule(xacmlRule, rules);    
             }
 
             return rules;
@@ -212,7 +212,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// Subject have multiple matches in a AllOf element, but it is not used in the current implementation in Altinn. (requiring a user to have multiple roles to access a resource)
         /// A resource can have multiple matched in a AllOf element to be able to match on multiple attributes. (app, task1 , task2 etc)
         /// </summary>
-        private static List<PolicyRule> FlattenXacmlRule(XacmlRule xacmlRule)
+        private static void  FlattenXacmlRule(XacmlRule xacmlRule, List<PolicyRule> policyRules)
         {
             XacmlAnyOf anyOfSubjects = null;
             XacmlAnyOf anyOfActions = null;
@@ -251,8 +251,6 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 }
             }
 
-            List<PolicyRule> policyRules = new List<PolicyRule>();
-
             foreach (XacmlAllOf allOfSubject in anyOfSubjects.AllOf)
             {
                 foreach (XacmlAllOf allOfAction in anyOfActions.AllOf)
@@ -269,8 +267,6 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                     }
                 }
             }
-
-            return policyRules;
         }
 
         /// <summary>
@@ -300,7 +296,8 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             foreach (XacmlMatch match in allOfs.Matches)
             {
-                return KeyValueUrn.Create($"{match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant()}:{match.AttributeValue.Value}", match.AttributeDesignator.AttributeId.ToString().Length + 1);
+                string matchId = match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant();
+                return KeyValueUrn.Create($"{matchId}:{match.AttributeValue.Value}", matchId.Length + 1);
             }
 
             throw new ArgumentException("No match found in allOf for action category");

@@ -289,7 +289,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);
-        Assert.Equal(12, subjectMatch.Items.Count());
+        Assert.Equal(13, subjectMatch.Items.Count());
     }
 
     /// <summary>
@@ -384,7 +384,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);
-        Assert.Equal(12, subjectMatch.Items.Count());
+        Assert.Equal(13, subjectMatch.Items.Count());
     }
 
 

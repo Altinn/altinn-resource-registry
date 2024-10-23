@@ -1,5 +1,7 @@
 ﻿using Altinn.Urn;
 using Altinn.Urn.Json;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Altinn.ResourceRegistry.Core.Models
 {
@@ -31,12 +33,26 @@ namespace Altinn.ResourceRegistry.Core.Models
             get
             {
                 string key = Action.Value.ValueSpan.ToString().ToLowerInvariant();
-                foreach (var res in Resource.OrderBy(x => x.Value.ToString().ToLowerInvariant()))
+                string shortKey = key;
+                foreach (var res in Resource.OrderBy(x => x.Value.ToString()))
                 {
-                    key += ";" + res.Value.ToString().ToLowerInvariant();
+                    key += ";" + res.Value.ToString();
+                    shortKey += ";" + res.Value.ValueSpan.ToString();
                 }
 
-                return key;
+                using (MD5 md5 = MD5.Create())
+                {
+                    byte[] inputBytes = Encoding.UTF8.GetBytes(key);
+                    byte[] hashBytes = md5.ComputeHash(inputBytes);
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < hashBytes.Length; i++)
+                    {
+                        sb.Append(hashBytes[i].ToString("x2"));
+                    }
+
+                    return shortKey + ";" + sb.ToString();
+                }
+               
             }
         }
 
@@ -49,7 +65,7 @@ namespace Altinn.ResourceRegistry.Core.Models
             get
             {
                 HashSet<string> subjectTypes = new HashSet<string>();
-       
+
                 foreach (var subject in Subjects)
                 {
                     foreach (var attr in subject.SubjectAttributes)

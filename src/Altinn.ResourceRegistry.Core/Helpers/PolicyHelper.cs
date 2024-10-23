@@ -189,13 +189,13 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                     Subjects = new List<PolicySubject> { new PolicySubject { SubjectAttributes = rule.Subject } }
                 };
                 
-                if (resourceActions.ContainsKey(policyResourceAction.RightKey()))
+                if (resourceActions.ContainsKey(policyResourceAction.RightKey))
                 {
-                    resourceActions[policyResourceAction.RightKey()].Subjects.AddRange(policyResourceAction.Subjects);
+                    resourceActions[policyResourceAction.RightKey].Subjects.AddRange(policyResourceAction.Subjects);
                 }
                 else
                 {
-                    resourceActions.Add(policyResourceAction.RightKey(), policyResourceAction);
+                    resourceActions.Add(policyResourceAction.RightKey, policyResourceAction);
                 }
             }
 

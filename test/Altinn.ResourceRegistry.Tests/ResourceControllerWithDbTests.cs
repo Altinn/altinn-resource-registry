@@ -340,14 +340,14 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(policyRights);
         Assert.Equal(18, policyRights.Count());
-        Assert.Equal(2, policyRights[0].GetSubjectTypes().Count());
-        Assert.Equal("urn:altinn:rolecode", policyRights[0].GetSubjectTypes()[0]);
-        Assert.Equal("urn:altinn:org", policyRights[0].GetSubjectTypes()[1]);
-        Assert.Equal("instantiate;urn:altinn:app:rrh-innrapportering;urn:altinn:org:brg", policyRights[0].RightKey());
-        Assert.Equal(2, policyRights[1].GetSubjectTypes().Count());
-        Assert.Equal("urn:altinn:rolecode", policyRights[1].GetSubjectTypes()[0]);
-        Assert.Equal("urn:altinn:org", policyRights[1].GetSubjectTypes()[1]);
-        Assert.Equal("read;urn:altinn:app:rrh-innrapportering;urn:altinn:org:brg", policyRights[1].RightKey());
+        Assert.Equal(2, policyRights[0].SubjectTypes.Count());
+        Assert.Equal("urn:altinn:rolecode", policyRights[0].SubjectTypes[0]);
+        Assert.Equal("urn:altinn:org", policyRights[0].SubjectTypes[1]);
+        Assert.Equal("instantiate;urn:altinn:app:rrh-innrapportering;urn:altinn:org:brg", policyRights[0].RightKey);
+        Assert.Equal(2, policyRights[1].SubjectTypes.Count());
+        Assert.Equal("urn:altinn:rolecode", policyRights[1].SubjectTypes[0]);
+        Assert.Equal("urn:altinn:org", policyRights[1].SubjectTypes[1]);
+        Assert.Equal("read;urn:altinn:app:rrh-innrapportering;urn:altinn:org:brg", policyRights[1].RightKey);
     }
 
     /// <summary>

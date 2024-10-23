@@ -11,12 +11,12 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// Defines the action that the subject is allowed to perform on the resource
         /// </summary>
-        public required UrnJsonTypeValue Action { get; set; }
+        public required UrnJsonTypeValue Action { get; init; }
 
         /// <summary>
         /// The Resource attributes that identy one unique resource 
         /// </summary>
-        public required IReadOnlyList<UrnJsonTypeValue> Resource { get; set; }
+        public required IReadOnlyList<UrnJsonTypeValue> Resource { get; init; }
 
         /// <summary>
         /// List of subjects that is allowed to perform the action on the resource
@@ -44,24 +44,25 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// Returns a list of subject types that is allowed to perform the action on the resource
         /// IS used for filtering the 
         /// </summary>
-        public List<string> GetSubjectTypes()
+        public List<string> SubjectTypes
         {
-            List<string> subjectTypes = new List<string>();
-            foreach (var subject in Subjects)
+            get
             {
-                foreach (var attr in subject.SubjectAttributes)
+                HashSet<string> subjectTypes = new HashSet<string>();
+       
+                foreach (var subject in Subjects)
                 {
-                    if (!subjectTypes.Contains(attr.Value.PrefixSpan.ToString().ToLowerInvariant()))
+                    foreach (var attr in subject.SubjectAttributes)
                     {
-                        subjectTypes.Add(attr.Value.PrefixSpan.ToString().ToLowerInvariant());
+                        if (!subjectTypes.Contains(attr.Value.PrefixSpan.ToString().ToLowerInvariant()))
+                        {
+                            subjectTypes.Add(attr.Value.PrefixSpan.ToString().ToLowerInvariant());
+                        }
                     }
                 }
+
+                return subjectTypes.ToList();
             }
-
-            return subjectTypes;
         }
-
-        // Convert to property
-        public string RightKeyProperty => RightKey;
     }
 }

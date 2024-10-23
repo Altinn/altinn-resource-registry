@@ -293,13 +293,13 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpGet("{id}/policy/rules")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<ActionResult<List<PolicyRule>>> GetFlattenRules(string id, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<List<PolicyRuleDTO>>> GetFlattenRules(string id, CancellationToken cancellationToken = default)
         {
             List<PolicyRule> policyRule = await _resourceRegistry.GetFlattenPolicyRules(id, cancellationToken);
 
             if (policyRule != null)
             {
-                return Ok(policyRule);
+                return Ok(MapToDTO(policyRule));
             }
 
             return new NotFoundResult();
@@ -312,13 +312,13 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpGet("{id}/policy/rights")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<ActionResult<List<PolicyRights>>> GetRights(string id, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<List<PolicyRightsDTO>>> GetRights(string id, CancellationToken cancellationToken = default)
         {
             List<PolicyRights> resourceAction = await _resourceRegistry.GetPolicyRights(id, cancellationToken);
 
             if (resourceAction != null)
             {
-                return Ok(resourceAction);
+                return Ok(MapToDTO(resourceAction));
             }
 
             return new NotFoundResult();
@@ -486,27 +486,6 @@ namespace Altinn.ResourceRegistry.Controllers
 
             return Paginated.Create(updatedResourceSubjects, nextUrl);
         }
-    }
-
-    /// <summary>
-    /// ToDo: move to a separate class
-    /// </summary>
-    public class SuppressModelStateInvalidFilterAttribute : Attribute, IActionModelConvention
-    {
-        private const string FilterTypeName = "ModelStateInvalidFilterFactory";
-
-        /// <inheritdoc/>
-        public void Apply(ActionModel action)
-        {
-            for (var i = 0; i < action.Filters.Count; i++)
-            {
-                if (action.Filters[i].GetType().Name == FilterTypeName)
-                {
-                    action.Filters.RemoveAt(i);
-                    break;
-                }
-            }
-        }
 
         private static List<PolicyRightsDTO> MapToDTO(List<PolicyRights> policyRights)
         {
@@ -554,6 +533,51 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             return policySubjectsDTOs;
+        }
+
+        private static List<PolicyRuleDTO> MapToDTO(List<PolicyRule> policyRules)
+        {
+            if (policyRules == null)
+            {
+                return null;
+            }
+
+            List<PolicyRuleDTO> policyRulesDTOs = new List<PolicyRuleDTO>();
+
+            foreach (PolicyRule policyRule in policyRules)
+            {
+                PolicyRuleDTO policyRuleDTO = new PolicyRuleDTO
+                {
+                    Action = policyRule.Action,
+                    Resource = policyRule.Resource,
+                    Subject = policyRule.Subject
+                };
+
+                policyRulesDTOs.Add(policyRuleDTO);
+            }
+
+            return policyRulesDTOs;
+        }
+    }
+
+    /// <summary>
+    /// ToDo: move to a separate class
+    /// </summary>
+    public class SuppressModelStateInvalidFilterAttribute : Attribute, IActionModelConvention
+    {
+        private const string FilterTypeName = "ModelStateInvalidFilterFactory";
+
+        /// <inheritdoc/>
+        public void Apply(ActionModel action)
+        {
+            for (var i = 0; i < action.Filters.Count; i++)
+            {
+                if (action.Filters[i].GetType().Name == FilterTypeName)
+                {
+                    action.Filters.RemoveAt(i);
+                    break;
+                }
+            }
         }
     }
 

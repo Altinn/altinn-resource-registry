@@ -54,7 +54,7 @@ namespace Altinn.ResourceRegistry.Controllers
             bool includeAltinn2 = true,
             CancellationToken cancellationToken = default)
         {
-            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, includeExpired: false,  cancellationToken);
+            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, includeExpired: false, cancellationToken);
         }
 
         /// <summary>
@@ -299,7 +299,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             if (policyRule != null)
             {
-               return Ok(policyRule);
+                return Ok(policyRule);
             }
 
             return new NotFoundResult();
@@ -506,6 +506,54 @@ namespace Altinn.ResourceRegistry.Controllers
                     break;
                 }
             }
+        }
+
+        private static List<PolicyRightsDTO> MapToDTO(List<PolicyRights> policyRights)
+        {
+            if (policyRights == null)
+            {
+                return null;
+            }
+
+            List<PolicyRightsDTO> policyRightsDTOs = new List<PolicyRightsDTO>();
+
+            foreach (PolicyRights policyRight in policyRights)
+            {
+                PolicyRightsDTO policyRightsDTO = new PolicyRightsDTO
+                {
+                    Action = policyRight.Action,
+                    Resource = policyRight.Resource,
+                    Subjects = MapToDTO(policyRight.Subjects),
+                    RightKey = policyRight.RightKey,
+                    SubjectTypes = policyRight.SubjectTypes
+                };
+
+                policyRightsDTOs.Add(policyRightsDTO);
+            }
+
+            return policyRightsDTOs;
+        }
+
+        private static List<PolicySubjectDTO> MapToDTO(List<PolicySubject> policySubjects)
+        {
+            if (policySubjects == null)
+            {
+                return null;
+            }
+
+            List<PolicySubjectDTO> policySubjectsDTOs = new List<PolicySubjectDTO>();
+
+            foreach (PolicySubject policySubject in policySubjects)
+            {
+                PolicySubjectDTO policySubjectDTO = new PolicySubjectDTO
+                {
+                    SubjectAttributes = policySubject.SubjectAttributes
+                };
+
+                policySubjectsDTOs.Add(policySubjectDTO);
+            }
+
+            return policySubjectsDTOs;
         }
     }
 

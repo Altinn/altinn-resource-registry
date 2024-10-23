@@ -1,7 +1,6 @@
-﻿using Altinn.Urn;
-using Altinn.Urn.Json;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+using Altinn.Urn.Json;
 
 namespace Altinn.ResourceRegistry.Core.Models
 {

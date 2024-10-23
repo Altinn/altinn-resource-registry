@@ -26,15 +26,18 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// Returns the right key for the right part of policy resource action
         /// </summary>
-        public string RightKey()
+        public string RightKey
         {
-            string key = Action.Value.ValueSpan.ToString().ToLowerInvariant();
-            foreach (var res in Resource.OrderBy(x => x.Value.ToString().ToLowerInvariant()))
+            get
             {
-                key += ";" + res.Value.ToString().ToLowerInvariant();
-            }
+                string key = Action.Value.ValueSpan.ToString().ToLowerInvariant();
+                foreach (var res in Resource.OrderBy(x => x.Value.ToString().ToLowerInvariant()))
+                {
+                    key += ";" + res.Value.ToString().ToLowerInvariant();
+                }
 
-            return key;
+                return key;
+            }
         }
 
         /// <summary>
@@ -57,5 +60,8 @@ namespace Altinn.ResourceRegistry.Core.Models
 
             return subjectTypes;
         }
+
+        // Convert to property
+        public string RightKeyProperty => RightKey;
     }
 }

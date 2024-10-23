@@ -16,11 +16,11 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// Defines the action that the subject is allowed to perform on the resource
         /// </summary>
-        public required UrnJsonTypeValue Action { get; set; }
+        public required UrnJsonTypeValue Action { get; init; }
 
         /// <summary>
         /// The Resource attributes that identy one unique resource 
         /// </summary>
-        public required IReadOnlyList<UrnJsonTypeValue> Resource { get; set; }    
+        public required IReadOnlyList<UrnJsonTypeValue> Resource { get; init; }    
     }
 }

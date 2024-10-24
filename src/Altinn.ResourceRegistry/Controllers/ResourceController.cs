@@ -299,7 +299,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             if (policyRule != null)
             {
-                return Ok(PolicyRuleDTO.MapToDTO(policyRule));
+                return Ok(PolicyRuleDTO.MapFrom(policyRule));
             }
 
             return new NotFoundResult();
@@ -318,7 +318,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             if (resourceAction != null)
             {
-                return Ok(PolicyRightsDTO.MapToDTO(resourceAction));
+                return Ok(PolicyRightsDTO.MapFrom(resourceAction));
             }
 
             return new NotFoundResult();

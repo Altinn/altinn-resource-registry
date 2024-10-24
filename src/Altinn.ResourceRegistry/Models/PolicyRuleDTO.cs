@@ -26,27 +26,20 @@ namespace Altinn.ResourceRegistry.Models
         /// <summary>
         /// Map to DTO List
         /// </summary>
-        public static List<PolicyRuleDTO> MapToDTO(List<PolicyRule> policyRules)
+        public static IEnumerable<PolicyRuleDTO> MapFrom(IEnumerable<PolicyRule> policyRules)
         {
             if (policyRules == null)
             {
                 return null;
             }
 
-            List<PolicyRuleDTO> policyRulesDTOs = new List<PolicyRuleDTO>();
-
-            foreach (PolicyRule policyRule in policyRules)
-            {
-                policyRulesDTOs.Add(MapToDTO(policyRule));
-            }
-
-            return policyRulesDTOs;
+            return policyRules.Select(static r => MapFrom(r));
         }
 
         /// <summary>
         /// Ma to DTO
         /// </summary>
-        public static PolicyRuleDTO MapToDTO(PolicyRule policyRule)
+        public static PolicyRuleDTO MapFrom(PolicyRule policyRule)
         {
             if (policyRule == null)
             {

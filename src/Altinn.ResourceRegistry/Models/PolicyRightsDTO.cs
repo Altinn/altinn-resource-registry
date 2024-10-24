@@ -21,7 +21,7 @@ namespace Altinn.ResourceRegistry.Models
         /// <summary>
         /// List of subjects that is allowed to perform the action on the resource
         /// </summary>
-        public required List<PolicySubjectDTO> Subjects { get; init; }
+        public required IEnumerable<PolicySubjectDTO> Subjects { get; init; }
 
         /// <summary>
         /// Returns the right key for the right part of policy resource action
@@ -37,33 +37,26 @@ namespace Altinn.ResourceRegistry.Models
         /// <summary>
         /// Map to DTO List
         /// </summary>
-        public static List<PolicyRightsDTO> MapToDTO(List<PolicyRight> policyRights)
+        public static IEnumerable<PolicyRightsDTO> MapFrom(IEnumerable<PolicyRight> policyRights)
         {
             if (policyRights == null)
             {
                 return null;
             }
 
-            List<PolicyRightsDTO> policyRightsDTOs = new List<PolicyRightsDTO>();
-
-            foreach (PolicyRight policyRight in policyRights)
-            {
-                policyRightsDTOs.Add(MapToDTO(policyRight));
-            }
-
-            return policyRightsDTOs;
+            return policyRights.Select(static r => MapFrom(r));
         }
 
         /// <summary>
         /// MAP to DTO
         /// </summary>
-        public static PolicyRightsDTO MapToDTO(PolicyRight policyRights)
+        public static PolicyRightsDTO MapFrom(PolicyRight policyRights)
         {
             PolicyRightsDTO policyRightsDTO = new PolicyRightsDTO
             {
                 Action = policyRights.Action,
                 Resource = policyRights.Resource,
-                Subjects = PolicySubjectDTO.MapToDTO(policyRights.Subjects),
+                Subjects = PolicySubjectDTO.MapFrom(policyRights.Subjects),
                 RightKey = policyRights.RightKey,
                 SubjectTypes = policyRights.SubjectTypes,
             };

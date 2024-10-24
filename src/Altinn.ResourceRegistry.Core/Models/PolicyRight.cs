@@ -15,7 +15,7 @@ namespace Altinn.ResourceRegistry.Core.Models
     public class PolicyRight
     {
         private string? _rightKey;
-        private IReadOnlySet<string>? _subjectTypes;
+        private SortedSet<string>? _subjectTypes;
 
         /// <summary>
         /// Defines the action that the subject is allowed to perform on the resource
@@ -42,12 +42,12 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// Returns a list of subject types that is allowed to perform the action on the resource
         /// IS used for filtering the 
         /// </summary>
-        public IReadOnlySet<string> SubjectTypes
+        public SortedSet<string> SubjectTypes
             => _subjectTypes ??= CalculateSubjectTypes();
 
-        private IReadOnlySet<string> CalculateSubjectTypes()
+        private SortedSet<string> CalculateSubjectTypes()
         {
-            HashSet<string> subjectTypes = new HashSet<string>();
+            SortedSet<string> subjectTypes = new SortedSet<string>();
 
             foreach (var subject in Subjects)
             {

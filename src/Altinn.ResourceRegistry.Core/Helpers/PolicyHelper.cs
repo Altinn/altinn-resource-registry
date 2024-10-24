@@ -281,7 +281,8 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             foreach (XacmlMatch match in allOfs.Matches)
             {
-                subjectMatches.Add(KeyValueUrn.Create($"{match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant()}:{match.AttributeValue.Value}", match.AttributeDesignator.AttributeId.ToString().Length + 1));
+                string attributeId = match.AttributeDesignator.AttributeId.ToString();
+                subjectMatches.Add(KeyValueUrn.Create($"{attributeId}:{match.AttributeValue.Value}", attributeId.Length + 1));
             }
 
             return subjectMatches;
@@ -297,13 +298,14 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 throw new ArgumentException("Only one match is allowed in a allOf for action category");
             }
 
-            foreach (XacmlMatch match in allOfs.Matches)
+            if (allOfs.Matches.Count == 0)
             {
-                string matchId = match.AttributeDesignator.AttributeId.ToString().ToLowerInvariant();
-                return KeyValueUrn.Create($"{matchId}:{match.AttributeValue.Value}", matchId.Length + 1);
+                throw new ArgumentException("No match found in allOf for action category");
             }
 
-            throw new ArgumentException("No match found in allOf for action category");
+            XacmlMatch match = allOfs.Matches.First();
+            string matchId = match.AttributeDesignator.AttributeId.ToString();
+            return KeyValueUrn.Create($"{matchId}:{match.AttributeValue.Value}", matchId.Length + 1);
         }
 
         private static AttributeMatch GetActionValueFromRule(XacmlRule rule)

@@ -16,14 +16,14 @@ namespace Altinn.ResourceRegistry.Models
         /// <summary>
         /// Map to DTO List
         /// </summary>
-        public static List<PolicySubjectDTO> MapToDTO(List<PolicySubject> policySubjects)
+        public static List<PolicySubjectDTO> MapToDTO(IReadOnlyList<PolicySubject> policySubjects)
         {
             if (policySubjects == null)
             {
                 return null;
             }
 
-            List<PolicySubjectDTO> policySubjectsDTOs = new List<PolicySubjectDTO>();
+            List<PolicySubjectDTO> policySubjectsDTOs = new List<PolicySubjectDTO>(policySubjects.Count);
 
             foreach (PolicySubject policySubject in policySubjects)
             {

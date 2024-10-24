@@ -1,14 +1,22 @@
-﻿using System.Security.Cryptography;
+#nullable enable
+
+using System.Buffers;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using Altinn.Urn.Json;
 
 namespace Altinn.ResourceRegistry.Core.Models
 {
     /// <summary>
-    /// Definees a flatten Policy Rule
+    /// Defines a flatten Policy Rule
     /// </summary>
     public class PolicyRights
     {
+        private string? _rightKey;
+        private IReadOnlySet<string>? _subjectTypes;
+
         /// <summary>
         /// Defines the action that the subject is allowed to perform on the resource
         /// </summary>
@@ -22,62 +30,132 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// List of subjects that is allowed to perform the action on the resource
         /// </summary>
-        public required List<PolicySubject> Subjects { get; init; }
+        public required IReadOnlyList<PolicySubject> Subjects { get; init; }
 
         /// <summary>
         /// Returns the right key for the right part of policy resource action
         /// </summary>
         public string RightKey
-        {
-            get
-            {
-                string key = Action.Value.ValueSpan.ToString().ToLowerInvariant();
-                string shortKey = key;
-                foreach (var res in Resource.OrderBy(x => x.Value.ToString()))
-                {
-                    key += ";" + res.Value.ToString();
-                    shortKey += ";" + res.Value.ValueSpan.ToString();
-                }
-
-                using (MD5 md5 = MD5.Create())
-                {
-                    byte[] inputBytes = Encoding.UTF8.GetBytes(key);
-                    byte[] hashBytes = md5.ComputeHash(inputBytes);
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < hashBytes.Length; i++)
-                    {
-                        sb.Append(hashBytes[i].ToString("x2"));
-                    }
-
-                    return shortKey + ";" + sb.ToString();
-                }
-               
-            }
-        }
+            => _rightKey ??= CalculateRightKey();
 
         /// <summary>
         /// Returns a list of subject types that is allowed to perform the action on the resource
         /// IS used for filtering the 
         /// </summary>
-        public List<string> SubjectTypes
-        {
-            get
-            {
-                HashSet<string> subjectTypes = new HashSet<string>();
+        public IReadOnlySet<string> SubjectTypes
+            => _subjectTypes ??= CalculateSubjectTypes();
 
-                foreach (var subject in Subjects)
+        private IReadOnlySet<string> CalculateSubjectTypes()
+        {
+            HashSet<string> subjectTypes = new HashSet<string>();
+
+            foreach (var subject in Subjects)
+            {
+                foreach (var attr in subject.SubjectAttributes)
                 {
-                    foreach (var attr in subject.SubjectAttributes)
-                    {
-                        if (!subjectTypes.Contains(attr.Value.PrefixSpan.ToString().ToLowerInvariant()))
-                        {
-                            subjectTypes.Add(attr.Value.PrefixSpan.ToString().ToLowerInvariant());
-                        }
-                    }
+                    subjectTypes.Add(attr.Value.PrefixSpan.ToString().ToLowerInvariant());
+                }
+            }
+
+            return subjectTypes;
+        }
+
+        private string CalculateRightKey()
+        {
+            var sb = _stringBuilder ?? new();
+
+            UrnJsonTypeValue[]? resourcesArray = null;
+            byte[]? rentedBytes = null;
+
+            try
+            {
+                resourcesArray = ArrayPool<UrnJsonTypeValue>.Shared.Rent(Resource.Count);
+
+                // copy all of the resources so we can sort them
+                var resources = CopyUrns(Resource, resourcesArray);
+                resources.Sort(static (x, y) => x.Value.Urn.CompareTo(y.Value.Urn));
+
+                // first, fill with the string to be hashed
+                sb.Append(Action.Value.ValueSpan);
+                foreach (var resource in resources)
+                {
+                    sb.Append(';').Append(resource.Value.Urn);
                 }
 
-                return subjectTypes.ToList();
+                // compute the MD5 hash
+                Span<byte> hash = stackalloc byte[MD5.HashSizeInBytes];
+                rentedBytes = ArrayPool<byte>.Shared.Rent(sb.Length * 2); // every char is 2 bytes
+                var toHash = CopyBytes(sb, rentedBytes);
+                MD5.HashData(toHash, hash);
+
+                // build the final key
+                sb.Clear();
+                sb.Append(Action.Value.ValueSpan);
+                foreach (var resource in resources)
+                {
+                    sb.Append(';').Append(resource.Value.ValueSpan);
+                }
+
+                var success = true;
+                sb.Append(';');
+                Span<char> dest = stackalloc char[2];
+                for (var i = 0; i < MD5.HashSizeInBytes; i++)
+                {
+                    var b = hash[i];
+                    success |= b.TryFormat(dest, out _, "x2");
+                    sb.Append(dest);
+                }
+
+                Debug.Assert(success);
+                return sb.ToString();
+            }
+            finally
+            {
+                if (resourcesArray is not null)
+                {
+                    ArrayPool<UrnJsonTypeValue>.Shared.Return(resourcesArray);
+                }
+
+                if (rentedBytes is not null)
+                {
+                    ArrayPool<byte>.Shared.Return(rentedBytes);
+                }
+
+                sb.Clear();
+                _stringBuilder = sb;
+            }
+
+            static Span<UrnJsonTypeValue> CopyUrns(IReadOnlyList<UrnJsonTypeValue> from, UrnJsonTypeValue[] to)
+            {
+                if (from is ICollection<UrnJsonTypeValue> collection)
+                {
+                    collection.CopyTo(to, 0);
+                    return to.AsSpan(0, from.Count);
+                }
+
+                for (int i = 0; i < from.Count; i++)
+                {
+                    to[i] = from[i];
+                }
+
+                return to.AsSpan(0, from.Count);
+            }
+
+            static ReadOnlySpan<byte> CopyBytes(StringBuilder from, byte[] to)
+            {
+                var position = 0;
+                foreach (var chunk in from.GetChunks())
+                {
+                    var bytes = MemoryMarshal.AsBytes(chunk.Span);
+                    bytes.CopyTo(to.AsSpan(position));
+                    position += bytes.Length;
+                }
+
+                return to.AsSpan(0, position);
             }
         }
+
+        [ThreadStatic]
+        private static StringBuilder? _stringBuilder;
     }
 }

@@ -32,7 +32,7 @@ namespace Altinn.ResourceRegistry.Models
         /// Returns a list of subject types that is allowed to perform the action on the resource
         /// IS used for filtering the 
         /// </summary>
-        public List<string> SubjectTypes { get; init; }
+        public IReadOnlySet<string> SubjectTypes { get; init; }
 
         /// <summary>
         /// Map to DTO List
@@ -65,7 +65,7 @@ namespace Altinn.ResourceRegistry.Models
                 Resource = policyRights.Resource,
                 Subjects = PolicySubjectDTO.MapToDTO(policyRights.Subjects),
                 RightKey = policyRights.RightKey,
-                SubjectTypes = policyRights.SubjectTypes
+                SubjectTypes = policyRights.SubjectTypes,
             };
 
             return policyRightsDTO;

@@ -177,16 +177,18 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         public static List<PolicyRights> ConvertToPolicyRight(XacmlPolicy policy)
         {
             List<PolicyRule> policyRules = ConvertToPolicyRules(policy);
+            List<PolicyRights> policyRights = new(policyRules.Count);
 
-            Dictionary<string, PolicyRights> resourceActions = new Dictionary<string, PolicyRights>();
+            Dictionary<string, (PolicyRights Rights, List<PolicySubject> Subjects)> resourceActions = new();
 
             foreach (PolicyRule rule in policyRules)
             {
+                List<PolicySubject> subjects = [new PolicySubject { SubjectAttributes = rule.Subject }];
                 PolicyRights policyResourceAction = new PolicyRights()
                 { 
                     Action = rule.Action, 
                     Resource = rule.Resource,
-                    Subjects = new List<PolicySubject> { new PolicySubject { SubjectAttributes = rule.Subject } }
+                    Subjects = subjects,
                 };
                 
                 if (resourceActions.ContainsKey(policyResourceAction.RightKey))
@@ -195,11 +197,12 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 }
                 else
                 {
-                    resourceActions.Add(policyResourceAction.RightKey, policyResourceAction);
+                    resourceActions.Add(policyResourceAction.RightKey, (policyResourceAction, subjects));
+                    policyRights.Add(policyResourceAction);
                 }
             }
 
-            return resourceActions.Values.ToList();
+            return policyRights;
         }
 
         /// <summary>
@@ -212,7 +215,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// Subject have multiple matches in a AllOf element, but it is not used in the current implementation in Altinn. (requiring a user to have multiple roles to access a resource)
         /// A resource can have multiple matched in a AllOf element to be able to match on multiple attributes. (app, task1 , task2 etc)
         /// </summary>
-        private static void  FlattenXacmlRule(XacmlRule xacmlRule, List<PolicyRule> policyRules)
+        private static void FlattenXacmlRule(XacmlRule xacmlRule, List<PolicyRule> policyRules)
         {
             XacmlAnyOf anyOfSubjects = null;
             XacmlAnyOf anyOfActions = null;

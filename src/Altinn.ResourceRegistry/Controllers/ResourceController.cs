@@ -288,7 +288,7 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
-        /// Returns 
+        /// Returns a list of flattenrules that only contains on subject, action and resource per rule
         /// </summary>
         [HttpGet("{id}/policy/rules")]
         [Produces("application/json")]

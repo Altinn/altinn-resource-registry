@@ -341,8 +341,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.NotNull(policyRights);
         Assert.Equal(18, policyRights.Count());
         Assert.Equal(2, policyRights[0].SubjectTypes.Count());
-        Assert.Equal("urn:altinn:rolecode", policyRights[0].SubjectTypes.ToList()[0]);
-        Assert.Equal("urn:altinn:org", policyRights[0].SubjectTypes.ToList()[1]);
+        Assert.Equal("urn:altinn:org", policyRights[0].SubjectTypes.ToList()[0]);
+        Assert.Equal("urn:altinn:rolecode", policyRights[0].SubjectTypes.ToList()[1]);
         Assert.Equal("instantiate;rrh-innrapportering;brg;5476ef44b24088fa0deb5f11cc285484", policyRights[0].RightKey);
         Assert.Equal(2, policyRights[1].SubjectTypes.Count());
         Assert.Equal("urn:altinn:org", policyRights[1].SubjectTypes.ToList()[0]);

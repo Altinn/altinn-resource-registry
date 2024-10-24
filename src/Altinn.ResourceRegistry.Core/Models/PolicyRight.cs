@@ -42,7 +42,7 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// Returns a list of subject types that is allowed to perform the action on the resource
         /// IS used for filtering the 
         /// </summary>
-        public SortedSet<string> SubjectTypes
+        public IReadOnlySet<string> SubjectTypes
             => _subjectTypes ??= CalculateSubjectTypes();
 
         private SortedSet<string> CalculateSubjectTypes()

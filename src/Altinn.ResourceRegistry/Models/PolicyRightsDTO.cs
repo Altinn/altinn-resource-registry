@@ -39,12 +39,7 @@ namespace Altinn.ResourceRegistry.Models
         /// </summary>
         public static IEnumerable<PolicyRightsDTO> MapFrom(IEnumerable<PolicyRight> policyRights)
         {
-            if (policyRights == null)
-            {
-                return null;
-            }
-
-            return policyRights.Select(static r => MapFrom(r));
+            return policyRights?.Select(static r => MapFrom(r));
         }
 
         /// <summary>

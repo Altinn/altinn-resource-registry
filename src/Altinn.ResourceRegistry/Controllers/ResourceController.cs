@@ -247,7 +247,7 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
-        /// Returns the XACML policy for a resource in resource registry.
+        /// Returns a list of subjects from rules in policy
         /// </summary>
         /// <param name="id">Resource Id</param>
         /// <param name="reloadFromXacml">Defines if subjects should be reloaded from Xacml</param>

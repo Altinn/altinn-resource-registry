@@ -299,7 +299,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             if (policyRule != null)
             {
-                return Ok(MapToDTO(policyRule));
+                return Ok(PolicyRuleDTO.MapToDTO(policyRule));
             }
 
             return new NotFoundResult();

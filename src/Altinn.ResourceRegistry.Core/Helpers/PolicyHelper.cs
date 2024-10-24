@@ -174,17 +174,17 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         /// Returns a list of rights for a resource. A right is a combination of resource and action. The response list the subjects in policy that is granted the right.
         /// Response is grouped by right.
         /// </summary>
-        public static List<PolicyRights> ConvertToPolicyRight(XacmlPolicy policy)
+        public static List<PolicyRight> ConvertToPolicyRight(XacmlPolicy policy)
         {
             List<PolicyRule> policyRules = ConvertToPolicyRules(policy);
-            List<PolicyRights> policyRights = new(policyRules.Count);
+            List<PolicyRight> policyRights = new(policyRules.Count);
 
-            Dictionary<string, (PolicyRights Rights, List<PolicySubject> Subjects)> resourceActions = new();
+            Dictionary<string, (PolicyRight Rights, List<PolicySubject> Subjects)> resourceActions = new();
 
             foreach (PolicyRule rule in policyRules)
             {
                 List<PolicySubject> subjects = [new PolicySubject { SubjectAttributes = rule.Subject }];
-                PolicyRights policyResourceAction = new PolicyRights()
+                PolicyRight policyResourceAction = new PolicyRight()
                 { 
                     Action = rule.Action, 
                     Resource = rule.Resource,

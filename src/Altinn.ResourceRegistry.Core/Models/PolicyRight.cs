@@ -12,7 +12,7 @@ namespace Altinn.ResourceRegistry.Core.Models
     /// <summary>
     /// Defines a flatten Policy Rule
     /// </summary>
-    public class PolicyRights
+    public class PolicyRight
     {
         private string? _rightKey;
         private IReadOnlySet<string>? _subjectTypes;

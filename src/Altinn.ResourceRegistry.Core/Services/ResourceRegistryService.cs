@@ -414,7 +414,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<PolicyRights>> GetPolicyRights(string resourceId, CancellationToken cancellationToken = default)
+        public async Task<List<PolicyRight>> GetPolicyRights(string resourceId, CancellationToken cancellationToken = default)
         {
             XacmlPolicy policy = await GetXacmlPolicy(resourceId, cancellationToken);
             if (policy == null)
@@ -422,7 +422,7 @@ namespace Altinn.ResourceRegistry.Core.Services
                 return null;
             }
 
-            List<PolicyRights> policyResourceActions = PolicyHelper.ConvertToPolicyRight(policy);
+            List<PolicyRight> policyResourceActions = PolicyHelper.ConvertToPolicyRight(policy);
             return policyResourceActions;
         }
 

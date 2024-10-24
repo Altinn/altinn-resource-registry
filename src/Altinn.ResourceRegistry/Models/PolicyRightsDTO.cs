@@ -37,7 +37,7 @@ namespace Altinn.ResourceRegistry.Models
         /// <summary>
         /// Map to DTO List
         /// </summary>
-        public static List<PolicyRightsDTO> MapToDTO(List<PolicyRights> policyRights)
+        public static List<PolicyRightsDTO> MapToDTO(List<PolicyRight> policyRights)
         {
             if (policyRights == null)
             {
@@ -46,7 +46,7 @@ namespace Altinn.ResourceRegistry.Models
 
             List<PolicyRightsDTO> policyRightsDTOs = new List<PolicyRightsDTO>();
 
-            foreach (PolicyRights policyRight in policyRights)
+            foreach (PolicyRight policyRight in policyRights)
             {
                 policyRightsDTOs.Add(MapToDTO(policyRight));
             }
@@ -57,7 +57,7 @@ namespace Altinn.ResourceRegistry.Models
         /// <summary>
         /// MAP to DTO
         /// </summary>
-        public static PolicyRightsDTO MapToDTO(PolicyRights policyRights)
+        public static PolicyRightsDTO MapToDTO(PolicyRight policyRights)
         {
             PolicyRightsDTO policyRightsDTO = new PolicyRightsDTO
             {

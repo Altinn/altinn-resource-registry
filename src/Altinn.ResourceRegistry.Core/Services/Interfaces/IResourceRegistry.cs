@@ -103,7 +103,7 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// Returns a list of rights for a resource. A right is a combination of resource and action. The response list the subjects in policy that is granted the right.
         /// Response is grouped by right.
         /// </summary>
-        Task<List<PolicyRights>> GetPolicyRights(string resourceId, CancellationToken cancellationToken = default);
+        Task<List<PolicyRight>> GetPolicyRights(string resourceId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates Access management with changes in recource registry

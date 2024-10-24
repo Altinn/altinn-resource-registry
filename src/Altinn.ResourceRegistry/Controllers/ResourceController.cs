@@ -314,7 +314,7 @@ namespace Altinn.ResourceRegistry.Controllers
         [Consumes("application/json")]
         public async Task<ActionResult<List<PolicyRightsDTO>>> GetRights(string id, CancellationToken cancellationToken = default)
         {
-            List<PolicyRights> resourceAction = await _resourceRegistry.GetPolicyRights(id, cancellationToken);
+            List<PolicyRight> resourceAction = await _resourceRegistry.GetPolicyRights(id, cancellationToken);
 
             if (resourceAction != null)
             {

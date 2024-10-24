@@ -335,7 +335,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
         string content = await response.Content.ReadAsStringAsync();
-        List<PolicyRights>? policyRights = await response.Content.ReadFromJsonAsync<List<PolicyRights>>();
+        List<PolicyRight>? policyRights = await response.Content.ReadFromJsonAsync<List<PolicyRight>>();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(policyRights);

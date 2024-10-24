@@ -1,4 +1,5 @@
-﻿using Altinn.Urn.Json;
+﻿using Altinn.ResourceRegistry.Core.Models;
+using Altinn.Urn.Json;
 
 namespace Altinn.ResourceRegistry.Models
 {
@@ -32,5 +33,42 @@ namespace Altinn.ResourceRegistry.Models
         /// IS used for filtering the 
         /// </summary>
         public List<string> SubjectTypes { get; init; }
+
+        /// <summary>
+        /// Map to DTO List
+        /// </summary>
+        public static List<PolicyRightsDTO> MapToDTO(List<PolicyRights> policyRights)
+        {
+            if (policyRights == null)
+            {
+                return null;
+            }
+
+            List<PolicyRightsDTO> policyRightsDTOs = new List<PolicyRightsDTO>();
+
+            foreach (PolicyRights policyRight in policyRights)
+            {
+                policyRightsDTOs.Add(MapToDTO(policyRight));
+            }
+
+            return policyRightsDTOs;
+        }
+
+        /// <summary>
+        /// MAP to DTO
+        /// </summary>
+        public static PolicyRightsDTO MapToDTO(PolicyRights policyRights)
+        {
+            PolicyRightsDTO policyRightsDTO = new PolicyRightsDTO
+            {
+                Action = policyRights.Action,
+                Resource = policyRights.Resource,
+                Subjects = PolicySubjectDTO.MapToDTO(policyRights.Subjects),
+                RightKey = policyRights.RightKey,
+                SubjectTypes = policyRights.SubjectTypes
+            };
+
+            return policyRightsDTO;
+        }
     }
 }

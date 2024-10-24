@@ -318,7 +318,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             if (resourceAction != null)
             {
-                return Ok(MapToDTO(resourceAction));
+                return Ok(PolicyRightsDTO.MapToDTO(resourceAction));
             }
 
             return new NotFoundResult();
@@ -485,78 +485,6 @@ namespace Altinn.ResourceRegistry.Controllers
             });
 
             return Paginated.Create(updatedResourceSubjects, nextUrl);
-        }
-
-        private static List<PolicyRightsDTO> MapToDTO(List<PolicyRights> policyRights)
-        {
-            if (policyRights == null)
-            {
-                return null;
-            }
-
-            List<PolicyRightsDTO> policyRightsDTOs = new List<PolicyRightsDTO>();
-
-            foreach (PolicyRights policyRight in policyRights)
-            {
-                PolicyRightsDTO policyRightsDTO = new PolicyRightsDTO
-                {
-                    Action = policyRight.Action,
-                    Resource = policyRight.Resource,
-                    Subjects = MapToDTO(policyRight.Subjects),
-                    RightKey = policyRight.RightKey,
-                    SubjectTypes = policyRight.SubjectTypes
-                };
-
-                policyRightsDTOs.Add(policyRightsDTO);
-            }
-
-            return policyRightsDTOs;
-        }
-
-        private static List<PolicySubjectDTO> MapToDTO(List<PolicySubject> policySubjects)
-        {
-            if (policySubjects == null)
-            {
-                return null;
-            }
-
-            List<PolicySubjectDTO> policySubjectsDTOs = new List<PolicySubjectDTO>();
-
-            foreach (PolicySubject policySubject in policySubjects)
-            {
-                PolicySubjectDTO policySubjectDTO = new PolicySubjectDTO
-                {
-                    SubjectAttributes = policySubject.SubjectAttributes
-                };
-
-                policySubjectsDTOs.Add(policySubjectDTO);
-            }
-
-            return policySubjectsDTOs;
-        }
-
-        private static List<PolicyRuleDTO> MapToDTO(List<PolicyRule> policyRules)
-        {
-            if (policyRules == null)
-            {
-                return null;
-            }
-
-            List<PolicyRuleDTO> policyRulesDTOs = new List<PolicyRuleDTO>();
-
-            foreach (PolicyRule policyRule in policyRules)
-            {
-                PolicyRuleDTO policyRuleDTO = new PolicyRuleDTO
-                {
-                    Action = policyRule.Action,
-                    Resource = policyRule.Resource,
-                    Subject = policyRule.Subject
-                };
-
-                policyRulesDTOs.Add(policyRuleDTO);
-            }
-
-            return policyRulesDTOs;
         }
     }
 

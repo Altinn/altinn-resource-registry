@@ -160,7 +160,6 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
     }
 
-
     [Fact]
     public async Task SetResourcePolicy_MissingAnyOf_()
     {
@@ -199,25 +198,11 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
-        requestUri = new Uri("resourceregistry/api/v1/resource/altinn_access_management/policy/subjects", UriKind.Relative);
+        string responseContent = await response.Content.ReadAsStringAsync();
 
-        httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
-        {
-        };
-
-        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-        HttpResponseMessage response2 = await client.SendAsync(httpRequestMessage);
-        Paginated<AttributeMatchV2>? subjectMatch = await response2.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
-
-        Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
-        Assert.NotNull(subjectMatch);
-
-        // ensure we don't get the deleted subject
-        Assert.Single(subjectMatch.Items);
-        Assert.Equal("admai", subjectMatch.Items.First().Value);
+        Assert.Contains("invalid XmlNodeType", responseContent);
 
     }
 

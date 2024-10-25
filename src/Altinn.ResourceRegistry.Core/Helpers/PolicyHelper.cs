@@ -346,7 +346,6 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             }
 
             return result;
-        }
-       
+        }    
     }
 }

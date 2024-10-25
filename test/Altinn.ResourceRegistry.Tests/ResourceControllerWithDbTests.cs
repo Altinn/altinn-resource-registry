@@ -160,6 +160,67 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
     }
 
+
+    [Fact]
+    public async Task SetResourcePolicy_MissingAnyOf_()
+    {
+        // Add one that should be marked as deleted when updating with policy
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:altinn_access_management", ["urn:altinn:rolecode:tobedeleted"], "skd"));
+
+        ServiceResource resource = new ServiceResource()
+        {
+            Identifier = "altinn_access_management",
+            HasCompetentAuthority = new CompetentAuthority()
+            {
+                Organization = "974761076",
+                Orgcode = "skd"
+            }
+        };
+        await Repository.CreateResource(resource);
+
+        using var client = CreateClient();
+        string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+
+        string fileName = $"{resource.Identifier}_missinganyof.xml";
+        string filePath = $"Data/ResourcePolicies/{fileName}";
+
+        Uri requestUri = new Uri($"resourceregistry/api/v1/Resource/{resource.Identifier}/policy", UriKind.Relative);
+
+        ByteArrayContent fileContent = new ByteArrayContent(File.ReadAllBytes(filePath));
+        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("text/xml");
+
+        MultipartFormDataContent content = new();
+        content.Add(fileContent, "policyFile", fileName);
+
+        HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Post, RequestUri = requestUri, Content = content };
+        httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        requestUri = new Uri("resourceregistry/api/v1/resource/altinn_access_management/policy/subjects", UriKind.Relative);
+
+        httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response2 = await client.SendAsync(httpRequestMessage);
+        Paginated<AttributeMatchV2>? subjectMatch = await response2.Content.ReadFromJsonAsync<Paginated<AttributeMatchV2>>();
+
+        Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
+        Assert.NotNull(subjectMatch);
+
+        // ensure we don't get the deleted subject
+        Assert.Single(subjectMatch.Items);
+        Assert.Equal("admai", subjectMatch.Items.First().Value);
+
+    }
+
     [Fact]
     public async Task GetUpdatedResourceSubjects_Paginates()
     {

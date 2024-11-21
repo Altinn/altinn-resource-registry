@@ -1,0 +1,40 @@
+{
+  "identifier": "se_3225_1596",
+  "title": {
+    "nb": "Delegation_time",
+    "en": "Delegation_time",
+    "nn": "Delegation_time"
+  },
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "3225",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1596",
+      "referenceType": "ServiceEditionCode"
+    }
+  ],
+  "delegable": true,
+  "visible": true,
+  "hasCompetentAuthority": {
+    "name": {},
+    "orgcode": "acn"
+  },
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Altinn2Service",
+  "authorizationReference": [
+    {
+      "id": "urn:altinn:servicecode",
+      "value": "3225"
+    },
+    {
+      "id": "urn:altinn:serviceeditioncode",
+      "value": "1596"
+    }
+  ]
+}

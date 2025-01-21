@@ -48,6 +48,39 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         [Fact]
+        public async Task GetResource_app_skd_flyttemelding_OK()
+        {
+            var client = CreateClient();
+            string requestUri = "resourceregistry/api/v1/Resource/app_skd_flyttemelding";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+            {
+            };
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+            ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+
+            Assert.NotNull(resource);
+            Assert.Equal("app_skd_flyttemelding", resource.Identifier);
+        }
+
+        [Fact]
+        public async Task GetResource_app_nav_flyttemelding_NotFound()
+        {
+            var client = CreateClient();
+            string requestUri = "resourceregistry/api/v1/Resource/app_nav_flyttemelding";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+            {
+            };
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
         public async Task Test_Nav_Get()
         {
             var client = CreateClient();

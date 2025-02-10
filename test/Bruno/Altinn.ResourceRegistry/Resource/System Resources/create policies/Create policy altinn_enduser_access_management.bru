@@ -1,7 +1,7 @@
 meta {
-  name: Create policy altinn_access_management
+  name: Create policy altinn_enduser_access_management
   type: http
-  seq: 2
+  seq: 3
 }
 
 post {
@@ -15,11 +15,11 @@ headers {
 }
 
 body:multipart-form {
-  policyFile: @file(Testdata/Policies/altinn_access_management.xacml)
+  policyFile: @file(Testdata/Policies/altinn_enduser_access_management.xacml)
 }
 
 vars:pre-request {
-  id: altinn_access_management
+  id: altinn_enduser_access_management
 }
 
 script:pre-request {

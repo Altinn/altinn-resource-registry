@@ -2,7 +2,7 @@
 <xacml:Policy xmlns:xsl="http://www.w3.org/2001/XMLSchema-instance" xmlns:xacml="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17" PolicyId="urn:altinn:resource:altinn_enduser_access_management:policyid:1" Version="1.0" RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-overrides">
     <xacml:Target/>
     <xacml:Rule RuleId="urn:altinn:resource:altinn_enduser_access_management:ruleid:1" Effect="Permit">
-        <xacml:Description>SystemResource policy for resource; altinn_enduser_access_management for roles; ADMAI and HADM to have access to actions; read and write</xacml:Description>
+        <xacml:Description>SystemResource policy for resource; altinn_enduser_access_management for Altinn 2 roles; ADMAI, HADM and BOBEL and Altinn 3 roles tilgangsstyrer and hovedadministrator to have access to actions; read and write</xacml:Description>
         <xacml:Target>
             <xacml:AnyOf>
                 <xacml:AllOf>

@@ -1,11 +1,11 @@
 meta {
-  name: Create altinn_enduser_access_management
+  name: Update altinn_enduser_access_management
   type: http
   seq: 3
 }
 
-post {
-  url: {{baseUrl}}/resourceregistry/api/v1/resource
+put {
+  url: {{baseUrl}}/resourceregistry/api/v1/resource/{{id}}
   body: json
   auth: inherit
 }
@@ -45,6 +45,10 @@ body:json {
     "enterpriseUserEnabled": true,
     "resourceType": "SystemResource"
   }
+}
+
+vars:pre-request {
+  id: altinn_enduser_access_management
 }
 
 script:pre-request {

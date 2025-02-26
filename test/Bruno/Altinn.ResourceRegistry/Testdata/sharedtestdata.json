@@ -1,10 +1,7 @@
 {
-    "scopes": {
-        "read": "altinn:instances:read",
-        "k6Read": "test:am/k6.read"
-    },
     "auth_scopes": {
-        "resourceregistryAdmin": "altinn:resourceregistry/resource.admin"
+        "resourceregistryAdmin": "altinn:resourceregistry/resource.admin",
+        "resourceregistryWrite": "altinn:resourceregistry/resource.write"
     },
     "authTokenType": {
         "personal": "Personal",

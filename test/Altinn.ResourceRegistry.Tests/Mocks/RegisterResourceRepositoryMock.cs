@@ -1,4 +1,6 @@
-﻿using Altinn.ResourceRegistry.Core;
+﻿using Altinn.Authorization.ProblemDetails;
+using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Models;
 
@@ -34,6 +36,17 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             }
 
             return null;
+        }
+
+        public async Task<Result<CompetentAuthorityReference>> GetResourceOwner(string id, CancellationToken cancellationToken = default)
+        {
+            var resource = await GetResource(id, cancellationToken);
+            if (resource is null)
+            {
+                return Problems.ResourceReference_NotFound;
+            }
+
+            return resource.HasCompetentAuthority!;
         }
 
         public async Task<List<ServiceResource>> Search(ResourceSearch resourceSearch, CancellationToken cancellationToken = default)
@@ -96,6 +109,34 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             List<ResourceSubjects> resourceSubjects = new List<ResourceSubjects>();
             resourceSubjects.Add(GetResourceSubjects("urn:altinn:resource:skd_mva", new List<string> { "urn:altinn:rolecode:utinn", "urn:altinn:rolecode:dagl" }, "urn:altinn:org:skd"));
             return Task.FromResult(resourceSubjects);
+        }
+
+        public Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default)
+        {
+            List<UpdatedResourceSubject> updatedResourceSubjects = new List<UpdatedResourceSubject>();
+            updatedResourceSubjects.Add(new UpdatedResourceSubject
+            {
+                ResourceUrn = new Uri("urn:altinn:resource:first"),
+                SubjectUrn = new Uri("urn:altinn:rolecode:foobar"),
+                UpdatedAt = DateTimeOffset.Parse("2024-01-01T00:00:00Z"),
+                Deleted = false
+            });
+            updatedResourceSubjects.Add(new UpdatedResourceSubject
+            {
+                ResourceUrn = new Uri("urn:altinn:resource:second"),
+                SubjectUrn = new Uri("urn:altinn:rolecode:foobar"),
+                UpdatedAt = DateTimeOffset.Parse("2024-02-01T00:00:00Z"),
+                Deleted = false
+            });
+            updatedResourceSubjects.Add(new UpdatedResourceSubject
+            {
+                ResourceUrn = new Uri("urn:altinn:resource:third"),
+                SubjectUrn = new Uri("urn:altinn:rolecode:foobar"),
+                UpdatedAt = DateTimeOffset.Parse("2024-03-01T00:00:00Z"),
+                Deleted = false
+            });
+
+            return Task.FromResult(updatedResourceSubjects);
         }
 
 

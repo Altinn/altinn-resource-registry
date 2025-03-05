@@ -10,6 +10,9 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using Altinn.ResourceRegistry.Controllers;
+using AngleSharp.Text;
+using VDS.RDF;
 
 namespace Altinn.ResourceRegistry.Tests;
 
@@ -100,6 +103,9 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     [Fact]
     public async Task SetResourcePolicy_OK()
     {
+        // Add one that should be marked as deleted when updating with policy
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:altinn_access_management", ["urn:altinn:rolecode:tobedeleted"], "skd"));
+
         ServiceResource resource = new ServiceResource()
         {
             Identifier = "altinn_access_management",
@@ -147,6 +153,118 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
         Assert.NotNull(subjectMatch);
+
+        // ensure we don't get the deleted subject
+        Assert.Single(subjectMatch.Items);
+        Assert.Equal("admai", subjectMatch.Items.First().Value);
+
+    }
+
+    [Fact]
+    public async Task GetUpdatedResourceSubjects_Paginates()
+    {
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002"], "ttd"));
+
+        using var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/resource/updated/?limit=1";
+
+        HttpResponseMessage response = await client.GetAsync(requestUri);
+        Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+        Assert.NotNull(subjectResources);
+        Assert.Single(subjectResources.Items);
+        Assert.NotNull(subjectResources.Links.Next);
+        Assert.Contains("?since=20", subjectResources.Links.Next);
+        var token = Opaque.Create(new UpdatedResourceSubjectsContinuationToken(subjectResources.Items.Last().ResourceUrn, subjectResources.Items.Last().SubjectUrn));
+        Assert.Contains($"&token={token}&limit=1", subjectResources.Links.Next);
+
+        Assert.True(Uri.TryCreate(subjectResources.Links.Next, UriKind.Absolute, out Uri? nextUri));
+        Assert.NotNull(nextUri);
+        response = await client.GetAsync(nextUri.PathAndQuery);
+        subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+        Assert.NotNull(subjectResources);
+        Assert.Single(subjectResources.Items);
+        Assert.Equal("urn:altinn:rolecode:r002", subjectResources.Items.First().SubjectUrn.ToString());
+        Assert.Null(subjectResources.Links.Next);
+    }
+
+    [Fact]
+    public async Task SetResourceSubjects_OK()
+    {
+        using var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/resource/updated/";
+        HttpResponseMessage response;
+        Paginated<UpdatedResourceSubject>? subjectResources;
+
+        UpdatedResourceSubject Subject(string roleCode)
+        {
+            return subjectResources.Items.Single(x => x.SubjectUrn.ToString() == $"urn:altinn:rolecode:{roleCode}");
+        }
+
+        DateTimeOffset UpdatedAtFor(string roleCode)
+        {
+            return Subject(roleCode)!.UpdatedAt;
+        }
+
+        // 1: First add some resources
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002", "urn:altinn:rolecode:r003"], "ttd"));
+
+        response = await client.GetAsync(requestUri);
+        subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+        // Check that all pairs are returned, each with a updatedAt timestamp and deleted = false
+        Assert.NotNull(subjectResources);
+        Assert.Equal(3, subjectResources.Items.Count());
+        Assert.True(subjectResources.Items.All(x => x.UpdatedAt > DateTimeOffset.MinValue));
+        Assert.True(subjectResources.Items.All(x => x.Deleted == false));
+        var role001Timestamp = UpdatedAtFor("r001");
+        var role002Timestamp = UpdatedAtFor("r002");
+        var role003Timestamp = UpdatedAtFor("r003");
+
+        // 2: Now update the resource to delete subject r002, and add subject r004
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r003", "urn:altinn:rolecode:r004"], "ttd"));
+
+        response = await client.GetAsync(requestUri);
+        subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+        // There should be four pairs, but the item with rolecode:r002 should be marked as deleted with a higher timestamp. r001 and r003 should have the same timestamp as before
+        // r004 should have the same timestamp as r002
+        Assert.NotNull(subjectResources);
+        Assert.Equal(4, subjectResources.Items.Count());
+        Assert.NotNull(subjectResources.Items.SingleOrDefault(x => x.SubjectUrn.ToString() == "urn:altinn:rolecode:r002" && x.Deleted));
+        Assert.True(role001Timestamp == UpdatedAtFor("r001"));
+        Assert.True(role002Timestamp < UpdatedAtFor("r002"));
+        Assert.True(role003Timestamp == UpdatedAtFor("r003"));
+        Assert.True(UpdatedAtFor("r002") == UpdatedAtFor("r004"));
+        role002Timestamp = UpdatedAtFor("r002");
+
+        // 3: Now update the resource to have no subjects
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", [], "ttd"));
+
+        response = await client.GetAsync(requestUri);
+        subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+        // There should be four pairs, all marked as deleted. r001, r003 and r004 should have new, identical timestamps. r002, which was already deleted, should have the same timestamp as before
+        Assert.NotNull(subjectResources);
+        Assert.Equal(4, subjectResources.Items.Count());
+        Assert.True(subjectResources.Items.All(x => x.Deleted));
+        Assert.True(role001Timestamp < UpdatedAtFor("r001"));
+        Assert.True(role002Timestamp == UpdatedAtFor("r002"));
+        Assert.True(UpdatedAtFor("r001") == UpdatedAtFor("r003") &&  UpdatedAtFor("r003") == UpdatedAtFor("r004"));
+
+        // 4. Reenable the resource with r001 and r003
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r003"], "ttd"));
+
+        response = await client.GetAsync(requestUri);
+        subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+        // There should be four pairs, but r001 and r003 should no longer be marked as deleted. They should have new, identical timestamps
+        Assert.NotNull(subjectResources);
+        Assert.Equal(4, subjectResources.Items.Count());
+        Assert.True(!Subject("r001").Deleted && !Subject("r003").Deleted);
+        Assert.True(UpdatedAtFor("r001") == UpdatedAtFor("r003"));
+        Assert.True(UpdatedAtFor("r001") > UpdatedAtFor("r004"));
     }
 
     /// <summary>
@@ -171,9 +289,66 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);
-        Assert.Equal(12, subjectMatch.Items.Count());
+        Assert.Equal(13, subjectMatch.Items.Count());
     }
 
+    /// <summary>
+    /// Scenario: Get Policy rules for RRH innrapportering
+    /// </summary>
+    [Fact]
+    public async Task GetpolicyRulesRRH()
+    {
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v1/resource/app_brg_rrh-innrapportering/policy/rules";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        string content = await response.Content.ReadAsStringAsync();
+        List<PolicyRule>? subjectMatch = await response.Content.ReadFromJsonAsync<List<PolicyRule>>();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(subjectMatch);
+        Assert.Equal(238, subjectMatch.Count());
+    }
+
+    /// <summary>
+    /// Scenario: Get Policy rules for RRH innrapportering
+    /// </summary>
+    [Fact]
+    public async Task GetpolicyRightsRRH()
+    {
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v1/resource/app_brg_rrh-innrapportering/policy/rights";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        string content = await response.Content.ReadAsStringAsync();
+        List<PolicyRight>? policyRights = await response.Content.ReadFromJsonAsync<List<PolicyRight>>();
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(policyRights);
+        Assert.Equal(18, policyRights.Count());
+        Assert.Equal(2, policyRights[0].SubjectTypes.Count());
+        Assert.Equal("urn:altinn:org", policyRights[0].SubjectTypes.ToList()[0]);
+        Assert.Equal("urn:altinn:rolecode", policyRights[0].SubjectTypes.ToList()[1]);
+        Assert.Equal("instantiate;rrh-innrapportering;brg;c9e4c013f36877a54c6d92bab8dcb69c", policyRights[0].RightKey);
+        Assert.Equal(2, policyRights[1].SubjectTypes.Count());
+        Assert.Equal("urn:altinn:org", policyRights[1].SubjectTypes.ToList()[0]);
+        Assert.Equal("urn:altinn:rolecode", policyRights[1].SubjectTypes.ToList()[1]);
+        Assert.Equal("read;rrh-innrapportering;brg;52a1e8911c3a9d3a7d2b837ae29a0dd8", policyRights[1].RightKey);
+    }
 
     /// <summary>
     /// Scenario: Reload subject resources for rrh-innlevering. App os imported to registry. Expects 12 subjects
@@ -209,7 +384,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);
-        Assert.Equal(12, subjectMatch.Items.Count());
+        Assert.Equal(13, subjectMatch.Items.Count());
     }
 
 

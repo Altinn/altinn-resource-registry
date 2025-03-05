@@ -21,7 +21,6 @@ exports.getToken = async function (getTokenParameters) {
 
     tokenUrl = `${tokenBaseUrl}/api/Get${tokenType}Token?env=${tokenEnv}&scopes=${tokenScopes}&pid=${tokenPid}&userid=${tokenUser}&partyid=${tokenParty}&authLvl=3&ttl=3000`;
   }
-
   else if (tokenType == "Enterprise") {
     const tokenOrg = getTokenParameters.auth_org;
     const tokenOrgNo = getTokenParameters.auth_orgNo;
@@ -37,6 +36,8 @@ exports.getToken = async function (getTokenParameters) {
     const tokenUserName = getTokenParameters.auth_username;
 
     tokenUrl = `${tokenBaseUrl}/api/Get${tokenType}Token?env=${tokenEnv}&scopes=${tokenScopes}&orgNo=${tokenOrgNo}&userId=${tokenUser}&partyId=${tokenParty}&userName=${tokenUserName}&ttl=30`;
+  } else {
+    throw new Error("Unknown tokenType: " + tokenType);
   }
 
   else if (tokenType == "PlatformAccess") {
@@ -52,4 +53,6 @@ exports.getToken = async function (getTokenParameters) {
   });
 
 	return response.data;
+  console.log(response.data);
+  bru.setVar("bearerToken", response.data);
 }

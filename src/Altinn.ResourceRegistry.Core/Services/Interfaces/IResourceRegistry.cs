@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using Altinn.Authorization.ProblemDetails;
 using Altinn.ResourceRegistry.Core.Models;
 
 namespace Altinn.ResourceRegistry.Core.Services.Interfaces
@@ -17,6 +18,14 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         Task<ServiceResource> GetResource(string id, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Gets the resource owner for a given resource, or <see langword="null"/> if it has no owner.
+        /// </summary>
+        /// <param name="id">The resource identifier to retrieve</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A <see cref="CompetentAuthorityReference"/> or <see langword="null"/> if the resource exists, otherwise a <see cref="Result{T}"/> with an error.</returns>
+        Task<Result<CompetentAuthorityReference>> GetResourceOwner(string id, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Returns the full list of 
         /// </summary>
         /// <param name="includeApps">Wheather or not to include apps</param>
@@ -24,7 +33,7 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="includeExpired">Defines if expired Altinn 2 serviices should be include</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
-        Task<List<ServiceResource>> GetResourceList(bool includeApps, bool includeAltinn2, bool includeExpired,  CancellationToken cancellationToken = default);
+        Task<List<ServiceResource>> GetResourceList(bool includeApps, bool includeAltinn2, bool includeExpired, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates a service resource in the resource registry if it pass all validation checks
@@ -83,6 +92,20 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         Task<Stream> GetPolicy(string resourceId, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Returns a list of flatten policy rules for a every unqie combinatiotion of subject, action, 
+        /// </summary>
+        /// <param name="resourceId">The resourceID. Support both App and resource</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns></returns>
+        Task<List<PolicyRule>> GetFlattenPolicyRules(string resourceId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Returns a list of rights for a resource. A right is a combination of resource and action. The response list the subjects in policy that is granted the right.
+        /// Response is grouped by right.
+        /// </summary>
+        Task<List<PolicyRight>> GetPolicyRights(string resourceId, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Updates Access management with changes in recource registry
         /// </summary>
         /// <param name="serviceResource">The resource to add to access management</param>
@@ -121,5 +144,15 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="app">The app</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         Task UpdateResourceSubjectsFromAppPolicy(string org, string app, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Returns a list of resource/subject pairs (including deleted) that has been updated since lastUpdated
+        /// </summary>
+        /// <param name="lastUpdated">The timestamp from which to return updated entries</param>
+        /// <param name="limit">The maximum number of entries to return</param>
+        /// <param name="skipPast">Optional ResourceUrn,SubjectUrn pair to skip past if "since" value matches multiple rows</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>List of resource/subject pairs updated since lastUpdated</returns>
+        Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default);
     }
 }

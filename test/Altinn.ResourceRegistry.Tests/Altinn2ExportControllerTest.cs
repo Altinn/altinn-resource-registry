@@ -57,7 +57,7 @@ namespace Altinn.ResourceRegistry.Tests
         public async Task DelegationCount()
         {
             HttpClient client = CreateClient();
-            string token = PrincipalUtil.GetAccessToken("studio.designer");
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/altinn2export/delegationcount?serviceCode=4485&serviceEditionCode=2021";
 
@@ -116,6 +116,45 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         /// <summary>
+        /// Calls SetExpired endpoint without token
+        /// </summary>
+        [Fact]
+        public async Task Setserviceeditionexpired_WithoutToken()
+        {
+            HttpClient client = CreateClient();
+            string requestUri = "resourceregistry/api/v1/altinn2export/setserviceeditionexpired?externalServiceCode=4485&externalServiceEditionCode=2021";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+            {
+            };
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Calls SetExpired endpoint without token
+        /// </summary>
+        [Fact]
+        public async Task Setserviceeditionexpired_WithValidToken()
+        {
+            HttpClient client = CreateClient();
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string requestUri = "resourceregistry/api/v1/altinn2export/setserviceeditionexpired?externalServiceCode=4485&externalServiceEditionCode=2021";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+            {
+            };
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        }
+
+
+        /// <summary>
         /// Tries to trigger batch without Altinn Studio token
         /// </summary>
         [Fact]
@@ -145,7 +184,7 @@ namespace Altinn.ResourceRegistry.Tests
         public async Task Trigger_Batch_MissingResource()
         {
             HttpClient client = CreateClient();
-            string token = PrincipalUtil.GetAccessToken("studio.designer");
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/altinn2export/exportdelegations";
 
@@ -176,7 +215,7 @@ namespace Altinn.ResourceRegistry.Tests
         public async Task Trigger_Batch_Ok()
         {
             HttpClient client = CreateClient();
-            string token = PrincipalUtil.GetAccessToken("studio.designer");
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/altinn2export/exportdelegations";
 
@@ -193,7 +232,7 @@ namespace Altinn.ResourceRegistry.Tests
 
             string responseContent = await response.Content.ReadAsStringAsync();
 
-            Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
+            Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
         }
 
         /// <summary>
@@ -203,7 +242,7 @@ namespace Altinn.ResourceRegistry.Tests
         public async Task Trigger_Batch_NoMatchingORg()
         {
             HttpClient client = CreateClient();
-            string token = PrincipalUtil.GetAccessToken("studio.designer");
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string requestUri = "resourceregistry/api/v1/altinn2export/exportdelegations";
 
@@ -221,6 +260,33 @@ namespace Altinn.ResourceRegistry.Tests
             string responseContent = await response.Content.ReadAsStringAsync();
 
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Triggers batch with a ttd resource to migrate delegations for an acn Altinn 2 service
+        /// </summary>
+        [Fact]
+        public async Task Trigger_Batch_MigrateAcnServiceForTtd_OK()
+        {
+            HttpClient client = CreateClient();
+            string token = PrincipalUtil.GetOrgToken("ttd", "991825827", "altinn:resourceregistry/resource.admin");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string requestUri = "resourceregistry/api/v1/altinn2export/exportdelegations";
+
+            ExportDelegationsRequestBE exportDelegationsRequestBE = new ExportDelegationsRequestBE() 
+            { 
+                ResourceId = "altinn_delegation_resource", 
+                DateTimeForExport = DateTime.Now, 
+                ServiceCode = "3225", 
+                ServiceEditionCode = 1596
+            };
+            
+            using HttpContent content = JsonContent.Create(exportDelegationsRequestBE);
+            HttpResponseMessage response = await client.PostAsync(requestUri, content);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
         }
     }
 }

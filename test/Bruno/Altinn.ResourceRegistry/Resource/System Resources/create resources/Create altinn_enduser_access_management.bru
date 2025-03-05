@@ -1,18 +1,18 @@
 meta {
-  name: Update altinn_access_management
+  name: Create altinn_enduser_access_management
   type: http
-  seq: 2
+  seq: 3
 }
 
-put {
-  url: {{baseUrl}}/resourceregistry/api/v1/resource/{{id}}
+post {
+  url: {{baseUrl}}/resourceregistry/api/v1/resource
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "identifier": "altinn_access_management",
+    "identifier": "altinn_enduser_access_management",
     "title": {
       "en": "Access Management",
       "nb": "Tilgangsstyring",
@@ -47,10 +47,6 @@ body:json {
   }
 }
 
-vars:pre-request {
-  id: altinn_access_management
-}
-
 script:pre-request {
   //const token = await tokenGenerator.getToken();
   const sharedtestdata = require(`./Testdata/sharedtestdata.json`);
@@ -65,4 +61,7 @@ script:pre-request {
   const token = await testTokenGenerator.getToken(getTokenParameters);
   
   bru.setVar("bearerToken",  token);
+  
+  
+  
 }

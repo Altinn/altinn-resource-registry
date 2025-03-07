@@ -81,7 +81,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <summary>
         /// Information about number of delegations for a service
         /// </summary>
-        [Authorize(Policy = AuthzConstants.POLICY_STUDIO_DESIGNER)]
+        [Authorize(Policy = AuthzConstants.POLICY_ADMIN)]
         [HttpGet("delegationcount")]
         public async Task<ActionResult<DelegationCountOverview>> GetDelegationCount([FromQueryAttribute] string serviceCode, [FromQueryAttribute] int serviceEditionCode, CancellationToken cancellationToken = default)
         {
@@ -93,7 +93,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <summary>
         /// Request a batch run of delegations from service in Altinn 2 to resource in Altinn 3
         /// </summary>
-        [Authorize(Policy = AuthzConstants.POLICY_STUDIO_DESIGNER)]
+        [Authorize(Policy = AuthzConstants.POLICY_ADMIN)]
         [HttpPost("exportdelegations")]
         public async Task<ActionResult> ExportDelegations([FromBody] ExportDelegationsRequestBE exportDelegationsRequestBE, CancellationToken cancellationToken = default)
         {
@@ -113,6 +113,18 @@ namespace Altinn.ResourceRegistry.Controllers
             return Created();
         }
 
+        /// <summary>
+        /// Sets a given service expired to hide delegation functionality. Proxy for bridge functionality. Called by Altinn Studio and used as part of the migration of delegation process
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Policy = AuthzConstants.POLICY_ADMIN)]
+        [HttpGet("setserviceeditionexpired")]
+        public async Task<ActionResult> SetServiceEditionExpired([FromQueryAttribute] string externalServiceCode, [FromQueryAttribute] int externalServiceEditionCode, CancellationToken cancellationToken = default)
+        {
+            await _altinn2ServicesClient.SetServiceEditionExpired(externalServiceCode, externalServiceEditionCode, cancellationToken);
+            return Ok();
+        }
+
         [NonAction]
         private async Task<bool> ValidateMatchingOrgForDelegaton(ExportDelegationsRequestBE exportRequest, string org,  CancellationToken cancellationToken = default)
         {
@@ -126,7 +138,9 @@ namespace Altinn.ResourceRegistry.Controllers
             {
                 if (resource.Identifier.Equals($"se_{exportRequest.ServiceCode}_{exportRequest.ServiceEditionCode}"))
                 {       
-                    if (resource.HasCompetentAuthority.Orgcode.Equals(org, StringComparison.OrdinalIgnoreCase))
+                    bool isMatchingOrg = resource.HasCompetentAuthority.Orgcode.Equals(org, StringComparison.OrdinalIgnoreCase) || 
+                        (org.Equals("ttd", StringComparison.OrdinalIgnoreCase) && resource.HasCompetentAuthority.Orgcode.Equals("acn", StringComparison.OrdinalIgnoreCase));
+                    if (isMatchingOrg)
                     {
                         return true;
                     }

@@ -8,6 +8,7 @@ using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Models;
 using System.Net.Http.Json;
+using Altinn.ResourceRegistry.Controllers;
 using Altinn.ResourceRegistry.TestUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Altinn.ResourceRegistry.Core;
@@ -47,6 +48,39 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         [Fact]
+        public async Task GetResource_app_skd_flyttemelding_OK()
+        {
+            var client = CreateClient();
+            string requestUri = "resourceregistry/api/v1/Resource/app_skd_flyttemelding";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+            {
+            };
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+            ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+
+            Assert.NotNull(resource);
+            Assert.Equal("app_skd_flyttemelding", resource.Identifier);
+        }
+
+        [Fact]
+        public async Task GetResource_app_nav_flyttemelding_NotFound()
+        {
+            var client = CreateClient();
+            string requestUri = "resourceregistry/api/v1/Resource/app_nav_flyttemelding";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+            {
+            };
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
         public async Task Test_Nav_Get()
         {
             var client = CreateClient();
@@ -82,7 +116,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(2, resource.Count);
+            Assert.Equal(3, resource.Count);
         }
 
         [Fact]
@@ -101,7 +135,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(439, resource.Count);
+            Assert.Equal(441, resource.Count);
 
             ServiceResource? altinn2resourcewithdescription = resource.FirstOrDefault(r => r.ResourceReferences != null && r.ResourceReferences.Any(r => r.Reference != null && r.Reference.Contains("5563")));
             Assert.NotNull(altinn2resourcewithdescription);
@@ -127,7 +161,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(312, resource.Count);
+            Assert.Equal(314, resource.Count);
         }
 
         [Fact]
@@ -146,7 +180,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(130, resource.Count);
+            Assert.Equal(132, resource.Count);
         }
 
         [Fact]
@@ -165,7 +199,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(3, resource.Count);
+            Assert.Equal(5, resource.Count);
         }
 
         [Fact]
@@ -1783,5 +1817,91 @@ namespace Altinn.ResourceRegistry.Tests
             Assert.NotNull(subjectResources.Items.FirstOrDefault(r => r.Subject.Urn.Contains("utinn")));
         }
 
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_WithoutParameters()
+        {
+            var client = CreateClient();
+            string requestUri = "resourceregistry/api/v1/resource/updated/";
+
+            HttpResponseMessage response = await client.GetAsync(requestUri);
+            Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(subjectResources);
+            Assert.NotNull(subjectResources.Items.FirstOrDefault(r => r.ResourceUrn.ToString().Contains("first")));
+        }
+
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_HasNextLink()
+        {
+            var client = CreateClient();
+            string requestUri = "resourceregistry/api/v1/resource/updated/?limit=2";
+
+            HttpResponseMessage response = await client.GetAsync(requestUri);
+            Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(subjectResources);
+            Assert.NotNull(subjectResources.Items.FirstOrDefault(r => r.ResourceUrn.ToString().Contains("altinn")));
+            Assert.NotNull(subjectResources.Links.Next);
+            var token = Opaque.Create(new UpdatedResourceSubjectsContinuationToken(subjectResources.Items.Last().ResourceUrn, subjectResources.Items.Last().SubjectUrn));
+            Assert.Contains($"?since=2024-02-01T00%3A00%3A00.0000000%2B00%3A00&token={token}&limit=2", subjectResources.Links.Next);
+        }
+
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_WithSkipPast()
+        {
+            var client = CreateClient();
+            var token = Opaque.Create(new UpdatedResourceSubjectsContinuationToken(new Uri("urn:altinn:resource:second"), new Uri("urn:altinn:rolecode:foobar")));
+            string requestUri = $"resourceregistry/api/v1/resource/updated/?Since=2024-02-01T00:00:00.0000000%2B00:00&token={token}&limit=2";
+
+            HttpResponseMessage response = await client.GetAsync(requestUri);
+            Paginated<UpdatedResourceSubject>? subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(subjectResources);
+        }
+
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_WithInvalidLimit()
+        {
+            var client = CreateClient();
+            string requestUri = "resourceregistry/api/v1/resource/updated/?limit=100000";
+
+            HttpResponseMessage response = await client.GetAsync(requestUri);
+            ValidationProblemDetails? errordetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.NotNull(errordetails);
+        }
+
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_WithInvalidDateTime()
+        {
+            var client = CreateClient();
+            string requestUri = "resourceregistry/api/v1/resource/updated/?since=xxx";
+
+            HttpResponseMessage response = await client.GetAsync(requestUri);
+            ValidationProblemDetails? errordetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.NotNull(errordetails);
+
+            Assert.Single(errordetails.Errors);
+            Assert.NotNull(errordetails.Errors["since"]);
+        }
+
+        [Fact]
+        public async Task GetUpdatedResourceSubjects_WithInvalidSkipPast()
+        {
+            var client = CreateClient();
+            string requestUri = "resourceregistry/api/v1/resource/updated/?token=xxx";
+
+            HttpResponseMessage response = await client.GetAsync(requestUri);
+            ValidationProblemDetails? errordetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.NotNull(errordetails);
+        }
     }
 }

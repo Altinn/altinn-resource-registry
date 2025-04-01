@@ -1,7 +1,7 @@
 meta {
-  name: Create policy altinn_client_administration
+  name: Create policy altinn_keyrole_access
   type: http
-  seq: 4
+  seq: 5
 }
 
 post {
@@ -15,11 +15,11 @@ headers {
 }
 
 body:multipart-form {
-  policyFile: @file(Testdata/Policies/altinn_clientadministration.xacml)
+  policyFile: @file(Testdata/Policies/altinn_keyrole_access.xacml)
 }
 
 vars:pre-request {
-  id: altinn_client_administration
+  id: altinn_keyrole_access
 }
 
 script:pre-request {

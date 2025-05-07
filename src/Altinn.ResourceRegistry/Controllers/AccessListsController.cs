@@ -124,34 +124,6 @@ public class AccessListsController
     }
 
     /// <summary>
-    /// Returns a list of access lists for a given member.
-    /// </summary>
-    /// <param name="memberPartyUUid">The member partyuuid</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-    /// <returns>List of accesslist the party is member of</returns>
-    [HttpGet("/resourceregistry/api/v1/access-lists/get-by-member")]
-    [SwaggerOperation(Tags = ["Access List"])]
-    public async Task<ActionResult<IReadOnlyList<AccessListInfo>>> GetAccessListsByMember(
-        [FromQuery(Name = "member")] Guid memberPartyUUid,
-        CancellationToken cancellationToken = default)
-        {
-        ValidationErrorBuilder errors = default;
-
-        if (errors.TryToActionResult(out var errorResult))
-        {
-            return errorResult;
-        }
-
-        IReadOnlyList<AccessListInfo> accesssLists = await _service.GetAccessListsByMember(memberPartyUUid, cancellationToken);
-        if (accesssLists == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(accesssLists);
-    }
-
-    /// <summary>
     /// Gets an access list by owner and identifier.
     /// </summary>
     /// <param name="owner">The resource owner</param>

@@ -273,6 +273,40 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         memberships.Items.Should().Contain(m => m.Party == user1 && m.Resource == resource1);
     }
 
+    [Fact]
+    public async Task By_Member()
+    {
+        const string RESOURCE1 = "resource1";
+        const string RESOURCE2 = "resource2";
+
+        await AddResource(RESOURCE1);
+        await AddResource(RESOURCE2);
+
+        var resource1 = ResourceUrn.ResourceId.Create(ResourceIdentifier.CreateUnchecked(RESOURCE1));
+        var resource2 = ResourceUrn.ResourceId.Create(ResourceIdentifier.CreateUnchecked(RESOURCE2));
+        var user1 = PartyUrn.PartyUuid.Create(GenerateUserId());
+        var user2 = PartyUrn.PartyUuid.Create(GenerateUserId());
+
+        var list1 = await Repository.CreateAccessList(
+            resourceOwner: ORG_NR,
+            identifier: "access-list1",
+            name: "Access List 1",
+            description: "description1");
+
+        list1.AddResourceConnection(RESOURCE1, []);
+        list1.AddResourceConnection(RESOURCE2, []);
+        list1.AddMembers([user1.Value, user2.Value]);
+        await list1.SaveChanges();
+
+        using var client = CreateAuthenticatedClient();
+
+        var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/get-by-member?party={user1}");
+        response.Should().HaveStatusCode(HttpStatusCode.OK);
+
+        var memberships = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccessListInfo>>();
+        Assert.NotNull(memberships);
+    }
+
     #region Authorization
     public class Authorization(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
         : AccessListMembershipsControllerTests(dbFixture, webApplicationFixture)

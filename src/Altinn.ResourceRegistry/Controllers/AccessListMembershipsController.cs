@@ -12,6 +12,7 @@ using Altinn.ResourceRegistry.Filters;
 using Altinn.ResourceRegistry.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Altinn.ResourceRegistry.Controllers;
 
@@ -119,5 +120,39 @@ public class AccessListMembershipsController
         }
 
         return ListObject.Create(result.Value.Select(AccessListResourceMembershipWithActionFilterDto.From));
+    }
+
+    /// <summary>
+    /// Returns a list of access lists for a given member.
+    /// </summary>
+    /// <param name="memberPartyUUid">The member partyuuid</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+    /// <returns>List of accesslist the party is member of</returns>
+    [HttpGet("/resourceregistry/api/v1/access-lists/get-by-member")]
+    [Authorize(Policy = AuthzConstants.POLICY_PLATFORM_COMPONENT_ONLY)]
+    [SwaggerOperation(Tags = ["Access List"])]
+    public async Task<ActionResult<IReadOnlyList<AccessListInfo>>> GetAccessListsByMember(
+        [FromQuery(Name = "party")] PartyUrn memberPartyUUid,
+        CancellationToken cancellationToken = default)
+    {
+        ValidationErrorBuilder errors = default;
+
+        if (errors.TryToActionResult(out var errorResult))
+        {
+            return errorResult;
+        }
+
+        if (memberPartyUUid.IsPartyUuid(out Guid partyUuid))
+        {
+            IReadOnlyList<AccessListInfo> accesssLists = await _service.GetAccessListsByMember(partyUuid, cancellationToken);
+            if (accesssLists == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(accesssLists);
+        }
+
+        return BadRequest("Invalid partyID");
     }
 }

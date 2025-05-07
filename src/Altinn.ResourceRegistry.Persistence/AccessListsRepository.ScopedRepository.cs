@@ -258,6 +258,22 @@ internal partial class AccessListsRepository
             return accessLists;
         }
 
+        public async Task<IReadOnlyList<AccessListInfo>> GetAccessListByMember(Guid memberParty, CancellationToken cancellationToken)
+        {
+            const string QUERY = /*strpsql*/@"
+                SELECT a.aggregate_id, a.identifier, a.resource_owner, a.name, a.description, a.created, a.modified, a.version
+                FROM resourceregistry.access_list_state AS a
+                INNER JOIN resourceregistry.access_list_members_state AS m ON m.aggregate_id = a.aggregate_id
+                WHERE m.party_id = @party_id;";
+            await using var cmd = _conn.CreateCommand(QUERY);
+            cmd.Parameters.AddWithValue("party_id", NpgsqlDbType.Uuid, memberParty);
+            await cmd.PrepareAsync(cancellationToken);
+            var accessLists = await cmd.ExecuteEnumerableAsync(cancellationToken)
+                .Select(CreateAccessListInfo)
+                .ToListAsync(cancellationToken);
+            return accessLists;
+        }
+
         public async Task<AccessListData<IReadOnlyList<AccessListResourceConnection>>?> GetAccessListResourceConnections(
             AccessListIdentifier identifier,
             string? continueFrom,

@@ -303,8 +303,12 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/get-by-member?party={user1}");
         response.Should().HaveStatusCode(HttpStatusCode.OK);
 
-        var memberships = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccessListInfo>>();
+        IReadOnlyList<AccessListInfo>? memberships = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccessListInfo>>();
         Assert.NotNull(memberships);
+        Assert.Single(memberships);
+        Assert.Equal("access-list1", memberships[0].Identifier);
+        Assert.Equal("description1", memberships[0].Description);
+        Assert.Equal(ORG_NR, memberships[0].ResourceOwner);
     }
 
     #region Authorization

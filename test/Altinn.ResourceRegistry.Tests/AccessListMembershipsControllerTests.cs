@@ -17,7 +17,7 @@ namespace Altinn.ResourceRegistry.Tests;
 public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplicationFixture webApplicationFixture)
     : WebApplicationTests(dbFixture, webApplicationFixture)
 {
-    private const string ORG_NR = "974761076";
+    private const string ORG_CODE = "ttd";
 
     protected IAccessListsRepository Repository => Services.GetRequiredService<IAccessListsRepository>();
     protected AdvanceableTimeProvider TimeProvider => Services.GetRequiredService<AdvanceableTimeProvider>();
@@ -160,7 +160,7 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         var user2 = PartyUrn.PartyUuid.Create(GenerateUserId());
 
         var list1 = await Repository.CreateAccessList(
-            resourceOwner: ORG_NR, 
+            resourceOwner: ORG_CODE, 
             identifier: "access-list1", 
             name: "Access List 1",
             description: "description1");
@@ -170,7 +170,7 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         await list1.SaveChanges();
 
         var list2 = await Repository.CreateAccessList(
-            resourceOwner: ORG_NR,
+            resourceOwner: ORG_CODE,
             identifier: "access-list2",
             name: "Access List 2",
             description: "description2");
@@ -213,7 +213,7 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         var user2 = PartyUrn.PartyUuid.Create(GenerateUserId());
 
         var list1 = await Repository.CreateAccessList(
-            resourceOwner: ORG_NR,
+            resourceOwner: ORG_CODE,
             identifier: "access-list1",
             name: "Access List 1",
             description: "description1");
@@ -251,7 +251,7 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         var user2 = PartyUrn.PartyUuid.Create(GenerateUserId());
 
         var list1 = await Repository.CreateAccessList(
-            resourceOwner: ORG_NR,
+            resourceOwner: ORG_CODE,
             identifier: "access-list1",
             name: "Access List 1",
             description: "description1");
@@ -274,7 +274,7 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
     }
 
     [Fact]
-    public async Task By_Member()
+    public async Task By_Member_MemberOfOne()
     {
         const string RESOURCE1 = "resource1";
         const string RESOURCE2 = "resource2";
@@ -288,7 +288,7 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         var user2 = PartyUrn.PartyUuid.Create(GenerateUserId());
 
         var list1 = await Repository.CreateAccessList(
-            resourceOwner: ORG_NR,
+            resourceOwner: ORG_CODE,
             identifier: "access-list1",
             name: "Access List 1",
             description: "description1");
@@ -303,12 +303,64 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/get-by-member?party={user1}");
         response.Should().HaveStatusCode(HttpStatusCode.OK);
 
-        IReadOnlyList<AccessListInfo>? memberships = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccessListInfo>>();
+        IReadOnlyList<AccessListInfoDto>? memberships = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccessListInfoDto>>();
         Assert.NotNull(memberships);
         Assert.Single(memberships);
         Assert.Equal("access-list1", memberships[0].Identifier);
         Assert.Equal("description1", memberships[0].Description);
-        Assert.Equal(ORG_NR, memberships[0].ResourceOwner);
+        Assert.Equal("urn:altinn:access-list:ttd:access-list1", memberships[0].Urn);
+    }
+
+    [Fact]
+    public async Task By_Member_MemberOfTwo()
+    {
+        const string RESOURCE1 = "resource1";
+        const string RESOURCE2 = "resource2";
+
+        await AddResource(RESOURCE1);
+        await AddResource(RESOURCE2);
+
+        var resource1 = ResourceUrn.ResourceId.Create(ResourceIdentifier.CreateUnchecked(RESOURCE1));
+        var resource2 = ResourceUrn.ResourceId.Create(ResourceIdentifier.CreateUnchecked(RESOURCE2));
+        var user1 = PartyUrn.PartyUuid.Create(GenerateUserId());
+        var user2 = PartyUrn.PartyUuid.Create(GenerateUserId());
+
+        var list1 = await Repository.CreateAccessList(
+            resourceOwner: ORG_CODE,
+            identifier: "access-list1",
+            name: "Access List 1",
+            description: "description1");
+
+        list1.AddResourceConnection(RESOURCE1, []);
+        list1.AddResourceConnection(RESOURCE2, []);
+        list1.AddMembers([user1.Value, user2.Value]);
+        await list1.SaveChanges();
+
+        var list2 = await Repository.CreateAccessList(
+           resourceOwner: ORG_CODE,
+           identifier: "access-list2",
+           name: "Access List 2",
+           description: "description2");
+
+        list2.AddResourceConnection(RESOURCE1, []);
+        list2.AddResourceConnection(RESOURCE2, []);
+        list2.AddMembers([user1.Value, user2.Value]);
+        await list2.SaveChanges();
+
+        using var client = CreateAuthenticatedClient();
+
+        var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/get-by-member?party={user1}");
+        response.Should().HaveStatusCode(HttpStatusCode.OK);
+
+        IReadOnlyList<AccessListInfoDto>? memberships = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccessListInfoDto>>();
+        Assert.NotNull(memberships);
+        Assert.Equal(2,memberships.Count);
+        Assert.Equal("access-list1", memberships[0].Identifier);
+        Assert.Equal("description1", memberships[0].Description);
+        Assert.Equal("urn:altinn:access-list:ttd:access-list1", memberships[0].Urn);
+        Assert.Equal("access-list2", memberships[1].Identifier);
+        Assert.Equal("description2", memberships[1].Description);
+        Assert.Equal("urn:altinn:access-list:ttd:access-list2", memberships[1].Urn);
     }
 
     #region Authorization

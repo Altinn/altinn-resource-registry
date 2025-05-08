@@ -131,7 +131,7 @@ public class AccessListMembershipsController
     [HttpGet("/resourceregistry/api/v1/access-lists/get-by-member")]
     [Authorize(Policy = AuthzConstants.POLICY_PLATFORM_COMPONENT_ONLY)]
     [SwaggerOperation(Tags = ["Access List"])]
-    public async Task<ActionResult<IReadOnlyList<AccessListInfo>>> GetAccessListsByMember(
+    public async Task<ActionResult<IReadOnlyList<AccessListInfoDto>>> GetAccessListsByMember(
         [FromQuery(Name = "party")] PartyUrn memberPartyUUid,
         CancellationToken cancellationToken = default)
     {
@@ -150,7 +150,10 @@ public class AccessListMembershipsController
                 return NotFound();
             }
 
-            return Ok(accesssLists);
+            // Assuming `accessList` is a List<AccessListInfo> and you want to convert it to List<AccessListInfoDto>  
+            List<AccessListInfoDto> accessListDtos = accesssLists.Select(AccessListInfoDto.From).ToList();
+
+            return Ok(accessListDtos);
         }
 
         return BadRequest("Invalid partyID");

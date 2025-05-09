@@ -132,7 +132,7 @@ public class AccessListMembershipsController
     [Authorize(Policy = AuthzConstants.POLICY_PLATFORM_COMPONENT_ONLY)]
     [SwaggerOperation(Tags = ["Access List"])]
     public async Task<ActionResult<IReadOnlyList<AccessListInfoDto>>> GetAccessListsByMember(
-        [FromQuery(Name = "party")] PartyUrn memberPartyUUid,
+        [FromQuery(Name = "party")] PartyUuidUrn memberPartyUUid,
         CancellationToken cancellationToken = default)
     {
         ValidationErrorBuilder errors = default;

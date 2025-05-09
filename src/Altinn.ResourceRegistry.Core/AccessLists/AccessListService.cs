@@ -58,13 +58,12 @@ internal class AccessListService
 
     /// <inheritdoc/>
     public async Task<IReadOnlyList<AccessListInfo>> GetAccessListsByMember(
-    Guid memberPartyUuid,
-    CancellationToken cancellationToken = default)
+        Guid memberPartyUuid,
+        CancellationToken cancellationToken = default)
     {
-        Guard.IsNotNull(memberPartyUuid);
+        Guard.IsDefault(memberPartyUuid);
 
-        // request 1 more than page size to determine if there are more pages
-        var accessLists = await _repository.GetAccessListByMember(
+        IReadOnlyList<AccessListInfo> accessLists = await _repository.GetAccessListByMember(
             memberPartyUuid,
             cancellationToken);
 

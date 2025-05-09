@@ -32,7 +32,7 @@ public interface IAccessListService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Returns a all AccessLists for a given member.
+    /// Gets all access-lists a given party is a member of.
     /// </summary>
     /// <param name="memberPartyUuid">The given partyUuid for an member</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>

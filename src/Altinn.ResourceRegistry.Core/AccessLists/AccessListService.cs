@@ -61,7 +61,7 @@ internal class AccessListService
         Guid memberPartyUuid,
         CancellationToken cancellationToken = default)
     {
-        Guard.IsDefault(memberPartyUuid);
+        Guard.IsNotDefault(memberPartyUuid);
 
         IReadOnlyList<AccessListInfo> accessLists = await _repository.GetAccessListByMember(
             memberPartyUuid,

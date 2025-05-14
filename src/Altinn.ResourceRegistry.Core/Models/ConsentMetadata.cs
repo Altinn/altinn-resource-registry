@@ -10,7 +10,6 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// <summary>
         /// Define if metadata is optional
         /// </summary>
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool Optional { get; set; }
     }
 }

@@ -149,6 +149,11 @@ namespace Altinn.ResourceRegistry.Core.Models
         public Dictionary<string, ConsentMetadata>? ConsentMetadata { get; set; }
 
         /// <summary>
+        /// Defines if consent resource is used for one time consents, or consents with an expiry date
+        /// </summary>
+        public bool IsOneTimeConsent { get; set; }
+
+        /// <summary>
         /// Writes key information when this object is written to Log.
         /// </summary>
         /// <returns></returns>

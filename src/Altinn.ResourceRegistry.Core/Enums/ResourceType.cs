@@ -34,7 +34,7 @@ namespace Altinn.ResourceRegistry.Core.Enums
         [PgName("correspondenceservice")]
         CorrespondenceService = 1 << 6,
 
-        [PgName("consentresource")]
-        ConsentResource = 1 << 7,
+        [PgName("consent")]
+        Consent = 1 << 7,
     }
 }

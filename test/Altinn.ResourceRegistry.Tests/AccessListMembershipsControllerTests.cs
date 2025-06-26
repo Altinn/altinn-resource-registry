@@ -306,9 +306,11 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
         IReadOnlyList<AccessListInfoDto>? memberships = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccessListInfoDto>>();
         Assert.NotNull(memberships);
         Assert.Single(memberships);
-        Assert.Equal("access-list1", memberships[0].Identifier);
-        Assert.Equal("description1", memberships[0].Description);
-        Assert.Equal("urn:altinn:access-list:ttd:access-list1", memberships[0].Urn);
+        AccessListInfoDto? list1Resp = memberships.FirstOrDefault(r => r.Identifier.Equals("access-list1"));
+        Assert.NotNull(list1Resp);
+        Assert.Equal("access-list1", list1Resp.Identifier);
+        Assert.Equal("description1", list1Resp.Description);
+        Assert.Equal("urn:altinn:access-list:ttd:access-list1", list1Resp.Urn);
     }
 
     [Fact]
@@ -322,8 +324,8 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
 
         var resource1 = ResourceUrn.ResourceId.Create(ResourceIdentifier.CreateUnchecked(RESOURCE1));
         var resource2 = ResourceUrn.ResourceId.Create(ResourceIdentifier.CreateUnchecked(RESOURCE2));
-        var user1 = PartyUrn.PartyUuid.Create(GenerateUserId());
-        var user2 = PartyUrn.PartyUuid.Create(GenerateUserId());
+        var party1 = PartyUrn.PartyUuid.Create(GenerateUserId());
+        var party2 = PartyUrn.PartyUuid.Create(GenerateUserId());
 
         var list1 = await Repository.CreateAccessList(
             resourceOwner: ORG_CODE,
@@ -333,7 +335,7 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
 
         list1.AddResourceConnection(RESOURCE1, []);
         list1.AddResourceConnection(RESOURCE2, []);
-        list1.AddMembers([user1.Value, user2.Value]);
+        list1.AddMembers([party1.Value, party2.Value]);
         await list1.SaveChanges();
 
         var list2 = await Repository.CreateAccessList(
@@ -344,23 +346,27 @@ public class AccessListMembershipsControllerTests(DbFixture dbFixture, WebApplic
 
         list2.AddResourceConnection(RESOURCE1, []);
         list2.AddResourceConnection(RESOURCE2, []);
-        list2.AddMembers([user1.Value, user2.Value]);
+        list2.AddMembers([party1.Value, party2.Value]);
         await list2.SaveChanges();
 
         using var client = CreateAuthenticatedClient();
 
-        var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/get-by-member?party={user1}");
+        var response = await client.GetAsync($"/resourceregistry/api/v1/access-lists/get-by-member?party={party1}");
         response.Should().HaveStatusCode(HttpStatusCode.OK);
 
         IReadOnlyList<AccessListInfoDto>? memberships = await response.Content.ReadFromJsonAsync<IReadOnlyList<AccessListInfoDto>>();
         Assert.NotNull(memberships);
         Assert.Equal(2,memberships.Count);
-        Assert.Equal("access-list1", memberships[0].Identifier);
-        Assert.Equal("description1", memberships[0].Description);
-        Assert.Equal("urn:altinn:access-list:ttd:access-list1", memberships[0].Urn);
-        Assert.Equal("access-list2", memberships[1].Identifier);
-        Assert.Equal("description2", memberships[1].Description);
-        Assert.Equal("urn:altinn:access-list:ttd:access-list2", memberships[1].Urn);
+        AccessListInfoDto? list1Resp = memberships.FirstOrDefault(r => r.Identifier.Equals("access-list1"));
+        AccessListInfoDto? list2Resp = memberships.FirstOrDefault(r => r.Identifier.Equals("access-list2"));
+        Assert.NotNull(list1Resp);
+        Assert.NotNull(list2Resp);
+        Assert.Equal("access-list1", list1Resp.Identifier);
+        Assert.Equal("description1", list1Resp.Description);
+        Assert.Equal("urn:altinn:access-list:ttd:access-list1", list1Resp.Urn);
+        Assert.Equal("access-list2", list2Resp.Identifier);
+        Assert.Equal("description2", list2Resp.Description);
+        Assert.Equal("urn:altinn:access-list:ttd:access-list2", list2Resp.Urn);
     }
 
     #region Authorization

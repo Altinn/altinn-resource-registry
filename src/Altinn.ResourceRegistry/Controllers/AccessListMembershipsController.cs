@@ -135,13 +135,6 @@ public class AccessListMembershipsController
         [FromQuery(Name = "party")] PartyUuidUrn memberPartyUUid,
         CancellationToken cancellationToken = default)
     {
-        ValidationErrorBuilder errors = default;
-
-        if (errors.TryToActionResult(out var errorResult))
-        {
-            return errorResult;
-        }
-
         if (memberPartyUUid.IsPartyUuid(out Guid partyUuid))
         {
             IReadOnlyList<AccessListInfo> accesssLists = await _service.GetAccessListsByMember(partyUuid, cancellationToken);
@@ -150,12 +143,11 @@ public class AccessListMembershipsController
                 return NotFound();
             }
 
-            // Assuming `accessList` is a List<AccessListInfo> and you want to convert it to List<AccessListInfoDto>  
             List<AccessListInfoDto> accessListDtos = accesssLists.Select(AccessListInfoDto.From).ToList();
 
             return Ok(accessListDtos);
         }
 
-        return BadRequest("Invalid partyID");
+        return BadRequest("Invalid partyurn" + memberPartyUUid.ToString());
     }
 }

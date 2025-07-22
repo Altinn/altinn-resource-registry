@@ -7,7 +7,7 @@ RUN dotnet publish -c Release -o out ./src/Altinn.ResourceRegistry/Altinn.Resour
   && cp -r src/Altinn.ResourceRegistry.Persistence/Migration out/Migration
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine@sha256:53867b9ebb86beab644de47226867d255d0360e38324d2afb3ff4d2f2933e33f AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine@sha256:91e477e260390e2fc18987e552daf7958491c2e247bf07ae3b876e4f629b6504 AS final
 EXPOSE 5100
 WORKDIR /app
 

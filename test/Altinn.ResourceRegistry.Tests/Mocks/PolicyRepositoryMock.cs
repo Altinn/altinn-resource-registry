@@ -8,9 +8,17 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 {
     public class PolicyRepositoryMock : IPolicyRepository
     {
-        public Task<Response> DeletePolicyVersionAsync(string filepath, string version, CancellationToken cancellationToken)
+        public Task<Response> DeletePolicyVersionAsync(string resourceId, string version, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<Response> DeletePolicyAsync(string resourceId, CancellationToken cancellationToken)
+        {
+            // Don't actually delete anything, just return a successful response
+            var responseMock = new Mock<Response>();
+            responseMock.SetupGet(r => r.Status).Returns((int)HttpStatusCode.Accepted);
+            return Task.FromResult(responseMock.Object);
         }
 
         public async Task<Stream?> GetPolicyAsync(string resourceId, CancellationToken cancellationToken)
@@ -48,9 +56,16 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<bool> PolicyExistsAsync(string filepath, CancellationToken cancellationToken)
+        public Task<bool> PolicyExistsAsync(string resourceId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            string? containerPath = GetPolicyContainerPath();
+            if (containerPath != null)
+            {
+                containerPath = Path.Combine(containerPath, resourceId, "resourcepolicy.xml");
+                return Task.FromResult(File.Exists(containerPath));
+            }
+
+            return Task.FromResult(false);
         }
 
         public Task ReleaseBlobLease(string filepath, string leaseId, CancellationToken cancellationToken)

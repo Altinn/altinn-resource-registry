@@ -116,7 +116,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(3, resource.Count);
+            Assert.Equal(4, resource.Count);
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(441, resource.Count);
+            Assert.Equal(442, resource.Count);
 
             ServiceResource? altinn2resourcewithdescription = resource.FirstOrDefault(r => r.ResourceReferences != null && r.ResourceReferences.Any(r => r.Reference != null && r.Reference.Contains("5563")));
             Assert.NotNull(altinn2resourcewithdescription);
@@ -161,7 +161,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(314, resource.Count);
+            Assert.Equal(315, resource.Count);
         }
 
         [Fact]
@@ -180,7 +180,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(132, resource.Count);
+            Assert.Equal(133, resource.Count);
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(5, resource.Count);
+            Assert.Equal(6, resource.Count);
         }
 
         [Fact]
@@ -1692,6 +1692,31 @@ namespace Altinn.ResourceRegistry.Tests
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             string resourceId = "altinn_access_management_skd";
+            string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Deletes a resource that user is authorized for
+        /// Expected result: Return httpStatus nocontent statuscode
+        /// </summary>
+        [Fact]
+        public async Task Delete_AdminScope_ValidResource_WithPolicy_ReturnsNoContent()
+        {
+            // Arrange
+            var client = CreateClient();
+
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string resourceId = "altinn_access_management_skd_delme";
             string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);

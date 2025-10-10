@@ -177,6 +177,34 @@ internal class PolicyRepository : IPolicyRepository
         }
     }
 
+    /// <inheritdoc/>
+    public async Task<Response> DeletePolicyAsync(string resourceId, CancellationToken cancellationToken = default)
+    {
+        string filePath = $"{resourceId.AsFilePath()}/resourcepolicy.xml";
+        try
+        {
+            BlobClient blockBlob = CreateBlobClient(filePath);
+
+            return await blockBlob.DeleteAsync(snapshotsOption: DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);
+        }
+        catch (RequestFailedException ex)
+        {
+            if (ex.Status == (int)HttpStatusCode.Forbidden && ex.ErrorCode == "OperationNotAllowedOnRootBlob")
+            {
+                _logger.LogError(ex, "Failed to delete policy file at {filepath}. Not allowed to delete.", filePath);
+                throw;
+            }
+
+            _logger.LogError(ex, "Failed to delete policy file at {filepath}. RequestFailedException", filePath);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to delete policy file at {filepath}. Unexpected error", filePath);
+            throw;
+        }
+    }
+
     private BlobClient CreateBlobClient(string blobName)
     {
         return _resourceRegisterContainerClient.GetBlobClient(blobName);

@@ -79,7 +79,12 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task Delete(string id, CancellationToken cancellationToken = default)
         {
-            await _repository.DeleteResource(id, cancellationToken);
+            if (await _policyRepository.PolicyExistsAsync(id))
+            {
+                await _policyRepository.DeletePolicyAsync(id, cancellationToken);
+            }
+        
+            await _repository.DeleteResource(id, cancellationToken);            
         }
 
         /// <inheritdoc/>

@@ -79,11 +79,18 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task Delete(string id, CancellationToken cancellationToken = default)
         {
-            if (await _policyRepository.PolicyExistsAsync(id))
+            try
             {
-                await _policyRepository.DeletePolicyAsync(id, cancellationToken);
+                await _policyRepository.TryDeletePolicyAsync(id, cancellationToken);
             }
-        
+            catch (RequestFailedException ex)
+            {
+                if (ex.Status == (int)HttpStatusCode.NotFound)
+                {
+                    // Ignore not found exceptions when deleting the policy
+                }
+            }
+
             await _repository.DeleteResource(id, cancellationToken);            
         }
 

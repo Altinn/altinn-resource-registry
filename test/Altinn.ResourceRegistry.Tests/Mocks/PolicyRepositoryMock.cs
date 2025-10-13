@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Altinn.Authorization.ProblemDetails;
 using Altinn.ResourceRegistry.Core;
 using Azure;
 using Azure.Storage.Blobs.Models;
@@ -13,8 +14,19 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<Response> DeletePolicyAsync(string resourceId, CancellationToken cancellationToken)
+        public Task<Response> TryDeletePolicyAsync(string resourceId, CancellationToken cancellationToken)
         {
+            string? containerPath = GetPolicyContainerPath();
+            if (containerPath != null)
+            {
+                containerPath = Path.Combine(containerPath, resourceId, "resourcepolicy.xml");
+
+                if (!File.Exists(containerPath))
+                {   
+                    throw new RequestFailedException((int)HttpStatusCode.NotFound, "Not Found");
+                }
+            }
+
             // Don't actually delete anything, just return a successful response
             var responseMock = new Mock<Response>();
             responseMock.SetupGet(r => r.Status).Returns((int)HttpStatusCode.Accepted);

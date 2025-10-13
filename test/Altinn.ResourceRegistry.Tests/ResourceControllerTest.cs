@@ -1659,7 +1659,7 @@ namespace Altinn.ResourceRegistry.Tests
         /// Expected result: Return httpStatus No content statuscode
         /// </summary>
         [Fact]
-        public async Task Delete_AuthorizedUser_ValidResource_ReturnsNoContent()
+        public async Task Delete_AuthorizedUser_ValidResource_NoPolicyFile_ReturnsNoContent()
         {
             var client = CreateClient();
             // Arrange            
@@ -1670,31 +1670,6 @@ namespace Altinn.ResourceRegistry.Tests
             string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);            
-
-            // Act
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-        }
-
-        /// <summary>
-        /// Deletes a resource that user is authorized for
-        /// Expected result: Return httpStatus nocontent statuscode
-        /// </summary>
-        [Fact]
-        public async Task Delete_AdminScope_ValidResource_ReturnsNoContent()
-        {
-            // Arrange
-            var client = CreateClient();
-
-            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.admin");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            string resourceId = "altinn_access_management_skd";
-            string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
-
-            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
 
             // Act
             HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
@@ -1727,7 +1702,6 @@ namespace Altinn.ResourceRegistry.Tests
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
-
 
         /// <summary>
         /// Deletes a resource that user is authorized for
@@ -1780,6 +1754,30 @@ namespace Altinn.ResourceRegistry.Tests
         /// </summary>
         [Fact]
         public async Task Delete_DoesentExist_ReturnsNotFound()
+        {
+            var client = CreateClient();
+            // Arrange            
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string resourceId = "fail-you-can-never-find-me";
+            string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+                /// <summary>
+        /// Attempts to delete a resource that does not exist
+        /// Expected result: Return httpStatus not found statuscode
+        /// </summary>
+        [Fact]
+        public async Task Delete_PolicyDoesentExist_ReturnsOK()
         {
             var client = CreateClient();
             // Arrange            

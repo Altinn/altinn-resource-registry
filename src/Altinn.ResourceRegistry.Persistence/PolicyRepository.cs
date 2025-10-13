@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using Altinn.Authorization.ProblemDetails;
 using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Persistence.Configuration;
@@ -178,7 +180,7 @@ internal class PolicyRepository : IPolicyRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Response> DeletePolicyAsync(string resourceId, CancellationToken cancellationToken = default)
+    public async Task<Response> TryDeletePolicyAsync(string resourceId, CancellationToken cancellationToken = default)
     {
         string filePath = $"{resourceId.AsFilePath()}/resourcepolicy.xml";
         try
@@ -192,6 +194,12 @@ internal class PolicyRepository : IPolicyRepository
             if (ex.Status == (int)HttpStatusCode.Forbidden && ex.ErrorCode == "OperationNotAllowedOnRootBlob")
             {
                 _logger.LogError(ex, "Failed to delete policy file at {filepath}. Not allowed to delete.", filePath);
+                throw;
+            }
+
+            if (ex.Status == (int)HttpStatusCode.NotFound)
+            {
+                _logger.LogWarning(ex, "Failed to delete policy file at {filepath}. No file found.", filePath);
                 throw;
             }
 

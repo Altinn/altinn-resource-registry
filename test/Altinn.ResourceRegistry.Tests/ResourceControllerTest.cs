@@ -1774,6 +1774,30 @@ namespace Altinn.ResourceRegistry.Tests
             Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
         }
 
+        /// <summary>
+        /// Attempts to delete a resource that does not exist
+        /// Expected result: Return httpStatus not found statuscode
+        /// </summary>
+        [Fact]
+        public async Task Delete_DoesentExist_ReturnsNotFound()
+        {
+            var client = CreateClient();
+            // Arrange            
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            string resourceId = "fail-you-can-never-find-me";
+            string requestUri = $"resourceregistry/api/v1/Resource/{resourceId}";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
         [Fact]
         public async Task Export_OK()
         {

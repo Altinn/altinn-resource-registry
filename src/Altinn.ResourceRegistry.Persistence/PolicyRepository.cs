@@ -195,22 +195,22 @@ internal class PolicyRepository : IPolicyRepository
         }
         catch (RequestFailedException ex) when (ex.Status == (int)HttpStatusCode.NotFound)
         {
-            _logger.LogWarning(ex, "No policy file to delete at {filepath}.", filePath);
+            _logger.LogWarning(ex, "No policy file to delete at {FilePath}.", filePath);
             return true;
         }
         catch (RequestFailedException ex) when (ex.Status == (int)HttpStatusCode.Forbidden && ex.ErrorCode == "OperationNotAllowedOnRootBlob")
         {
-            _logger.LogError(ex, "Failed to delete policy file at {filepath}. Not allowed to delete.", filePath);
+            _logger.LogError(ex, "Failed to delete policy file at {FilePath}. Not allowed to delete.", filePath);
             throw;
         }        
         catch (RequestFailedException ex)
         {
-            _logger.LogError(ex, "Failed to delete policy file at {filepath}. RequestFailedException", filePath);
+            _logger.LogError(ex, "Failed to delete policy file at {FilePath}. RequestFailedException", filePath);
             throw;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to delete policy file at {filepath}. Unexpected error", filePath);
+            _logger.LogError(ex, "Failed to delete policy file at {FilePath}. Unexpected error", filePath);
             throw;
         }
 

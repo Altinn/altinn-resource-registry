@@ -1,8 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using Altinn.Authorization.ProblemDetails;
 using Altinn.ResourceRegistry.Core;
-using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Persistence.Configuration;
@@ -187,15 +185,35 @@ internal class PolicyRepository : IPolicyRepository
         {
             BlobClient blockBlob = CreateBlobClient(filePath);
 
-            var deleteResponse = await blockBlob.DeleteAsync(snapshotsOption: DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);
-            if (!deleteResponse.IsError)
+            // Delete current version and all snapshots
+            bool currentDeleted = await blockBlob.DeleteIfExistsAsync(snapshotsOption: DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);
+
+            if (!currentDeleted)
             {
-                return true;
+                _logger.LogWarning("No policy file existed at {FilePath}.", filePath);
             }
-        }
-        catch (RequestFailedException ex) when (ex.Status == (int)HttpStatusCode.NotFound)
-        {
-            _logger.LogWarning(ex, "No policy file to delete at {FilePath}.", filePath);
+
+            // Enumerate versions and delete each, even if current did not exist
+            await foreach (BlobItem item in _resourceRegisterContainerClient.GetBlobsAsync(
+                traits: BlobTraits.None,
+                states: BlobStates.Version,
+                prefix: filePath,
+                cancellationToken: cancellationToken))
+            {
+                if (item.VersionId is not null)
+                {
+                    BlobClient versionClient = blockBlob.WithVersion(item.VersionId);
+                    try
+                    {
+                        await versionClient.DeleteAsync(cancellationToken: cancellationToken);
+                    }
+                    catch (RequestFailedException ex) when (ex.Status == 404)
+                    { 
+                        /* already gone */
+                    }
+                }
+            }
+
             return true;
         }
         catch (RequestFailedException ex) when (ex.Status == (int)HttpStatusCode.Forbidden && ex.ErrorCode == "OperationNotAllowedOnRootBlob")
@@ -213,8 +231,6 @@ internal class PolicyRepository : IPolicyRepository
             _logger.LogError(ex, "Failed to delete policy file at {FilePath}. Unexpected error", filePath);
             throw;
         }
-
-        return false; // effectivly unreachable
     }
 
     private BlobClient CreateBlobClient(string blobName)

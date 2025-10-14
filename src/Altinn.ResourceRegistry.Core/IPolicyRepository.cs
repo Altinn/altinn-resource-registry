@@ -69,7 +69,7 @@ namespace Altinn.ResourceRegistry.Core
         /// <param name="resourceId">The resourceId</param> 
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>The delete response</returns>
-        Task<Response> TryDeletePolicyAsync(string resourceId, CancellationToken cancellationToken = default);
+        Task<bool> TryDeletePolicyAsync(string resourceId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Tries to acquire a blob lease on the base blob for the provided filepath.

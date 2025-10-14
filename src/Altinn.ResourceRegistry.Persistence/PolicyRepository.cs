@@ -180,29 +180,31 @@ internal class PolicyRepository : IPolicyRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Response> TryDeletePolicyAsync(string resourceId, CancellationToken cancellationToken = default)
+    public async Task<bool> TryDeletePolicyAsync(string resourceId, CancellationToken cancellationToken = default)
     {
         string filePath = $"{resourceId.AsFilePath()}/resourcepolicy.xml";
         try
         {
             BlobClient blockBlob = CreateBlobClient(filePath);
 
-            return await blockBlob.DeleteAsync(snapshotsOption: DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);
+            var deleteResponse = await blockBlob.DeleteAsync(snapshotsOption: DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);
+            if (!deleteResponse.IsError)
+            {
+                return true;
+            }
         }
+        catch (RequestFailedException ex) when (ex.Status == (int)HttpStatusCode.NotFound)
+        {
+            _logger.LogWarning(ex, "No policy file to delete at {filepath}.", filePath);
+            return true;
+        }
+        catch (RequestFailedException ex) when (ex.Status == (int)HttpStatusCode.Forbidden && ex.ErrorCode == "OperationNotAllowedOnRootBlob")
+        {
+            _logger.LogError(ex, "Failed to delete policy file at {filepath}. Not allowed to delete.", filePath);
+            throw;
+        }        
         catch (RequestFailedException ex)
         {
-            if (ex.Status == (int)HttpStatusCode.Forbidden && ex.ErrorCode == "OperationNotAllowedOnRootBlob")
-            {
-                _logger.LogError(ex, "Failed to delete policy file at {filepath}. Not allowed to delete.", filePath);
-                throw;
-            }
-
-            if (ex.Status == (int)HttpStatusCode.NotFound)
-            {
-                _logger.LogWarning(ex, "Failed to delete policy file at {filepath}. No file found.", filePath);
-                throw;
-            }
-
             _logger.LogError(ex, "Failed to delete policy file at {filepath}. RequestFailedException", filePath);
             throw;
         }
@@ -211,6 +213,8 @@ internal class PolicyRepository : IPolicyRepository
             _logger.LogError(ex, "Failed to delete policy file at {filepath}. Unexpected error", filePath);
             throw;
         }
+
+        return false; // effectivly unreachable
     }
 
     private BlobClient CreateBlobClient(string blobName)

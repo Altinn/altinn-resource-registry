@@ -14,23 +14,10 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<Response> TryDeletePolicyAsync(string resourceId, CancellationToken cancellationToken)
+        public Task<bool> TryDeletePolicyAsync(string resourceId, CancellationToken cancellationToken)
         {
-            string? containerPath = GetPolicyContainerPath();
-            if (containerPath != null)
-            {
-                containerPath = Path.Combine(containerPath, resourceId, "resourcepolicy.xml");
-
-                if (!File.Exists(containerPath))
-                {   
-                    throw new RequestFailedException((int)HttpStatusCode.NotFound, "Not Found");
-                }
-            }
-
             // Don't actually delete anything, just return a successful response
-            var responseMock = new Mock<Response>();
-            responseMock.SetupGet(r => r.Status).Returns((int)HttpStatusCode.Accepted);
-            return Task.FromResult(responseMock.Object);
+            return Task.FromResult(true);
         }
 
         public async Task<Stream?> GetPolicyAsync(string resourceId, CancellationToken cancellationToken)

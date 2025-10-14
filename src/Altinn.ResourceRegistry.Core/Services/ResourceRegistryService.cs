@@ -79,19 +79,13 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task Delete(string id, CancellationToken cancellationToken = default)
         {
-            try
+            bool deletePolicyResult = await _policyRepository.TryDeletePolicyAsync(id, cancellationToken);
+            if (!deletePolicyResult)
             {
-                await _policyRepository.TryDeletePolicyAsync(id, cancellationToken);
-            }
-            catch (RequestFailedException ex)
-            {
-                if (ex.Status == (int)HttpStatusCode.NotFound)
-                {
-                    // Ignore not found exceptions when deleting the policy
-                }
+                throw new AccessManagementUpdateException($"Deleting policy for resource {id} failed");
             }
 
-            await _repository.DeleteResource(id, cancellationToken);            
+            await _repository.DeleteResource(id, cancellationToken);
         }
 
         /// <inheritdoc/>

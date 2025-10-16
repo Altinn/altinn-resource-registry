@@ -194,23 +194,22 @@ internal class PolicyRepository : IPolicyRepository
             }
 
             // Enumerate versions and delete each, even if current did not exist
-            await foreach (BlobItem item in _resourceRegisterContainerClient.GetBlobsAsync(
-                traits: BlobTraits.None,
-                states: BlobStates.Version,
-                prefix: filePath,
-                cancellationToken: cancellationToken))
+            await foreach (BlobItem item in _resourceRegisterContainerClient
+               .GetBlobsAsync(
+                   traits: BlobTraits.None,
+                   states: BlobStates.Version,
+                   prefix: filePath,
+                   cancellationToken: cancellationToken)
+               .Where(b => b.VersionId is not null))
             {
-                if (item.VersionId is not null)
+                BlobClient versionClient = blockBlob.WithVersion(item.VersionId);
+                try
                 {
-                    BlobClient versionClient = blockBlob.WithVersion(item.VersionId);
-                    try
-                    {
-                        await versionClient.DeleteAsync(cancellationToken: cancellationToken);
-                    }
-                    catch (RequestFailedException ex) when (ex.Status == 404)
-                    { 
-                        /* already gone */
-                    }
+                    await versionClient.DeleteAsync(cancellationToken: cancellationToken);
+                }
+                catch (RequestFailedException ex) when (ex.Status == 404)
+                {
+                    /* already gone */
                 }
             }
 

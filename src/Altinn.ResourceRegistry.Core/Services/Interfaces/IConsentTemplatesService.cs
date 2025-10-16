@@ -3,7 +3,7 @@ using Altinn.ResourceRegistry.Core.Models;
 namespace Altinn.ResourceRegistry.Core.Services.Interfaces
 {
     /// <summary>
-    /// Interface for the ResourceRegistryService implementation
+    /// Interface for the ConsentTemplatesService implementation
     /// </summary>
     public interface IConsentTemplatesService
     {

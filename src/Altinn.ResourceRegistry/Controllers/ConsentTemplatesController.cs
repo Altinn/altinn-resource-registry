@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Altinn.ResourceRegistry.Controllers
 {
     /// <summary>
-    /// Controller responsible for all operations for managing resources in the resource registry
+    /// Controller responsible for getting consent templates
     /// </summary>
     [Route("resourceregistry/api/v1/consent-templates")]
     [ApiController]

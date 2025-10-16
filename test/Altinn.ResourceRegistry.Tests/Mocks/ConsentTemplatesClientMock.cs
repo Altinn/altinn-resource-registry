@@ -7,6 +7,11 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 {
     public class ConsentTemplatesClientMock : IConsentTemplatesClient
     {
+        private static readonly JsonSerializerOptions SerializerOptions = new()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        };
+
         public async Task<List<ConsentTemplate>> GetConsentTemplates(CancellationToken cancellationToken)
         {
             return await GetConsentTemplatesTestData(cancellationToken);
@@ -23,7 +28,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
                 {
                     string content = await File.ReadAllTextAsync(templatesPath, cancellationToken);
                   
-                    List<ConsentTemplate>? templates = JsonSerializer.Deserialize<List<ConsentTemplate>>(content, new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+                    List<ConsentTemplate>? templates = JsonSerializer.Deserialize<List<ConsentTemplate>>(content, SerializerOptions);
 
                     return templates ?? [];
                 }

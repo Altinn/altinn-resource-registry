@@ -34,6 +34,11 @@ namespace Altinn.ResourceRegistry.Tests
 
             Assert.NotNull(content);
             Assert.Equal(5, content.Count);
+            Assert.Equal(3, content.First(c => c.Id == "samtykkemal_simpleconsent").Version);
+            Assert.Equal(2, content.First(c => c.Id == "default").Version);
+            Assert.Equal(1, content.First(c => c.Id == "bst_krav").Version);
+            Assert.Equal(1, content.First(c => c.Id == "sblanesoknad").Version);
+            Assert.Equal(1, content.First(c => c.Id == "poa").Version);
         }
 
         [Fact]

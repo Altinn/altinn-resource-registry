@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
 using ResourceSubjectsLoader.Clients.Altinn.AccessManagement.UI.Integration.Clients;
 using ResourceSubjectsLoader.Enums;

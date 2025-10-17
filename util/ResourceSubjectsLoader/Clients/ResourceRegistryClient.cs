@@ -38,7 +38,7 @@
             {
                 List<ServiceResource> resources = null;
 
-                JsonSerializerOptions options = new JsonSerializerOptions
+                JsonSerializerOptions options = new()
                 {
                     PropertyNameCaseInsensitive = true,
                 };

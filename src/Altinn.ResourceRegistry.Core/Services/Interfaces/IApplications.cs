@@ -13,6 +13,6 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="includeMigratedResources">filter migrated resources from A1/A2, default er false</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
-        Task<ApplicationList> GetApplicationList(bool includeMigratedResources = false, CancellationToken cancellationToken = default);
+        Task<ApplicationList> GetApplicationList(bool includeMigratedResources, CancellationToken cancellationToken = default);
     }
 }

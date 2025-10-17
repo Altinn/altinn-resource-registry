@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Altinn.ResourceRegistry.Core.Register;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -16,19 +17,19 @@ namespace Altinn.ResourceRegistry.Models;
 [JsonConverter(typeof(Converter))]
 [SwaggerSchemaFilter(typeof(SchemaFilter))]
 public class UpsertAccessListPartyMembersListDto(
-    IReadOnlyList<PartyReference> items)
-    : IReadOnlyList<PartyReference>
+    IReadOnlyList<PartyUrn> items)
+    : IReadOnlyList<PartyUrn>
 {
-    private readonly IReadOnlyList<PartyReference> _items = items;
+    private readonly IReadOnlyList<PartyUrn> _items = items;
 
     /// <inheritdoc/>
-    public PartyReference this[int index] => _items[index];
+    public PartyUrn this[int index] => _items[index];
 
     /// <inheritdoc/>
     public int Count => _items.Count;
 
     /// <inheritdoc/>
-    public IEnumerator<PartyReference> GetEnumerator()
+    public IEnumerator<PartyUrn> GetEnumerator()
     {
         return _items.GetEnumerator();
     }
@@ -44,13 +45,42 @@ public class UpsertAccessListPartyMembersListDto(
         /// <inheritdoc/>
         public override UpsertAccessListPartyMembersListDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            if (reader.TokenType != JsonTokenType.StartObject)
+            {
+                throw new JsonException("Expected object");
+            }
+
+            if (!reader.Read() || reader.TokenType != JsonTokenType.PropertyName || !reader.ValueTextEquals("data"u8))
+            {
+                throw new JsonException("Expected property 'data'");
+            }
+
+            if (!reader.Read() || reader.TokenType != JsonTokenType.StartArray)
+            {
+                throw new JsonException("Expected array");
+            }
+
+            var items = JsonSerializer.Deserialize<List<PartyUrn>>(ref reader, options);
+            if (items is null)
+            {
+                throw new JsonException("Expected array");
+            }
+
+            if (!reader.Read() || reader.TokenType != JsonTokenType.EndObject)
+            {
+                throw new JsonException("Expected end of object");
+            }
+
+            return new(items);
         }
 
         /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, UpsertAccessListPartyMembersListDto value, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            writer.WriteStartObject();
+            writer.WritePropertyName("data"u8);
+            JsonSerializer.Serialize(writer, value._items, options);
+            writer.WriteEndObject();
         }
     }
 
@@ -60,7 +90,7 @@ public class UpsertAccessListPartyMembersListDto(
         {
             schema.Type = "object";
             schema.Properties.Clear();
-            schema.Properties.Add("data", context.SchemaGenerator.GenerateSchema(typeof(List<PartyReference>), context.SchemaRepository));
+            schema.Properties.Add("data", context.SchemaGenerator.GenerateSchema(typeof(List<PartyUrn>), context.SchemaRepository));
             schema.Required.Clear();
             schema.Required.Add("data");
         }

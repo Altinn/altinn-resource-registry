@@ -45,6 +45,12 @@ internal partial class AccessListsRepository
         => InTransaction(repo => repo.GetAccessListsByOwner(resourceOwner, continueFrom, count, includes, resourceIdentifier, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
+    public Task<IReadOnlyList<AccessListInfo>> GetAccessListByMember(
+        Guid memberParty, 
+        CancellationToken cancellationToken = default)
+    => InTransaction(repo => repo.GetAccessListByMember(memberParty, cancellationToken), cancellationToken);
+
+    /// <inheritdoc/>
     public Task<AccessListInfo?> LookupInfo(Guid id, AccessListIncludes includes = default, CancellationToken cancellationToken = default)
         => InTransaction(repo => repo.LookupInfo(new(id), includes, cancellationToken), cancellationToken);
 
@@ -74,15 +80,19 @@ internal partial class AccessListsRepository
     /// <inheritdoc/>
     public Task<AccessListData<IReadOnlyList<AccessListMembership>>?> GetAccessListMemberships(
         Guid id,
+        Guid? continueFrom,
+        int count,
         CancellationToken cancellationToken = default)
-        => InTransaction(repo => repo.GetAccessListMemberships(new(id), cancellationToken), cancellationToken);
+        => InTransaction(repo => repo.GetAccessListMemberships(new(id), continueFrom, count, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
     public Task<AccessListData<IReadOnlyList<AccessListMembership>>?> GetAccessListMemberships(
         string registryOwner,
         string identifier,
+        Guid? continueFrom,
+        int count,
         CancellationToken cancellationToken = default)
-        => InTransaction(repo => repo.GetAccessListMemberships(new(registryOwner, identifier), cancellationToken), cancellationToken);
+        => InTransaction(repo => repo.GetAccessListMemberships(new(registryOwner, identifier), continueFrom, count, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
     public async Task<IAccessListAggregate> CreateAccessList(string resourceOwner, string identifier, string name, string description, CancellationToken cancellationToken = default)
@@ -107,6 +117,13 @@ internal partial class AccessListsRepository
 
         throw new UnreachableException("This should not happen. Failed to load/create an access list");
     }
+
+    /// <inheritdoc/>
+    public async Task<IReadOnlyCollection<KeyValuePair<AccessListResourceConnection, AccessListMembership>>> GetMembershipsForPartiesAndResources(
+        IReadOnlyCollection<Guid>? partyUuids,
+        IReadOnlyCollection<string>? resourceIdentifiers,
+        CancellationToken cancellationToken)
+        => await InTransaction(repo => repo.GetMembershipsForPartiesAndResources(partyUuids, resourceIdentifiers, cancellationToken), cancellationToken);
 
     /// <inheritdoc/>
     public async Task<IAccessListAggregate?> LoadAccessList(Guid id, CancellationToken cancellationToken = default)

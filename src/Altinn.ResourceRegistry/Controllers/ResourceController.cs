@@ -1,17 +1,19 @@
-﻿using Altinn.ResourceRegistry.Core.Constants;
-using Altinn.ResourceRegistry.Core.Enums;
+using Altinn.Authorization.ProblemDetails;
+using Altinn.Authorization.ServiceDefaults;
+using Altinn.Platform.Events.Formatters;
+using Altinn.ResourceRegistry.Core.Constants;
+using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Extensions;
+using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Extensions;
 using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Utils;
-using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using Nerdbank.Streams;
 
 namespace Altinn.ResourceRegistry.Controllers
 {
@@ -22,32 +24,38 @@ namespace Altinn.ResourceRegistry.Controllers
     [ApiController]
     public class ResourceController : ControllerBase
     {
-        private IResourceRegistry _resourceRegistry;
+        private readonly IResourceRegistry _resourceRegistry;
         private readonly ILogger<ResourceController> _logger;
+        private readonly AltinnServiceDescriptor _serviceDescriptor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceController"/> controller.
         /// </summary>
-        /// <param name="resourceRegistry">Service implementation for operations on resources in the resource registry</param>
-        /// <param name="logger">Logger</param>
         public ResourceController(
             IResourceRegistry resourceRegistry,
-            ILogger<ResourceController> logger)
+            ILogger<ResourceController> logger,
+            AltinnServiceDescriptor serviceDescriptor)
         {
             _resourceRegistry = resourceRegistry;
             _logger = logger;
+            _serviceDescriptor = serviceDescriptor;
         }
 
         /// <summary>
         /// List of all resources
         /// </summary>
+        /// <param name="includeApps">Include App resources</param>
+        /// <param name="includeAltinn2">Include Altinn 2 resources</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         [HttpGet("resourcelist")]
         [Produces("application/json")]
-        public async Task<List<ServiceResource>> ResourceList(CancellationToken cancellationToken)
+        public async Task<List<ServiceResource>> ResourceList(
+            bool includeApps = true,
+            bool includeAltinn2 = true,
+            CancellationToken cancellationToken = default)
         {
-            return await _resourceRegistry.GetResourceList(includeApps: true, includeAltinn2: true, cancellationToken);
+            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, includeExpired: false, cancellationToken);
         }
 
         /// <summary>
@@ -56,7 +64,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         [HttpGet("export")]
-        [Produces("application/xml+rdf")]
+        [Produces(RdfOutputFormatter.RDFMimeType)]
         public async Task<string> Export(CancellationToken cancellationToken)
         {
             ResourceSearch search = new ResourceSearch();
@@ -73,9 +81,26 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <returns>ServiceResource</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
-        public async Task<ServiceResource> Get(string id, CancellationToken cancellationToken)
+        public async Task<ActionResult<ServiceResource>> Get(string id, CancellationToken cancellationToken)
         {
-            return await _resourceRegistry.GetResource(id, cancellationToken);
+            ServiceResource resource = await _resourceRegistry.GetResource(id, cancellationToken);
+
+            if (resource == null && id.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
+            {
+                List<ServiceResource> resourceList = await _resourceRegistry.GetResourceList(includeApps: true, includeAltinn2: false, includeExpired: false, cancellationToken);
+                ServiceResource appResource = resourceList.FirstOrDefault(r => r.Identifier == id);
+                if (appResource != null)
+                {
+                    return Ok(appResource);
+                }
+            }
+
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(resource);
         }
 
         /// <summary>
@@ -96,23 +121,18 @@ namespace Altinn.ResourceRegistry.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            if (serviceResource.Identifier.StartsWith(ResourceConstants.SERVICE_ENGINE_RESOURCE_PREFIX)
-                && (serviceResource.ResourceReferences == null
-                || !serviceResource.ResourceReferences.Any()
-                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceCode))
-                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceEditionCode))))
+            // Validate Resource
+            if (!ServiceResourceHelper.ValidateResource(serviceResource, out Dictionary<string, List<string>> message))
             {
-                // Uses Service engine prefix without it beeing a service engine resource
-                return BadRequest("Invalid Prefix");
-            }
+                foreach (KeyValuePair<string, List<string>> kvp in message)
+                {
+                    foreach (string validationMessage in kvp.Value)
+                    {
+                        ModelState.AddModelError(kvp.Key, validationMessage);
+                    }
+                }
 
-            if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX)
-                && (serviceResource.ResourceReferences == null 
-                || !serviceResource.ResourceReferences.Any()
-                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ApplicationId))))
-            {
-                // Uses app prefix without it beeing a app resource
-                return BadRequest("Invalid Prefix");
+                return ValidationProblem(ModelState);
             }
 
             try
@@ -175,29 +195,25 @@ namespace Altinn.ResourceRegistry.Controllers
             {
                 return BadRequest("Id in path does not match ID in resource");
             }
-           
+
             if (!ModelState.IsValid)
             {
                 return ValidationProblem(ModelState);
             }
 
-            if (serviceResource.Identifier.StartsWith(ResourceConstants.SERVICE_ENGINE_RESOURCE_PREFIX)
-                && (serviceResource.ResourceReferences == null
-                || !serviceResource.ResourceReferences.Any()
-                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceCode))
-                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ServiceEditionCode))))
+            // Validate Resource
+            // Validate Resource
+            if (!ServiceResourceHelper.ValidateResource(serviceResource, out Dictionary<string, List<string>> message))
             {
-                // Uses Service engine prefix without it beeing a service engine resource
-                return BadRequest("Invalid Prefix");
-            }
+                foreach (KeyValuePair<string, List<string>> kvp in message)
+                {
+                    foreach (string validationMessage in kvp.Value)
+                    {
+                        ModelState.AddModelError(kvp.Key, validationMessage);
+                    }
+                }
 
-            if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX)
-                && (serviceResource.ResourceReferences == null
-                || !serviceResource.ResourceReferences.Any()
-                || !serviceResource.ResourceReferences.Exists(rf => rf.ReferenceType.HasValue && rf.ReferenceType.Equals(ReferenceType.ApplicationId))))
-            {
-                // Uses app prefix without it beeing a app resource
-                return BadRequest("Invalid Prefix");
+                return ValidationProblem(ModelState);
             }
 
             if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
@@ -233,6 +249,27 @@ namespace Altinn.ResourceRegistry.Controllers
         public async Task<ActionResult> GetPolicy(string id, CancellationToken cancellationToken)
         {
             ServiceResource resource = await _resourceRegistry.GetResource(id, cancellationToken);
+            if (resource == null && id.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
+            {
+                string[] idParts = id.Split('_');
+
+                // Scenario for app imported in to resource registry
+                if (idParts.Length == 3)
+                {
+                    string org = idParts[1];
+                    string app = idParts[2];
+
+                    Stream appStream = await _resourceRegistry.GetAppPolicy(org, app, cancellationToken);
+
+                    if (appStream == null)
+                    {
+                        return NotFound("Unable to find requested policy");
+                    }
+
+                    return File(appStream, "text/xml", "policy.xml");
+                }
+            }
+
             if (resource == null)
             {
                 return NotFound("Unable to find resource");
@@ -249,7 +286,7 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
-        /// Returns the XACML policy for a resource in resource registry.
+        /// Returns a list of subjects from rules in policy
         /// </summary>
         /// <param name="id">Resource Id</param>
         /// <param name="reloadFromXacml">Defines if subjects should be reloaded from Xacml</param>
@@ -287,6 +324,43 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             return Paginated.Create(resourceSubjects[0].Subjects, null);
+        }
+
+        /// <summary>
+        /// Returns a list of flattenrules that only contains on subject, action and resource per rule
+        /// </summary>
+        [HttpGet("{id}/policy/rules")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        public async Task<ActionResult<List<PolicyRuleDTO>>> GetFlattenRules(string id, CancellationToken cancellationToken = default)
+        {
+            List<PolicyRule> policyRule = await _resourceRegistry.GetFlattenPolicyRules(id, cancellationToken);
+
+            if (policyRule != null)
+            {
+                return Ok(PolicyRuleDTO.MapFrom(policyRule));
+            }
+
+            return new NotFoundResult();
+        }
+
+        /// <summary>
+        /// Returns a list of rights for a resource. A right is a combination of resource and action. The response list the subjects in policy that is granted the right.
+        /// Response is grouped by right.
+        /// </summary>
+        [HttpGet("{id}/policy/rights")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        public async Task<ActionResult<List<PolicyRightsDTO>>> GetRights(string id, CancellationToken cancellationToken = default)
+        {
+            List<PolicyRight> resourceAction = await _resourceRegistry.GetPolicyRights(id, cancellationToken);
+
+            if (resourceAction != null)
+            {
+                return Ok(PolicyRightsDTO.MapFrom(resourceAction));
+            }
+
+            return new NotFoundResult();
         }
 
         /// <summary>
@@ -349,7 +423,7 @@ namespace Altinn.ResourceRegistry.Controllers
             {
                 using var policyFileContent = await fileStream.ReadToSequenceAsync(cancellationToken);
                 bool successfullyStored = await _resourceRegistry.StorePolicy(resource, policyFileContent.AsReadOnlySequence, cancellationToken);
-               
+
                 if (successfullyStored)
                 {
                     return Created(id + "/policy", null);
@@ -378,7 +452,22 @@ namespace Altinn.ResourceRegistry.Controllers
         [Authorize(Policy = AuthzConstants.POLICY_SCOPE_RESOURCEREGISTRY_WRITE)]
         public async Task<ActionResult> Delete(string id, CancellationToken cancellationToken)
         {
+            var env = _serviceDescriptor.Environment;
+            if (!env.IsLocalDev && !env.IsAT && !env.IsYT && !env.IsTT && env.ToString() != "TEST")
+            {
+                _logger.LogInformation("Delete operation is not allowed in environment {Environment}", _serviceDescriptor.Environment);
+                var result = Content("Delete operation is not allowed in this environment");
+                result.StatusCode = StatusCodes.Status403Forbidden;
+                return result;
+            }
+
             ServiceResource serviceResource = await _resourceRegistry.GetResource(id, cancellationToken);
+
+            if (serviceResource == null)
+            {
+                return NotFound();
+            }
+
             string orgClaim = User.GetOrgNumber();
             if (orgClaim != null)
             {
@@ -403,8 +492,55 @@ namespace Altinn.ResourceRegistry.Controllers
         public async Task<List<ServiceResource>> Search([FromQuery] ResourceSearch search, CancellationToken cancellationToken)
         {
             return await _resourceRegistry.GetSearchResults(search, cancellationToken);
-        } 
-     }
+        }
+
+        /// <summary>
+        /// Gets the updated resources since the provided last updated time (inclusive)
+        /// </summary>
+        /// <param name="since">Date time used for filtering</param>
+        /// <param name="token">Opaque continuation token containing ResourceUrn,SubjectUrn pair to skip past on rows matching "since" exactly</param>
+        /// <param name="limit">Maximum number of pairs returned (1-1000, default: 1000)</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A list of updated subject/resource pairs since provided timestamp (inclusive)</returns>
+        [HttpGet("updated", Name = "updated")]
+        [Produces("application/json")]
+        public async Task<ActionResult<Paginated<UpdatedResourceSubject>>> UpdatedResourceSubjects([FromQuery] DateTimeOffset since, [FromQuery(Name = "token")] Opaque<UpdatedResourceSubjectsContinuationToken> token = null, [FromQuery] int limit = 1000, CancellationToken cancellationToken = default)
+        {
+            if (limit is < 1 or > 1000)
+            {
+                return new AltinnValidationProblemDetails([
+                    ValidationErrors.UpdatedResourceSubjects_InvalidLimit.ToValidationError(),
+                ]).ToActionResult();
+            }
+
+            (Uri ResourceUrn, Uri SubjectUrn)? skipPastPair = null;
+
+            if (token is not null)
+            {
+                skipPastPair = (token.Value.ResourceUrn, token.Value.SubjectUrn);
+            }
+
+            // Use maxItems + 1 in order to determine if there are more items to fetch
+            List<UpdatedResourceSubject> updatedResourceSubjects = await _resourceRegistry.FindUpdatedResourceSubjects(since.ToUniversalTime(), limit + 1, skipPastPair, cancellationToken);
+
+            if (updatedResourceSubjects.Count != limit + 1)
+            {
+                return Paginated.Create(updatedResourceSubjects, null);
+            }
+
+            updatedResourceSubjects.RemoveAt(limit);
+            UpdatedResourceSubject last = updatedResourceSubjects[^1];
+
+            string nextUrl = Url.Link("updated", new
+            {
+                since = last.UpdatedAt.ToString("O"),
+                token = Opaque.Create(new UpdatedResourceSubjectsContinuationToken(last.ResourceUrn, last.SubjectUrn)),
+                limit
+            });
+
+            return Paginated.Create(updatedResourceSubjects, nextUrl);
+        }
+    }
 
     /// <summary>
     /// ToDo: move to a separate class
@@ -426,4 +562,13 @@ namespace Altinn.ResourceRegistry.Controllers
             }
         }
     }
+
+    /// <summary>
+    /// Continuation token for updated resource subjects. Used with "since" value to serve
+    /// as tiebreaker when paginating over resource subjects having the same "updatedAt" value
+    /// split across pages
+    /// </summary>
+    /// <param name="ResourceUrn">The resourceUrn.</param>
+    /// <param name="SubjectUrn">The subjectUrn.</param>
+    public record UpdatedResourceSubjectsContinuationToken(Uri ResourceUrn, Uri SubjectUrn);
 }

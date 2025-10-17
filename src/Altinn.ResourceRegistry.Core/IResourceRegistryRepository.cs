@@ -1,4 +1,5 @@
-﻿using Altinn.ResourceRegistry.Core.Models;
+﻿using Altinn.Authorization.ProblemDetails;
+using Altinn.ResourceRegistry.Core.Models;
 
 namespace Altinn.ResourceRegistry.Core
 {
@@ -14,6 +15,14 @@ namespace Altinn.ResourceRegistry.Core
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> for cancelling the async process.</param>
         /// <returns>ServiceResource</returns>
         Task<ServiceResource> GetResource(string id, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets the resource owner for a single resource by its resource identifier if it exists in the resource registry.
+        /// </summary>
+        /// <param name="id">The resource identifier to retrieve</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for cancelling the async process.</param>
+        /// <returns>A <see cref="CompetentAuthorityReference"/>.</returns>
+        Task<Result<CompetentAuthorityReference>> GetResourceOwner(string id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes a resource from the resource registry
@@ -61,6 +70,16 @@ namespace Altinn.ResourceRegistry.Core
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         Task<List<ResourceSubjects>> FindSubjectsForResources(IEnumerable<string> resources, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Returns a list of resource/subject pairs (including deleted) that has been updated since lastUpdated
+        /// </summary>
+        /// <param name="lastUpdated">The timestamp from which to return updated entries</param>
+        /// <param name="limit">The maximum number of entries to return</param>
+        /// <param name="skipPast">Optional ResourceUrn,SubjectUrn pair to skip past if "since" value matches multiple rows</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>List of resource/subject pairs updated since lastUpdated</returns>
+        Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Resett subjects for a given resource

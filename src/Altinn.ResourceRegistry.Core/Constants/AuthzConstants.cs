@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Altinn.ResourceRegistry.Core.Constants
+﻿namespace Altinn.ResourceRegistry.Core.Constants
 {
     /// <summary>
     /// Constants related to authorization
     /// </summary>
     public static class AuthzConstants
     {
+        /// <summary>
+        /// Policy tag for authorizing designer access
+        /// </summary>
+        public const string POLICY_STUDIO_DESIGNER = "StudioDesignerAccess";
+
         /// <summary>
         /// Policy tag for authorizing write scope.
         /// </summary>
@@ -32,6 +31,16 @@ namespace Altinn.ResourceRegistry.Core.Constants
         public const string POLICY_ACCESS_LIST_READ = "AccessListRead";
 
         /// <summary>
+        /// Policy name for authorizing endpoints that require admin privileges.
+        /// </summary>
+        public const string POLICY_ADMIN = "Admin";
+
+        /// <summary>
+        /// Scope required for PDP Access List
+        /// </summary>
+        public const string POLICY_PLATFORM_COMPONENT_ONLY = "PlatformComponentOnly";
+
+        /// <summary>
         /// Scope for resourceregistry read access
         /// </summary>
         public const string SCOPE_RESOURCE_READ = "altinn:resourceregistry/resource.read";
@@ -49,12 +58,17 @@ namespace Altinn.ResourceRegistry.Core.Constants
         /// <summary>
         /// Scope for access list read access
         /// </summary>
-        public const string SCOPE_ACCESS_LIST_READ = "altinn:resourceregistry/access-list.read";
+        public const string SCOPE_ACCESS_LIST_READ = "altinn:resourceregistry/accesslist.read";
 
         /// <summary>
         /// Scope for access list write access
         /// </summary>
-        public const string SCOPE_ACCESS_LIST_WRITE = "altinn:resourceregistry/access-list.write";
+        public const string SCOPE_ACCESS_LIST_WRITE = "altinn:resourceregistry/accesslist.write";
+
+        /// <summary>
+        /// Scope for access list info for PDP
+        /// </summary>
+        public const string SCOPE_ACCESS_LIST_PDP = "altinn:resourceregistry/pdp:accesslist.read";
 
         /// <summary>
         /// Claim for scopes from maskinporten token

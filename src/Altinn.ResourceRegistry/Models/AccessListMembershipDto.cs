@@ -1,6 +1,9 @@
 ﻿#nullable enable
 
 using System.Text.Json.Serialization;
+using Altinn.ResourceRegistry.Core.AccessLists;
+using Altinn.ResourceRegistry.Core.Register;
+using Altinn.Urn;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Annotations;
@@ -12,15 +15,36 @@ namespace Altinn.ResourceRegistry.Models;
 /// Represents an access list membership.
 /// </summary>
 /// <param name="Id">The party id.</param>
-/// <param name="Since">Since when the party has been a member of the registry.</param>
+/// <param name="Since">Since when the party has been a member of the access list.</param>
 /// <param name="Identifiers">An optional set of identifiers.</param>
 [SwaggerSchemaFilter(typeof(SchemaFilter))]
 public record AccessListMembershipDto(
-    string Id,
+    PartyUrn.PartyUuid Id,
     DateTimeOffset Since,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    PartyIdentifiers Identifiers)
+    KeyValueUrnDictionary<PartyUrn, PartyUrn.Type> Identifiers)
 {
+    /// <summary>
+    /// Creates a new <see cref="AccessListMembershipDto"/> from an <see cref="EnrichedAccessListMembership"/>.
+    /// </summary>
+    /// <param name="membership">The membership.</param>
+    /// <returns>The mapped <see cref="AccessListMembershipDto"/>.</returns>
+    public static AccessListMembershipDto From(EnrichedAccessListMembership membership)
+    {
+        var id = PartyUrn.PartyUuid.Create(membership.PartyUuid);
+        var identifiers = new KeyValueUrnDictionary<PartyUrn, PartyUrn.Type>();
+        identifiers.Add(id);
+        identifiers.Add(PartyUrn.PartyId.Create(membership.PartyIdentifiers.PartyId));
+        
+        if (membership.PartyIdentifiers.OrgNumber is { } orgNo)
+        {
+            var orgNumber = PartyUrn.OrganizationIdentifier.Create(OrganizationNumber.Parse(orgNo));
+            identifiers.Add(orgNumber);
+        }
+
+        return new(id, membership.Since, identifiers);
+    }
+
     private sealed class SchemaFilter : ISchemaFilter
     {
         /// <inheritdoc/>
@@ -38,31 +62,6 @@ public record AccessListMembershipDto(
 
             var identifiersSchema = schema.Properties["identifiers"];
             identifiersSchema.Nullable = true;
-        }
-    }
-}
-
-/// <summary>
-/// Additional identifiers for a party.
-/// </summary>
-/// <param name="PartyId">The party id.</param>
-/// <param name="OrganizationNumber">The organization number.</param>
-[SwaggerSchemaFilter(typeof(SchemaFilter))]
-public record PartyIdentifiers(
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    Guid PartyId,
-    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    string? OrganizationNumber)
-{
-    private sealed class SchemaFilter : ISchemaFilter
-    {
-        /// <inheritdoc/>
-        public void Apply(OpenApiSchema schema, SchemaFilterContext context)
-        {
-            var orgNrSchema = schema.Properties["organizationNumber"];
-            orgNrSchema.Type = "string";
-            orgNrSchema.Format = "org.nr";
-            orgNrSchema.Example = new OpenApiString("123456789");
         }
     }
 }

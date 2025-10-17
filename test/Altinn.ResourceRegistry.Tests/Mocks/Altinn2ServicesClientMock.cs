@@ -3,23 +3,13 @@ using Altinn.Authorization.ABAC.Xacml;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Models.Altinn2;
 using Altinn.ResourceRegistry.Core.Services;
-using Castle.Components.DictionaryAdapter.Xml;
-using FluentAssertions.Common;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Altinn.ResourceRegistry.Tests.Mocks
 {
     public class Altinn2ServicesClientMock : IAltinn2Services
     {
-        public async Task<List<AvailableService>> AvailableServices(int languageId, CancellationToken cancellationToken)
+        public async Task<List<AvailableService>> AvailableServices(int languageId, bool includeExpired,  CancellationToken cancellationToken)
         {
             string? testDataFolder = GetAltinn2TestDatafolder();
             if (testDataFolder != null)
@@ -47,7 +37,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 
         public async Task<ServiceResource?> GetServiceResourceFromService(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken)
         {
-            List<AvailableService> services = await AvailableServices(1044, cancellationToken);
+            List<AvailableService> services = await AvailableServices(1044,false, cancellationToken);
             AvailableService? service = services.FirstOrDefault(r=> r.ExternalServiceCode == serviceCode);
 
             if(service == null) 
@@ -105,6 +95,21 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             }
 
             return null;
+        }
+
+        public Task<DelegationCountOverview> GetDelegationCount(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(new DelegationCountOverview() { NumberOfDelegations = 13337, NumberOfRelations = 13336 });
+        }
+
+        public Task ExportDelegations(ExportDelegationsRequestBE exportDelegationsRequestBE, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task SetServiceEditionExpired(string externalServiceCode, int externalServiceEditionCode, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
         }
     }
 }

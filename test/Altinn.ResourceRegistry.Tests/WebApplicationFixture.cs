@@ -1,5 +1,7 @@
 ﻿using Altinn.Common.Authentication.Configuration;
 using Altinn.ResourceRegistry.Core;
+using Altinn.ResourceRegistry.Core.Clients.Interfaces;
+using Altinn.ResourceRegistry.Core.Services;
 using Altinn.ResourceRegistry.Tests.Mocks;
 using Altinn.ResourceRegistry.TestUtils;
 using AltinnCore.Authentication.JwtCookie;
@@ -9,9 +11,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Altinn.ResourceRegistry.Tests;
 
@@ -30,10 +29,19 @@ public class WebApplicationFixture
         await _factory.DisposeAsync();
     }
 
-    public WebApplicationFactory<Program> CreateServer(Action<IServiceCollection>? configureServices = null)
+    public WebApplicationFactory<Program> CreateServer(
+        Action<IConfigurationBuilder>? configureConfiguration = null,
+        Action<IServiceCollection>? configureServices = null)
     {
         return _factory.WithWebHostBuilder(builder =>
         {
+            if (configureConfiguration is not null)
+            {
+                var settings = new ConfigurationBuilder();
+                configureConfiguration(settings);
+                builder.UseConfiguration(settings.Build());
+            }
+
             if (configureServices is not null)
             {
                 builder.ConfigureTestServices(configureServices);
@@ -45,12 +53,11 @@ public class WebApplicationFixture
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.ConfigureAppConfiguration(config =>
-            {
-                config.AddConfiguration(new ConfigurationBuilder()
-                        .AddJsonFile("appsettings.test.json")
-                        .Build());
-            });
+            var settings = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.test.json")
+                .Build();
+
+            builder.UseConfiguration(settings);
 
             builder.ConfigureTestServices(services =>
             {
@@ -60,6 +67,8 @@ public class WebApplicationFixture
                 services.AddSingleton<TimeProvider>(timeProvider);
                 services.AddSingleton<AdvanceableTimeProvider>(timeProvider);
                 services.AddSingleton<IPolicyRepository, PolicyRepositoryMock>();
+                services.AddSingleton<IAltinn2Services, Altinn2ServicesClientMock>();
+                services.AddSingleton<IAccessManagementClient, AccessManagementMock>();
             });
 
             base.ConfigureWebHost(builder);

@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
+using System.Threading;
 using System.Xml;
 using Altinn.Authorization.ABAC.Utils;
 using Altinn.Authorization.ABAC.Xacml;
@@ -15,9 +17,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
     /// </summary>
     public class Altinn2ServicesClient : IAltinn2Services
     {
-        private static readonly JsonSerializerOptions SerializerOptions = new()
-        {
-        };
+        private static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
         private readonly HttpClient _client;
         private readonly PlatformSettings _settings;
@@ -32,10 +32,10 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<List<AvailableService>?> AvailableServices(int languageId, CancellationToken cancellationToken = default)
+        public async Task<List<AvailableService>?> AvailableServices(int languageId, bool includeExpired = false, CancellationToken cancellationToken = default)
         {
             List<AvailableService>? availableServices = null;
-            string availabbleServicePath = _settings.BridgeApiEndpoint + $"metadata/api/availableServices?languageID={languageId}&appTypesToInclude=0&includeExpired=false";
+            string availabbleServicePath = _settings.BridgeApiEndpoint + $"metadata/api/availableServices?languageID={languageId}&appTypesToInclude=0&includeExpired={includeExpired}";
 
             try
             {
@@ -53,6 +53,32 @@ namespace Altinn.ResourceRegistry.Integration.Clients
             {
                 throw new Exception($"Something went wrong when retrieving Action options", ex);
             }
+        }
+
+        /// <inheritdoc/>
+        public async Task ExportDelegations(ExportDelegationsRequestBE exportDelegationsRequestBE, CancellationToken cancellationToken = default)
+        {
+            string bridgeBaseUrl = _settings.BridgeApiEndpoint;
+            string url = $"{bridgeBaseUrl}authorization/api/delegationexport";
+
+            using HttpContent content = JsonContent.Create(exportDelegationsRequestBE, options: SerializerOptions);
+
+            HttpResponseMessage response = await _client.PostAsync(url, content, cancellationToken);
+            response.EnsureSuccessStatusCode();
+        }
+
+        /// <inheritdoc/>
+        public async Task<DelegationCountOverview?> GetDelegationCount(string serviceCode, int serviceEditionCode, CancellationToken cancellationToken = default)
+        {
+            string bridgeBaseUrl = _settings.BridgeApiEndpoint;
+            string url = $"{bridgeBaseUrl}authorization/api/rights/delegation/delegationcount/{serviceCode}/{serviceEditionCode}";
+
+            HttpResponseMessage response = await _client.GetAsync(url, cancellationToken);
+            response.EnsureSuccessStatusCode();
+
+            DelegationCountOverview? delegationCouunt = await response.Content.ReadFromJsonAsync<DelegationCountOverview>(SerializerOptions,cancellationToken);
+           
+            return delegationCouunt;
         }
 
         /// <inheritdoc/>
@@ -96,6 +122,15 @@ namespace Altinn.ResourceRegistry.Integration.Clients
             }
 
             return policy;
+        }
+
+        /// <inheritdoc/>
+        public async Task SetServiceEditionExpired(string externalServiceCode, int externalServiceEditionCode, CancellationToken cancellationToken = default)
+        {
+            string bridgeBaseUrl = _settings.BridgeApiEndpoint;
+            string url = $"{bridgeBaseUrl}metadata/api/setserviceeditionexpired?externalServiceCode={externalServiceCode}&externalServiceEditionCode={externalServiceEditionCode}";
+            HttpResponseMessage response = await _client.GetAsync(url, cancellationToken);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

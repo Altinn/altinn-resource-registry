@@ -30,7 +30,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<ApplicationList?> GetApplicationList(bool includeMigratedResources, CancellationToken cancellationToken = default)
+        public async Task<ApplicationList?> GetApplicationList(bool includeMigratedApps , CancellationToken cancellationToken = default)
         {
             string availabbleServicePath = _settings.StorageApiEndpoint + $"applications";
 
@@ -40,7 +40,7 @@ namespace Altinn.ResourceRegistry.Integration.Clients
 
                 ApplicationList? applications = await response.Content.ReadFromJsonAsync<ApplicationList>(SerializerOptions, cancellationToken);
                 
-                if (includeMigratedResources)
+                if (includeMigratedApps)
                 {
                     return applications;
                 }

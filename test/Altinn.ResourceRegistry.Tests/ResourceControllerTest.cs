@@ -203,10 +203,10 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         [Fact]
-        public async Task ResourceList_IncludeMigratedResources()
+        public async Task ResourceList_IncludeMigratedApps()
         {
             var client = CreateClient();
-            string requestUri = "resourceregistry/api/v1/Resource/resourcelist?includeAltinn2=false&includeApps=true&includeMigratedResources=true";
+            string requestUri = "resourceregistry/api/v1/Resource/resourcelist?includeAltinn2=false&includeApps=true&includeMigratedApps=true";
 
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
             {

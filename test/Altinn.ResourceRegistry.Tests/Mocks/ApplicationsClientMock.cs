@@ -5,7 +5,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 {
     public class ApplicationsClientMock : IApplications
     {
-        public async Task<ApplicationList> GetApplicationList(bool includeMigratedResources, CancellationToken cancellationToken)
+        public async Task<ApplicationList> GetApplicationList(bool includeMigratedApps, CancellationToken cancellationToken)
         {
             string? testdataFolder = GetAltinn2TestDatafolder();
             if(testdataFolder != null)
@@ -27,7 +27,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
                         applicationList = new ApplicationList();
                     }
 
-                    if (includeMigratedResources)
+                    if (includeMigratedApps)
                     {
                         return applicationList;
                     }

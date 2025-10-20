@@ -44,7 +44,7 @@
                 };
                 try
                 {
-                    string endpointUrl = "resource/resourcelist";
+                    string endpointUrl = "resource/resourcelist?includeMigratedApps=true";
 
                     HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
                     string content = await response.Content.ReadAsStringAsync();
@@ -77,8 +77,16 @@
 
                     HttpResponseMessage response = await _httpClient.GetAsync(endpointUrl);
                     string content = await response.Content.ReadAsStringAsync();
+                   if(!response.IsSuccessStatusCode)
+                   {
+                        Console.WriteLine($"Failed to reload resource subjects for resource {id}. Status code: {response.StatusCode} url: {endpointUrl}");
+                    }
 
-                  
+                    if (id.StartsWith("app_"))
+                    {
+                        Console.WriteLine("Reloaded resource subjects for AltinnApp resource: " + id);
+                    }
+
                 }
                 catch (Exception ex)
                 {

@@ -6,7 +6,7 @@ using ResourceSubjectsLoader.Enums;
 
 Console.WriteLine("Hello, World!");
 
-string at22base = "https://platform.altinn.no/resourceregistry/api/v1/";
+string at22base = "https://platform.tt02.altinn.no/resourceregistry/api/v1/";
 
 HttpClient _httpClient = new HttpClient();
 _httpClient.BaseAddress = new Uri(at22base);    
@@ -15,8 +15,15 @@ ResourceRegistryClient resourceRegistry = new ResourceRegistryClient(_httpClient
 
  List<ServiceResource> resourceList = await resourceRegistry.GetResourceList();
 
-foreach(ServiceResource resource in resourceList)
+for (int i = 0; i < resourceList.Count; i++)
 {
+    if (i % 100 == 0)
+    {
+        Console.WriteLine($"Index: {i}");
+    }
+
+    ServiceResource resource = resourceList[i];
+
     if (resource.ResourceType.Equals(ResourceType.GenericAccessResource))
     {
         await resourceRegistry.ReloadResourceSubects(resource.Identifier);
@@ -26,4 +33,6 @@ foreach(ServiceResource resource in resourceList)
     {
         await resourceRegistry.ReloadResourceSubects(resource.Identifier);
     }
+
+
 }

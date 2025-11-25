@@ -22,6 +22,11 @@ namespace Altinn.ResourceRegistry.Core.Models
         public string? Version { get; set; }
 
         /// <summary>
+        /// Generated unique ID 
+        /// </summary>
+        public int? RuntimeVersion { get; set; }
+
+        /// <summary>
         /// The title of service
         /// </summary>
         [Required]

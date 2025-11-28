@@ -146,21 +146,27 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     }
 
     /// <inheritdoc/>
-    public async Task<ServiceResource?> GetResource(string id, CancellationToken cancellationToken = default)
+    public async Task<ServiceResource?> GetResource(string id, int? runTimeVersion, CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            SELECT identifier, created, modified, serviceresourcejson
-            FROM resourceregistry.resources
-            WHERE identifier = @identifier   
-            ";
+        SELECT identifier, created, modified, serviceresourcejson, runTimeVersion
+        FROM resourceregistry.resources
+        WHERE identifier = @identifier   
+        AND (@runTimeVersion IS NULL OR runTimeVersion = @runTimeVersion)
+        ORDER BY 
+            CASE WHEN @runTimeVersion IS NULL THEN runTimeVersion END DESC
+        LIMIT 
+            CASE WHEN @runTimeVersion IS NULL THEN 1 ELSE NULL END
+        ";
 
         try
         {
             await using var pgcom = _conn.CreateCommand(QUERY);
             pgcom.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, id);
+            pgcom.Parameters.AddWithValue("runTimeVersion", NpgsqlDbType.Integer, runTimeVersion ?? (object)DBNull.Value);
 
             var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(GetServiceResource)
+                .SelectAwait(GetServiceResourceWithVersion)
                 .SingleOrDefaultAsync(cancellationToken);
 
             return serviceResource;
@@ -170,6 +176,18 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
             throw;
         }
+    }
+
+    private static async ValueTask<ServiceResource> GetServiceResourceWithVersion(NpgsqlDataReader reader)
+    {
+        var json = await reader.GetFieldValueAsync<JsonDocument>("serviceresourcejson");
+        var runtimeVersion = await reader.GetFieldValueAsync<int>("runTimeVersion");
+
+        var serviceResource = json.Deserialize<ServiceResource>(JsonSerializerOptions) ??
+            throw new SqlNullValueException("Got null when trying to parse ServiceResource");
+        
+        serviceResource.RuntimeVersion = runtimeVersion;
+        return serviceResource;
     }
 
     /// <inheritdoc/>

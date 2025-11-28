@@ -31,4 +31,8 @@
     <EmbeddedResource Include="Migration/**/*.sql" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migration\v0.09-add-versioning\" />
+  </ItemGroup>
+
 </Project>

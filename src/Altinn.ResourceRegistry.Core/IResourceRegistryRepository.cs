@@ -12,9 +12,10 @@ namespace Altinn.ResourceRegistry.Core
         /// Gets a single resource by its resource identifier if it exists in the resource registry
         /// </summary>
         /// <param name="id">The resource identifier to retrieve</param>
+        /// <param name="runtimeVersion">A runtime version of a resource</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> for cancelling the async process.</param>
         /// <returns>ServiceResource</returns>
-        Task<ServiceResource> GetResource(string id, CancellationToken cancellationToken = default);
+        Task<ServiceResource> GetResource(string id, int? runtimeVersion,  CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the resource owner for a single resource by its resource identifier if it exists in the resource registry.

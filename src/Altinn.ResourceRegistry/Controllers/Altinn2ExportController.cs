@@ -97,7 +97,7 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpPost("exportdelegations")]
         public async Task<ActionResult> ExportDelegations([FromBody] ExportDelegationsRequestBE exportDelegationsRequestBE, CancellationToken cancellationToken = default)
         {
-            ServiceResource resource = await _resourceRegistryRepository.GetResource(exportDelegationsRequestBE.ResourceId, cancellationToken);
+            ServiceResource resource = await _resourceRegistryRepository.GetResource(exportDelegationsRequestBE.ResourceId, null, cancellationToken);
             if (resource == null)
             {
                 return Problems.ResourceReference_NotFound.ToActionResult();

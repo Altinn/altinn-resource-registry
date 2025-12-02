@@ -89,7 +89,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 	            Now(),
 	            @serviceresourcejson
             )
-            RETURNING identifier, created, modified, serviceresourcejson
+            RETURNING identifier, created, modified, serviceresourcejson, runtimeVersion
             ";
 
         ArgumentNullException.ThrowIfNull(resource);
@@ -102,7 +102,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             pgcom.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
 
             var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(GetServiceResource)
+                .SelectAwait(GetServiceResourceWithVersion)
                 .FirstOrDefaultAsync(cancellationToken);
 
             return serviceResource ?? throw new SqlNullValueException("No result from database");
@@ -181,7 +181,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     private static async ValueTask<ServiceResource> GetServiceResourceWithVersion(NpgsqlDataReader reader)
     {
         var json = await reader.GetFieldValueAsync<JsonDocument>("serviceresourcejson");
-        var runtimeVersion = await reader.GetFieldValueAsync<int>("runTimeVersion");
+        var runtimeVersion = await reader.GetFieldValueAsync<int>("runtimeVersion");
 
         var serviceResource = json.Deserialize<ServiceResource>(JsonSerializerOptions) ??
             throw new SqlNullValueException("Got null when trying to parse ServiceResource");
@@ -227,13 +227,20 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     public async Task<ServiceResource> UpdateResource(ServiceResource resource, CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            UPDATE resourceregistry.resources
-            SET
-	            modified = Now(),
-	            serviceresourcejson = @serviceresourcejson
-            WHERE identifier = @identifier
-            RETURNING identifier, created, modified, serviceresourcejson
-            ";
+        INSERT INTO resourceregistry.resources(
+            identifier,
+            created,
+            modified,
+            serviceresourcejson
+        )
+        VALUES (
+            @identifier,
+            (SELECT created FROM resourceregistry.resources WHERE identifier = @identifier ORDER BY runtimeVersion DESC LIMIT 1),
+            Now(),
+            @serviceresourcejson
+        )
+        RETURNING identifier, created, modified, serviceresourcejson, runtimeVersion
+        ";
 
         ArgumentNullException.ThrowIfNull(resource);
         ArgumentNullException.ThrowIfNull(resource.Identifier);
@@ -245,7 +252,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             pgcom.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
 
             var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(GetServiceResource)
+                .SelectAwait(GetServiceResourceWithVersion)
                 .FirstOrDefaultAsync(cancellationToken);
 
             return serviceResource ?? throw new SqlNullValueException("No result from database");
@@ -254,7 +261,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         {
             if (!e.Message.Contains("duplicate key value violates unique constraint"))
             {
-                _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
+                _logger.LogError(e, "Authorization // ResourceRegistryRepository // UpdateResource // Exception");
             }
 
             throw;

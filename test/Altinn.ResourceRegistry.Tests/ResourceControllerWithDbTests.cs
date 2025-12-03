@@ -13,6 +13,7 @@ using System.Text.Json;
 using Altinn.ResourceRegistry.Controllers;
 using AngleSharp.Text;
 using VDS.RDF;
+using Altinn.ResourceRegistry.Core.Enums;
 
 namespace Altinn.ResourceRegistry.Tests;
 
@@ -424,6 +425,44 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.NotNull(subjectMatch);
         Assert.Single(subjectMatch.Items);
+    }
+
+    [Fact]
+    public async Task CreateResource_Ok()
+    {
+        var client = CreateClient();
+        string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        ServiceResource resource = new ServiceResource()
+        {
+            Identifier = "superdupertjenestene",
+            Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            Status = "Completed",
+            ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
+            HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+            {
+                Organization = "974761076",
+                Orgcode = "skd",
+            },
+            ResourceType = ResourceType.GenericAccessResource,
+        };
+
+        string requestUri = "resourceregistry/api/v1/Resource/";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
+        {
+            Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+        };
+
+        httpRequestMessage.Headers.Add("Accept", "application/json");
+        httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
     #region Utils

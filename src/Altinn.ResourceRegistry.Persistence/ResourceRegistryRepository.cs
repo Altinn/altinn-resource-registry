@@ -76,6 +76,18 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<ServiceResource> CreateResource(ServiceResource resource, CancellationToken cancellationToken = default)
     {
+        const string QUERYRESMAIN =/*strpsql*/@"
+            INSERT INTO resourceregistry.resourcemain(
+	            identifier,
+	            created
+            )
+            VALUES (
+	            @identifier,
+	            Now()
+            )
+            RETURNING identifier, created
+            ";
+
         const string QUERY = /*strpsql*/@"
             INSERT INTO resourceregistry.resources(
 	            identifier,
@@ -89,29 +101,54 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 	            Now(),
 	            @serviceresourcejson
             )
-            RETURNING identifier, created, modified, serviceresourcejson
+            RETURNING identifier, created, modified, serviceresourcejson, versionid
             ";
 
         ArgumentNullException.ThrowIfNull(resource);
         ArgumentNullException.ThrowIfNull(resource.Identifier);
+
         var json = JsonSerializer.SerializeToDocument(resource, JsonSerializerOptions);
+
+        await using var conn = await _conn.OpenConnectionAsync(cancellationToken);
+        await using var tx = await conn.BeginTransactionAsync(cancellationToken);
+
         try
         {
-            await using var pgcom = _conn.CreateCommand(QUERY);
-            pgcom.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
-            pgcom.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
+            // First insert into resourcesmain
+            await using (var cmdMain = new NpgsqlCommand(QUERYRESMAIN, conn, tx))
+            {
+                cmdMain.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
+                await cmdMain.ExecuteNonQueryAsync(cancellationToken);
+            }
 
-            var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
+            // Then insert into resources
+            await using var cmd = new NpgsqlCommand(QUERY, conn, tx);
+            cmd.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
+            cmd.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
+
+            var serviceResource = await cmd.ExecuteEnumerableAsync(cancellationToken)
                 .SelectAwait(GetServiceResource)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            return serviceResource ?? throw new SqlNullValueException("No result from database");
+            if (serviceResource is null)
+            {
+                throw new SqlNullValueException("No result from database");
+            }
+
+            await tx.CommitAsync(cancellationToken);
+            return serviceResource;
         }
         catch (Exception e)
         {
-            if (!e.Message.Contains("duplicate key value violates unique constraint"))
+            try
             {
-                _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
+                await tx.RollbackAsync(cancellationToken);
+            }
+            catch { /* ignore rollback errors */ }
+
+            if (!e.Message.Contains("duplicate key value violates unique constraint", StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogError(e, "Authorization // ResourceRegistryRepository // CreateResource // Exception");
             }
 
             throw;
@@ -150,8 +187,9 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     {
         const string QUERY = /*strpsql*/@"
             SELECT identifier, created, modified, serviceresourcejson
-            FROM resourceregistry.resources
-            WHERE identifier = @identifier   
+            FROM resourceregistry.resources res 
+            join resourceregistry.resourcesmain rm on res.identifier = rm.identifier
+            WHERE res.identifier = @identifier   
             ";
 
         try

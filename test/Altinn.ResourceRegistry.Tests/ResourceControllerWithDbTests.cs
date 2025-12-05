@@ -13,6 +13,8 @@ using System.Text.Json;
 using Altinn.ResourceRegistry.Controllers;
 using AngleSharp.Text;
 using VDS.RDF;
+using Altinn.ResourceRegistry.Core.Enums;
+using Altinn.ResourceRegistry.Tests.Mocks;
 
 namespace Altinn.ResourceRegistry.Tests;
 
@@ -426,6 +428,65 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Single(subjectMatch.Items);
     }
 
+    [Fact]
+    public async Task CreateResource_Ok()
+    {
+        var client = CreateClient();
+        string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        ServiceResource resource = new ServiceResource()
+        {
+            Identifier = "superdupertjenestene",
+            Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            Status = "Completed",
+            ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
+            HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+            {
+                Organization = "974761076",
+                Orgcode = "skd",
+            },
+            ResourceType = ResourceType.GenericAccessResource,
+        };
+
+        string requestUri = "resourceregistry/api/v1/Resource/";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
+        {
+            Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+        };
+
+        httpRequestMessage.Headers.Add("Accept", "application/json");
+        httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task SearchResources_Ok()
+    {
+        await LoadTestData();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?Id=korrespondanse-fra-sivilforsvaret";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+        Assert.NotNull(resource);
+        Assert.Single(resource);
+    }
+
     #region Utils
     private static ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)
     {
@@ -455,6 +516,29 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         }
 
         return resourceSubjects;
+    }
+
+
+    private async Task LoadTestData()
+    {
+        List<ServiceResource> testData = await GetTtestDAta();
+        foreach (ServiceResource resource in testData)
+        {
+            await Repository.CreateResource(resource);
+        }
+    }
+
+    private async Task<List<ServiceResource>> GetTtestDAta()
+    {
+        List<ServiceResource> resources = new List<ServiceResource>();  
+
+        RegisterResourceRepositoryMock repositoryMock = new RegisterResourceRepositoryMock();
+        resources.Add(await repositoryMock.GetResource("eformidling-dpo-meldingsutveksling"));
+        resources.Add(await repositoryMock.GetResource("korrespondanse-fra-sivilforsvaret"));
+        resources.Add(await repositoryMock.GetResource("skd-maskinportenschemaid-8"));
+        resources.Add(await repositoryMock.GetResource("ske-innrapportering-boligsameie"));
+
+        return resources;
     }
     #endregion
 }

@@ -44,9 +44,10 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            SELECT identifier, created, modified, serviceresourcejson
-            FROM resourceregistry.resources
-            WHERE (@id IS NULL OR serviceresourcejson ->> 'identifier' ILIKE concat('%', @id, '%'))
+            SELECT rm.identifier, rm.created, modified, serviceresourcejson
+            FROM resourceregistry.resources res 
+            join resourceregistry.resourcemain rm on res.identifier = rm.identifier
+            WHERE (@id IS NULL OR serviceresourcejson ->> 'rm.identifier' ILIKE concat('%', @id, '%'))
             AND (@title IS NULL OR serviceresourcejson ->> 'title' ILIKE concat('%', @title, '%'))
             AND (@description IS NULL OR serviceresourcejson ->> 'description' ILIKE concat('%', @description, '%'))
             AND (@resourcetype IS NULL OR serviceresourcejson ->> 'resourceType' ILIKE @resourcetype::text)
@@ -76,42 +77,70 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<ServiceResource> CreateResource(ServiceResource resource, CancellationToken cancellationToken = default)
     {
-        const string QUERY = /*strpsql*/@"
+        const string BULK_INSERT_QUERY = /*strpsql*/@"
+            WITH main_insert AS (
+                INSERT INTO resourceregistry.resourcemain(
+                    identifier,
+                    created
+                )
+                VALUES (
+                    @identifier,
+                    Now()
+                )
+                RETURNING identifier, created
+            )
             INSERT INTO resourceregistry.resources(
-	            identifier,
-	            created,
-	            modified,
-	            serviceresourcejson
+                identifier,
+                created,
+                modified,
+                serviceresourcejson
             )
-            VALUES (
-	            @identifier,
-	            Now(),
-	            Now(),
-	            @serviceresourcejson
-            )
-            RETURNING identifier, created, modified, serviceresourcejson
+            SELECT 
+                main_insert.identifier,
+                main_insert.created,
+                Now(),
+                @serviceresourcejson
+            FROM main_insert
+            RETURNING identifier, created, modified, serviceresourcejson, version_id
             ";
 
         ArgumentNullException.ThrowIfNull(resource);
         ArgumentNullException.ThrowIfNull(resource.Identifier);
+
         var json = JsonSerializer.SerializeToDocument(resource, JsonSerializerOptions);
+
+        await using var conn = await _conn.OpenConnectionAsync(cancellationToken);
+        await using var tx = await conn.BeginTransactionAsync(cancellationToken);
+
         try
         {
-            await using var pgcom = _conn.CreateCommand(QUERY);
-            pgcom.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
-            pgcom.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
+            await using var cmd = new NpgsqlCommand(BULK_INSERT_QUERY, conn, tx);
+            cmd.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
+            cmd.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
 
-            var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
+            var serviceResource = await cmd.ExecuteEnumerableAsync(cancellationToken)
                 .SelectAwait(GetServiceResource)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            return serviceResource ?? throw new SqlNullValueException("No result from database");
+            if (serviceResource is null)
+            {
+                throw new SqlNullValueException("No result from database");
+            }
+
+            await tx.CommitAsync(cancellationToken);
+            return serviceResource;
         }
         catch (Exception e)
         {
-            if (!e.Message.Contains("duplicate key value violates unique constraint"))
+            try
             {
-                _logger.LogError(e, "Authorization // ResourceRegistryRepository // GetResource // Exception");
+                await tx.RollbackAsync(cancellationToken);
+            }
+            catch { /* ignore rollback errors */ }
+
+            if (!e.Message.Contains("duplicate key value violates unique constraint", StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogError(e, "Authorization // ResourceRegistryRepository // CreateResource // Exception");
             }
 
             throw;
@@ -149,9 +178,12 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     public async Task<ServiceResource?> GetResource(string id, CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            SELECT identifier, created, modified, serviceresourcejson
-            FROM resourceregistry.resources
-            WHERE identifier = @identifier   
+            SELECT rm.identifier, rm.created, res.modified, res.serviceresourcejson
+            FROM resourceregistry.resources res 
+            join resourceregistry.resourcemain rm on res.identifier = rm.identifier
+            WHERE res.identifier = @identifier
+            ORDER BY version_id DESC
+            LIMIT 1
             ";
 
         try

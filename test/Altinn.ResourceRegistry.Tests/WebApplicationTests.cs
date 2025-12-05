@@ -103,6 +103,11 @@ public abstract class WebApplicationTests
     {
         owner ??= DefaultAuthority;
 
+        await using var resourcemainCmd = DataSource.CreateCommand(/*strpsql*/"INSERT INTO resourceregistry.resourcemain (identifier, created) VALUES (@name, NOW());");
+        var namemainParam = resourcemainCmd.Parameters.Add("name", NpgsqlTypes.NpgsqlDbType.Text);
+        namemainParam.Value = name;
+        resourcemainCmd.ExecuteNonQuery();
+
         await using var resourceCmd = DataSource.CreateCommand(/*strpsql*/"INSERT INTO resourceregistry.resources (identifier, created, serviceresourcejson) VALUES (@name, NOW(), @json);");
         var nameParam = resourceCmd.Parameters.Add("name", NpgsqlTypes.NpgsqlDbType.Text);
         var jsonParam = resourceCmd.Parameters.Add("json", NpgsqlTypes.NpgsqlDbType.Jsonb);

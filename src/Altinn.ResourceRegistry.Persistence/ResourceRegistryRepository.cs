@@ -44,9 +44,10 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            SELECT identifier, created, modified, serviceresourcejson
-            FROM resourceregistry.resources
-            WHERE (@id IS NULL OR serviceresourcejson ->> 'identifier' ILIKE concat('%', @id, '%'))
+            SELECT rm.identifier, rm.created, modified, serviceresourcejson
+            FROM resourceregistry.resources res 
+            join resourceregistry.resourcemain rm on res.identifier = rm.identifier
+            WHERE (@id IS NULL OR serviceresourcejson ->> 'rm.identifier' ILIKE concat('%', @id, '%'))
             AND (@title IS NULL OR serviceresourcejson ->> 'title' ILIKE concat('%', @title, '%'))
             AND (@description IS NULL OR serviceresourcejson ->> 'description' ILIKE concat('%', @description, '%'))
             AND (@resourcetype IS NULL OR serviceresourcejson ->> 'resourceType' ILIKE @resourcetype::text)
@@ -186,9 +187,9 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     public async Task<ServiceResource?> GetResource(string id, CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            SELECT identifier, created, modified, serviceresourcejson
+            SELECT rm.identifier, rm.created, res.modified, res.serviceresourcejson
             FROM resourceregistry.resources res 
-            join resourceregistry.resourcesmain rm on res.identifier = rm.identifier
+            join resourceregistry.resourcemain rm on res.identifier = rm.identifier
             WHERE res.identifier = @identifier   
             ";
 

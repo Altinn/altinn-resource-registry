@@ -14,6 +14,7 @@ using Altinn.ResourceRegistry.Controllers;
 using AngleSharp.Text;
 using VDS.RDF;
 using Altinn.ResourceRegistry.Core.Enums;
+using Altinn.ResourceRegistry.Tests.Mocks;
 
 namespace Altinn.ResourceRegistry.Tests;
 
@@ -465,6 +466,27 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
+    [Fact]
+    public async Task SearchResources_Ok()
+    {
+        await LoadTestData();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?Id=korrespondanse-fra-sivilforsvaret";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+        Assert.NotNull(resource);
+        Assert.Single(resource);
+    }
+
     #region Utils
     private static ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)
     {
@@ -494,6 +516,29 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         }
 
         return resourceSubjects;
+    }
+
+
+    private async Task LoadTestData()
+    {
+        List<ServiceResource> testData = await GetTtestDAta();
+        foreach (ServiceResource resource in testData)
+        {
+            await Repository.CreateResource(resource);
+        }
+    }
+
+    private async Task<List<ServiceResource>> GetTtestDAta()
+    {
+        List<ServiceResource> resources = new List<ServiceResource>();  
+
+        RegisterResourceRepositoryMock repositoryMock = new RegisterResourceRepositoryMock();
+        resources.Add(await repositoryMock.GetResource("eformidling-dpo-meldingsutveksling"));
+        resources.Add(await repositoryMock.GetResource("korrespondanse-fra-sivilforsvaret"));
+        resources.Add(await repositoryMock.GetResource("skd-maskinportenschemaid-8"));
+        resources.Add(await repositoryMock.GetResource("ske-innrapportering-boligsameie"));
+
+        return resources;
     }
     #endregion
 }

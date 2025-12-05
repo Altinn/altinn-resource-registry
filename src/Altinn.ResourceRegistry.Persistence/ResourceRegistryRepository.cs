@@ -77,32 +77,31 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<ServiceResource> CreateResource(ServiceResource resource, CancellationToken cancellationToken = default)
     {
-        const string QUERYRESMAIN =/*strpsql*/@"
-            INSERT INTO resourceregistry.resourcemain(
-	            identifier,
-	            created
+        const string BULK_INSERT_QUERY = /*strpsql*/@"
+            WITH main_insert AS (
+                INSERT INTO resourceregistry.resourcemain(
+                    identifier,
+                    created
+                )
+                VALUES (
+                    @identifier,
+                    Now()
+                )
+                RETURNING identifier, created
             )
-            VALUES (
-	            @identifier,
-	            Now()
-            )
-            RETURNING identifier, created
-            ";
-
-        const string QUERY = /*strpsql*/@"
             INSERT INTO resourceregistry.resources(
-	            identifier,
-	            created,
-	            modified,
-	            serviceresourcejson
+                identifier,
+                created,
+                modified,
+                serviceresourcejson
             )
-            VALUES (
-	            @identifier,
-	            Now(),
-	            Now(),
-	            @serviceresourcejson
-            )
-            RETURNING identifier, created, modified, serviceresourcejson, versionid
+            SELECT 
+                main_insert.identifier,
+                main_insert.created,
+                Now(),
+                @serviceresourcejson
+            FROM main_insert
+            RETURNING identifier, created, modified, serviceresourcejson, version_id
             ";
 
         ArgumentNullException.ThrowIfNull(resource);
@@ -115,15 +114,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         try
         {
-            // First insert into resourcesmain
-            await using (var cmdMain = new NpgsqlCommand(QUERYRESMAIN, conn, tx))
-            {
-                cmdMain.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
-                await cmdMain.ExecuteNonQueryAsync(cancellationToken);
-            }
-
-            // Then insert into resources
-            await using var cmd = new NpgsqlCommand(QUERY, conn, tx);
+            await using var cmd = new NpgsqlCommand(BULK_INSERT_QUERY, conn, tx);
             cmd.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
             cmd.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
 
@@ -190,7 +181,9 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             SELECT rm.identifier, rm.created, res.modified, res.serviceresourcejson
             FROM resourceregistry.resources res 
             join resourceregistry.resourcemain rm on res.identifier = rm.identifier
-            WHERE res.identifier = @identifier   
+            WHERE res.identifier = @identifier
+            ORDER BY version_id DESC
+            LIMIT 1
             ";
 
         try

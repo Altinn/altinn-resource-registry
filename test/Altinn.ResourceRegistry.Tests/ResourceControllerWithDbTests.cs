@@ -487,6 +487,75 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Single(resource);
     }
 
+
+    [Fact]
+    public async Task UpdateResource_Ok()
+    {
+        var client = CreateClient();
+        string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        ServiceResource resource = new ServiceResource()
+        {
+            Identifier = "superdupertjenestene",
+            Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            Status = "Completed",
+            ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
+            HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+            {
+                Organization = "974761076",
+                Orgcode = "skd",
+            },
+            ResourceType = ResourceType.GenericAccessResource,
+        };
+
+        string requestUri = "resourceregistry/api/v1/Resource/";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
+        {
+            Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+        };
+
+        httpRequestMessage.Headers.Add("Accept", "application/json");
+        httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        ServiceResource updatedresource = new ServiceResource()
+        {
+            Identifier = "superdupertjenestene",
+            Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            Status = "Completed",
+            ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
+            HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+            {
+                Organization = "974761076",
+                Orgcode = "skd",
+            },
+            ResourceType = ResourceType.GenericAccessResource
+        };
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        string updateRequestUri = "resourceregistry/api/v1/Resource/superdupertjenestene";
+
+        HttpRequestMessage httpupdateRequestMessage = new HttpRequestMessage(HttpMethod.Put, updateRequestUri)
+        {
+            Content = new StringContent(JsonSerializer.Serialize(updatedresource), Encoding.UTF8, "application/json")
+        };
+
+        httpupdateRequestMessage.Headers.Add("Accept", "application/json");
+        httpupdateRequestMessage.Headers.Add("ContentType", "application/json");
+
+        HttpResponseMessage responseUpdate = await client.SendAsync(httpupdateRequestMessage);
+
+        Assert.Equal(HttpStatusCode.OK, responseUpdate.StatusCode);
+    }
+
     #region Utils
     private static ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)
     {

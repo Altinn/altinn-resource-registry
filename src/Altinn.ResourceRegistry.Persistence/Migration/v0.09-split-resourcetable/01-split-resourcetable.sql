@@ -12,14 +12,23 @@ SELECT DISTINCT identifier, created
 FROM resourceregistry.resources
 ORDER BY identifier;
 
--- Step 3: Add foreign key constraint using existing identifier
+-- Remove the primary key constraint
+alter table resourceregistry.access_list_resource_connections_state 
+drop constraint access_list_resource_connections_state_resource_identifier_fkey;
+
+-- Step 3: Drop the primary key constraint from resources table
+ALTER TABLE resourceregistry.resources 
+DROP CONSTRAINT resourceregistry_pkey;
+
+-- Step 4: Add foreign key constraint using existing identifier
 ALTER TABLE resourceregistry.resources 
 ADD CONSTRAINT fk_resources_resourcemain 
 FOREIGN KEY (identifier) REFERENCES resourceregistry.resourcemain(identifier);
 
--- Step 4: Add versionid column with automatic generation
+-- Step 5: Add versionid column with automatic generation
 ALTER TABLE resourceregistry.resources 
 ADD COLUMN version_id BIGSERIAL NOT NULL;
 
--- Step 5: Create indexes for better performance
+-- Step 6: Create indexes for better performance
 CREATE INDEX idx_resources_identifier ON resourceregistry.resources(identifier);
+

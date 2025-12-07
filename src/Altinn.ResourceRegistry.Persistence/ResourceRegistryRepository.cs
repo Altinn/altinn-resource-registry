@@ -241,12 +241,20 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     public async Task<ServiceResource> UpdateResource(ServiceResource resource, CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            UPDATE resourceregistry.resources
-            SET
-	            modified = Now(),
-	            serviceresourcejson = @serviceresourcejson
-            WHERE identifier = @identifier
-            RETURNING identifier, created, modified, serviceresourcejson
+            INSERT INTO resourceregistry.resources(
+                identifier,
+                created,
+                modified,
+                serviceresourcejson
+            )
+            VALUES
+            (
+                @identifier,
+                Now(),
+                Now(),
+                @serviceresourcejson
+            )
+            RETURNING identifier, created, modified, serviceresourcejson, version_id
             ";
 
         ArgumentNullException.ThrowIfNull(resource);

@@ -44,7 +44,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            SELECT rm.identifier, rm.created, modified, serviceresourcejson
+            SELECT rm.identifier, rm.created, modified, serviceresourcejson, version_id
             FROM resourceregistry.resources res 
             join resourceregistry.resourcemain rm on res.identifier = rm.identifier
             WHERE (@id IS NULL OR serviceresourcejson ->> 'rm.identifier' ILIKE concat('%', @id, '%'))
@@ -178,7 +178,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     public async Task<ServiceResource?> GetResource(string id, CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            SELECT rm.identifier, rm.created, res.modified, res.serviceresourcejson
+            SELECT rm.identifier, rm.created, res.modified, res.serviceresourcejson, res.version_id
             FROM resourceregistry.resources res 
             join resourceregistry.resourcemain rm on res.identifier = rm.identifier
             WHERE res.identifier = @identifier
@@ -510,8 +510,12 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     private static async ValueTask<ServiceResource> GetServiceResource(NpgsqlDataReader reader)
     {
         var json = await reader.GetFieldValueAsync<JsonDocument>("serviceresourcejson");
+        int versionId = await reader.GetFieldValueAsync<int>("version_id");
 
-        return json.Deserialize<ServiceResource>(JsonSerializerOptions) ??
+        ServiceResource resource = json.Deserialize<ServiceResource>(JsonSerializerOptions) ??
             throw new SqlNullValueException("Got null when trying to parse ServiceResource");
+
+        resource.VersionId = versionId;
+        return resource;
     }
 }

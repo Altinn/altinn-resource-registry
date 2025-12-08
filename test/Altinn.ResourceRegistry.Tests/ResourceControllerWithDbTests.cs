@@ -556,6 +556,34 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Equal(HttpStatusCode.OK, responseUpdate.StatusCode);
     }
 
+    [Fact]
+    public async Task ResourceListWithMultpleVersionsReturnCorrect()
+    {
+        await LoadTestDataWithUpdates();
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/resourcelist?includeAltinn2=false&includeApps=false";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+        Assert.NotNull(resource);
+        Assert.Equal(4, resource.Count);
+
+        ServiceResource? skd_maskinportenSchema = resource.FirstOrDefault(r => r.ResourceReferences != null && r.ResourceReferences.Any(r => r.Reference != null && r.Reference.Contains("folkeregister:deling/finans")));
+        Assert.NotNull(skd_maskinportenSchema);
+        Assert.NotNull(skd_maskinportenSchema.RightDescription);
+        Assert.Equal("This service allows you to delegate your access to The national Population Register information to a provider. Once the delegation has been completed, the provider will be notified that they can use the services available within the rights", skd_maskinportenSchema.RightDescription["en"]);
+        Assert.Equal("Denne tjenesten gir deg mulighet for å delegere din tilgang til folkeregisteropplysninger til en  leverandør. Når delegeringen er utført, vil leverandøren motta melding om at de på vegne av din virksomhet kan benyttet de tjenester som er ti", skd_maskinportenSchema.RightDescription["nb"]);
+        Assert.Equal("Denne tenesta gir deg moglegheit for å delegera tilgangen din til folkeregisteropplysningar til ein leverandør. Når delegeringen er utførte, vil leverandøren få melding om at dei på vegner av verksemda di kan nytta dei tenestene som er tilg", skd_maskinportenSchema.RightDescription["nn"]);
+        Assert.True(skd_maskinportenSchema.VersionId > 4);
+    }
+
     #region Utils
     private static ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)
     {
@@ -590,24 +618,60 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
     private async Task LoadTestData()
     {
-        List<ServiceResource> testData = await GetTtestDAta();
+        List<ServiceResource> testData = await GetTestData();
         foreach (ServiceResource resource in testData)
         {
             await Repository.CreateResource(resource);
         }
     }
 
-    private async Task<List<ServiceResource>> GetTtestDAta()
+    private async Task LoadTestDataWithUpdates()
+    {
+        List<ServiceResource> testData = await GetTestData();
+        foreach (ServiceResource resource in testData)
+        {
+            await Repository.CreateResource(resource);
+        }
+
+        foreach (ServiceResource resource in testData)
+        {
+            resource.Description = new Dictionary<string, string> { { "en", "Updated English" }, { "nb", "Updated Bokmal" }, { "nn", "Updated Nynorsk" } };
+            await Repository.UpdateResource(resource);
+        }
+    }
+
+
+    private async Task<List<ServiceResource>> GetTestData()
     {
         List<ServiceResource> resources = new List<ServiceResource>();  
 
         RegisterResourceRepositoryMock repositoryMock = new RegisterResourceRepositoryMock();
-        resources.Add(await repositoryMock.GetResource("eformidling-dpo-meldingsutveksling"));
-        resources.Add(await repositoryMock.GetResource("korrespondanse-fra-sivilforsvaret"));
-        resources.Add(await repositoryMock.GetResource("skd-maskinportenschemaid-8"));
-        resources.Add(await repositoryMock.GetResource("ske-innrapportering-boligsameie"));
+
+        string[] testResources = GetTestServices();
+
+        foreach (string testResource in testResources)
+        {
+            ServiceResource? resource = await repositoryMock.GetResource(testResource);
+            if (resource != null)
+            {
+                resources.Add(resource);
+            }
+        }
 
         return resources;
     }
+
+    private string[] GetTestServices()
+    {
+        return
+        [
+            "eformidling-dpo-meldingsutveksling",
+            "korrespondanse-fra-sivilforsvaret",
+            "skd-maskinportenschemaid-8",
+            "ske-innrapportering-boligsameie"
+        ];
+
+    }
+
     #endregion
 }

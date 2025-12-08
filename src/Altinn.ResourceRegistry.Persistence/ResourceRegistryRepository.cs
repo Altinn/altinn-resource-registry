@@ -44,15 +44,31 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            SELECT rm.identifier, rm.created, modified, serviceresourcejson, version_id
-            FROM resourceregistry.resources res 
-            join resourceregistry.resourcemain rm on res.identifier = rm.identifier
-            WHERE (@id IS NULL OR serviceresourcejson ->> 'rm.identifier' ILIKE concat('%', @id, '%'))
-            AND (@title IS NULL OR serviceresourcejson ->> 'title' ILIKE concat('%', @title, '%'))
-            AND (@description IS NULL OR serviceresourcejson ->> 'description' ILIKE concat('%', @description, '%'))
-            AND (@resourcetype IS NULL OR serviceresourcejson ->> 'resourceType' ILIKE @resourcetype::text)
-            AND (@keyword IS NULL OR serviceresourcejson ->> 'keywords' ILIKE concat('%', @keyword, '%'))
-            ";
+        WITH ranked AS (
+            SELECT
+                rm.identifier,
+                rm.created,
+                res.modified,
+                res.serviceresourcejson,
+                res.version_id,
+                ROW_NUMBER() OVER (
+                    PARTITION BY rm.identifier
+                    ORDER BY res.version_id DESC
+                ) AS rn
+            FROM resourceregistry.resources res
+            JOIN resourceregistry.resourcemain rm
+                ON res.identifier = rm.identifier
+            WHERE (@id IS NULL OR rm.identifier ILIKE concat('%', @id, '%'))
+              AND (@title IS NULL OR serviceresourcejson ->> 'title' ILIKE concat('%', @title, '%'))
+              AND (@description IS NULL OR serviceresourcejson ->> 'description' ILIKE concat('%', @description, '%'))
+              AND (@resourcetype IS NULL OR serviceresourcejson ->> 'resourceType' ILIKE @resourcetype::text)
+              AND (@keyword IS NULL OR serviceresourcejson ->> 'keywords' ILIKE concat('%', @keyword, '%'))
+        )
+        SELECT identifier, created, modified, serviceresourcejson, version_id
+        FROM ranked
+        WHERE rn = 1
+        ORDER BY identifier;
+        ";
 
         try
         {
@@ -73,6 +89,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             throw;
         }
     }
+
 
     /// <inheritdoc/>
     public async Task<ServiceResource> CreateResource(ServiceResource resource, CancellationToken cancellationToken = default)

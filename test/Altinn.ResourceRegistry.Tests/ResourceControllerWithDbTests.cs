@@ -668,6 +668,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
             "eformidling-dpo-meldingsutveksling",
             "korrespondanse-fra-sivilforsvaret",
             "skd-maskinportenschemaid-8",
+            "ske-innrapportering-boligsameie",
             "ske-innrapportering-boligsameie"
         ];
 

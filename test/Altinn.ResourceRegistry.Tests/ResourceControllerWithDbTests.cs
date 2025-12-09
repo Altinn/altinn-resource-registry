@@ -573,7 +573,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
         Assert.NotNull(resource);
-        Assert.Equal(4, resource.Count);
+        Assert.Equal(5, resource.Count);
 
         ServiceResource? skd_maskinportenSchema = resource.FirstOrDefault(r => r.ResourceReferences != null && r.ResourceReferences.Any(r => r.Reference != null && r.Reference.Contains("folkeregister:deling/finans")));
         Assert.NotNull(skd_maskinportenSchema);
@@ -669,7 +669,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
             "korrespondanse-fra-sivilforsvaret",
             "skd-maskinportenschemaid-8",
             "ske-innrapportering-boligsameie",
-            "ske-innrapportering-boligsameie"
+            "stami-samtykke-must"
         ];
 
     }

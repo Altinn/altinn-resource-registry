@@ -1,20 +1,21 @@
-﻿using Altinn.ResourceRegistry.Core;
+﻿using Altinn.Platform.Storage.Interface.Models;
+using Altinn.ResourceRegistry.Controllers;
+using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Constants;
+using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Models;
+using Altinn.ResourceRegistry.Tests.Mocks;
 using Altinn.ResourceRegistry.Tests.Utils;
 using Altinn.ResourceRegistry.TestUtils;
+using AngleSharp.Text;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using Altinn.ResourceRegistry.Controllers;
-using AngleSharp.Text;
 using VDS.RDF;
-using Altinn.ResourceRegistry.Core.Enums;
-using Altinn.ResourceRegistry.Tests.Mocks;
 
 namespace Altinn.ResourceRegistry.Tests;
 
@@ -638,6 +639,19 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
             resource.Description = new Dictionary<string, string> { { "en", "Updated English" }, { "nb", "Updated Bokmal" }, { "nn", "Updated Nynorsk" } };
             await Repository.UpdateResource(resource);
         }
+
+        RegisterResourceRepositoryMock repositoryMock = new();
+        ServiceResource? version7658 = await repositoryMock.GetResource("skd-migrert-4628-1-7846");
+        if(version7658 != null)
+        {
+            await Repository.UpdateResource(version7658);   
+        }
+        
+        ServiceResource? version9546 = await repositoryMock.GetResource("skd-migrert-4628-1-9546");
+        if (version9546 != null)
+        {
+            await Repository.UpdateResource(version9546);
+        }
     }
 
 
@@ -669,7 +683,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
             "korrespondanse-fra-sivilforsvaret",
             "skd-maskinportenschemaid-8",
             "ske-innrapportering-boligsameie",
-            "stami-samtykke-must"
+            "stami-samtykke-must",
+            "skd-migrert-4628-1-7381"
         ];
 
     }

@@ -488,6 +488,27 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Single(resource);
     }
 
+    [Fact]
+    public async Task SearchResources_ServiceEditionVersion_Ok()
+    {
+        await LoadTestDataWithUpdates();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?reference=7846";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+        Assert.NotNull(resource);
+        Assert.Single(resource);
+    }
+
 
     [Fact]
     public async Task UpdateResource_Ok()

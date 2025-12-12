@@ -41,9 +41,12 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<ServiceResource>> Search(
         ResourceSearch resourceSearch,
+        bool includeAllVersions = false,
         CancellationToken cancellationToken = default)
     {
-        const string QUERY = /*strpsql*/@"
+        string versionFilter = includeAllVersions ? string.Empty : "WHERE rn = 1";
+
+        string query = /*strpsql*/@$"
         WITH ranked AS (
             SELECT
                 ri.identifier,
@@ -66,13 +69,13 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         )
         SELECT identifier, created, modified, serviceresourcejson, version_id
         FROM ranked
-        WHERE rn = 1
+        {versionFilter}
         ORDER BY identifier;
         ";
 
         try
         {
-            await using var pgcom = _conn.CreateCommand(QUERY);
+            await using var pgcom = _conn.CreateCommand(query);
             pgcom.Parameters.AddWithNullableValue("id", NpgsqlDbType.Text, resourceSearch.Id);
             pgcom.Parameters.AddWithNullableValue("title", NpgsqlDbType.Text, resourceSearch.Title);
             pgcom.Parameters.AddWithNullableValue("description", NpgsqlDbType.Text, resourceSearch.Description);
@@ -89,7 +92,6 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             throw;
         }
     }
-
 
     /// <inheritdoc/>
     public async Task<ServiceResource> CreateResource(ServiceResource resource, CancellationToken cancellationToken = default)
@@ -153,7 +155,10 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             {
                 await tx.RollbackAsync(cancellationToken);
             }
-            catch { /* ignore rollback errors */ }
+            catch 
+            {
+                /* ignore rollback errors */ 
+            }
 
             if (!e.Message.Contains("duplicate key value violates unique constraint", StringComparison.OrdinalIgnoreCase))
             {

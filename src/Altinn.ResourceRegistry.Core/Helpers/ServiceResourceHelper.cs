@@ -27,7 +27,8 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             foreach (ServiceResource serviceResource in resourceList)
             {
-                if (MatchingIdentifier(serviceResource, resourceSearch) && MatchingDescription(serviceResource, resourceSearch) && MatchingResourceType(serviceResource, resourceSearch) && MatchingKeywords(serviceResource, resourceSearch))
+                if (MatchingIdentifier(serviceResource, resourceSearch) && MatchingDescription(serviceResource, resourceSearch) && MatchingResourceType(serviceResource, resourceSearch) && MatchingKeywords(serviceResource, resourceSearch)
+                    && MatchingReference(serviceResource, resourceSearch))
                 {
                     searchResults.Add(serviceResource);
                 }
@@ -209,6 +210,25 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             }
 
             return true;
+        }
+
+        private static bool MatchingReference(ServiceResource resource, ResourceSearch resourceSearch)
+        {
+            if (resourceSearch.Reference == null)
+            {
+                return true;
+            }
+            else
+            {
+                if (resource.ResourceReferences == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return resource.ResourceReferences.Any(r => r.Reference.Contains(resourceSearch.Reference, StringComparison.InvariantCultureIgnoreCase));
+                }
+            }
         }
 
         private static bool MatchingIdentifier(ServiceResource resource, ResourceSearch resourceSearch)

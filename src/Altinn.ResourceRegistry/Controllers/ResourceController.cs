@@ -58,7 +58,7 @@ namespace Altinn.ResourceRegistry.Controllers
             bool includeMigratedApps = false,
             CancellationToken cancellationToken = default)
         {
-            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, includeExpired: false, includeMigratedApps, cancellationToken);
+            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, includeExpired: false, includeMigratedApps, includeAllVersions: false, cancellationToken);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Altinn.ResourceRegistry.Controllers
         public async Task<string> Export(CancellationToken cancellationToken)
         {
             ResourceSearch search = new ResourceSearch();
-            List<ServiceResource> serviceResources = await _resourceRegistry.Search(search, cancellationToken);
+            List<ServiceResource> serviceResources = await _resourceRegistry.Search(search, false, cancellationToken);
             string rdfString = RdfUtil.CreateRdf(serviceResources);
             return rdfString;
         }
@@ -90,7 +90,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             if (resource == null && id.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
             {
-                List<ServiceResource> resourceList = await _resourceRegistry.GetResourceList(includeApps: true, includeAltinn2: false, includeExpired: false, includeMigratedApps: false, cancellationToken);
+                List<ServiceResource> resourceList = await _resourceRegistry.GetResourceList(includeApps: true, includeAltinn2: false, includeExpired: false, includeMigratedApps: false, includeAllVersions:false, cancellationToken);
                 ServiceResource appResource = resourceList.FirstOrDefault(r => r.Identifier == id);
                 if (appResource != null)
                 {

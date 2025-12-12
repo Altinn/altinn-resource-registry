@@ -46,19 +46,19 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         const string QUERY = /*strpsql*/@"
         WITH ranked AS (
             SELECT
-                rm.identifier,
-                rm.created,
+                ri.identifier,
+                ri.created,
                 res.modified,
                 res.serviceresourcejson,
                 res.version_id,
                 ROW_NUMBER() OVER (
-                    PARTITION BY rm.identifier
+                    PARTITION BY ri.identifier
                     ORDER BY res.version_id DESC
                 ) AS rn
             FROM resourceregistry.resources res
-            JOIN resourceregistry.resourcemain rm
-                ON res.identifier = rm.identifier
-            WHERE (@id IS NULL OR rm.identifier ILIKE concat('%', @id, '%'))
+            JOIN resourceregistry.resource_identifier ri
+                ON res.identifier = ri.identifier
+            WHERE (@id IS NULL OR ri.identifier ILIKE concat('%', @id, '%'))
               AND (@title IS NULL OR serviceresourcejson ->> 'title' ILIKE concat('%', @title, '%'))
               AND (@description IS NULL OR serviceresourcejson ->> 'description' ILIKE concat('%', @description, '%'))
               AND (@resourcetype IS NULL OR serviceresourcejson ->> 'resourceType' ILIKE @resourcetype::text)
@@ -96,7 +96,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     {
         const string BULK_INSERT_QUERY = /*strpsql*/@"
             WITH main_insert AS (
-                INSERT INTO resourceregistry.resourcemain(
+                INSERT INTO resourceregistry.resource_identifier(
                     identifier,
                     created
                 )
@@ -195,9 +195,9 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     public async Task<ServiceResource?> GetResource(string id, CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            SELECT rm.identifier, rm.created, res.modified, res.serviceresourcejson, res.version_id
+            SELECT ri.identifier, ri.created, res.modified, res.serviceresourcejson, res.version_id
             FROM resourceregistry.resources res 
-            join resourceregistry.resourcemain rm on res.identifier = rm.identifier
+            join resourceregistry.resource_identifier ri on res.identifier = ri.identifier
             WHERE res.identifier = @identifier
             ORDER BY version_id DESC
             LIMIT 1

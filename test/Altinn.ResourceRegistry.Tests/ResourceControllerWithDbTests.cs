@@ -507,6 +507,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.NotNull(resource);
         Assert.Single(resource);
+
+        Assert.Equal("skd-migrert-4628-1", resource[0].Identifier);
     }
 
 

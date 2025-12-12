@@ -574,7 +574,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
         Assert.NotNull(resource);
-        Assert.Equal(5, resource.Count);
+        Assert.Equal(6, resource.Count);
 
         ServiceResource? skd_maskinportenSchema = resource.FirstOrDefault(r => r.ResourceReferences != null && r.ResourceReferences.Any(r => r.Reference != null && r.Reference.Contains("folkeregister:deling/finans")));
         Assert.NotNull(skd_maskinportenSchema);

@@ -105,7 +105,7 @@ public abstract class WebApplicationTests
     {
         owner ??= DefaultAuthority;
 
-        await using var resourcemainCmd = DataSource.CreateCommand(/*strpsql*/"INSERT INTO resourceregistry.resourcemain (identifier, created) VALUES (@name, NOW());");
+        await using var resourcemainCmd = DataSource.CreateCommand(/*strpsql*/"INSERT INTO resourceregistry.resource_identifier (identifier, created) VALUES (@name, NOW());");
         var namemainParam = resourcemainCmd.Parameters.Add("name", NpgsqlTypes.NpgsqlDbType.Text);
         namemainParam.Value = name;
         resourcemainCmd.ExecuteNonQuery();

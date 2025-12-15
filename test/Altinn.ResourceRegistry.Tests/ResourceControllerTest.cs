@@ -135,7 +135,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(446, resource.Count);
+            Assert.Equal(450, resource.Count);
 
             ServiceResource? altinn2resourcewithdescription = resource.FirstOrDefault(r => r.ResourceReferences != null && r.ResourceReferences.Any(r => r.Reference != null && r.Reference.Contains("5563")));
             Assert.NotNull(altinn2resourcewithdescription);
@@ -161,7 +161,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(319, resource.Count);
+            Assert.Equal(323, resource.Count);
         }
 
         [Fact]
@@ -180,7 +180,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(137, resource.Count);
+            Assert.Equal(141, resource.Count);
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(10, resource.Count);
+            Assert.Equal(14, resource.Count);
         }
 
         [Fact]
@@ -218,7 +218,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(139, resource.Count);
+            Assert.Equal(143, resource.Count);
             Assert.Contains(resource, r => r.Identifier == "app_ssb_a1-1021-7048:1");
             Assert.Contains(resource, r => r.Identifier == "app_skd_a2-4223-160201");
         }

@@ -511,7 +511,11 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Equal("skd-migrert-4628-1", resource[0].Identifier);
     }
 
-
+    /// <summary>
+    /// Scenario: Update existing resource
+    /// Expects: 200 OK and version incremented
+    /// </summary>
+    /// <returns></returns>
     [Fact]
     public async Task UpdateResource_Ok()
     {
@@ -548,6 +552,22 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
+
+        string getRequestUri = "resourceregistry/api/v1/Resource/superdupertjenestene";
+
+
+        HttpRequestMessage httpGetRequestMessage = new HttpRequestMessage(HttpMethod.Get, getRequestUri)
+        {
+        };
+
+        HttpResponseMessage responseGet = await client.SendAsync(httpGetRequestMessage);
+
+        Assert.Equal(HttpStatusCode.OK, responseGet.StatusCode);
+
+        ServiceResource? createdResource = JsonSerializer.Deserialize<ServiceResource>(await responseGet.Content.ReadAsStringAsync(), new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+
+        Assert.NotNull(createdResource);
+
         ServiceResource updatedresource = new ServiceResource()
         {
             Identifier = "superdupertjenestene",
@@ -578,6 +598,21 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage responseUpdate = await client.SendAsync(httpupdateRequestMessage);
 
         Assert.Equal(HttpStatusCode.OK, responseUpdate.StatusCode);
+
+
+        HttpRequestMessage httpGetUpdatedResource = new HttpRequestMessage(HttpMethod.Get, getRequestUri)
+        {
+        };
+
+        HttpResponseMessage responseGetUpdated = await client.SendAsync(httpGetUpdatedResource);
+
+        Assert.Equal(HttpStatusCode.OK, responseGetUpdated.StatusCode);
+
+        ServiceResource? updatedResource = JsonSerializer.Deserialize<ServiceResource>(await responseGetUpdated.Content.ReadAsStringAsync(), new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+
+        Assert.NotNull(updatedResource);
+
+        Assert.Equal(createdResource.VersionId + 1, updatedResource.VersionId);
     }
 
     [Fact]

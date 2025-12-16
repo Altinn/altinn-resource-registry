@@ -8,7 +8,7 @@ CREATE TABLE resourceregistry.resource_identifier
 
 -- Step 2: Insert data from existing resources table into resource_identifier
 INSERT INTO resourceregistry.resource_identifier (identifier, created)
-SELECT DISTINCT identifier, created 
+SELECT identifier, created 
 FROM resourceregistry.resources
 ORDER BY identifier;
 

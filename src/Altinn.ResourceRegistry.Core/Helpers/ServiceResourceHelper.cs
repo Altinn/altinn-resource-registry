@@ -34,7 +34,17 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 }
             }
 
-            return searchResults;
+            return RemoveOldServiceResourceVersions(searchResults);
+        }
+
+        private static List<ServiceResource> RemoveOldServiceResourceVersions(List<ServiceResource> serviceResources)
+        {
+            List<ServiceResource> latestServiceResources = serviceResources
+                .GroupBy(sr => sr.Identifier)
+                .Select(g => g.OrderByDescending(sr => sr.VersionId).First())
+                .ToList();
+
+            return latestServiceResources;
         }
 
         /// <summary>

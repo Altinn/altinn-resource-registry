@@ -488,6 +488,12 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Single(resource);
     }
 
+    /// <summary>
+    /// Scenario: Search for resources by ServiceEditionVersion reference
+    /// This is relevant when migrating consents from Altinn 2 to Altinn 3 where the consent is tied to a specific version of a service edition
+    /// The goal is to find the correct 
+    /// </summary>
+    /// <returns></returns>
     [Fact]
     public async Task SearchResources_ServiceEditionVersion_Ok()
     {
@@ -515,6 +521,21 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.NotNull(resource.ResourceReferences);
         Assert.Equal(3, resource.ResourceReferences.Count);
         Assert.Contains(resource.ResourceReferences, r => r.ReferenceType == ReferenceType.ServiceEditionVersion && r.Reference == "7846");
+        Assert.True(resource.VersionId > 1, "Expected resource to be an updated version");
+
+        string requestUriAllResources = "resourceregistry/api/v1/Resource/Search";
+        HttpRequestMessage httpRequestMessageAllResources = new HttpRequestMessage(HttpMethod.Get, requestUriAllResources)
+        {
+        };
+        HttpResponseMessage responseAllResources = await client.SendAsync(httpRequestMessageAllResources);
+        string responseContentAllResources = await responseAllResources.Content.ReadAsStringAsync();
+        List<ServiceResource>? allResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContentAllResources, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+        Assert.NotNull(allResources);
+        Assert.True(allResources.Count > 1, "Expected multiple resources in test data");
+      
+        Assert.DoesNotContain(allResources, r => r.Identifier == "skd-migrert-4628-1" && r.VersionId == resource.VersionId);
+        Assert.Contains(allResources, r => r.Identifier == "skd-migrert-4628-1" && r.VersionId > resource.VersionId);
     }
 
     /// <summary>

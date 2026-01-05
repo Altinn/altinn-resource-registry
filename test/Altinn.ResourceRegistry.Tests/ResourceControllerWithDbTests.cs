@@ -503,12 +503,18 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? matchingResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
-        Assert.NotNull(resource);
-        Assert.Single(resource);
+        Assert.NotNull(matchingResources);
+        Assert.Single(matchingResources);
 
-        Assert.Equal("skd-migrert-4628-1", resource[0].Identifier);
+        Assert.Equal("skd-migrert-4628-1", matchingResources[0].Identifier);
+
+        ServiceResource resource = matchingResources[0];
+
+        Assert.NotNull(resource.ResourceReferences);
+        Assert.Equal(3, resource.ResourceReferences.Count);
+        Assert.Contains(resource.ResourceReferences, r => r.ReferenceType == ReferenceType.ServiceEditionVersion && r.Reference == "7846");
     }
 
     /// <summary>

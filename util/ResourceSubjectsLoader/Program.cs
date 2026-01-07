@@ -34,5 +34,10 @@ for (int i = 0; i < resourceList.Count; i++)
         await resourceRegistry.ReloadResourceSubects(resource.Identifier);
     }
 
+    if (resource.ResourceType.Equals(ResourceType.Systemresource))
+    {
+        await resourceRegistry.ReloadResourceSubects(resource.Identifier);
+    }
+
 
 }

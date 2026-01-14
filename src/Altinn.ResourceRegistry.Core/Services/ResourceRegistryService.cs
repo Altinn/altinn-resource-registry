@@ -89,9 +89,9 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<ServiceResource> GetResource(string id, CancellationToken cancellationToken = default)
+        public async Task<ServiceResource> GetResource(string id, int? versionId, CancellationToken cancellationToken = default)
         {
-            return await _repository.GetResource(id, cancellationToken);
+            return await _repository.GetResource(id, versionId,  cancellationToken);
         }
 
         /// <inheritdoc/>

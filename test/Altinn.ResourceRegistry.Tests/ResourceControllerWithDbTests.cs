@@ -538,6 +538,65 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Contains(allResources, r => r.Identifier == "skd-migrert-4628-1" && r.VersionId > resource.VersionId);
     }
 
+    [Fact]
+    public async Task GetResource_skd_migrert_4628_1_OK()
+    {
+        await LoadTestDataWithUpdates();
+        var client = CreateClient();
+        string requestUriSearch = "resourceregistry/api/v1/Resource/Search?reference=7846";
+
+        HttpRequestMessage httpRequestMessageSearch = new HttpRequestMessage(HttpMethod.Get, requestUriSearch)
+        {
+        };
+
+        HttpResponseMessage responseSearch = await client.SendAsync(httpRequestMessageSearch);
+
+        string responseContentSearch = await responseSearch.Content.ReadAsStringAsync();
+        List<ServiceResource>? matchingResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContentSearch, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+        Assert.NotNull(matchingResources);
+        Assert.Single(matchingResources);
+        Assert.Equal("skd-migrert-4628-1", matchingResources[0].Identifier);
+
+        ServiceResource oldVersion = matchingResources[0];
+
+        string requestUri = "resourceregistry/api/v1/Resource/skd-migrert-4628-1";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+
+        Assert.NotNull(resource);
+        Assert.Equal("skd-migrert-4628-1", resource.Identifier);
+        Assert.True(resource.VersionId > oldVersion.VersionId, "Expected resource to be an updated version");
+
+        // Try getting the resource again but now with the version id to get the old version
+
+        string requestUriWithVersion = $"resourceregistry/api/v1/Resource/skd-migrert-4628-1?versionId={oldVersion.VersionId}";
+        HttpRequestMessage httpRequestMessageWithVersion = new HttpRequestMessage(HttpMethod.Get, requestUriWithVersion)
+        {
+        };
+        HttpResponseMessage responseWithVersion = await client.SendAsync(httpRequestMessageWithVersion);
+        string responseContentWithVersion = await responseWithVersion.Content.ReadAsStringAsync();
+        ServiceResource? resourceWithVersion = JsonSerializer.Deserialize<ServiceResource>(responseContentWithVersion, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;  
+        Assert.NotNull(resourceWithVersion);
+        Assert.Equal("skd-migrert-4628-1", resourceWithVersion.Identifier);
+        Assert.Equal(oldVersion.VersionId, resourceWithVersion.VersionId);
+
+        // Try getting a non existing version
+        string requestUriWithNonExistingVersion = $"resourceregistry/api/v1/Resource/skd-migrert-4628-1?versionId=9999";
+        HttpRequestMessage httpRequestMessageWithNonExistingVersion = new HttpRequestMessage(HttpMethod.Get, requestUriWithNonExistingVersion)
+        {
+        };
+        HttpResponseMessage responseWithNonExistingVersion = await client.SendAsync(httpRequestMessageWithNonExistingVersion);
+        Assert.Equal(HttpStatusCode.NotFound, responseWithNonExistingVersion.StatusCode);
+    }
+
     /// <summary>
     /// Scenario: Update existing resource
     /// Expects: 200 OK and version incremented
@@ -885,13 +944,13 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         }
 
         RegisterResourceRepositoryMock repositoryMock = new();
-        ServiceResource? version7658 = await repositoryMock.GetResource("skd-migrert-4628-1-7846");
+        ServiceResource? version7658 = await repositoryMock.GetResource("skd-migrert-4628-1-7846", null);
         if(version7658 != null)
         {
             await Repository.UpdateResource(version7658);   
         }
         
-        ServiceResource? version9546 = await repositoryMock.GetResource("skd-migrert-4628-1-9546");
+        ServiceResource? version9546 = await repositoryMock.GetResource("skd-migrert-4628-1-9546", null);
         if (version9546 != null)
         {
             await Repository.UpdateResource(version9546);
@@ -909,7 +968,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         foreach (string testResource in testResources)
         {
-            ServiceResource? resource = await repositoryMock.GetResource(testResource);
+            ServiceResource? resource = await repositoryMock.GetResource(testResource, null);
             if (resource != null)
             {
                 resources.Add(resource);

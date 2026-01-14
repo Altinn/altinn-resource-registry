@@ -13,9 +13,10 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// Gets a single resource by its resource identifier if it exists in the resource registry
         /// </summary>
         /// <param name="id">The resource identifier to retrieve</param>
+        /// <param name="versionId">The version identifier to retrieve</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>ServiceResource</returns>
-        Task<ServiceResource> GetResource(string id, CancellationToken cancellationToken = default);
+        Task<ServiceResource> GetResource(string id, int? versionId,  CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the resource owner for a given resource, or <see langword="null"/> if it has no owner.

@@ -197,21 +197,32 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     }
 
     /// <inheritdoc/>
-    public async Task<ServiceResource?> GetResource(string id, CancellationToken cancellationToken = default)
+    public async Task<ServiceResource?> GetResource(string id, int? versionId, CancellationToken cancellationToken = default)
     {
-        const string QUERY = /*strpsql*/@"
-            SELECT ri.identifier, ri.created, res.modified, res.serviceresourcejson, res.version_id
-            FROM resourceregistry.resources res 
-            join resourceregistry.resource_identifier ri on res.identifier = ri.identifier
-            WHERE res.identifier = @identifier
-            ORDER BY version_id DESC
-            LIMIT 1
-            ";
+        string query = /*strpsql*/@"
+        SELECT ri.identifier, ri.created, res.modified, res.serviceresourcejson, res.version_id
+        FROM resourceregistry.resources res 
+        join resourceregistry.resource_identifier ri on res.identifier = ri.identifier
+        WHERE res.identifier = @identifier";
+
+        if (versionId.HasValue)
+        {
+            query += " AND res.version_id = @versionId";
+        }
+        else
+        {
+            query += " ORDER BY version_id DESC LIMIT 1";
+        }
 
         try
         {
-            await using var pgcom = _conn.CreateCommand(QUERY);
+            await using var pgcom = _conn.CreateCommand(query);
             pgcom.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, id);
+
+            if (versionId.HasValue)
+            {
+                pgcom.Parameters.AddWithValue("versionId", NpgsqlDbType.Integer, versionId.Value);
+            }
 
             var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
                 .SelectAwait(GetServiceResource)

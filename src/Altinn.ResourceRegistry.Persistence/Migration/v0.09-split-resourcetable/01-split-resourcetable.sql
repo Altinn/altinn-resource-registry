@@ -27,7 +27,7 @@ FOREIGN KEY (identifier) REFERENCES resourceregistry.resource_identifier(identif
 
 -- Step 5: Add versionid column with automatic generation
 ALTER TABLE resourceregistry.resources 
-ADD COLUMN version_id BIGSERIAL NOT NULL;
+ADD COLUMN version_id BIGSERIAL PRIMARY KEY;
 
 -- Step 6: Create indexes for better performance
 CREATE INDEX idx_resources_identifier ON resourceregistry.resources(identifier);

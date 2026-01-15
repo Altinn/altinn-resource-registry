@@ -888,6 +888,27 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
+    [Fact]
+    public async Task Export_OK()
+    {
+        await LoadTestDataWithUpdates();
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/export";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Add("Accept", "application/text");
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        Assert.True(response.IsSuccessStatusCode);
+        string responseContent = await response.Content.ReadAsStringAsync();
+        Assert.NotNull(responseContent);
+        Assert.Contains("Skattegrunnlag latest version", responseContent);
+    }
+
     #region Utils
     private static ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)
     {

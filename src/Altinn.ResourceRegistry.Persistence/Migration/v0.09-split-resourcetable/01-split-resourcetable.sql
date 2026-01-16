@@ -2,7 +2,7 @@
 -- Step 1: Create the new resource_identifier table
 CREATE TABLE resourceregistry.resource_identifier
 (
-    identifier text COLLATE pg_catalog."default" PRIMARY KEY,
+    identifier text PRIMARY KEY,
     created timestamp with time zone NOT NULL
 );
 
@@ -27,8 +27,13 @@ FOREIGN KEY (identifier) REFERENCES resourceregistry.resource_identifier(identif
 
 -- Step 5: Add versionid column with automatic generation
 ALTER TABLE resourceregistry.resources 
-ADD COLUMN version_id BIGSERIAL PRIMARY KEY;
+ADD COLUMN version_id BIGSERIAL NOT NULL PRIMARY KEY;
 
 -- Step 6: Create indexes for better performance
 CREATE INDEX idx_resources_identifier ON resourceregistry.resources(identifier);
+create index idx_resources_lookup on resourceregistry.resources(identifier, version_id desc);
 
+CREATE VIEW resourceregistry.current_resources as
+select distinct on (res.identifier) res.*
+from resourceregistry.resources res
+order by res.identifier, res.version_id desc;

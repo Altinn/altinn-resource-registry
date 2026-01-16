@@ -1,4 +1,7 @@
-﻿using Altinn.Authorization.ProblemDetails;
+﻿using System.Data;
+using System.Data.SqlTypes;
+using System.Text.Json;
+using Altinn.Authorization.ProblemDetails;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Models;
@@ -6,9 +9,6 @@ using Altinn.ResourceRegistry.Persistence.Extensions;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using NpgsqlTypes;
-using System.Data;
-using System.Data.SqlTypes;
-using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Altinn.ResourceRegistry.Persistence;

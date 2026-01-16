@@ -83,7 +83,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             pgcom.Parameters.AddWithNullableValue("keyword", NpgsqlDbType.Text, resourceSearch.Keyword);
 
             return await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(GetServiceResource)
+                .SelectAwait(reader => GetServiceResource(reader, cancellationToken))
                 .ToListAsync(cancellationToken);
         }
         catch (Exception e)
@@ -93,38 +93,16 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         }
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Creates a new service resource in the database
+    /// </summary>
     public async Task<ServiceResource> CreateResource(ServiceResource resource, CancellationToken cancellationToken = default)
     {
-        const string BULK_INSERT_QUERY = /*strpsql*/@"
-            WITH main_insert AS (
-                INSERT INTO resourceregistry.resource_identifier(
-                    identifier,
-                    created
-                )
-                VALUES (
-                    @identifier,
-                    Now()
-                )
-                RETURNING identifier, created
-            )
-            INSERT INTO resourceregistry.resources(
-                identifier,
-                created,
-                modified,
-                serviceresourcejson
-            )
-            SELECT 
-                main_insert.identifier,
-                main_insert.created,
-                Now(),
-                @serviceresourcejson
-            FROM main_insert
-            RETURNING identifier, created, modified, serviceresourcejson, version_id
-            ";
-
         ArgumentNullException.ThrowIfNull(resource);
         ArgumentNullException.ThrowIfNull(resource.Identifier);
+
+        DateTime created = DateTime.UtcNow;
+        DateTime modified = created;
 
         var json = JsonSerializer.SerializeToDocument(resource, JsonSerializerOptions);
 
@@ -133,39 +111,78 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
         try
         {
-            await using var cmd = new NpgsqlCommand(BULK_INSERT_QUERY, conn, tx);
-            cmd.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
-            cmd.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
-
-            var serviceResource = await cmd.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(GetServiceResource)
-                .FirstOrDefaultAsync(cancellationToken);
-
-            if (serviceResource is null)
+            await using (var cmd1 = new NpgsqlCommand(
+                @"
+                INSERT INTO resourceregistry.resource_identifier(identifier, created)
+                VALUES (@identifier, @created);", 
+                conn, 
+                tx))
             {
-                throw new SqlNullValueException("No result from database");
+                cmd1.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
+                cmd1.Parameters.AddWithValue("created", NpgsqlDbType.TimestampTz, created);
+                await cmd1.ExecuteNonQueryAsync(cancellationToken);
+            }
+
+            ServiceResource serviceResource;
+            
+            await using (var cmd2 = new NpgsqlCommand(
+                @"
+                INSERT INTO resourceregistry.resources(
+                    identifier,
+                    created,
+                    modified,
+                    serviceresourcejson
+                )
+                VALUES (
+                    @identifier,
+                    @created,
+                    @modified,
+                    @serviceresourcejson
+                )
+                RETURNING identifier, created, modified, serviceresourcejson, version_id;", 
+                conn, 
+                tx))
+            {
+                cmd2.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
+                cmd2.Parameters.AddWithValue("created", NpgsqlDbType.TimestampTz, created);
+                cmd2.Parameters.AddWithValue("modified", NpgsqlDbType.TimestampTz, modified);
+                cmd2.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
+
+                await using (var reader = await cmd2.ExecuteReaderAsync(cancellationToken))
+                {
+                    if (!await reader.ReadAsync(cancellationToken))
+                    {
+                        throw new SqlNullValueException("No result from database when creating resource version");
+                    }
+
+                    serviceResource = await GetServiceResource(reader, cancellationToken);
+                }
             }
 
             await tx.CommitAsync(cancellationToken);
             return serviceResource;
         }
+        catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
+        {
+            await SafeRollback(tx, cancellationToken);
+            throw;
+        }
         catch (Exception e)
         {
-            try
-            {
-                await tx.RollbackAsync(cancellationToken);
-            }
-            catch 
-            {
-                /* ignore rollback errors */ 
-            }
-
-            if (!e.Message.Contains("duplicate key value violates unique constraint", StringComparison.OrdinalIgnoreCase))
-            {
-                _logger.LogError(e, "Authorization // ResourceRegistryRepository // CreateResource // Exception");
-            }
-
+            await SafeRollback(tx, cancellationToken);
+            _logger.LogError(e, "Authorization // ResourceRegistryRepository // CreateResource // Exception");
             throw;
+        }
+    }
+
+    private static async Task SafeRollback(NpgsqlTransaction tx, CancellationToken ct)
+    {
+        try 
+        { 
+            await tx.RollbackAsync(ct); 
+        } 
+        catch 
+        { /* ignore rollback errors */ 
         }
     }
 
@@ -184,7 +201,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             pgcom.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, id);
 
             var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(GetServiceResource)
+                .SelectAwait(reader => GetServiceResource(reader, cancellationToken))
                 .SingleOrDefaultAsync(cancellationToken);
 
             return serviceResource;
@@ -225,7 +242,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             }
 
             var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(GetServiceResource)
+                .SelectAwait(reader => GetServiceResource(reader, cancellationToken))
                 .SingleOrDefaultAsync(cancellationToken);
 
             return serviceResource;
@@ -300,7 +317,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             pgcom.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
 
             var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(GetServiceResource)
+                .SelectAwait(reader => GetServiceResource(reader, cancellationToken))
                 .FirstOrDefaultAsync(cancellationToken);
 
             return serviceResource ?? throw new SqlNullValueException("No result from database");
@@ -540,10 +557,10 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         await tx.CommitAsync(cancellationToken);
     }
 
-    private static async ValueTask<ServiceResource> GetServiceResource(NpgsqlDataReader reader)
+    private static async ValueTask<ServiceResource> GetServiceResource(NpgsqlDataReader reader, CancellationToken cancellationToken = default)
     {
-        var json = await reader.GetFieldValueAsync<JsonDocument>("serviceresourcejson");
-        int versionId = await reader.GetFieldValueAsync<int>("version_id");
+        var json = await reader.GetFieldValueAsync<JsonDocument>("serviceresourcejson", cancellationToken);
+        int versionId = await reader.GetFieldValueAsync<int>("version_id", cancellationToken);
 
         ServiceResource resource = json.Deserialize<ServiceResource>(JsonSerializerOptions) ??
             throw new SqlNullValueException("Got null when trying to parse ServiceResource");

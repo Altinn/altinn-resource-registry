@@ -1,7 +1,4 @@
-﻿using System.Data;
-using System.Data.SqlTypes;
-using System.Text.Json;
-using Altinn.Authorization.ProblemDetails;
+﻿using Altinn.Authorization.ProblemDetails;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Models;
@@ -9,6 +6,10 @@ using Altinn.ResourceRegistry.Persistence.Extensions;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using NpgsqlTypes;
+using System.Data;
+using System.Data.SqlTypes;
+using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Altinn.ResourceRegistry.Persistence;
 
@@ -83,7 +84,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             pgcom.Parameters.AddWithNullableValue("keyword", NpgsqlDbType.Text, resourceSearch.Keyword);
 
             return await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(reader => GetServiceResource(reader, cancellationToken))
+                 .SelectAwaitWithCancellation(GetServiceResource)
                 .ToListAsync(cancellationToken);
         }
         catch (Exception e)
@@ -188,7 +189,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             pgcom.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, id);
 
             var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(reader => GetServiceResource(reader, cancellationToken))
+                .SelectAwaitWithCancellation(GetServiceResource)
                 .SingleOrDefaultAsync(cancellationToken);
 
             return serviceResource;
@@ -203,19 +204,24 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<ServiceResource?> GetResource(string id, int? versionId, CancellationToken cancellationToken = default)
     {
-        string query = /*strpsql*/@"
-        SELECT ri.identifier, ri.created, res.modified, res.serviceresourcejson, res.version_id
-        FROM resourceregistry.resources res 
-        join resourceregistry.resource_identifier ri on res.identifier = ri.identifier
-        WHERE res.identifier = @identifier";
+        string query = string.Empty;
 
-        if (versionId.HasValue)
+        if (versionId != null)
         {
-            query += " AND res.version_id = @versionId";
+            query = /*strpsql*/@"
+            SELECT ri.identifier, ri.created, res.modified, res.serviceresourcejson, res.version_id
+            FROM resourceregistry.resources res 
+            join resourceregistry.resource_identifier ri on res.identifier = ri.identifier
+            WHERE res.identifier = @identifier
+            AND res.version_id = @versionId";
         }
         else
         {
-            query += " ORDER BY version_id DESC LIMIT 1";
+            // Get the latest version using the current_resources view
+            query = /*strpsql*/@"
+            SELECT identifier, created, modified, serviceresourcejson, version_id
+            FROM resourceregistry.current_resources res
+            WHERE res.identifier = @identifier";
         }
 
         try
@@ -229,7 +235,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             }
 
             var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(reader => GetServiceResource(reader, cancellationToken))
+                .SelectAwaitWithCancellation(GetServiceResource)
                 .SingleOrDefaultAsync(cancellationToken);
 
             return serviceResource;
@@ -249,7 +255,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             SELECT
                 serviceresourcejson->'hasCompetentAuthority'->>'organization' AS organization,
                 serviceresourcejson->'hasCompetentAuthority'->>'orgcode' AS orgcode
-            FROM resourceregistry.resources
+            FROM resourceregistry.current_resources
             WHERE identifier = @identifier
             """;
 
@@ -304,7 +310,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             pgcom.Parameters.AddWithValue("serviceresourcejson", NpgsqlDbType.Jsonb, json);
 
             var serviceResource = await pgcom.ExecuteEnumerableAsync(cancellationToken)
-                .SelectAwait(reader => GetServiceResource(reader, cancellationToken))
+                 .SelectAwaitWithCancellation(GetServiceResource)
                 .FirstOrDefaultAsync(cancellationToken);
 
             return serviceResource ?? throw new SqlNullValueException("No result from database");

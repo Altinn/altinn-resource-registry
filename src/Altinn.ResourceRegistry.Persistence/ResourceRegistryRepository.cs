@@ -164,25 +164,12 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         }
         catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
         {
-            await SafeRollback(tx, cancellationToken);
             throw;
         }
         catch (Exception e)
         {
-            await SafeRollback(tx, cancellationToken);
             _logger.LogError(e, "Authorization // ResourceRegistryRepository // CreateResource // Exception");
             throw;
-        }
-    }
-
-    private static async Task SafeRollback(NpgsqlTransaction tx, CancellationToken ct)
-    {
-        try 
-        { 
-            await tx.RollbackAsync(ct); 
-        } 
-        catch 
-        { /* ignore rollback errors */ 
         }
     }
 

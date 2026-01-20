@@ -1,0 +1,76 @@
+{
+  "Identifier": "TTD_5128_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Er virksomheten konkurs eller under tvangsavvikling",
+    "en": "Er virksomheten konkurs eller under tvangsavvikling",
+    "nn": "Er virksomheten konkurs eller under tvangsavvikling"
+  },
+  "Description": {
+    "nb": "Er virksomheten konkurs eller under tvangsavvikling",
+    "en": "Er virksomheten konkurs eller under tvangsavvikling",
+    "nn": "Er virksomheten konkurs eller under tvangsavvikling"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5128",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "147296",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "",
+    "Orgcode": "TTD"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "P\u00E5 vegne av \u003Cstrong\u003E{requestorname}\u003C/strong\u003E trenger vi \u00E5 kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  \u003Cscript\u003Etry { var r1 = $(\u0027.panel-section\u0027).find(\u0027h4\u0027); var r2 = $(\u0027.panel-section\u0027).find(\u0027p.font-size-lg.pad-top-2\u0027); var s = \u0027registerenheten i br\u00F8nn\u00F8ysund\u0027; var r = document.location.href.match(/nadobecoveredby=([^\u0026]\u002B)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}\u003C/script\u003E",
+    "en": "P\u00E5 vegne av \u003Cstrong\u003E{requestorname}\u003C/strong\u003E trenger vi \u00E5 kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  \u003Cscript\u003Etry { var r1 = $(\u0027.panel-section\u0027).find(\u0027h4\u0027); var r2 = $(\u0027.panel-section\u0027).find(\u0027p.font-size-lg.pad-top-2\u0027); var s = \u0027registerenheten i br\u00F8nn\u00F8ysund\u0027; var r = document.location.href.match(/nadobecoveredby=([^\u0026]\u002B)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}\u003C/script\u003E",
+    "nn": "P\u00E5 vegne av \u003Cstrong\u003E{requestorname}\u003C/strong\u003E trenger vi \u00E5 kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  \u003Cscript\u003Etry { var r1 = $(\u0027.panel-section\u0027).find(\u0027h4\u0027); var r2 = $(\u0027.panel-section\u0027).find(\u0027p.font-size-lg.pad-top-2\u0027); var s = \u0027registerenheten i br\u00F8nn\u00F8ysund\u0027; var r = document.location.href.match(/nadobecoveredby=([^\u0026]\u002B)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}\u003C/script\u003E"
+  },
+  "ConsentMetadata": {
+    "requestorname": {
+      "Optional": false
+    },
+    " var r1 = $(\u0027.panel-section\u0027).find(\u0027h4\u0027); var r2 = $(\u0027.panel-section\u0027).find(\u0027p.font-size-lg.pad-top-2\u0027); var s = \u0027registerenheten i br\u00F8nn\u00F8ysund\u0027; var r = document.location.href.match(/nadobecoveredby=([^\u0026]\u002B)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) ": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

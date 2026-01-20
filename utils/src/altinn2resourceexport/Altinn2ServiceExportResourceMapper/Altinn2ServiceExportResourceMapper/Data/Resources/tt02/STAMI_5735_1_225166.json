@@ -1,0 +1,73 @@
+{
+  "Identifier": "STAMI_5735_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Samtykkeerkl\u00E6ring Medarbeiderunders\u00F8kelsen i staten - MUST",
+    "en": "Samtykkeerkl\u00E6ring Medarbeiderunders\u00F8kelsen i staten - MUST",
+    "nn": "Samtykkeerkl\u00E6ring Medarbeiderunders\u00F8kelsen i staten - MUST"
+  },
+  "Description": {
+    "nb": "Samtykkeerkl\u00E6ring Medarbeiderunders\u00F8kelsen i staten - MUST",
+    "en": "Samtykkeerkl\u00E6ring Medarbeiderunders\u00F8kelsen i staten - MUST",
+    "nn": "Samtykkeerkl\u00E6ring Medarbeiderunders\u00F8kelsen i staten - MUST"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5735",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "225166",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "874761222",
+    "Orgcode": "STAMI"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "nb": "\u003Cp\u003E\u003Ca href=\u0027https://static.stami.no/files/MUST/SAMTYKKE_MUST_STAMI_V4_NO.pdf\u0027 target=\u0027_blank\u0027\u003ELes informasjonsskrivet p\u00E5 nytt her (\u00E5pnes i ny fane)\u003C/a\u003E\u003C/p\u003E \u003Cp\u003E Jeg har mottatt og forst\u00E5tt informasjonen om MUST, og har f\u00E5tt anledning til \u00E5 stille sp\u00F8rsm\u00E5l. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 \u00E5r etter at prosjektet er avsluttet - inntil 31.12.2045 \u2013 eller f\u00F8r dette om jeg trekker mitt samtykke. \u003C/p\u003E\u003Cp\u003E Klikk \u00ABJa, jeg gir samtykke\u00BB for \u003Cb\u003Etillatelse\u003C/b\u003E til at \u003Cb\u003ESTAMI kan bruke dine opplysninger\u003C/b\u003E i sin \u003Cb\u003Eforskning p\u00E5 arbeidsmilj\u00F8 og helse\u003C/b\u003E - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere \u2013 se \u00ABSamtykker og fullmakter\u00BB, under din profil i Altinn.  \u003C/p\u003E\u003Cp\u003E Klikk \u00ABNei, jeg gir ikke samtykke\u00BB hvis du \u003Cb\u003Ekun vil\u003C/b\u003E at \u003Cb\u003Edine opplysninger\u003C/b\u003E skal inng\u00E5 i \u003Cb\u003Eresultatrapportene\u003C/b\u003E som {virksomhet} mottar etter endt medarbeiderunders\u00F8kelse. \u003C/p\u003E",
+    "en": "\u003Cp\u003E\u003Ca href=\u0027https://static.stami.no/files/MUST/SAMTYKKE_MUST_STAMI_V4_NO.pdf\u0027 target=\u0027_blank\u0027\u003ELes informasjonsskrivet p\u00E5 nytt her (\u00E5pnes i ny fane)\u003C/a\u003E\u003C/p\u003E \u003Cp\u003E Jeg har mottatt og forst\u00E5tt informasjonen om MUST, og har f\u00E5tt anledning til \u00E5 stille sp\u00F8rsm\u00E5l. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 \u00E5r etter at prosjektet er avsluttet - inntil 31.12.2045 \u2013 eller f\u00F8r dette om jeg trekker mitt samtykke. \u003C/p\u003E\u003Cp\u003E Klikk \u00ABJa, jeg gir samtykke\u00BB for \u003Cb\u003Etillatelse\u003C/b\u003E til at \u003Cb\u003ESTAMI kan bruke dine opplysninger\u003C/b\u003E i sin \u003Cb\u003Eforskning p\u00E5 arbeidsmilj\u00F8 og helse\u003C/b\u003E - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere \u2013 se \u00ABSamtykker og fullmakter\u00BB, under din profil i Altinn.  \u003C/p\u003E\u003Cp\u003E Klikk \u00ABNei, jeg gir ikke samtykke\u00BB hvis du \u003Cb\u003Ekun vil\u003C/b\u003E at \u003Cb\u003Edine opplysninger\u003C/b\u003E skal inng\u00E5 i \u003Cb\u003Eresultatrapportene\u003C/b\u003E som {virksomhet} mottar etter endt medarbeiderunders\u00F8kelse. \u003C/p\u003E",
+    "nn": "\u003Cp\u003E\u003Ca href=\u0027https://static.stami.no/files/MUST/SAMTYKKE_MUST_STAMI_V4_NO.pdf\u0027 target=\u0027_blank\u0027\u003ELes informasjonsskrivet p\u00E5 nytt her (\u00E5pnes i ny fane)\u003C/a\u003E\u003C/p\u003E \u003Cp\u003E Jeg har mottatt og forst\u00E5tt informasjonen om MUST, og har f\u00E5tt anledning til \u00E5 stille sp\u00F8rsm\u00E5l. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 \u00E5r etter at prosjektet er avsluttet - inntil 31.12.2045 \u2013 eller f\u00F8r dette om jeg trekker mitt samtykke. \u003C/p\u003E\u003Cp\u003E Klikk \u00ABJa, jeg gir samtykke\u00BB for \u003Cb\u003Etillatelse\u003C/b\u003E til at \u003Cb\u003ESTAMI kan bruke dine opplysninger\u003C/b\u003E i sin \u003Cb\u003Eforskning p\u00E5 arbeidsmilj\u00F8 og helse\u003C/b\u003E - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere \u2013 se \u00ABSamtykker og fullmakter\u00BB, under din profil i Altinn.  \u003C/p\u003E\u003Cp\u003E Klikk \u00ABNei, jeg gir ikke samtykke\u00BB hvis du \u003Cb\u003Ekun vil\u003C/b\u003E at \u003Cb\u003Edine opplysninger\u003C/b\u003E skal inng\u00E5 i \u003Cb\u003Eresultatrapportene\u003C/b\u003E som {virksomhet} mottar etter endt medarbeiderunders\u00F8kelse. \u003C/p\u003E"
+  },
+  "ConsentMetadata": {
+    "virksomhet": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

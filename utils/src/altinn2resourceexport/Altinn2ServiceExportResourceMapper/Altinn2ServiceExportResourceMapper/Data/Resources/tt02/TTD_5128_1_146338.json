@@ -1,0 +1,69 @@
+{
+  "Identifier": "TTD_5128_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "NADOBE_TEST_ESBR_ISBANKRUPT",
+    "en": "NADOBE_TEST_ESBR_ISBANKRUPT",
+    "nn": "NADOBE_TEST_ESBR_ISBANKRUPT"
+  },
+  "Description": {
+    "nb": "NADOBE_TEST_ESBR_ISBANKRUPT",
+    "en": "NADOBE_TEST_ESBR_ISBANKRUPT",
+    "nn": "NADOBE_TEST_ESBR_ISBANKRUPT"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5128",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "146338",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "",
+    "Orgcode": "TTD"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. \u003Cb\u003EVi kan ha HTML\u003C/b\u003E\u003Cscript\u003Ealert(\u0027test\u0027)\u003C/script\u003E",
+    "en": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. \u003Cb\u003EVi kan ha HTML\u003C/b\u003E\u003Cscript\u003Ealert(\u0027test\u0027)\u003C/script\u003E",
+    "nn": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. \u003Cb\u003EVi kan ha HTML\u003C/b\u003E\u003Cscript\u003Ealert(\u0027test\u0027)\u003C/script\u003E"
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

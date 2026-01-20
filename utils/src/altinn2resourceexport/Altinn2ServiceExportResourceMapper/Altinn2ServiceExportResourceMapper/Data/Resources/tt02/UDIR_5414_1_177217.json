@@ -1,0 +1,79 @@
+{
+  "Identifier": "UDIR_5414_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "DigiL\u00E6r - Samtykke",
+    "en": "DigiL\u00E6r - Samtykke",
+    "nn": "DigiL\u00E6r - Samtykke"
+  },
+  "Description": {
+    "nb": "DigiL\u00E6r - Samtykke",
+    "en": "DigiL\u00E6r - Samtykke",
+    "nn": "DigiL\u00E6r - Samtykke"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5414",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "177217",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "970018131",
+    "Orgcode": "UDIR"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "\u003Cp\u003E\u0026gt;\u0026gt;\u0026gt; Denne teksten settes i TUL, maks 1000 tegn inkludert formattering \u0026gt;\u0026gt;\u0026gt;\u003C/p\u003E \u003Ca href=\u0022https://www.db.no\u0022 target=\u0022_blank\u0022\u003ETest av lenke\u003C/a\u003E \u003Cp\u003EDette er en samtykkeerkl\u0026aelig;ring. Dersom du samtykker, er denne samtykkeerkl\u0026aelig;ringen det rettslige grunnlaget for at vi kan behandle dine barns ({elevfornavn} {elevetternavn}) personopplysninger, jf. personvernforordningen art. 6 nr. 1 bokstav a og art. 9 nr. 2 bokstav a. Ved at du samtykker f\u0026aring;r Digil\u0026aelig;r.no rett til \u0026aring; samle inn og analysere opplysninger om elevens bruk av plattformen og plattformens l\u0026aelig;ringsressurser.\u003C/p\u003E \u003Cp\u003EKan her bruke flere metadata fra innsendt skjema, f.eks.:\u003Cbr /\u003EARreferanse: {arreferanse}\u003C/p\u003E \u003Cp\u003E\u0026lt;\u0026lt;\u0026lt; Denne teksten settes i TUL,\u0026nbsp;maks 1000 tegn inkludert formattering \u0026lt;\u0026lt;\u0026lt;\u003C/p\u003E ",
+    "en": "\u003Cp\u003E\u0026gt;\u0026gt;\u0026gt; Denne teksten settes i TUL, maks 1000 tegn inkludert formattering \u0026gt;\u0026gt;\u0026gt;\u003C/p\u003E \u003Ca href=\u0022https://www.db.no\u0022 target=\u0022_blank\u0022\u003ETest av lenke\u003C/a\u003E \u003Cp\u003EDette er en samtykkeerkl\u0026aelig;ring. Dersom du samtykker, er denne samtykkeerkl\u0026aelig;ringen det rettslige grunnlaget for at vi kan behandle dine barns ({elevfornavn} {elevetternavn}) personopplysninger, jf. personvernforordningen art. 6 nr. 1 bokstav a og art. 9 nr. 2 bokstav a. Ved at du samtykker f\u0026aring;r Digil\u0026aelig;r.no rett til \u0026aring; samle inn og analysere opplysninger om elevens bruk av plattformen og plattformens l\u0026aelig;ringsressurser.\u003C/p\u003E \u003Cp\u003EKan her bruke flere metadata fra innsendt skjema, f.eks.:\u003Cbr /\u003EARreferanse: {arreferanse}\u003C/p\u003E \u003Cp\u003E\u0026lt;\u0026lt;\u0026lt; Denne teksten settes i TUL,\u0026nbsp;maks 1000 tegn inkludert formattering \u0026lt;\u0026lt;\u0026lt;\u003C/p\u003E ",
+    "nn": "\u003Cp\u003E\u0026gt;\u0026gt;\u0026gt; Denne teksten settes i TUL, maks 1000 tegn inkludert formattering \u0026gt;\u0026gt;\u0026gt;\u003C/p\u003E \u003Ca href=\u0022https://www.db.no\u0022 target=\u0022_blank\u0022\u003ETest av lenke\u003C/a\u003E \u003Cp\u003EDette er en samtykkeerkl\u0026aelig;ring. Dersom du samtykker, er denne samtykkeerkl\u0026aelig;ringen det rettslige grunnlaget for at vi kan behandle dine barns ({elevfornavn} {elevetternavn}) personopplysninger, jf. personvernforordningen art. 6 nr. 1 bokstav a og art. 9 nr. 2 bokstav a. Ved at du samtykker f\u0026aring;r Digil\u0026aelig;r.no rett til \u0026aring; samle inn og analysere opplysninger om elevens bruk av plattformen og plattformens l\u0026aelig;ringsressurser.\u003C/p\u003E \u003Cp\u003EKan her bruke flere metadata fra innsendt skjema, f.eks.:\u003Cbr /\u003EARreferanse: {arreferanse}\u003C/p\u003E \u003Cp\u003E\u0026lt;\u0026lt;\u0026lt; Denne teksten settes i TUL,\u0026nbsp;maks 1000 tegn inkludert formattering \u0026lt;\u0026lt;\u0026lt;\u003C/p\u003E "
+  },
+  "ConsentMetadata": {
+    "elevfornavn": {
+      "Optional": false
+    },
+    "elevetternavn": {
+      "Optional": false
+    },
+    "arreferanse": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

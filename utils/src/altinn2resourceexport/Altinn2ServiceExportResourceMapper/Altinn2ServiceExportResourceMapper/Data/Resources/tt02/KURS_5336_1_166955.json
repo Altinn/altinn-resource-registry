@@ -1,0 +1,69 @@
+{
+  "Identifier": "KURS_5336_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "STAMI ber om ditt samtykke",
+    "en": "STAMI ber om ditt samtykke",
+    "nn": "STAMI ber om ditt samtykke"
+  },
+  "Description": {
+    "nb": "STAMI ber om ditt samtykke",
+    "en": "STAMI ber om ditt samtykke",
+    "nn": "STAMI ber om ditt samtykke"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5336",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "166955",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": null,
+    "Orgcode": "KURS"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "\u003Cp\u003ESamtykket gir Virksomheten AS rett til \u0026aring; sende disse data til STAMI:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EDaglig inn- og ut tidspunkt\u003C/li\u003E \u003Cli\u003EStartdato, stillingsprosent\u003C/li\u003E \u003Cli\u003ESivilstand, statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.\u003C/p\u003E \u003Cp\u003ELes mer her:\u0026nbsp;\u003Ca href=\u0022https://www.stami.no\u0022\u003E\u003Cu\u003EInformasjon om A-TID\u003C/u\u003E\u003C/a\u003E\u003C/p\u003E",
+    "en": "\u003Cp\u003ESamtykket gir Virksomheten AS rett til \u0026aring; sende disse data til STAMI:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EDaglig inn- og ut tidspunkt\u003C/li\u003E \u003Cli\u003EStartdato, stillingsprosent\u003C/li\u003E \u003Cli\u003ESivilstand, statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.\u003C/p\u003E \u003Cp\u003ELes mer her:\u0026nbsp;\u003Ca href=\u0022https://www.stami.no\u0022\u003E\u003Cu\u003EInformasjon om A-TID\u003C/u\u003E\u003C/a\u003E\u003C/p\u003E",
+    "nn": "\u003Cp\u003ESamtykket gir Virksomheten AS rett til \u0026aring; sende disse data til STAMI:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EDaglig inn- og ut tidspunkt\u003C/li\u003E \u003Cli\u003EStartdato, stillingsprosent\u003C/li\u003E \u003Cli\u003ESivilstand, statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.\u003C/p\u003E \u003Cp\u003ELes mer her:\u0026nbsp;\u003Ca href=\u0022https://www.stami.no\u0022\u003E\u003Cu\u003EInformasjon om A-TID\u003C/u\u003E\u003C/a\u003E\u003C/p\u003E"
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

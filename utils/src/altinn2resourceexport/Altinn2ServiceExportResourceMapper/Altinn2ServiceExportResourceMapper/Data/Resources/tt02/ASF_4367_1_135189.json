@@ -1,0 +1,69 @@
+{
+  "Identifier": "ASF_4367_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Ligningsopplysninger",
+    "en": "Ligningsopplysninger",
+    "nn": "Ligningsopplysninger"
+  },
+  "Description": {
+    "nb": "Ligningsopplysninger",
+    "en": "Ligningsopplysninger",
+    "nn": "Ligningsopplysninger"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4367",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "135189",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974706121",
+    "Orgcode": "ASF"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn, renter, innskudd og gjeld fra selvangivelsen fra siste \u00E5r.",
+    "en": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn, renter, innskudd og gjeld fra selvangivelsen fra siste \u00E5r.",
+    "nn": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn, renter, innskudd og gjeld fra selvangivelsen fra siste \u00E5r."
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

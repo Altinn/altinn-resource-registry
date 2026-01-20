@@ -18,6 +18,9 @@
     <None Update="Data\Samtykke_ressurser.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Data\samtykke_ressurser_tt02.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

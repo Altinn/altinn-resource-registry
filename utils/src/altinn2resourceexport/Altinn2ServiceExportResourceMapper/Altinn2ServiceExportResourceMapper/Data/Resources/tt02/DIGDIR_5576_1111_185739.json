@@ -1,0 +1,69 @@
+{
+  "Identifier": "DIGDIR_5576_1111",
+  "Version": "1.0",
+  "Title": {
+    "nb": "DIGDIR samtykke test",
+    "en": "DIGDIR samtykke test",
+    "nn": "DIGDIR samtykke test"
+  },
+  "Description": {
+    "nb": "DIGDIR samtykke test",
+    "en": "DIGDIR samtykke test",
+    "nn": "DIGDIR samtykke test"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5576",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "185739",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1111",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "991825827",
+    "Orgcode": "DIGDIR"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "nb": "Da er det bare \u00E5 samtykke ",
+    "en": "Da er det bare \u00E5 samtykke ",
+    "nn": "Da er det bare \u00E5 samtykke "
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

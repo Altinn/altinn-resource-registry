@@ -1,0 +1,69 @@
+{
+  "Identifier": "ACN_4021_7868",
+  "Version": "1.0",
+  "Title": {
+    "en": "LinkServiceforMVC",
+    "nb": "LinkServiceforMVC",
+    "nn": "LinkServiceforMVC"
+  },
+  "Description": {
+    "en": "LinkServiceforMVC",
+    "nb": "LinkServiceforMVC",
+    "nn": "LinkServiceforMVC"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4021",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "162369",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "7868",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "999999990",
+    "Orgcode": "ACN"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "samtykke test",
+    "en": "samtykke test",
+    "nn": "samtykke test"
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

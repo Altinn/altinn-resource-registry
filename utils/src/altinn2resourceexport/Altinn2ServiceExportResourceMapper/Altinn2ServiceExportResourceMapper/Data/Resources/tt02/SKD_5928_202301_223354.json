@@ -1,0 +1,69 @@
+{
+  "Identifier": "SKD_5928_202301",
+  "Version": "1.0",
+  "Title": {
+    "en": "Overview of the enterprise\u2019s tax and duty claims",
+    "nb": "Oversikt over virksomhetens skatte- og avgiftskrav",
+    "nn": "Oversikt over verksemda sine skatte- og avgiftskrav"
+  },
+  "Description": {
+    "en": "Overview of the enterprise\u2019s tax and duty claims",
+    "nb": "Oversikt over virksomhetens skatte- og avgiftskrav",
+    "nn": "Oversikt over verksemda sine skatte- og avgiftskrav"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5928",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "223354",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "202301",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974761076",
+    "Orgcode": "SKD"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "en": "The information shown in the bank\u2019s customer interface is an overview of selected claims from the tax authorities, payments to and from the enterprise and offsetting. The claims are related to income and net wealth tax, withholding tax, employer\u0027s national insurance contributions, value added tax, import and export duties and excise duties. For sole proprietorships, the owner\u2019s advance tax and underpaid tax will also be shown.   Information about claims related to additional tax will not be shared with the bank.",
+    "nb": "Informasjonen som vises i bankens kundeflater er en oversikt over utvalgte krav fra skattemyndighetene, om virksomhetens innbetalinger, utbetalinger og motregninger. Kravene er knyttet til inntekt- og formuesskatt, forskuddstrekk, arbeidsgiveravgift, merverdiavgift, inn- og utf\u00F8rselsavgifter, motorvognavgifter og s\u00E6ravgifter. \u00A0For enkeltpersonforetak, vil ogs\u00E5 forskuddsskatt og restskatt for innehaver vises. Informasjon om krav knyttet til tilleggsskatt vil ikke deles med banken.",
+    "nn": "Informasjonen som blir vist i banken sine kundeflater er ei oversikt over utvalde krav fr\u00E5 skattestyresmaktene om verksemda sine innbetalingar, utbetalingar og motrekningar. Krava er knytte til inntekt- og formuesskatt, forskottstrekk, arbeidsgivaravgift, meirverdiavgift, inn- og utf\u00F8rselsavgifter, motorvognavgifter og s\u00E6ravgifter. For enkeltpersonf\u00F8retak vil ogs\u00E5 forskottsskatt og restskatt for innehavar vise.   Informasjon om krav knytte til tilleggsskatt vil ikkje bli delt med banken."
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

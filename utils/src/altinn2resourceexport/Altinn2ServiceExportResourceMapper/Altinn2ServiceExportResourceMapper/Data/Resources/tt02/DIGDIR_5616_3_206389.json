@@ -1,0 +1,69 @@
+{
+  "Identifier": "DIGDIR_5616_3",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Oversikt over arbeidsgiveravgift fra Skatteetaten",
+    "en": "Oversikt over arbeidsgiveravgift fra Skatteetaten",
+    "nn": "Oversikt over arbeidsgiveravgift fra Skatteetaten"
+  },
+  "Description": {
+    "nb": "Oversikt over arbeidsgiveravgift fra Skatteetaten",
+    "en": "Oversikt over arbeidsgiveravgift fra Skatteetaten",
+    "nn": "Oversikt over arbeidsgiveravgift fra Skatteetaten"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5616",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "206389",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "3",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "991825827",
+    "Orgcode": "DIGDIR"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "poa",
+  "ConsentText": {
+    "nb": "Informasjon om innrapportert og betalt arbeidsgveravgift",
+    "en": "Informasjon om innrapportert og betalt arbeidsgveravgift",
+    "nn": "Informasjon om innrapportert og betalt arbeidsgveravgift"
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

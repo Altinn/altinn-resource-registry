@@ -1,0 +1,73 @@
+{
+  "Identifier": "STAMI_5341_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Arbeidstidsdata fra din arbeidsgiver",
+    "en": "Arbeidstidsdata fra din arbeidsgiver",
+    "nn": "Arbeidstidsdata fra din arbeidsgiver"
+  },
+  "Description": {
+    "nb": "Arbeidstidsdata fra din arbeidsgiver",
+    "en": "Arbeidstidsdata fra din arbeidsgiver",
+    "nn": "Arbeidstidsdata fra din arbeidsgiver"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5341",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "174243",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "874761222",
+    "Orgcode": "STAMI"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "\u003Cp\u003E{virksomhet} har inng\u0026aring;tt samarbeid med Statens arbeidsmilj\u00F8institutt (STAMI) om bruk av arbeidstidsdata i et nasjonalt arbeidstidsregister (A-TID). Vi ber om ditt samtykke til at dine data blir inkludert i dette registeret i kryptert form. \u0026nbsp;\u003C/p\u003E \u003Cp\u003ESamtykket gir samtidig STAMI rett til \u0026aring; hente inn f\u0026oslash;lgende data:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EYrke, startdato, stillingsprosent i n\u0026aring;v\u0026aelig;rende stilling\u003C/li\u003E \u003Cli\u003ESivilstand, statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003ERegisteret har strengest mulig personvernkontroll. Data oppbevares inntil videre, men du kan n\u0026aring;r som helst endre eller trekke samtykket.\u003C/p\u003E \u003Cp\u003ELes mer her: \u003Ca href=\u0022https://stami.no/a-tid-utvidet-informasjon-om-samtykke-i-altinn/\u0022\u003EInformasjon om A-TID\u003C/a\u003E\u003C/p\u003E \u003Cp\u003E\u0026nbsp;\u003C/p\u003E",
+    "en": "\u003Cp\u003E{virksomhet} har inng\u0026aring;tt samarbeid med Statens arbeidsmilj\u00F8institutt (STAMI) om bruk av arbeidstidsdata i et nasjonalt arbeidstidsregister (A-TID). Vi ber om ditt samtykke til at dine data blir inkludert i dette registeret i kryptert form. \u0026nbsp;\u003C/p\u003E \u003Cp\u003ESamtykket gir samtidig STAMI rett til \u0026aring; hente inn f\u0026oslash;lgende data:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EYrke, startdato, stillingsprosent i n\u0026aring;v\u0026aelig;rende stilling\u003C/li\u003E \u003Cli\u003ESivilstand, statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003ERegisteret har strengest mulig personvernkontroll. Data oppbevares inntil videre, men du kan n\u0026aring;r som helst endre eller trekke samtykket.\u003C/p\u003E \u003Cp\u003ELes mer her: \u003Ca href=\u0022https://stami.no/a-tid-utvidet-informasjon-om-samtykke-i-altinn/\u0022\u003EInformasjon om A-TID\u003C/a\u003E\u003C/p\u003E \u003Cp\u003E\u0026nbsp;\u003C/p\u003E",
+    "nn": "\u003Cp\u003E{virksomhet} har inng\u0026aring;tt samarbeid med Statens arbeidsmilj\u00F8institutt (STAMI) om bruk av arbeidstidsdata i et nasjonalt arbeidstidsregister (A-TID). Vi ber om ditt samtykke til at dine data blir inkludert i dette registeret i kryptert form. \u0026nbsp;\u003C/p\u003E \u003Cp\u003ESamtykket gir samtidig STAMI rett til \u0026aring; hente inn f\u0026oslash;lgende data:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EYrke, startdato, stillingsprosent i n\u0026aring;v\u0026aelig;rende stilling\u003C/li\u003E \u003Cli\u003ESivilstand, statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003ERegisteret har strengest mulig personvernkontroll. Data oppbevares inntil videre, men du kan n\u0026aring;r som helst endre eller trekke samtykket.\u003C/p\u003E \u003Cp\u003ELes mer her: \u003Ca href=\u0022https://stami.no/a-tid-utvidet-informasjon-om-samtykke-i-altinn/\u0022\u003EInformasjon om A-TID\u003C/a\u003E\u003C/p\u003E \u003Cp\u003E\u0026nbsp;\u003C/p\u003E"
+  },
+  "ConsentMetadata": {
+    "virksomhet": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

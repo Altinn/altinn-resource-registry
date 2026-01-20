@@ -1,0 +1,76 @@
+{
+  "Identifier": "ASF_4630_3",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Inntektsopplysninger utgave 3",
+    "en": "Inntektsopplysninger utgave 3",
+    "nn": "Inntektsopplysninger utgave 3"
+  },
+  "Description": {
+    "nb": "Inntektsopplysninger utgave 3",
+    "en": "Inntektsopplysninger utgave 3",
+    "nn": "Inntektsopplysninger utgave 3"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4630",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "182073",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "3",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974706121",
+    "Orgcode": "ASF"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "Inntektsopplysninger for perioden fra {fraogmed} til {tilogmed}.\u003Cbr/\u003E\u003Cbr/\u003EOpplysningene er rapportert av arbeidsgiver eller andre som er opplysningspliktige. For \u00E5 se alt som er innrapportert g\u00E5 til \u003Ca href=\u0022http://www.skatteetaten.no\u0022 target=\u0022_blank\u0022\u003Einnsynsl\u00F8sning.no\u003C/a\u003E\u003Cbr/\u003E\u003Cbr/\u003EUtleveres:\u003Cbr/\u003E\u003Cul\u003E\u003Cli\u003E Utbetalt l\u00F8nn fra arbeidsgiver/oppdragsgiver\u003Cbr/\u003E\u003Cli\u003E Skattefradrag og forskuddstrekk\u003Cbr/\u003E\u003Cli\u003E Utbetalte ytelser fra det offentlige, som foreldrepenger, arbeidsavklaringspenger osv.\u003Cbr/\u003E\u003Cli\u003E Utbetalt pensjon eller trygd.\u003Cbr/\u003E\u003Cli\u003E N\u00E6ringsinntekt n\u00E5r rapporteringspliktig\u003Cbr/\u003E\u003C/ul\u003E\u003Cbr/\u003E",
+    "en": "Inntektsopplysninger for perioden fra {fraogmed} til {tilogmed}.\u003Cbr/\u003E\u003Cbr/\u003EOpplysningene er rapportert av arbeidsgiver eller andre som er opplysningspliktige. For \u00E5 se alt som er innrapportert g\u00E5 til \u003Ca href=\u0022http://www.skatteetaten.no\u0022 target=\u0022_blank\u0022\u003Einnsynsl\u00F8sning.no\u003C/a\u003E\u003Cbr/\u003E\u003Cbr/\u003EUtleveres:\u003Cbr/\u003E\u003Cul\u003E\u003Cli\u003E Utbetalt l\u00F8nn fra arbeidsgiver/oppdragsgiver\u003Cbr/\u003E\u003Cli\u003E Skattefradrag og forskuddstrekk\u003Cbr/\u003E\u003Cli\u003E Utbetalte ytelser fra det offentlige, som foreldrepenger, arbeidsavklaringspenger osv.\u003Cbr/\u003E\u003Cli\u003E Utbetalt pensjon eller trygd.\u003Cbr/\u003E\u003Cli\u003E N\u00E6ringsinntekt n\u00E5r rapporteringspliktig\u003Cbr/\u003E\u003C/ul\u003E\u003Cbr/\u003E",
+    "nn": "Inntektsopplysninger for perioden fra {fraogmed} til {tilogmed}.\u003Cbr/\u003E\u003Cbr/\u003EOpplysningene er rapportert av arbeidsgiver eller andre som er opplysningspliktige. For \u00E5 se alt som er innrapportert g\u00E5 til \u003Ca href=\u0022http://www.skatteetaten.no\u0022 target=\u0022_blank\u0022\u003Einnsynsl\u00F8sning.no\u003C/a\u003E\u003Cbr/\u003E\u003Cbr/\u003EUtleveres:\u003Cbr/\u003E\u003Cul\u003E\u003Cli\u003E Utbetalt l\u00F8nn fra arbeidsgiver/oppdragsgiver\u003Cbr/\u003E\u003Cli\u003E Skattefradrag og forskuddstrekk\u003Cbr/\u003E\u003Cli\u003E Utbetalte ytelser fra det offentlige, som foreldrepenger, arbeidsavklaringspenger osv.\u003Cbr/\u003E\u003Cli\u003E Utbetalt pensjon eller trygd.\u003Cbr/\u003E\u003Cli\u003E N\u00E6ringsinntekt n\u00E5r rapporteringspliktig\u003Cbr/\u003E\u003C/ul\u003E\u003Cbr/\u003E"
+  },
+  "ConsentMetadata": {
+    "fraogmed": {
+      "Optional": false
+    },
+    "tilogmed": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": true,
+  "VersionId": 0
+}

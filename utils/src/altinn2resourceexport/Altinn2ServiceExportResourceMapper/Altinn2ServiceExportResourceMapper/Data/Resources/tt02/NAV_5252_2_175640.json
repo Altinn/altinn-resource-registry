@@ -1,0 +1,76 @@
+{
+  "Identifier": "NAV_5252_2",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Opplysninger om AAP og uf\u00F8retrygd fra NAV",
+    "en": "Opplysninger om AAP og uf\u00F8retrygd fra NAV",
+    "nn": "Opplysninger om AAP og uf\u00F8retrygd fra NAV"
+  },
+  "Description": {
+    "nb": "Opplysninger om AAP og uf\u00F8retrygd fra NAV",
+    "en": "Opplysninger om AAP og uf\u00F8retrygd fra NAV",
+    "nn": "Opplysninger om AAP og uf\u00F8retrygd fra NAV"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5252",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "175640",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "2",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "889640782",
+    "Orgcode": "NAV"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "\u003CH1\u003EUnder utvikling\u003C/H1\u003E Her kommer felles samtykketekst for AAP og Uf\u00F8retrygd. For perioden {fraogmed} \u0026ndash; {tilogmed} ",
+    "en": "\u003CH1\u003EUnder utvikling\u003C/H1\u003E Her kommer felles samtykketekst for AAP og Uf\u00F8retrygd. For perioden {fraogmed} \u0026ndash; {tilogmed} ",
+    "nn": "\u003CH1\u003EUnder utvikling\u003C/H1\u003E Her kommer felles samtykketekst for AAP og Uf\u00F8retrygd. For perioden {fraogmed} \u0026ndash; {tilogmed} "
+  },
+  "ConsentMetadata": {
+    "fraogmed": {
+      "Optional": false
+    },
+    "tilogmed": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

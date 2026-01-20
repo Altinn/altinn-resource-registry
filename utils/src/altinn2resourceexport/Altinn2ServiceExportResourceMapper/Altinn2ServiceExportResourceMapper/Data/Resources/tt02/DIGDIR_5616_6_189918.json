@@ -1,0 +1,69 @@
+{
+  "Identifier": "DIGDIR_5616_6",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Restanser i forbindelse med drosjel\u00F8yve",
+    "en": "Restanser i forbindelse med drosjel\u00F8yve",
+    "nn": "Restanser i forbindelse med drosjel\u00F8yve"
+  },
+  "Description": {
+    "nb": "Restanser i forbindelse med drosjel\u00F8yve",
+    "en": "Restanser i forbindelse med drosjel\u00F8yve",
+    "nn": "Restanser i forbindelse med drosjel\u00F8yve"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5616",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "189918",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "6",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "991825827",
+    "Orgcode": "DIGDIR"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "poa",
+  "ConsentText": {
+    "nb": "\u003Cp\u003ERestanser p\u0026aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p\u0026aring;:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003ESkatt\u003C/li\u003E \u003Cli\u003EArbeidsgiveravgift\u003C/li\u003E \u003Cli\u003EMerverdiavgift\u003C/li\u003E \u003Cli\u003EForskuddstrekk\u003C/li\u003E \u003Cli\u003EAnsvarskrav skatt\u003C/li\u003E \u003Cli\u003EAnsvarskrav merverdiavgift\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu har rett til innsyn i opplysningene som utleveres. Ta kontakt med s\u00F8knadsmottaker for \u0026aring; f\u0026aring; innsyn i hvilke opplysninger som har blitt utlevert.\u003C/p\u003E",
+    "en": "\u003Cp\u003ERestanser p\u0026aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p\u0026aring;:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003ESkatt\u003C/li\u003E \u003Cli\u003EArbeidsgiveravgift\u003C/li\u003E \u003Cli\u003EMerverdiavgift\u003C/li\u003E \u003Cli\u003EForskuddstrekk\u003C/li\u003E \u003Cli\u003EAnsvarskrav skatt\u003C/li\u003E \u003Cli\u003EAnsvarskrav merverdiavgift\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu har rett til innsyn i opplysningene som utleveres. Ta kontakt med s\u00F8knadsmottaker for \u0026aring; f\u0026aring; innsyn i hvilke opplysninger som har blitt utlevert.\u003C/p\u003E",
+    "nn": "\u003Cp\u003ERestanser p\u0026aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p\u0026aring;:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003ESkatt\u003C/li\u003E \u003Cli\u003EArbeidsgiveravgift\u003C/li\u003E \u003Cli\u003EMerverdiavgift\u003C/li\u003E \u003Cli\u003EForskuddstrekk\u003C/li\u003E \u003Cli\u003EAnsvarskrav skatt\u003C/li\u003E \u003Cli\u003EAnsvarskrav merverdiavgift\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu har rett til innsyn i opplysningene som utleveres. Ta kontakt med s\u00F8knadsmottaker for \u0026aring; f\u0026aring; innsyn i hvilke opplysninger som har blitt utlevert.\u003C/p\u003E"
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

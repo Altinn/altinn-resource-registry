@@ -1,0 +1,76 @@
+{
+  "Identifier": "SKD_4804_170223",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Inntektsmottaker",
+    "en": "Inntektsmottaker",
+    "nn": "Inntektsmottaker"
+  },
+  "Description": {
+    "nb": "Inntektsmottaker",
+    "en": "Inntektsmottaker",
+    "nn": "Inntektsmottaker"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4804",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "122316",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "170223",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974761076",
+    "Orgcode": "SKD"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "Opplysninger  for perioden fra \u003C{fraogmed}\u003E til \u003C{tilogmed}\u003E  \u003Cbr\u003E\u003Cbr\u003E Opplysningene er rapportert av arbeidsgiver eller andre som er  opplysningspliktige. For \u00E5 se alt som er innrapportert g\u00E5 til  \u003Ca href=\u0022https://skatt-at.sits.no/web/innsynamelding/\u0022 target=\u0022_blank\u0022\u003EInnsyn A-melding\u003C/a\u003E \u003Cbr\u003E\u003Cbr\u003E Utleveres: \u003Cbr\u003E \u2022Utbetalt l\u00F8nn\u003Cbr\u003E \u2022Skattefradrag og forskuddstrekk\u003Cbr\u003E \u2022Utbetalte ytelser fra det offentlige, som foreldrepenger, osv. \u003Cbr\u003E \u2022Utbetalt pensjon eller trygd.\u003Cbr\u003E \u2022N\u00E6ringsinntekt n\u00E5r rapporteringspliktig\u003Cbr\u003E Utleveres ikke:\u003Cbr\u003E \u2022opplysninger om selve arbeidsforholdet (stillingsprosent osv.) \u003Cbr\u003E",
+    "en": "Opplysninger  for perioden fra \u003C{fraogmed}\u003E til \u003C{tilogmed}\u003E  \u003Cbr\u003E\u003Cbr\u003E Opplysningene er rapportert av arbeidsgiver eller andre som er  opplysningspliktige. For \u00E5 se alt som er innrapportert g\u00E5 til  \u003Ca href=\u0022https://skatt-at.sits.no/web/innsynamelding/\u0022 target=\u0022_blank\u0022\u003EInnsyn A-melding\u003C/a\u003E \u003Cbr\u003E\u003Cbr\u003E Utleveres: \u003Cbr\u003E \u2022Utbetalt l\u00F8nn\u003Cbr\u003E \u2022Skattefradrag og forskuddstrekk\u003Cbr\u003E \u2022Utbetalte ytelser fra det offentlige, som foreldrepenger, osv. \u003Cbr\u003E \u2022Utbetalt pensjon eller trygd.\u003Cbr\u003E \u2022N\u00E6ringsinntekt n\u00E5r rapporteringspliktig\u003Cbr\u003E Utleveres ikke:\u003Cbr\u003E \u2022opplysninger om selve arbeidsforholdet (stillingsprosent osv.) \u003Cbr\u003E",
+    "nn": "Opplysninger  for perioden fra \u003C{fraogmed}\u003E til \u003C{tilogmed}\u003E  \u003Cbr\u003E\u003Cbr\u003E Opplysningene er rapportert av arbeidsgiver eller andre som er  opplysningspliktige. For \u00E5 se alt som er innrapportert g\u00E5 til  \u003Ca href=\u0022https://skatt-at.sits.no/web/innsynamelding/\u0022 target=\u0022_blank\u0022\u003EInnsyn A-melding\u003C/a\u003E \u003Cbr\u003E\u003Cbr\u003E Utleveres: \u003Cbr\u003E \u2022Utbetalt l\u00F8nn\u003Cbr\u003E \u2022Skattefradrag og forskuddstrekk\u003Cbr\u003E \u2022Utbetalte ytelser fra det offentlige, som foreldrepenger, osv. \u003Cbr\u003E \u2022Utbetalt pensjon eller trygd.\u003Cbr\u003E \u2022N\u00E6ringsinntekt n\u00E5r rapporteringspliktig\u003Cbr\u003E Utleveres ikke:\u003Cbr\u003E \u2022opplysninger om selve arbeidsforholdet (stillingsprosent osv.) \u003Cbr\u003E"
+  },
+  "ConsentMetadata": {
+    "fraogmed": {
+      "Optional": false
+    },
+    "tilogmed": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

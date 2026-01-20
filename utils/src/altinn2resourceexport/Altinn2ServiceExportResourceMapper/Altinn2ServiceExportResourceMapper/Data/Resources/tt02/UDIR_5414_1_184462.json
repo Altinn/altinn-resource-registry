@@ -1,0 +1,69 @@
+{
+  "Identifier": "UDIR_5414_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no ",
+    "en": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no ",
+    "nn": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no "
+  },
+  "Description": {
+    "nb": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no ",
+    "en": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no ",
+    "nn": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no "
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5414",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "184462",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "970018131",
+    "Orgcode": "UDIR"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "nb": "Dette er en samtykkeerkl\u00E6ring.   Dersom du samtykker, er denne samtykkeerkl\u00E6ringen det rettslige grunnlaget for at vi kan behandle dine eller dine barns personopplysninger.  Vi behandler personopplysninger i Digil\u00E6r.no for \u00E5 legge til rette for nettbasert oppl\u00E6ring og oppf\u00F8lging av hver enkelt elev.     Deltakelse i Digil\u00E6r.no er frivillig. Du kan n\u00E5r som helst trekke tilbake samtykket, og dermed eleven fra tilbudet. Dette kan du gj\u00F8re enten i Altinn eller ved \u00E5 sende en epost til digilaer@udir.no.  Les \u003Ca href=\u0022https://digilaer.no/samtykke\u0022 target=\u0022_blank\u0022\u003Ehele samtykkeerkl\u00E6ringen.\u003C/a\u003E ",
+    "en": "Dette er en samtykkeerkl\u00E6ring.   Dersom du samtykker, er denne samtykkeerkl\u00E6ringen det rettslige grunnlaget for at vi kan behandle dine eller dine barns personopplysninger.  Vi behandler personopplysninger i Digil\u00E6r.no for \u00E5 legge til rette for nettbasert oppl\u00E6ring og oppf\u00F8lging av hver enkelt elev.     Deltakelse i Digil\u00E6r.no er frivillig. Du kan n\u00E5r som helst trekke tilbake samtykket, og dermed eleven fra tilbudet. Dette kan du gj\u00F8re enten i Altinn eller ved \u00E5 sende en epost til digilaer@udir.no.  Les \u003Ca href=\u0022https://digilaer.no/samtykke\u0022 target=\u0022_blank\u0022\u003Ehele samtykkeerkl\u00E6ringen.\u003C/a\u003E ",
+    "nn": "Dette er en samtykkeerkl\u00E6ring.   Dersom du samtykker, er denne samtykkeerkl\u00E6ringen det rettslige grunnlaget for at vi kan behandle dine eller dine barns personopplysninger.  Vi behandler personopplysninger i Digil\u00E6r.no for \u00E5 legge til rette for nettbasert oppl\u00E6ring og oppf\u00F8lging av hver enkelt elev.     Deltakelse i Digil\u00E6r.no er frivillig. Du kan n\u00E5r som helst trekke tilbake samtykket, og dermed eleven fra tilbudet. Dette kan du gj\u00F8re enten i Altinn eller ved \u00E5 sende en epost til digilaer@udir.no.  Les \u003Ca href=\u0022https://digilaer.no/samtykke\u0022 target=\u0022_blank\u0022\u003Ehele samtykkeerkl\u00E6ringen.\u003C/a\u003E "
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

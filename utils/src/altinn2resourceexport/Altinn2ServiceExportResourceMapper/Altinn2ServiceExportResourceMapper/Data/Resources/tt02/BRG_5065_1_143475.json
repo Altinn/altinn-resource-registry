@@ -1,0 +1,69 @@
+{
+  "Identifier": "BRG_5065_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Testtjeneste samtykke",
+    "en": "Testtjeneste samtykke",
+    "nn": "Testtjeneste samtykke"
+  },
+  "Description": {
+    "nb": "Testtjeneste samtykke",
+    "en": "Testtjeneste samtykke",
+    "nn": "Testtjeneste samtykke"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5065",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "143475",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974760673",
+    "Orgcode": "BRG"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "Da er det bare \u00E5 samtykke ",
+    "en": "Da er det bare \u00E5 samtykke ",
+    "nn": "Da er det bare \u00E5 samtykke "
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

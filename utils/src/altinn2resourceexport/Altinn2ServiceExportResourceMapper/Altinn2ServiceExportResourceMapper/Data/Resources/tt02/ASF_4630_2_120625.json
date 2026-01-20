@@ -1,0 +1,69 @@
+{
+  "Identifier": "ASF_4630_2",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Inntektsopplysninger",
+    "en": "Inntektsopplysninger",
+    "nn": "Inntektsopplysninger"
+  },
+  "Description": {
+    "nb": "Inntektsopplysninger",
+    "en": "Inntektsopplysninger",
+    "nn": "Inntektsopplysninger"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4630",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "120625",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "2",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974706121",
+    "Orgcode": "ASF"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "Opplysningene som utleveres er rapportert fra din arbeidsgiver eller andre opplysningspliktige* til A-ordningen, og inneholder informasjon om:  - Utbetalt l\u00F8nn fra arbeidsgiver/oppdragsgiver, som fastl\u00F8nn, tillegg, timel\u00F8nn osv. - Utbetalte ytelser fra det offentlige, som foreldrepenger, sykepenger, arbeidsavklaringspenger osv.  - Utbetalt pensjon eller trygd, som alderspensjon, uf\u00F8repensjon osv.  - N\u00E6ringsinntekt dersom rapporteringspliktig - Skattefradrag og forskuddstrekk  Banken vil ikke f\u00E5 utlevert opplysninger om selve arbeidsforholdet, for eksempel stillingsprosent, tiltredelsesdato, permisjoner og lignende.  Opplysningene gjelder for perioden fra 11/2016 til 01/2017.  Du oppfordres til \u00E5 benytte innsynsl\u00F8sningen for \u00E5 kontrollere om opplysningene er korrekte.  Dersom du finner feil i de rapporterte opplysningene, m\u00E5 du kontakte arbeidsgiver for korrigering og informere banken der du s\u00F8ker l\u00E5n.  *Opplysningspliktige vil v\u00E6re blant annet arbeidsgiver, oppdragsgiver og NAV ",
+    "en": "Opplysningene som utleveres er rapportert fra din arbeidsgiver eller andre opplysningspliktige* til A-ordningen, og inneholder informasjon om:  - Utbetalt l\u00F8nn fra arbeidsgiver/oppdragsgiver, som fastl\u00F8nn, tillegg, timel\u00F8nn osv. - Utbetalte ytelser fra det offentlige, som foreldrepenger, sykepenger, arbeidsavklaringspenger osv.  - Utbetalt pensjon eller trygd, som alderspensjon, uf\u00F8repensjon osv.  - N\u00E6ringsinntekt dersom rapporteringspliktig - Skattefradrag og forskuddstrekk  Banken vil ikke f\u00E5 utlevert opplysninger om selve arbeidsforholdet, for eksempel stillingsprosent, tiltredelsesdato, permisjoner og lignende.  Opplysningene gjelder for perioden fra 11/2016 til 01/2017.  Du oppfordres til \u00E5 benytte innsynsl\u00F8sningen for \u00E5 kontrollere om opplysningene er korrekte.  Dersom du finner feil i de rapporterte opplysningene, m\u00E5 du kontakte arbeidsgiver for korrigering og informere banken der du s\u00F8ker l\u00E5n.  *Opplysningspliktige vil v\u00E6re blant annet arbeidsgiver, oppdragsgiver og NAV ",
+    "nn": "Opplysningene som utleveres er rapportert fra din arbeidsgiver eller andre opplysningspliktige* til A-ordningen, og inneholder informasjon om:  - Utbetalt l\u00F8nn fra arbeidsgiver/oppdragsgiver, som fastl\u00F8nn, tillegg, timel\u00F8nn osv. - Utbetalte ytelser fra det offentlige, som foreldrepenger, sykepenger, arbeidsavklaringspenger osv.  - Utbetalt pensjon eller trygd, som alderspensjon, uf\u00F8repensjon osv.  - N\u00E6ringsinntekt dersom rapporteringspliktig - Skattefradrag og forskuddstrekk  Banken vil ikke f\u00E5 utlevert opplysninger om selve arbeidsforholdet, for eksempel stillingsprosent, tiltredelsesdato, permisjoner og lignende.  Opplysningene gjelder for perioden fra 11/2016 til 01/2017.  Du oppfordres til \u00E5 benytte innsynsl\u00F8sningen for \u00E5 kontrollere om opplysningene er korrekte.  Dersom du finner feil i de rapporterte opplysningene, m\u00E5 du kontakte arbeidsgiver for korrigering og informere banken der du s\u00F8ker l\u00E5n.  *Opplysningspliktige vil v\u00E6re blant annet arbeidsgiver, oppdragsgiver og NAV "
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

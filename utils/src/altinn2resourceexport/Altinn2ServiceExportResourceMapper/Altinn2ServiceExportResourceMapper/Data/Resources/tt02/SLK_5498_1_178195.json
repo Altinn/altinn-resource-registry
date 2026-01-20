@@ -1,0 +1,69 @@
+{
+  "Identifier": "SLK_5498_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "L\u00E5nesaldo fra L\u00E5nekassen",
+    "en": "L\u00E5nesaldo fra L\u00E5nekassen",
+    "nn": "L\u00E5nesaldo fra L\u00E5nekassen"
+  },
+  "Description": {
+    "nb": "L\u00E5nesaldo fra L\u00E5nekassen",
+    "en": "L\u00E5nesaldo fra L\u00E5nekassen",
+    "nn": "L\u00E5nesaldo fra L\u00E5nekassen"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5498",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "178195",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "960885406",
+    "Orgcode": "SLK"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "Test (tekst som forklarer hva brukeren samtykker til)",
+    "en": "Test (tekst som forklarer hva brukeren samtykker til)",
+    "nn": "Test (tekst som forklarer hva brukeren samtykker til)"
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

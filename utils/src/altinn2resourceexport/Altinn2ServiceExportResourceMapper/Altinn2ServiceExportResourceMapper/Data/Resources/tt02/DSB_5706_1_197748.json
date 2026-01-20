@@ -1,0 +1,73 @@
+{
+  "Identifier": "DSB_5706_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Mottaker av eksplosiver",
+    "en": "Mottaker av eksplosiver",
+    "nn": "Mottaker av eksplosiver"
+  },
+  "Description": {
+    "nb": "Mottaker av eksplosiver",
+    "en": "Mottaker av eksplosiver",
+    "nn": "Mottaker av eksplosiver"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5706",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "197748",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974760983",
+    "Orgcode": "DSB"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "nb": "Jeg samtykker til \u00E5 v\u00E6re oppf\u00F8rt som mottaker av eksplosiver, p\u00E5 {virksomhet} sin s\u00F8knad om tillatelse til erverv av eksplosiver. Jeg er ansatt i denne virksomheten. Jeg er kjent med ansvaret og pliktene etter eksplosivforskriften.",
+    "en": "Jeg samtykker til \u00E5 v\u00E6re oppf\u00F8rt som mottaker av eksplosiver, p\u00E5 {virksomhet} sin s\u00F8knad om tillatelse til erverv av eksplosiver. Jeg er ansatt i denne virksomheten. Jeg er kjent med ansvaret og pliktene etter eksplosivforskriften.",
+    "nn": "Jeg samtykker til \u00E5 v\u00E6re oppf\u00F8rt som mottaker av eksplosiver, p\u00E5 {virksomhet} sin s\u00F8knad om tillatelse til erverv av eksplosiver. Jeg er ansatt i denne virksomheten. Jeg er kjent med ansvaret og pliktene etter eksplosivforskriften."
+  },
+  "ConsentMetadata": {
+    "virksomhet": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

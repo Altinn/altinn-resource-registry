@@ -1,0 +1,76 @@
+{
+  "Identifier": "DSB_5733_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Avtale om oppbevaring om eksplosiver",
+    "en": "Avtale om oppbevaring om eksplosiver",
+    "nn": "Avtale om oppbevaring om eksplosiver"
+  },
+  "Description": {
+    "nb": "Avtale om oppbevaring om eksplosiver",
+    "en": "Avtale om oppbevaring om eksplosiver",
+    "nn": "Avtale om oppbevaring om eksplosiver"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5733",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "201633",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974760983",
+    "Orgcode": "DSB"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "nb": "{utleievirksomhet} samtykker til \u00E5 inneha en avtale om leie av oppbevaring av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen p\u00E5 et tidspunkt opph\u00F8rer vil vi trekke dette samtykke.",
+    "en": "{utleievirksomhet} samtykker til \u00E5 inneha en avtale om leie av oppbevaring av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen p\u00E5 et tidspunkt opph\u00F8rer vil vi trekke dette samtykke.",
+    "nn": "{utleievirksomhet} samtykker til \u00E5 inneha en avtale om leie av oppbevaring av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen p\u00E5 et tidspunkt opph\u00F8rer vil vi trekke dette samtykke."
+  },
+  "ConsentMetadata": {
+    "utleievirksomhet": {
+      "Optional": false
+    },
+    "ervervsokervirksomhet": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

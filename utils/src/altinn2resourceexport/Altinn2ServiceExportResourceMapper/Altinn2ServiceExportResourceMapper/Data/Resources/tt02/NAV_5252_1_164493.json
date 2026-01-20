@@ -1,0 +1,76 @@
+{
+  "Identifier": "NAV_5252_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Opplysninger om arbeidsavklaringspenger fra NAV",
+    "en": "Opplysninger om arbeidsavklaringspenger fra NAV",
+    "nn": "Opplysninger om arbeidsavklaringspenger fra NAV"
+  },
+  "Description": {
+    "nb": "Opplysninger om arbeidsavklaringspenger fra NAV",
+    "en": "Opplysninger om arbeidsavklaringspenger fra NAV",
+    "nn": "Opplysninger om arbeidsavklaringspenger fra NAV"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5252",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "164493",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "889640782",
+    "Orgcode": "NAV"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "\u003Cul\u003E\u003Cli\u003EPerioder for vedtak om arbeidsavklaringspenger og meldekort\u003C/li\u003E \u003Cli\u003EOm vedtaket gjelder innvilgelse, avslag, endring, forlengelse, gjenopptak, stans eller opph\u00F8r\u003C/li\u003E \u003Cli\u003EOm vedtak har blitt fattet fordi du har s\u00F8kt, eller fordi NAV har gjort en vurdering p\u00E5 eget initiativ\u003C/li\u003E \u003Cli\u003EOm du mottar arbeidsavklaringspenger under arbeidsavklaring, under vurdering for rett til uf\u00F8retrygd, mens du s\u0026oslash;ker arbeid eller fordi du ikke har rett p\u0026aring; sykepenger\u003C/li\u003E \u003Cli\u003EAntall arbeidede timer f\u0026oslash;rt p\u0026aring; meldekortene\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EVed \u0026aring; samtykke, gir du NAV rett til i en periode p\u0026aring; tre \u0026aring;r, \u0026aring; gi ut disse opplysningene om vedtak om arbeidsavklaringspenger og meldekort for perioden {fraogmed} \u0026ndash; {tilogmed}.\u003C/p\u003E \u003Cp\u003EP\u0026aring; Ditt NAV p\u0026aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs\u0026aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p\u0026aring; ditt samtykke.\u003C/p\u003E",
+    "en": "\u003Cul\u003E\u003Cli\u003EPerioder for vedtak om arbeidsavklaringspenger og meldekort\u003C/li\u003E \u003Cli\u003EOm vedtaket gjelder innvilgelse, avslag, endring, forlengelse, gjenopptak, stans eller opph\u00F8r\u003C/li\u003E \u003Cli\u003EOm vedtak har blitt fattet fordi du har s\u00F8kt, eller fordi NAV har gjort en vurdering p\u00E5 eget initiativ\u003C/li\u003E \u003Cli\u003EOm du mottar arbeidsavklaringspenger under arbeidsavklaring, under vurdering for rett til uf\u00F8retrygd, mens du s\u0026oslash;ker arbeid eller fordi du ikke har rett p\u0026aring; sykepenger\u003C/li\u003E \u003Cli\u003EAntall arbeidede timer f\u0026oslash;rt p\u0026aring; meldekortene\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EVed \u0026aring; samtykke, gir du NAV rett til i en periode p\u0026aring; tre \u0026aring;r, \u0026aring; gi ut disse opplysningene om vedtak om arbeidsavklaringspenger og meldekort for perioden {fraogmed} \u0026ndash; {tilogmed}.\u003C/p\u003E \u003Cp\u003EP\u0026aring; Ditt NAV p\u0026aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs\u0026aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p\u0026aring; ditt samtykke.\u003C/p\u003E",
+    "nn": "\u003Cul\u003E\u003Cli\u003EPerioder for vedtak om arbeidsavklaringspenger og meldekort\u003C/li\u003E \u003Cli\u003EOm vedtaket gjelder innvilgelse, avslag, endring, forlengelse, gjenopptak, stans eller opph\u00F8r\u003C/li\u003E \u003Cli\u003EOm vedtak har blitt fattet fordi du har s\u00F8kt, eller fordi NAV har gjort en vurdering p\u00E5 eget initiativ\u003C/li\u003E \u003Cli\u003EOm du mottar arbeidsavklaringspenger under arbeidsavklaring, under vurdering for rett til uf\u00F8retrygd, mens du s\u0026oslash;ker arbeid eller fordi du ikke har rett p\u0026aring; sykepenger\u003C/li\u003E \u003Cli\u003EAntall arbeidede timer f\u0026oslash;rt p\u0026aring; meldekortene\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EVed \u0026aring; samtykke, gir du NAV rett til i en periode p\u0026aring; tre \u0026aring;r, \u0026aring; gi ut disse opplysningene om vedtak om arbeidsavklaringspenger og meldekort for perioden {fraogmed} \u0026ndash; {tilogmed}.\u003C/p\u003E \u003Cp\u003EP\u0026aring; Ditt NAV p\u0026aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs\u0026aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p\u0026aring; ditt samtykke.\u003C/p\u003E"
+  },
+  "ConsentMetadata": {
+    "fraogmed": {
+      "Optional": false
+    },
+    "tilogmed": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

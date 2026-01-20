@@ -1,0 +1,76 @@
+{
+  "Identifier": "SKD_4804_210607",
+  "Version": "1.0",
+  "Title": {
+    "en": "Income information",
+    "nb": "Inntektsopplysninger",
+    "nn": "Inntektsopplysningar"
+  },
+  "Description": {
+    "en": "Income information",
+    "nb": "Inntektsopplysninger",
+    "nn": "Inntektsopplysningar"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4804",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "201265",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "210607",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974761076",
+    "Orgcode": "SKD"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "sblanesoknad",
+  "ConsentText": {
+    "en": "Information reported by employers or others who have paid salary or benefits during the period {fraogmed} to {tilogmed}:\u003Cbr\u003E \u2022\tPaid salary, business Income\u003Cbr\u003E \u2022\tPension\u003Cbr\u003E \u2022\tNational Insurance or benefits\u003Cbr\u003E \u2022\tTax deduction and withholding tax\u003Cbr\u003E \u003Cbr\u003E Here, you can see the income information that the Norwegian Tax Administration has about you: \u003Ca href=\u0022http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\u0022 target=\u0022_blank\u0022\u003EMy income and employment.\u003C/a\u003E ",
+    "nb": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt l\u00F8nn eller ytelser, i perioden {fraogmed} til {tilogmed}:\u003Cbr\u003E \u2022 Utbetalt l\u00F8nn, n\u00E6ringsinntekt \u003Cbr\u003E \u2022 Pensjon \u003Cbr\u003E \u2022 Trygd eller ytelser\u003Cbr\u003E \u2022 Skattefradrag og forskuddstrekk\u003Cbr\u003E \u003Cbr\u003E Her kan du se inntektsopplysningene Skatteetaten har om deg: \u003Ca href=\u0022http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\u0022 target=\u0022_blank\u0022\u003EMine inntekter og arbeidsforhold\u003C/a\u003E.",
+    "nn": "Opplysningar rapporterte av arbeidsgivar eller andre som har utbetalt l\u00F8nn eller ytingar, i perioden {fraogmed} til {tilogmed}:\u003Cbr\u003E \u2022\tUtbetalt l\u00F8nn, n\u00E6ringsinntekt\u003Cbr\u003E \u2022\tPensjon\u003Cbr\u003E \u2022\tTrygd eller ytingar\u003Cbr\u003E \u2022\tSkattefr\u00E5drag og forskotstrekk\u003Cbr\u003E \u003Cbr\u003E Her kan du sj\u00E5 inntektsopplysningane Skatteetaten har om deg: \u003Ca href=\u0022http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\u0022 target=\u0022_blank\u0022\u003EMine inntekter og arbeidsforhold.\u003C/a\u003E"
+  },
+  "ConsentMetadata": {
+    "fraogmed": {
+      "Optional": false
+    },
+    "tilogmed": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": true,
+  "VersionId": 0
+}

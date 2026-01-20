@@ -75,7 +75,7 @@ namespace Altinn2ServiceExportResourceMapper
 
         static void Main(string[] args)
         {
-            string csvFilePath = @"Data\Samtykke_ressurser.csv";
+            string csvFilePath = @"Data\Samtykke_ressurser_tt02.csv";
             
             try
             {
@@ -270,7 +270,7 @@ namespace Altinn2ServiceExportResourceMapper
                         sr.Title["nn"] = sr.Title["nb"];
                     }
 
-                    sr.HasCompetentAuthority.Organization = GetOrganizationInfo(sr.HasCompetentAuthority.Orgcode).OrgNumber;
+                    sr.HasCompetentAuthority.Organization = GetOrganizationInfo(sr.HasCompetentAuthority.Orgcode)?.OrgNumber;
 
 
                     // Lowercase all consent metadata. Both value and usage in consent text

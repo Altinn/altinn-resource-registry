@@ -1,0 +1,73 @@
+{
+  "Identifier": "TTD_5550_5",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Tilgang til \u00E5 hente dine data med overstyrt tom meldings",
+    "en": "Tilgang til \u00E5 hente dine data med overstyrt tom meldings",
+    "nn": "Tilgang til \u00E5 hente dine data med overstyrt tom meldings"
+  },
+  "Description": {
+    "nb": "Tilgang til \u00E5 hente dine data med overstyrt tom meldings",
+    "en": "Tilgang til \u00E5 hente dine data med overstyrt tom meldings",
+    "nn": "Tilgang til \u00E5 hente dine data med overstyrt tom meldings"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5550",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "186994",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "",
+    "Orgcode": "TTD"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default_nomessage",
+  "ConsentText": {
+    "nb": "Dette er en tekst som forklarer hva tjenesten g\u00E5r ut p\u00E5.\u003Cbr\u003E\u003Cbr\u003E  Her \u003Cb\u003Ekan det v\u00E6re HTML\u003C/b\u003E og plassholdere fra samtykkeforesp\u00F8rselen, for eksempel f\u00F8lgende: {somevalue}.",
+    "en": "Dette er en tekst som forklarer hva tjenesten g\u00E5r ut p\u00E5.\u003Cbr\u003E\u003Cbr\u003E  Her \u003Cb\u003Ekan det v\u00E6re HTML\u003C/b\u003E og plassholdere fra samtykkeforesp\u00F8rselen, for eksempel f\u00F8lgende: {somevalue}.",
+    "nn": "Dette er en tekst som forklarer hva tjenesten g\u00E5r ut p\u00E5.\u003Cbr\u003E\u003Cbr\u003E  Her \u003Cb\u003Ekan det v\u00E6re HTML\u003C/b\u003E og plassholdere fra samtykkeforesp\u00F8rselen, for eksempel f\u00F8lgende: {somevalue}."
+  },
+  "ConsentMetadata": {
+    "somevalue": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

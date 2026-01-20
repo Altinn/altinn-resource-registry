@@ -1,0 +1,73 @@
+{
+  "Identifier": "SKD_5928_202301",
+  "Version": "1.0",
+  "Title": {
+    "en": "Overview of the enterprise\u2019s tax and duty claims",
+    "nb": "Oversikt over virksomhetens skatte- og avgiftskrav",
+    "nn": "Oversikt over verksemda sine skatte- og avgiftskrav"
+  },
+  "Description": {
+    "en": "Overview of the enterprise\u2019s tax and duty claims",
+    "nb": "Oversikt over virksomhetens skatte- og avgiftskrav",
+    "nn": "Oversikt over verksemda sine skatte- og avgiftskrav"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5928",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "223919",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "202301",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974761076",
+    "Orgcode": "SKD"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "en": "{coveredby} shows the information in its customer interface, alone or together with other information, and can enable simple payment of claims from the Tax Administration. {coveredby} cannot use the information for any other purpose.\u003Cbr/\u003E\u003Cbr/\u003EIf any personal data is distributed, {coveredby} will be the data controller in accordance with the Personal Data Act and the General Data Protection Regulation.\u003Cbr/\u003E\u003Cbr/\u003EThe information shown in the bank\u2019s customer interface is an overview of selected claims from the tax authorities, payments to and from the enterprise and offsetting. The claims are related to income and net wealth tax, withholding tax, employer\u0027s national insurance contributions, value added tax, import and export duties and excise duties. For sole proprietorships, the owner\u2019s advance tax and underpaid tax will also be shown.\u003Cbr/\u003E",
+    "nb": "{coveredby} viser opplysningene i sine kundeflater, alene eller sammenstilt med andre opplysninger, og kan \u00E5pne for at krav fra Skatteetaten kan betales p\u00E5 en enkel m\u00E5te. {coveredby} kan ikke bruke opplysningene fra Skatteetaten til andre form\u00E5l.\u003Cbr/\u003E\u003Cbr/\u003EHvis det utleveres personopplysninger, vil {coveredby} v\u00E6re behandlingsansvarlig etter personvernforordningen.\u003Cbr/\u003E\u003Cbr/\u003EInformasjonen som vises i bankens kundeflater er en oversikt over utvalgte krav fra skattemyndighetene, om virksomhetens innbetalinger, utbetalinger og motregninger. Kravene er knyttet til inntekt- og formuesskatt, forskuddstrekk, arbeidsgiveravgift, merverdiavgift, inn- og utf\u00F8rselsavgifter, motorvognavgifter og s\u00E6ravgifter.  For enkeltpersonforetak, vil ogs\u00E5 forskuddsskatt og restskatt for innehaver vises.\u003Cbr/\u003E\u003Cbr/\u003EInformasjon om krav knyttet til tilleggsskatt vil ikke deles med banken.\u003Cbr/\u003E",
+    "nn": "{coveredby} viser opplysningane i sine kundeflater, \u00E5leine eller samanstilte med andre opplysningar, og kan opne for at krav fr\u00E5 Skatteetaten kan betalast p\u00E5 ein enkel m\u00E5te. {coveredby} kan ikkje bruke opplysningane fr\u00E5 Skatteetaten til andre f\u00F8rem\u00E5l.\u003Cbr/\u003E\u003Cbr/\u003EViss det blir utlevert personopplysningar, vil {coveredby} vere behandlingsansvarleg etter personvernforordninga.\u003Cbr/\u003E\u003Cbr/\u003EInformasjonen som blir vist i banken sine kundeflater er ei oversikt over utvalde krav fr\u00E5 skattestyresmaktene om verksemda sine innbetalingar, utbetalingar og motrekningar. Krava er knytte til inntekt- og formuesskatt, forskottstrekk, arbeidsgivaravgift, meirverdiavgift, inn- og utf\u00F8rselsavgifter, motorvognavgifter og s\u00E6ravgifter. For enkeltpersonf\u00F8retak vil ogs\u00E5 forskottsskatt og restskatt for innehavar vise.\u003Cbr/\u003E\u003Cbr/\u003EInformasjon om krav knytte til tilleggsskatt vil ikkje bli delt med banken.\u003Cbr/\u003E"
+  },
+  "ConsentMetadata": {
+    "coveredby": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

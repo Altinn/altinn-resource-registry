@@ -1,0 +1,73 @@
+{
+  "Identifier": "ASF_4629_2",
+  "Version": "1.0",
+  "Title": {
+    "en": "Summarized tax base from the Tax Administration",
+    "nb": "Summert skattegrunnlag fra Skatteetaten",
+    "nn": "Skattegrunnlag "
+  },
+  "Description": {
+    "en": "Summarized tax base from the Tax Administration",
+    "nb": "Summert skattegrunnlag fra Skatteetaten",
+    "nn": "Skattegrunnlag "
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4629",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "132894",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "2",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974706121",
+    "Orgcode": "ASF"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "en": "(Engelsk) Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.\u003Cbr /\u003E\u003Cbr/\u003E \u003Cul\u003E \u003Cli\u003E Inntekt\u003Cbr /\u003E \u003Cli\u003E Skattefradrag\u003Cbr /\u003E \u003Cli\u003E Formue (inkl bolig, bil og andre verdier)\u003Cbr /\u003E \u003Cli\u003E Gjeld\u003Cbr /\u003E \u003C/ul\u003E  ",
+    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.\u003Cbr /\u003E\u003Cbr/\u003E \u003Cul\u003E \u003Cli\u003E Inntekt\u003Cbr /\u003E \u003Cli\u003E Skattefradrag\u003Cbr /\u003E \u003Cli\u003E Formue (inkl bolig, bil og andre verdier)\u003Cbr /\u003E \u003Cli\u003E Gjeld\u003Cbr /\u003E \u003C/ul\u003E The War of independence (1775-83) is also known as the American Revolutionary War. The conflict stems from increasing tensions between residents of the United Kingdom\u0027s 13 North American colonies and colonial rule, representing the British crown. Skirmishes between British troops and colonial militias in Lexington and Concord in April 1775 kicked off the armed conflict, and the following summer, the rebels raised a full-scale war for their independence. France entered the American Revolution on the side of the colonists in 1778, striking what was essentially a civil war in an international conflict. Kflsdfk kagdl\u00F8kadg tk\u00F8kfg t kf\u00F8si ekfa\u00F8 rfhad fiasf er calruawdua dahwao ah worahrwvcor anoainfo wcoarw jfalfj rpjadf aetpvmca\u00F8tr cdmfmo oe pe fk\u00E5e jfa. Litt fl",
+    "nn": "(Nynorsk) Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.\u003Cbr /\u003E\u003Cbr/\u003E \u003Cul\u003E \u003Cli\u003E Inntekt\u003Cbr /\u003E \u003Cli\u003E Skattefradrag\u003Cbr /\u003E \u003Cli\u003E Formue (inkl bolig, bil og andre verdier)\u003Cbr /\u003E \u003Cli\u003E Gjeld\u003Cbr /\u003E \u003C/ul\u003E  "
+  },
+  "ConsentMetadata": {
+    "inntektsaar": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

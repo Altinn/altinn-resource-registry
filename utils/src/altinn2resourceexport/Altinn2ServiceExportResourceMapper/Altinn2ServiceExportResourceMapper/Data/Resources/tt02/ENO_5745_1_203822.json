@@ -1,0 +1,69 @@
+{
+  "Identifier": "ENO_5745_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Testtjeneste samtykke_Enova",
+    "en": "Testtjeneste samtykke_Enova",
+    "nn": "Testtjeneste samtykke_Enova"
+  },
+  "Description": {
+    "nb": "Testtjeneste samtykke_Enova",
+    "en": "Testtjeneste samtykke_Enova",
+    "nn": "Testtjeneste samtykke_Enova"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5745",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "203822",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "983609155",
+    "Orgcode": "ENO"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "nb": "Beskrivende tekst som forklarer hva det gis samtykke til...xxxxxxxx",
+    "en": "Beskrivende tekst som forklarer hva det gis samtykke til...xxxxxxxx",
+    "nn": "Beskrivende tekst som forklarer hva det gis samtykke til...xxxxxxxx"
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

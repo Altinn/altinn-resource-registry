@@ -1,0 +1,69 @@
+{
+  "Identifier": "DIGDIR_5616_4",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Oversikt over merverdiavgift fra Skatteetaten",
+    "en": "Oversikt over merverdiavgift fra Skatteetaten",
+    "nn": "Oversikt over merverdiavgift fra Skatteetaten"
+  },
+  "Description": {
+    "nb": "Oversikt over merverdiavgift fra Skatteetaten",
+    "en": "Oversikt over merverdiavgift fra Skatteetaten",
+    "nn": "Oversikt over merverdiavgift fra Skatteetaten"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5616",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "189059",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "991825827",
+    "Orgcode": "DIGDIR"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "nb": "Her kommer tekst om mva meldingsopplysning",
+    "en": "Her kommer tekst om mva meldingsopplysning",
+    "nn": "Her kommer tekst om mva meldingsopplysning"
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

@@ -1,0 +1,69 @@
+{
+  "Identifier": "UDIR_5414_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no ",
+    "en": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no ",
+    "nn": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no "
+  },
+  "Description": {
+    "nb": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no ",
+    "en": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no ",
+    "nn": "Samtykke til \u00E5 behandle personopplysninger p\u00E5 Digil\u00E6r.no "
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5414",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "219604",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "970018131",
+    "Orgcode": "UDIR"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "nb": "Vi anbefaler at \u003Ca href=\u0022https://digilaer.no/personvernerklaering\u0022 target=\u0022_blank\u0022\u003Epersonvernerkl\u00E6ringen\u003C/a\u003E og \u003Ca href=\u0022https://digilaer.no/samtykke\u0022 target=\u0022_blank\u0022\u003Esamtykkeerkl\u00E6ringen\u003C/a\u003E leses f\u00F8r samtykket gis. Der finner du ogs\u00E5 en oversikt over hvem som bidrar til Digil\u00E6r.no og hvilke undervisningsressurser som benyttes.  \u003Cb\u003EVed \u00E5 samtykke, godkjenner du/dine foreldre at Utdanningsdirektoratet behandler personopplysninger om deg (eleven) for:\u003C/b\u003E \u003Cul\u003E\u003Cli\u003E\u00E5 melde deg i Digil\u00E6r.no\u003C/li\u003E\u003Cli\u003E\u00E5 delta p\u00E5 digital undervisning i Digil\u00E6r.no\u003C/li\u003E\u003Cli\u003E\u00E5 gj\u00F8re opptak av klassetimene\u003C/li\u003E\u003C/ul\u003E  Du kan n\u00E5r som helst trekke tilbake ditt samtykke og, ved det, trekke deg fra i Digil\u00E6r.no. Det gj\u00F8res ved \u00E5 ta kontakt med digil\u00E6r@udir.no eller her i Altinn.  Du kan ta kontakt med personvernombud@udir.no hvis du vil ut\u00F8ve dine rettigheter eller har sp\u00F8rsm\u00E5l om behandling av personopplysninger om deg, og du kan klage til Datatilsynet.",
+    "en": "Vi anbefaler at \u003Ca href=\u0022https://digilaer.no/personvernerklaering\u0022 target=\u0022_blank\u0022\u003Epersonvernerkl\u00E6ringen\u003C/a\u003E og \u003Ca href=\u0022https://digilaer.no/samtykke\u0022 target=\u0022_blank\u0022\u003Esamtykkeerkl\u00E6ringen\u003C/a\u003E leses f\u00F8r samtykket gis. Der finner du ogs\u00E5 en oversikt over hvem som bidrar til Digil\u00E6r.no og hvilke undervisningsressurser som benyttes.  \u003Cb\u003EVed \u00E5 samtykke, godkjenner du/dine foreldre at Utdanningsdirektoratet behandler personopplysninger om deg (eleven) for:\u003C/b\u003E \u003Cul\u003E\u003Cli\u003E\u00E5 melde deg i Digil\u00E6r.no\u003C/li\u003E\u003Cli\u003E\u00E5 delta p\u00E5 digital undervisning i Digil\u00E6r.no\u003C/li\u003E\u003Cli\u003E\u00E5 gj\u00F8re opptak av klassetimene\u003C/li\u003E\u003C/ul\u003E  Du kan n\u00E5r som helst trekke tilbake ditt samtykke og, ved det, trekke deg fra i Digil\u00E6r.no. Det gj\u00F8res ved \u00E5 ta kontakt med digil\u00E6r@udir.no eller her i Altinn.  Du kan ta kontakt med personvernombud@udir.no hvis du vil ut\u00F8ve dine rettigheter eller har sp\u00F8rsm\u00E5l om behandling av personopplysninger om deg, og du kan klage til Datatilsynet.",
+    "nn": "Vi anbefaler at \u003Ca href=\u0022https://digilaer.no/personvernerklaering\u0022 target=\u0022_blank\u0022\u003Epersonvernerkl\u00E6ringen\u003C/a\u003E og \u003Ca href=\u0022https://digilaer.no/samtykke\u0022 target=\u0022_blank\u0022\u003Esamtykkeerkl\u00E6ringen\u003C/a\u003E leses f\u00F8r samtykket gis. Der finner du ogs\u00E5 en oversikt over hvem som bidrar til Digil\u00E6r.no og hvilke undervisningsressurser som benyttes.  \u003Cb\u003EVed \u00E5 samtykke, godkjenner du/dine foreldre at Utdanningsdirektoratet behandler personopplysninger om deg (eleven) for:\u003C/b\u003E \u003Cul\u003E\u003Cli\u003E\u00E5 melde deg i Digil\u00E6r.no\u003C/li\u003E\u003Cli\u003E\u00E5 delta p\u00E5 digital undervisning i Digil\u00E6r.no\u003C/li\u003E\u003Cli\u003E\u00E5 gj\u00F8re opptak av klassetimene\u003C/li\u003E\u003C/ul\u003E  Du kan n\u00E5r som helst trekke tilbake ditt samtykke og, ved det, trekke deg fra i Digil\u00E6r.no. Det gj\u00F8res ved \u00E5 ta kontakt med digil\u00E6r@udir.no eller her i Altinn.  Du kan ta kontakt med personvernombud@udir.no hvis du vil ut\u00F8ve dine rettigheter eller har sp\u00F8rsm\u00E5l om behandling av personopplysninger om deg, og du kan klage til Datatilsynet."
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

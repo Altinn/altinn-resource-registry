@@ -1,0 +1,73 @@
+{
+  "Identifier": "SKD_4628_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Skattegrunnlag",
+    "en": "Skattegrunnlag",
+    "nn": "Skattegrunnlag"
+  },
+  "Description": {
+    "nb": "Skattegrunnlag",
+    "en": "Skattegrunnlag",
+    "nn": "Skattegrunnlag"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4628",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "132536",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974761076",
+    "Orgcode": "SKD"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}: \u003Cbr\u003E \u2022 Inntekt \u003Cbr\u003E \u2022 Skattefradrag \u003Cbr\u003E \u2022 Formue (inkl. bolig, bil og andre verdier) \u003Cbr\u003E \u2022 Gjeld \u003Cbr\u003E",
+    "en": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}: \u003Cbr\u003E \u2022 Inntekt \u003Cbr\u003E \u2022 Skattefradrag \u003Cbr\u003E \u2022 Formue (inkl. bolig, bil og andre verdier) \u003Cbr\u003E \u2022 Gjeld \u003Cbr\u003E",
+    "nn": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}: \u003Cbr\u003E \u2022 Inntekt \u003Cbr\u003E \u2022 Skattefradrag \u003Cbr\u003E \u2022 Formue (inkl. bolig, bil og andre verdier) \u003Cbr\u003E \u2022 Gjeld \u003Cbr\u003E"
+  },
+  "ConsentMetadata": {
+    "inntektsaar": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": true,
+  "VersionId": 0
+}

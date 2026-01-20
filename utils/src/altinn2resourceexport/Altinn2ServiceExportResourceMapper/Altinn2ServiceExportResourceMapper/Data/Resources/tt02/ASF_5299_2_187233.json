@@ -1,0 +1,69 @@
+{
+  "Identifier": "ASF_5299_2",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Oversikt over oppdrag fra Skatteetaten",
+    "en": "Oversikt over oppdrag fra Skatteetaten",
+    "nn": "Oversikt over oppdrag fra Skatteetaten"
+  },
+  "Description": {
+    "nb": "Oversikt over oppdrag fra Skatteetaten",
+    "en": "Oversikt over oppdrag fra Skatteetaten",
+    "nn": "Oversikt over oppdrag fra Skatteetaten"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5299",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "187233",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "2",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974706121",
+    "Orgcode": "ASF"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "default",
+  "ConsentText": {
+    "nb": "Her kommer mer tekst om hva denne datauthentingen inneb\u00E6rer.",
+    "en": "Her kommer mer tekst om hva denne datauthentingen inneb\u00E6rer.",
+    "nn": "Her kommer mer tekst om hva denne datauthentingen inneb\u00E6rer."
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

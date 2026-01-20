@@ -1,0 +1,69 @@
+{
+  "Identifier": "SLK_5498_1",
+  "Version": "1.0",
+  "Title": {
+    "en": "Studiegjeld fra L\u00E5nekassen",
+    "nb": "Studiegjeld fra L\u00E5nekassen",
+    "nn": "Studiegjeld fra L\u00E5nekassen"
+  },
+  "Description": {
+    "en": "Studiegjeld fra L\u00E5nekassen",
+    "nb": "Studiegjeld fra L\u00E5nekassen",
+    "nn": "Studiegjeld fra L\u00E5nekassen"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5498",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "185156",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "960885406",
+    "Orgcode": "SLK"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "sblanesoknad",
+  "ConsentText": {
+    "nb": "\u003Cp\u003EDitt samtykke gir L\u0026aring;nekassen tillatelse til \u0026aring; sende opplysninger til nettbanken din om ditt samlede utest\u0026aring;ende studiel\u0026aring;n og ogs\u0026aring; gebyrer og omkostninger som er knyttet til l\u0026aring;net.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EBanken har ikke rett til \u0026aring; benytte opplysningene til noe annet form\u0026aring;l i sin virksomhet, enn \u0026aring; gi deg oversikt over studiel\u0026aring;net ditt i nettbanken. Opplysningene vil ikke v\u0026aelig;re tilgjengelig for bankens ansatte.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EBanken\u202Fvil hente opplysningene fra L\u0026aring;nekassen hver gang du logger inn i nettbanken og slette opplysningene igjen n\u0026aring;r du logger ut.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst trekke dette samtykket tilbake. Dersom du ikke trekker tilbake samtykket, vil det gjelde i ett \u0026aring;r.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EBanken er ansvarlig for behandlingen av opplysninger om din studiegjeld i nettbanken. L\u0026aring;nekassen er ansvarlig for at opplysningene sendes til banken p\u0026aring; en trygg m\u0026aring;te.\u003C/p\u003E",
+    "en": "\u003Cp\u003EDitt samtykke gir L\u0026aring;nekassen tillatelse til \u0026aring; sende opplysninger til nettbanken din om ditt samlede utest\u0026aring;ende studiel\u0026aring;n og ogs\u0026aring; gebyrer og omkostninger som er knyttet til l\u0026aring;net.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EBanken har ikke rett til \u0026aring; benytte opplysningene til noe annet form\u0026aring;l i sin virksomhet, enn \u0026aring; gi deg oversikt over studiel\u0026aring;net ditt i nettbanken. Opplysningene vil ikke v\u0026aelig;re tilgjengelig for bankens ansatte.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EBanken\u202Fvil hente opplysningene fra L\u0026aring;nekassen hver gang du logger inn i nettbanken og slette opplysningene igjen n\u0026aring;r du logger ut.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst trekke dette samtykket tilbake. Dersom du ikke trekker tilbake samtykket, vil det gjelde i ett \u0026aring;r.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EBanken er ansvarlig for behandlingen av opplysninger om din studiegjeld i nettbanken. L\u0026aring;nekassen er ansvarlig for at opplysningene sendes til banken p\u0026aring; en trygg m\u0026aring;te.\u003C/p\u003E",
+    "nn": "\u003Cp\u003EDitt samtykke gir L\u0026aring;nekassen tillatelse til \u0026aring; sende opplysninger til nettbanken din om ditt samlede utest\u0026aring;ende studiel\u0026aring;n og ogs\u0026aring; gebyrer og omkostninger som er knyttet til l\u0026aring;net.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EBanken har ikke rett til \u0026aring; benytte opplysningene til noe annet form\u0026aring;l i sin virksomhet, enn \u0026aring; gi deg oversikt over studiel\u0026aring;net ditt i nettbanken. Opplysningene vil ikke v\u0026aelig;re tilgjengelig for bankens ansatte.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EBanken\u202Fvil hente opplysningene fra L\u0026aring;nekassen hver gang du logger inn i nettbanken og slette opplysningene igjen n\u0026aring;r du logger ut.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst trekke dette samtykket tilbake. Dersom du ikke trekker tilbake samtykket, vil det gjelde i ett \u0026aring;r.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EBanken er ansvarlig for behandlingen av opplysninger om din studiegjeld i nettbanken. L\u0026aring;nekassen er ansvarlig for at opplysningene sendes til banken p\u0026aring; en trygg m\u0026aring;te.\u003C/p\u003E"
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

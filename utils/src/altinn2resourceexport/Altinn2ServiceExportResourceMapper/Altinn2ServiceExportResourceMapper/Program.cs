@@ -9,7 +9,7 @@ namespace Altinn2ServiceExportResourceMapper
     public class ConsentResource
     {
         public string OrganizationCode { get; set; }
-        public int ServiceCode { get; set; }
+        public string ServiceCode { get; set; }
         public int ServiceEditionCode { get; set; }
         public int ServiceEditionVersionId { get; set; }
         public int? IsOneTimeConsent { get; set; }
@@ -67,8 +67,6 @@ namespace Altinn2ServiceExportResourceMapper
                     Dictionary<string, string> ConsentText = new Dictionary<string, string>();
                     Dictionary<string, string> Title = new Dictionary<string, string>();
 
-               
-
                     if (resource.LanguageCode == 1044) // Norwegian Bokmål
                     {
                         if (resource.ResourceType == 1)
@@ -105,7 +103,18 @@ namespace Altinn2ServiceExportResourceMapper
                  
                     List<ResourceReference> resourceReferences = new List<ResourceReference>();
 
-                    if(resource.ServiceEditionVersionId != 0)
+                    if (!string.IsNullOrEmpty(resource.ServiceCode))
+                    {
+                        ResourceReference resourceReference = new ResourceReference
+                        {
+                            ReferenceSource = Altinn.ResourceRegistry.Core.Enums.ReferenceSource.Altinn2,
+                            ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceEditionCode,
+                            Reference = resource.ServiceCode
+                        };
+                        resourceReferences.Add(resourceReference);
+                    }
+
+                    if (resource.ServiceEditionCode != 0)
                     {
                         ResourceReference resourceReference = new ResourceReference
                         {
@@ -116,28 +125,16 @@ namespace Altinn2ServiceExportResourceMapper
                         resourceReferences.Add(resourceReference);
                     }
 
-                    if(resource.IsOneTimeConsent.HasValue)
-                    {
-                        ResourceReference resourceReference = new ResourceReference
-                        {
-                            ReferenceSource = Altinn.ResourceRegistry.Core.Enums.ReferenceSource.Altinn2,
-                            ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceEditionCode,
-                            Reference = resource.IsOneTimeConsent.Value.ToString()
-                        };
-                        resourceReferences.Add(resourceReference);
-                    }
-
-                    if(resource.IsOneTimeConsent != null)
+                    if(resource.ServiceEditionVersionId != 0)
                     {
                         ResourceReference resourceReference = new ResourceReference
                         {
                             ReferenceSource = Altinn.ResourceRegistry.Core.Enums.ReferenceSource.Altinn2,
                             ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceEditionVersion,
-                            Reference = resource.IsOneTimeConsent.Value.ToString()
+                            Reference = resource.ServiceEditionCode.ToString()
                         };
                         resourceReferences.Add(resourceReference);
                     }
-
 
                     Dictionary<string, ConsentMetadata> ConsentMetadata = new Dictionary<string, ConsentMetadata>();
 
@@ -251,7 +248,7 @@ namespace Altinn2ServiceExportResourceMapper
                 return new ConsentResource
                 {
                     OrganizationCode = fields[0],
-                    ServiceCode = int.Parse(fields[1]),
+                    ServiceCode = fields[1],
                     ServiceEditionCode = int.Parse(fields[2]),
                     ServiceEditionVersionId = int.Parse(fields[3]),
                     IsOneTimeConsent = fields[4] == "NULL" ? null : int.Parse(fields[4]),

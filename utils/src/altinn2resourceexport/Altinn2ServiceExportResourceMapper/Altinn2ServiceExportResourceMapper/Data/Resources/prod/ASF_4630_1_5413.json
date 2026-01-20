@@ -1,0 +1,69 @@
+{
+  "Identifier": "ASF_4630_1",
+  "Version": "1.0",
+  "Title": {
+    "nb": "L\u00F8nnsdata fra EFF TEST",
+    "en": "L\u00F8nnsdata fra EFF TEST",
+    "nn": "L\u00F8nnsdata fra EFF TEST"
+  },
+  "Description": {
+    "nb": "L\u00F8nnsdata fra EFF TEST",
+    "en": "L\u00F8nnsdata fra EFF TEST",
+    "nn": "L\u00F8nnsdata fra EFF TEST"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4630",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "5413",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "1",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974706121",
+    "Orgcode": "ASF"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn/pensjon/trygd, forskuddstrekk og eventuelle fradrag. ",
+    "en": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn/pensjon/trygd, forskuddstrekk og eventuelle fradrag. ",
+    "nn": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn/pensjon/trygd, forskuddstrekk og eventuelle fradrag. "
+  },
+  "ConsentMetadata": {},
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

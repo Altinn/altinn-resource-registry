@@ -1,0 +1,73 @@
+{
+  "Identifier": "SKD_4628_210607",
+  "Version": "1.0",
+  "Title": {
+    "en": "Tax basis",
+    "nb": "Skattegrunnlag",
+    "nn": "Skattegrunnlag"
+  },
+  "Description": {
+    "en": "Tax basis",
+    "nb": "Skattegrunnlag",
+    "nn": "Skattegrunnlag"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4628",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "11787",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "210607",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974761076",
+    "Orgcode": "SKD"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": "sblanesoknad",
+  "ConsentText": {
+    "en": "Information reported in connection with the {inntektsaar} tax return:\u003Cbr\u003E \u2022\tIncome\u003Cbr\u003E \u2022\tTax deduction\u003Cbr\u003E \u2022\tWealth (including housing, car and other assets)\u003Cbr\u003E \u2022\tDebt\u003Cbr\u003E",
+    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}: \u003Cbr\u003E \u2022 Inntekt \u003Cbr\u003E \u2022 Skattefradrag \u003Cbr\u003E \u2022 Formue (inkl. bolig, bil og andre verdier) \u003Cbr\u003E \u2022 Gjeld \u003Cbr\u003E",
+    "nn": "Opplysningar rapporterte i samband med skattemeldinga (sj\u00F8lvmeldinga) {inntektsaar}:\u003Cbr\u003E \u2022\tInntekt\u003Cbr\u003E \u2022\tSkattefr\u00E5drag\u003Cbr\u003E \u2022\tFormue (inkl. bustad, bil og andre verdiar)\u003Cbr\u003E \u2022\tGjeld\u003Cbr\u003E"
+  },
+  "ConsentMetadata": {
+    "inntektsaar": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": true,
+  "VersionId": 0
+}

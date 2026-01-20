@@ -1,0 +1,76 @@
+{
+  "Identifier": "SKD_4804_170223",
+  "Version": "1.0",
+  "Title": {
+    "nb": "Inntektsopplysninger",
+    "en": "Inntektsopplysninger",
+    "nn": "Inntektsopplysninger"
+  },
+  "Description": {
+    "nb": "Inntektsopplysninger",
+    "en": "Inntektsopplysninger",
+    "nn": "Inntektsopplysninger"
+  },
+  "RightDescription": null,
+  "Homepage": null,
+  "Status": "Discontinued",
+  "Spatial": null,
+  "ContactPoints": [
+    {
+      "Category": "Support",
+      "Email": "servicedesk@altinn.no",
+      "Telephone": null,
+      "ContactPage": null
+    }
+  ],
+  "Produces": null,
+  "IsPartOf": null,
+  "ThematicAreas": null,
+  "ResourceReferences": [
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "4804",
+      "ReferenceType": "ServiceEditionCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "6599",
+      "ReferenceType": "ServiceCode"
+    },
+    {
+      "ReferenceSource": "Altinn2",
+      "Reference": "170223",
+      "ReferenceType": "ServiceEditionVersion"
+    }
+  ],
+  "Delegable": false,
+  "Visible": false,
+  "HasCompetentAuthority": {
+    "Name": {},
+    "Organization": "974761076",
+    "Orgcode": "SKD"
+  },
+  "Keywords": null,
+  "AccessListMode": "Disabled",
+  "SelfIdentifiedUserEnabled": false,
+  "EnterpriseUserEnabled": false,
+  "ResourceType": "Consent",
+  "AvailableForType": null,
+  "AuthorizationReference": null,
+  "ConsentTemplate": null,
+  "ConsentText": {
+    "nb": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt l\u00F8nn eller ytelser, i perioden {fraogmed} til {tilogmed}:\u003Cbr\u003E \u2022 Utbetalt l\u00F8nn, n\u00E6ringsinntekt \u003Cbr\u003E \u2022 Pensjon, trygd eller ytelser fra det offentlige\u003Cbr\u003E \u2022 Skattefradrag og forskuddstrekk\u003Cbr\u003E \u003Cbr\u003E Du kan selv se hvilke opplysninger Skatteetaten har om deg p\u00E5 \u003Ca href=\u0022https://skatt-at.sits.no/web/innsynamelding/\u0022 target=\u0022_blank\u0022\u003Einnsyn A-melding\u003C/a\u003E",
+    "en": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt l\u00F8nn eller ytelser, i perioden {fraogmed} til {tilogmed}:\u003Cbr\u003E \u2022 Utbetalt l\u00F8nn, n\u00E6ringsinntekt \u003Cbr\u003E \u2022 Pensjon, trygd eller ytelser fra det offentlige\u003Cbr\u003E \u2022 Skattefradrag og forskuddstrekk\u003Cbr\u003E \u003Cbr\u003E Du kan selv se hvilke opplysninger Skatteetaten har om deg p\u00E5 \u003Ca href=\u0022https://skatt-at.sits.no/web/innsynamelding/\u0022 target=\u0022_blank\u0022\u003Einnsyn A-melding\u003C/a\u003E",
+    "nn": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt l\u00F8nn eller ytelser, i perioden {fraogmed} til {tilogmed}:\u003Cbr\u003E \u2022 Utbetalt l\u00F8nn, n\u00E6ringsinntekt \u003Cbr\u003E \u2022 Pensjon, trygd eller ytelser fra det offentlige\u003Cbr\u003E \u2022 Skattefradrag og forskuddstrekk\u003Cbr\u003E \u003Cbr\u003E Du kan selv se hvilke opplysninger Skatteetaten har om deg p\u00E5 \u003Ca href=\u0022https://skatt-at.sits.no/web/innsynamelding/\u0022 target=\u0022_blank\u0022\u003Einnsyn A-melding\u003C/a\u003E"
+  },
+  "ConsentMetadata": {
+    "fraogmed": {
+      "Optional": false
+    },
+    "tilogmed": {
+      "Optional": false
+    }
+  },
+  "IsOneTimeConsent": false,
+  "VersionId": 0
+}

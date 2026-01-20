@@ -161,7 +161,11 @@ namespace Altinn2ServiceExportResourceMapper
                             ConsentText = ConsentText,
                             ConsentMetadata = ConsentMetadata,
                             ResourceReferences = resourceReferences,
-                            Title = Title
+                            Title = Title,
+                            Description = Title,
+                            Identifier = serviceKey,
+                            Version = "1.0",
+                            ResourceType = Altinn.ResourceRegistry.Core.Enums.ResourceType.Consent
                         };
                     }
                     else

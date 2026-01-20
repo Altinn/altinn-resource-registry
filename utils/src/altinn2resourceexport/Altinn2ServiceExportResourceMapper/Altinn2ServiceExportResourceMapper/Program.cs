@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using Altinn.ResourceRegistry.Core.Models;
 
 namespace Altinn2ServiceExportResourceMapper
 {
@@ -10,12 +11,32 @@ namespace Altinn2ServiceExportResourceMapper
         public string OrganizationCode { get; set; }
         public int ServiceCode { get; set; }
         public int ServiceEditionCode { get; set; }
-        public int ExternalServiceCode { get; set; }
-        public int? ExternalServiceEditionCode { get; set; }
-        public string FormTask { get; set; }
+        public int ServiceEditionVersionId { get; set; }
+        public int? IsOneTimeConsent { get; set; }
+        public string ConsentTemplate { get; set; }
         public int LanguageCode { get; set; }
         public string Text { get; set; }
         public int ResourceType { get; set; }
+
+        public string GetServiceKey()
+        {
+            return $"{OrganizationCode}_{ServiceCode}_{ServiceEditionCode}_{ServiceEditionVersionId}";
+        }
+
+
+        public string[] GetConsentMetadata()
+        {
+            if (string.IsNullOrEmpty(Text))
+            {
+                return new string[0];
+            }
+            
+            var matches = System.Text.RegularExpressions.Regex.Matches(Text, @"\{([^}]+)\}");
+            return matches.Cast<System.Text.RegularExpressions.Match>()
+                         .Select(m => m.Groups[1].Value)
+                         .Distinct()
+                         .ToArray();
+        }
     }
 
     class Program
@@ -36,6 +57,152 @@ namespace Altinn2ServiceExportResourceMapper
                 
                 // Display first few records as examples
                 DisplaySampleRecords(resources);
+
+                Dictionary<string, ServiceResource> serviceResources = [];
+
+                foreach (ConsentResource resource in resources)
+                {
+                    string serviceKey = resource.GetServiceKey();
+
+                    Dictionary<string, string> ConsentText = new Dictionary<string, string>();
+                    Dictionary<string, string> Title = new Dictionary<string, string>();
+
+               
+
+                    if (resource.LanguageCode == 1044) // Norwegian Bokmål
+                    {
+                        if (resource.ResourceType == 1)
+                        {
+                            Title["nb"] = resource.Text;
+                        }
+                        else
+                        {
+                            ConsentText["nb"] = resource.Text;
+                        }
+                    }
+                    else if (resource.LanguageCode == 1033) // English
+                    {
+                        if (resource.ResourceType == 1)
+                        {
+                            Title["en"] = resource.Text;
+                        }
+                        else
+                        {
+                            ConsentText["en"] = resource.Text;
+                        }
+                    }
+                    else if (resource.LanguageCode == 2068) // Norwegian Nynorsk
+                    {
+                        if (resource.ResourceType == 1)
+                        {
+                            Title["nn"] = resource.Text;
+                        }
+                        else
+                        {
+                            ConsentText["nn"] = resource.Text;
+                        }
+                    }
+                 
+                    List<ResourceReference> resourceReferences = new List<ResourceReference>();
+
+                    if(resource.ServiceEditionVersionId != 0)
+                    {
+                        ResourceReference resourceReference = new ResourceReference
+                        {
+                            ReferenceSource = Altinn.ResourceRegistry.Core.Enums.ReferenceSource.Altinn2,
+                            ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceCode,
+                            Reference = resource.ServiceEditionVersionId.ToString()
+                        };
+                        resourceReferences.Add(resourceReference);
+                    }
+
+                    if(resource.IsOneTimeConsent.HasValue)
+                    {
+                        ResourceReference resourceReference = new ResourceReference
+                        {
+                            ReferenceSource = Altinn.ResourceRegistry.Core.Enums.ReferenceSource.Altinn2,
+                            ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceEditionCode,
+                            Reference = resource.IsOneTimeConsent.Value.ToString()
+                        };
+                        resourceReferences.Add(resourceReference);
+                    }
+
+                    if(resource.IsOneTimeConsent != null)
+                    {
+                        ResourceReference resourceReference = new ResourceReference
+                        {
+                            ReferenceSource = Altinn.ResourceRegistry.Core.Enums.ReferenceSource.Altinn2,
+                            ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceEditionVersion,
+                            Reference = resource.IsOneTimeConsent.Value.ToString()
+                        };
+                        resourceReferences.Add(resourceReference);
+                    }
+
+
+                    Dictionary<string, ConsentMetadata> ConsentMetadata = new Dictionary<string, ConsentMetadata>();
+
+                    string[] metadataKeys = resource.GetConsentMetadata();
+
+                    foreach (string key in metadataKeys)
+                    {
+                        ConsentMetadata[key] = new ConsentMetadata
+                        {
+                            Optional = false
+                        };
+                    }
+
+                    if (!serviceResources.ContainsKey(serviceKey))
+                    {
+                        serviceResources[serviceKey] = new ServiceResource
+                        {
+                            HasCompetentAuthority = new CompetentAuthority()
+                            {
+                                Orgcode = resource.OrganizationCode
+                            },
+
+                            ConsentTemplate = string.Empty,// Placeholder, as ConsentTemplate is not in CSV
+                            ConsentText = ConsentText,
+                            ConsentMetadata = ConsentMetadata,
+                            ResourceReferences = resourceReferences,
+                            Title = Title
+                        };
+                    }
+                    else
+                    {
+                        foreach (var kvp in ConsentText)
+                        {
+                            serviceResources[serviceKey].ConsentText[kvp.Key] = kvp.Value;
+                        }
+
+                        foreach(var kvpTitle in Title)
+                        {
+                            serviceResources[serviceKey].Title[kvpTitle.Key] = kvpTitle.Value;
+                        }
+
+                        foreach (var kvp in ConsentMetadata)
+                        {
+                            if (!serviceResources[serviceKey].ConsentMetadata.ContainsKey(kvp.Key))
+                            {
+                                serviceResources[serviceKey].ConsentMetadata[kvp.Key] = kvp.Value;
+                            }
+                        }
+
+                        foreach (var resRef in resourceReferences)
+                        {
+                            if (!serviceResources[serviceKey].ResourceReferences.Any(r => r.ReferenceSource == resRef.ReferenceSource &&
+                                                                                         r.ReferenceType == resRef.ReferenceType &&
+                                                                                         r.Reference == resRef.Reference))
+                            {
+                                serviceResources[serviceKey].ResourceReferences.Add(resRef);
+                            }
+                        }
+
+
+                    }
+                }
+
+                // Save each ServiceResource as JSON file
+                SaveServiceResourcesToJson(serviceResources);
             }
             catch (Exception ex)
             {
@@ -86,9 +253,9 @@ namespace Altinn2ServiceExportResourceMapper
                     OrganizationCode = fields[0],
                     ServiceCode = int.Parse(fields[1]),
                     ServiceEditionCode = int.Parse(fields[2]),
-                    ExternalServiceCode = int.Parse(fields[3]),
-                    ExternalServiceEditionCode = fields[4] == "NULL" ? null : int.Parse(fields[4]),
-                    FormTask = fields[5] == "NULL" ? null : fields[5],
+                    ServiceEditionVersionId = int.Parse(fields[3]),
+                    IsOneTimeConsent = fields[4] == "NULL" ? null : int.Parse(fields[4]),
+                    ConsentTemplate = fields[5] == "NULL" ? null : fields[5],
                     LanguageCode = int.Parse(fields[6]),
                     Text = fields[7],
                     ResourceType = int.Parse(fields[8])
@@ -196,13 +363,50 @@ namespace Altinn2ServiceExportResourceMapper
             {
                 Console.WriteLine($"Organization: {resource.OrganizationCode}");
                 Console.WriteLine($"Service: {resource.ServiceCode}/{resource.ServiceEditionCode}");
-                Console.WriteLine($"External Service: {resource.ExternalServiceCode}/{resource.ExternalServiceEditionCode}");
-                Console.WriteLine($"Form Task: {resource.FormTask ?? "NULL"}");
+                Console.WriteLine($"External Service: {resource.ServiceEditionVersionId}/{resource.IsOneTimeConsent}");
+                Console.WriteLine($"Form Task: {resource.ConsentTemplate ?? "NULL"}");
                 Console.WriteLine($"Language: {resource.LanguageCode}");
                 Console.WriteLine($"Resource Type: {resource.ResourceType} ({(resource.ResourceType == 1 ? "Title" : "Description")})");
                 Console.WriteLine($"Text: {resource.Text.Substring(0, Math.Min(100, resource.Text.Length))}...");
                 Console.WriteLine(new string('-', 50));
             }
+        }
+
+        static void SaveServiceResourcesToJson(Dictionary<string, ServiceResource> serviceResources)
+        {
+            string outputDirectory = "Data/Resources";
+            
+            // Create directory if it doesn't exist
+            if (!Directory.Exists(outputDirectory))
+            {
+                Directory.CreateDirectory(outputDirectory);
+            }
+
+            foreach (var kvp in serviceResources)
+            {
+                string serviceKey = kvp.Key;
+                ServiceResource serviceResource = kvp.Value;
+                
+                string fileName = $"{serviceKey}.json";
+                string filePath = Path.Combine(outputDirectory, fileName);
+                
+                try
+                {
+                    string json = System.Text.Json.JsonSerializer.Serialize(serviceResource, new System.Text.Json.JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+                    
+                    File.WriteAllText(filePath, json);
+                    Console.WriteLine($"Saved service resource: {fileName}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error saving {fileName}: {ex.Message}");
+                }
+            }
+            
+            Console.WriteLine($"\nSaved {serviceResources.Count} service resources to {outputDirectory}");
         }
     }
 }

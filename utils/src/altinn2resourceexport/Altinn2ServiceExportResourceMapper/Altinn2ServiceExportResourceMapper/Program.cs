@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Altinn.ResourceRegistry.Core.Models;
 
 namespace Altinn2ServiceExportResourceMapper
@@ -23,6 +24,10 @@ namespace Altinn2ServiceExportResourceMapper
             return $"{OrganizationCode}_{ServiceCode}_{ServiceEditionCode}_{ServiceEditionVersionId}";
         }
 
+        public string GetResourceKey()
+        {
+            return $"{OrganizationCode}_{ServiceCode}_{ServiceEditionCode}";
+        }
 
         public string[] GetConsentMetadata()
         {
@@ -39,14 +44,44 @@ namespace Altinn2ServiceExportResourceMapper
         }
     }
 
+    public class OrganizationInfo
+    {
+        public string Name { get; set; }
+        public string NameEnglish { get; set; }
+        public string NameNynorsk { get; set; }
+        public string OrgNumber { get; set; }
+        public string Logo { get; set; }
+        public string Homepage { get; set; }
+        public List<string> Environments { get; set; } = new List<string>();
+    }
+
+    public class AltinnOrg
+    {
+        public Dictionary<string, string> Name { get; set; }
+        public string Orgnr { get; set; }
+        public string Logo { get; set; }
+        public string Homepage { get; set; }
+        public List<string> Environments { get; set; }
+    }
+
+    public class AltinnOrgList
+    {
+        public Dictionary<string, AltinnOrg> Orgs { get; set; }
+    }
+
     class Program
     {
+        private static Dictionary<string, OrganizationInfo> _organizationLookup = new Dictionary<string, OrganizationInfo>();
+
         static void Main(string[] args)
         {
             string csvFilePath = @"Data\Samtykke_ressurser.csv";
             
             try
             {
+                // Initialize organization lookup from altinn-orgs.json
+                InitializeOrganizationLookup();
+                
                 var resources = ReadCsvFile(csvFilePath);
                 
                 Console.WriteLine($"Successfully read {resources.Count} consent resources from CSV file.");
@@ -57,6 +92,9 @@ namespace Altinn2ServiceExportResourceMapper
                 
                 // Display first few records as examples
                 DisplaySampleRecords(resources);
+                
+                // Demonstrate organization lookup
+                DemonstrateOrganizationLookup(resources);
 
                 Dictionary<string, ServiceResource> serviceResources = [];
 
@@ -157,16 +195,25 @@ namespace Altinn2ServiceExportResourceMapper
                                 Orgcode = resource.OrganizationCode
                             },
 
-                            ConsentTemplate = string.Empty,// Placeholder, as ConsentTemplate is not in CSV
+                            ConsentTemplate = resource.ConsentTemplate,
                             ConsentText = ConsentText,
                             ConsentMetadata = ConsentMetadata,
                             ResourceReferences = resourceReferences,
                             Title = Title,
                             Description = Title,
-                            Identifier = serviceKey,
+                            Identifier = resource.GetResourceKey(),
                             Version = "1.0",
-                            ResourceType = Altinn.ResourceRegistry.Core.Enums.ResourceType.Consent
-                        };
+                            ResourceType = Altinn.ResourceRegistry.Core.Enums.ResourceType.Consent,
+                            Status = "Discontinued",
+                            IsOneTimeConsent = resource.IsOneTimeConsent == 1 ? true : false,
+                            Visible = false,
+                            Delegable = false, // Default to false. No need to be able to delegate this migrated consent resource
+                            ContactPoints = [new ContactPoint()
+                            {
+                                Category = "Support",
+                                Email = "servicedesk@altinn.no"
+                            }]
+                         };
                     }
                     else
                     {
@@ -197,9 +244,33 @@ namespace Altinn2ServiceExportResourceMapper
                                 serviceResources[serviceKey].ResourceReferences.Add(resRef);
                             }
                         }
-
-
                     }
+                }
+
+                // Ensure all languages have text by falling back to Norwegian Bokmål
+                foreach (ServiceResource sr in serviceResources.Values)
+                {
+                    if (sr.ConsentText.ContainsKey("nb") && !sr.ConsentText.ContainsKey("en"))
+                    {
+                        sr.ConsentText["en"] = sr.ConsentText["nb"];
+                    }
+
+                    if (sr.ConsentText.ContainsKey("nb") && !sr.ConsentText.ContainsKey("nn"))
+                    {
+                        sr.ConsentText["nn"] = sr.ConsentText["nb"];
+                    }
+
+                    if (sr.Title.ContainsKey("nb") && !sr.Title.ContainsKey("en"))
+                    {
+                        sr.Title["en"] = sr.Title["nb"];
+                    }
+
+                    if (sr.Title.ContainsKey("nb") && !sr.Title.ContainsKey("nn"))
+                    {
+                        sr.Title["nn"] = sr.Title["nb"];
+                    }
+
+                    sr.HasCompetentAuthority.Organization = GetOrganizationInfo(sr.HasCompetentAuthority.Orgcode).OrgNumber;
                 }
 
                 // Save each ServiceResource as JSON file
@@ -208,6 +279,106 @@ namespace Altinn2ServiceExportResourceMapper
             catch (Exception ex)
             {
                 Console.WriteLine($"Error reading CSV file: {ex.Message}");
+            }
+        }
+
+        static void InitializeOrganizationLookup()
+        {
+            string altinnOrgsFilePath = @"Data\altinn-orgs.json";
+            
+            try
+            {
+                if (!File.Exists(altinnOrgsFilePath))
+                {
+                    Console.WriteLine($"Warning: altinn-orgs.json file not found at {altinnOrgsFilePath}");
+                    return;
+                }
+
+                string jsonContent = File.ReadAllText(altinnOrgsFilePath);
+                var altinnOrgList = JsonSerializer.Deserialize<AltinnOrgList>(jsonContent, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
+
+                if (altinnOrgList?.Orgs != null)
+                {
+                    foreach (var kvp in altinnOrgList.Orgs)
+                    {
+                        string orgCode = kvp.Key.ToLowerInvariant();
+                        var org = kvp.Value;
+                        
+                        _organizationLookup[orgCode] = new OrganizationInfo
+                        {
+                            Name = org.Name?.GetValueOrDefault("nb", ""),
+                            NameEnglish = org.Name?.GetValueOrDefault("en", ""),
+                            NameNynorsk = org.Name?.GetValueOrDefault("nn", ""),
+                            OrgNumber = org.Orgnr ?? "",
+                            Logo = org.Logo ?? "",
+                            Homepage = org.Homepage ?? "",
+                            Environments = org.Environments ?? new List<string>()
+                        };
+                    }
+
+                    Console.WriteLine($"Loaded {_organizationLookup.Count} organizations from altinn-orgs.json");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading organization lookup: {ex.Message}");
+            }
+        }
+
+        static OrganizationInfo GetOrganizationInfo(string orgCode)
+        {
+            if (string.IsNullOrEmpty(orgCode))
+                return null;
+
+            string key = orgCode.ToLowerInvariant();
+            return _organizationLookup.GetValueOrDefault(key);
+        }
+
+        static string GetOrganizationNumber(string orgCode)
+        {
+            var orgInfo = GetOrganizationInfo(orgCode);
+            return orgInfo?.OrgNumber ?? "";
+        }
+
+        static string GetOrganizationName(string orgCode, string language = "nb")
+        {
+            var orgInfo = GetOrganizationInfo(orgCode);
+            if (orgInfo == null) return "";
+
+            return language.ToLowerInvariant() switch
+            {
+                "en" => orgInfo.NameEnglish ?? orgInfo.Name,
+                "nn" => orgInfo.NameNynorsk ?? orgInfo.Name,
+                _ => orgInfo.Name
+            };
+        }
+
+        static void DemonstrateOrganizationLookup(List<ConsentResource> resources)
+        {
+            Console.WriteLine("=== Organization Lookup Demo ===");
+            
+            var uniqueOrgCodes = resources.Select(r => r.OrganizationCode).Distinct().Take(5);
+            
+            foreach (string orgCode in uniqueOrgCodes)
+            {
+                var orgInfo = GetOrganizationInfo(orgCode);
+                if (orgInfo != null)
+                {
+                    Console.WriteLine($"Org Code: {orgCode.ToUpperInvariant()}");
+                    Console.WriteLine($"  Name (NB): {orgInfo.Name}");
+                    Console.WriteLine($"  Name (EN): {orgInfo.NameEnglish}");
+                    Console.WriteLine($"  Org Number: {orgInfo.OrgNumber}");
+                    Console.WriteLine($"  Homepage: {orgInfo.Homepage}");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.WriteLine($"Org Code: {orgCode.ToUpperInvariant()} - No information found");
+                    Console.WriteLine();
+                }
             }
         }
 
@@ -321,7 +492,9 @@ namespace Altinn2ServiceExportResourceMapper
             Console.WriteLine($"Organizations: {organizationGroups.Count()}");
             foreach (var org in organizationGroups)
             {
-                Console.WriteLine($"  {org.Key}: {org.Count()} records");
+                string orgName = GetOrganizationName(org.Key);
+                string displayName = !string.IsNullOrEmpty(orgName) ? $"{org.Key.ToUpperInvariant()} ({orgName})" : org.Key.ToUpperInvariant();
+                Console.WriteLine($"  {displayName}: {org.Count()} records");
             }
             
             var languageGroups = resources.GroupBy(r => r.LanguageCode).OrderBy(g => g.Key);
@@ -393,7 +566,7 @@ namespace Altinn2ServiceExportResourceMapper
                 
                 try
                 {
-                    string json = System.Text.Json.JsonSerializer.Serialize(serviceResource, new System.Text.Json.JsonSerializerOptions
+                    string json = JsonSerializer.Serialize(serviceResource, new JsonSerializerOptions
                     {
                         WriteIndented = true
                     });

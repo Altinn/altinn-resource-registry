@@ -271,6 +271,25 @@ namespace Altinn2ServiceExportResourceMapper
                     }
 
                     sr.HasCompetentAuthority.Organization = GetOrganizationInfo(sr.HasCompetentAuthority.Orgcode).OrgNumber;
+
+
+                    // Lowercase all consent metadata. Both value and usage in consent text
+
+                    if(sr.ConsentMetadata != null)
+                    {
+                        var updatedConsentMetadata = new Dictionary<string, ConsentMetadata>();
+                        foreach (var kvp in sr.ConsentMetadata)
+                        {
+                            string lowerKey = kvp.Key.ToLowerInvariant();
+                            updatedConsentMetadata[lowerKey] = kvp.Value;
+
+                            sr.ConsentText["nb"] = sr.ConsentText["nb"].Replace("{" + kvp.Key + "}", "{" + lowerKey + "}");
+                            sr.ConsentText["en"] = sr.ConsentText["en"].Replace("{" + kvp.Key + "}", "{" + lowerKey + "}");
+                            sr.ConsentText["nn"] = sr.ConsentText["nn"].Replace("{" + kvp.Key + "}", "{" + lowerKey + "}");
+                        }
+                        sr.ConsentMetadata = updatedConsentMetadata;
+                    }
+
                 }
 
                 // Save each ServiceResource as JSON file

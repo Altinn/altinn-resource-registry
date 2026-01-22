@@ -30,12 +30,12 @@
     {
       "referenceSource": "Altinn2",
       "reference": "5382",
-      "referenceType": "ServiceEditionCode"
+      "referenceType": "ServiceCode"
     },
     {
       "referenceSource": "Altinn2",
       "reference": "169229",
-      "referenceType": "ServiceCode"
+      "referenceType": "ServiceEditionCode"
     },
     {
       "referenceSource": "Altinn2",

@@ -75,7 +75,7 @@ namespace Altinn2ServiceExportResourceMapper
 
         static void Main(string[] args)
         {
-            string csvFilePath = @"Data\Samtykke_ressurser_tt02.csv";
+            string csvFilePath = @"Data\Samtykke_ressurser.csv";
             
             try
             {
@@ -146,7 +146,7 @@ namespace Altinn2ServiceExportResourceMapper
                         ResourceReference resourceReference = new ResourceReference
                         {
                             ReferenceSource = Altinn.ResourceRegistry.Core.Enums.ReferenceSource.Altinn2,
-                            ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceEditionCode,
+                            ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceCode,
                             Reference = resource.ServiceCode
                         };
                         resourceReferences.Add(resourceReference);
@@ -157,7 +157,7 @@ namespace Altinn2ServiceExportResourceMapper
                         ResourceReference resourceReference = new ResourceReference
                         {
                             ReferenceSource = Altinn.ResourceRegistry.Core.Enums.ReferenceSource.Altinn2,
-                            ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceCode,
+                            ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceEditionCode,
                             Reference = resource.ServiceEditionVersionId.ToString()
                         };
                         resourceReferences.Add(resourceReference);

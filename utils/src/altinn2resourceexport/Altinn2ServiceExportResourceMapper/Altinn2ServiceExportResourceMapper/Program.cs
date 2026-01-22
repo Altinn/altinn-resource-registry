@@ -21,12 +21,12 @@ namespace Altinn2ServiceExportResourceMapper
 
         public string GetServiceKey()
         {
-            return $"{OrganizationCode}_{ServiceCode}_{ServiceEditionCode}_{ServiceEditionVersionId}";
+            return $"{OrganizationCode}_{ServiceCode}_{ServiceEditionCode}_{ServiceEditionVersionId}".ToLower();
         }
 
         public string GetResourceKey()
         {
-            return $"{OrganizationCode}_{ServiceCode}_{ServiceEditionCode}";
+            return $"{OrganizationCode}_{ServiceCode}_{ServiceEditionCode}".ToLower();
         }
 
         public string[] GetConsentMetadata()
@@ -75,7 +75,7 @@ namespace Altinn2ServiceExportResourceMapper
 
         static void Main(string[] args)
         {
-            string csvFilePath = @"Data\Samtykke_ressurser.csv";
+            string csvFilePath = @"Data\Samtykke_ressurser_tt02.csv";
             
             try
             {

@@ -1,69 +1,69 @@
-{
-  "Identifier": "DIGDIR_5616_5",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "DIGDIR_5616_5",
+  "version": "1.0",
+  "title": {
     "nb": "Restanser",
     "en": "Restanser",
     "nn": "Restanser"
   },
-  "Description": {
+  "description": {
     "nb": "Restanser",
     "en": "Restanser",
     "nn": "Restanser"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5616",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5616",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "11846",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "11846",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "5",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "991825827",
-    "Orgcode": "DIGDIR"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "991825827",
+    "orgcode": "DIGDIR"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": "poa",
-  "ConsentText": {
-    "nb": "\u003Cp\u003EForfalte, ubetalte skatter og avgifter p\u0026aring;:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003ERestskatt\u003C/li\u003E \u003Cli\u003EForskuddstrekk\u003C/li\u003E \u003Cli\u003EArbeidsgiveravgift\u003C/li\u003E \u003Cli\u003EMerverdiavgift\u003C/li\u003E \u003Cli\u003EForskuddsskatt\u003C/li\u003E \u003Cli\u003EGebyrer, ansvarskrav m.m.\u003C/li\u003E \u003C/ul\u003E",
-    "en": "\u003Cp\u003EForfalte, ubetalte skatter og avgifter p\u0026aring;:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003ERestskatt\u003C/li\u003E \u003Cli\u003EForskuddstrekk\u003C/li\u003E \u003Cli\u003EArbeidsgiveravgift\u003C/li\u003E \u003Cli\u003EMerverdiavgift\u003C/li\u003E \u003Cli\u003EForskuddsskatt\u003C/li\u003E \u003Cli\u003EGebyrer, ansvarskrav m.m.\u003C/li\u003E \u003C/ul\u003E",
-    "nn": "\u003Cp\u003EForfalte, ubetalte skatter og avgifter p\u0026aring;:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003ERestskatt\u003C/li\u003E \u003Cli\u003EForskuddstrekk\u003C/li\u003E \u003Cli\u003EArbeidsgiveravgift\u003C/li\u003E \u003Cli\u003EMerverdiavgift\u003C/li\u003E \u003Cli\u003EForskuddsskatt\u003C/li\u003E \u003Cli\u003EGebyrer, ansvarskrav m.m.\u003C/li\u003E \u003C/ul\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "poa",
+  "consentText": {
+    "nb": "<p>Forfalte, ubetalte skatter og avgifter p&aring;:</p> <ul> <li>Restskatt</li> <li>Forskuddstrekk</li> <li>Arbeidsgiveravgift</li> <li>Merverdiavgift</li> <li>Forskuddsskatt</li> <li>Gebyrer, ansvarskrav m.m.</li> </ul>",
+    "en": "<p>Forfalte, ubetalte skatter og avgifter p&aring;:</p> <ul> <li>Restskatt</li> <li>Forskuddstrekk</li> <li>Arbeidsgiveravgift</li> <li>Merverdiavgift</li> <li>Forskuddsskatt</li> <li>Gebyrer, ansvarskrav m.m.</li> </ul>",
+    "nn": "<p>Forfalte, ubetalte skatter og avgifter p&aring;:</p> <ul> <li>Restskatt</li> <li>Forskuddstrekk</li> <li>Arbeidsgiveravgift</li> <li>Merverdiavgift</li> <li>Forskuddsskatt</li> <li>Gebyrer, ansvarskrav m.m.</li> </ul>"
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

@@ -1,69 +1,69 @@
-{
-  "Identifier": "ASF_4601_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "ASF_4601_1",
+  "version": "1.0",
+  "title": {
     "nb": "SamtykkeTestHilde",
     "en": "SamtykkeTestHilde",
     "nn": "SamtykkeTestHilde"
   },
-  "Description": {
+  "description": {
     "nb": "SamtykkeTestHilde",
     "en": "SamtykkeTestHilde",
     "nn": "SamtykkeTestHilde"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4601",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "4601",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "108788",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "108788",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974706121",
-    "Orgcode": "ASF"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "Du samtykker n\u00E5 til \u00E5 dele hele ditt liv med Hilde Therese Lauvset Rafaelsen",
-    "en": "Du samtykker n\u00E5 til \u00E5 dele hele ditt liv med Hilde Therese Lauvset Rafaelsen",
-    "nn": "Du samtykker n\u00E5 til \u00E5 dele hele ditt liv med Hilde Therese Lauvset Rafaelsen"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Du samtykker nå til å dele hele ditt liv med Hilde Therese Lauvset Rafaelsen",
+    "en": "Du samtykker nå til å dele hele ditt liv med Hilde Therese Lauvset Rafaelsen",
+    "nn": "Du samtykker nå til å dele hele ditt liv med Hilde Therese Lauvset Rafaelsen"
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

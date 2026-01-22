@@ -1,69 +1,69 @@
-{
-  "Identifier": "DIGDIR_5616_6",
-  "Version": "1.0",
-  "Title": {
-    "nb": "Restanser i forbindelse med drosjel\u00F8yve",
-    "en": "Restanser i forbindelse med drosjel\u00F8yve",
-    "nn": "Restanser i forbindelse med drosjel\u00F8yve"
+﻿{
+  "identifier": "DIGDIR_5616_6",
+  "version": "1.0",
+  "title": {
+    "nb": "Restanser i forbindelse med drosjeløyve",
+    "en": "Restanser i forbindelse med drosjeløyve",
+    "nn": "Restanser i forbindelse med drosjeløyve"
   },
-  "Description": {
-    "nb": "Restanser i forbindelse med drosjel\u00F8yve",
-    "en": "Restanser i forbindelse med drosjel\u00F8yve",
-    "nn": "Restanser i forbindelse med drosjel\u00F8yve"
+  "description": {
+    "nb": "Restanser i forbindelse med drosjeløyve",
+    "en": "Restanser i forbindelse med drosjeløyve",
+    "nn": "Restanser i forbindelse med drosjeløyve"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5616",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5616",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "189944",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "189944",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "6",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "6",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "991825827",
-    "Orgcode": "DIGDIR"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "991825827",
+    "orgcode": "DIGDIR"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": "default",
-  "ConsentText": {
-    "nb": "\u003Cp\u003ERestanser p\u0026aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p\u0026aring;:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003ESkatt\u003C/li\u003E \u003Cli\u003EArbeidsgiveravgift\u003C/li\u003E \u003Cli\u003EMerverdiavgift\u003C/li\u003E \u003Cli\u003EForskuddstrekk\u003C/li\u003E \u003Cli\u003EAnsvarskrav skatt\u003C/li\u003E \u003Cli\u003EAnsvarskrav merverdiavgift\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu har rett til innsyn i opplysningene som utleveres. Ta kontakt med s\u00F8knadsmottaker for \u0026aring; f\u0026aring; innsyn i hvilke opplysninger som har blitt utlevert.\u003C/p\u003E",
-    "en": "\u003Cp\u003ERestanser p\u0026aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p\u0026aring;:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003ESkatt\u003C/li\u003E \u003Cli\u003EArbeidsgiveravgift\u003C/li\u003E \u003Cli\u003EMerverdiavgift\u003C/li\u003E \u003Cli\u003EForskuddstrekk\u003C/li\u003E \u003Cli\u003EAnsvarskrav skatt\u003C/li\u003E \u003Cli\u003EAnsvarskrav merverdiavgift\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu har rett til innsyn i opplysningene som utleveres. Ta kontakt med s\u00F8knadsmottaker for \u0026aring; f\u0026aring; innsyn i hvilke opplysninger som har blitt utlevert.\u003C/p\u003E",
-    "nn": "\u003Cp\u003ERestanser p\u0026aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p\u0026aring;:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003ESkatt\u003C/li\u003E \u003Cli\u003EArbeidsgiveravgift\u003C/li\u003E \u003Cli\u003EMerverdiavgift\u003C/li\u003E \u003Cli\u003EForskuddstrekk\u003C/li\u003E \u003Cli\u003EAnsvarskrav skatt\u003C/li\u003E \u003Cli\u003EAnsvarskrav merverdiavgift\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu har rett til innsyn i opplysningene som utleveres. Ta kontakt med s\u00F8knadsmottaker for \u0026aring; f\u0026aring; innsyn i hvilke opplysninger som har blitt utlevert.\u003C/p\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "<p>Restanser p&aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p&aring;:</p> <ul> <li>Skatt</li> <li>Arbeidsgiveravgift</li> <li>Merverdiavgift</li> <li>Forskuddstrekk</li> <li>Ansvarskrav skatt</li> <li>Ansvarskrav merverdiavgift</li> </ul> <p>Du har rett til innsyn i opplysningene som utleveres. Ta kontakt med søknadsmottaker for &aring; f&aring; innsyn i hvilke opplysninger som har blitt utlevert.</p>",
+    "en": "<p>Restanser p&aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p&aring;:</p> <ul> <li>Skatt</li> <li>Arbeidsgiveravgift</li> <li>Merverdiavgift</li> <li>Forskuddstrekk</li> <li>Ansvarskrav skatt</li> <li>Ansvarskrav merverdiavgift</li> </ul> <p>Du har rett til innsyn i opplysningene som utleveres. Ta kontakt med søknadsmottaker for &aring; f&aring; innsyn i hvilke opplysninger som har blitt utlevert.</p>",
+    "nn": "<p>Restanser p&aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p&aring;:</p> <ul> <li>Skatt</li> <li>Arbeidsgiveravgift</li> <li>Merverdiavgift</li> <li>Forskuddstrekk</li> <li>Ansvarskrav skatt</li> <li>Ansvarskrav merverdiavgift</li> </ul> <p>Du har rett til innsyn i opplysningene som utleveres. Ta kontakt med søknadsmottaker for &aring; f&aring; innsyn i hvilke opplysninger som har blitt utlevert.</p>"
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

@@ -1,69 +1,69 @@
-{
-  "Identifier": "DIGDIR_5616_3",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "DIGDIR_5616_3",
+  "version": "1.0",
+  "title": {
     "nb": "Oversikt over arbeidsgiveravgift fra Skatteetaten",
     "en": "Oversikt over arbeidsgiveravgift fra Skatteetaten",
     "nn": "Oversikt over arbeidsgiveravgift fra Skatteetaten"
   },
-  "Description": {
+  "description": {
     "nb": "Oversikt over arbeidsgiveravgift fra Skatteetaten",
     "en": "Oversikt over arbeidsgiveravgift fra Skatteetaten",
     "nn": "Oversikt over arbeidsgiveravgift fra Skatteetaten"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5616",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5616",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "206389",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "206389",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "3",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "3",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "991825827",
-    "Orgcode": "DIGDIR"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "991825827",
+    "orgcode": "DIGDIR"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": "poa",
-  "ConsentText": {
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "poa",
+  "consentText": {
     "nb": "Informasjon om innrapportert og betalt arbeidsgveravgift",
     "en": "Informasjon om innrapportert og betalt arbeidsgveravgift",
     "nn": "Informasjon om innrapportert og betalt arbeidsgveravgift"
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

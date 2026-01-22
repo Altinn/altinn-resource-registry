@@ -1,69 +1,69 @@
-{
-  "Identifier": "ASF_4630_1",
-  "Version": "1.0",
-  "Title": {
-    "nb": "L\u00F8nnsdata fra EFF TEST",
-    "en": "L\u00F8nnsdata fra EFF TEST",
-    "nn": "L\u00F8nnsdata fra EFF TEST"
+﻿{
+  "identifier": "ASF_4630_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Lønnsdata fra EFF TEST",
+    "en": "Lønnsdata fra EFF TEST",
+    "nn": "Lønnsdata fra EFF TEST"
   },
-  "Description": {
-    "nb": "L\u00F8nnsdata fra EFF TEST",
-    "en": "L\u00F8nnsdata fra EFF TEST",
-    "nn": "L\u00F8nnsdata fra EFF TEST"
+  "description": {
+    "nb": "Lønnsdata fra EFF TEST",
+    "en": "Lønnsdata fra EFF TEST",
+    "nn": "Lønnsdata fra EFF TEST"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4630",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "4630",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "126051",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "126051",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974706121",
-    "Orgcode": "ASF"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn/pensjon/trygd, forskuddstrekk og eventuelle fradrag. ",
-    "en": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn/pensjon/trygd, forskuddstrekk og eventuelle fradrag. ",
-    "nn": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn/pensjon/trygd, forskuddstrekk og eventuelle fradrag. "
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Det vil bli gitt innsyn i dine opplysninger om lønn/pensjon/trygd, forskuddstrekk og eventuelle fradrag. ",
+    "en": "Det vil bli gitt innsyn i dine opplysninger om lønn/pensjon/trygd, forskuddstrekk og eventuelle fradrag. ",
+    "nn": "Det vil bli gitt innsyn i dine opplysninger om lønn/pensjon/trygd, forskuddstrekk og eventuelle fradrag. "
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

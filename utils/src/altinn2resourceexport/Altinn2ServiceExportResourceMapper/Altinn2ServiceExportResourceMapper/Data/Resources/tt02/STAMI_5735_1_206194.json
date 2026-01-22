@@ -1,69 +1,69 @@
-{
-  "Identifier": "STAMI_5735_1",
-  "Version": "1.0",
-  "Title": {
-    "nb": "Samtykke til medarbeiderunders\u00F8kelse",
-    "en": "Samtykke til medarbeiderunders\u00F8kelse",
-    "nn": "Samtykke til medarbeiderunders\u00F8kelse"
+﻿{
+  "identifier": "STAMI_5735_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Samtykke til medarbeiderundersøkelse",
+    "en": "Samtykke til medarbeiderundersøkelse",
+    "nn": "Samtykke til medarbeiderundersøkelse"
   },
-  "Description": {
-    "nb": "Samtykke til medarbeiderunders\u00F8kelse",
-    "en": "Samtykke til medarbeiderunders\u00F8kelse",
-    "nn": "Samtykke til medarbeiderunders\u00F8kelse"
+  "description": {
+    "nb": "Samtykke til medarbeiderundersøkelse",
+    "en": "Samtykke til medarbeiderundersøkelse",
+    "nn": "Samtykke til medarbeiderundersøkelse"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5735",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5735",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "206194",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "206194",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "874761222",
-    "Orgcode": "STAMI"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "874761222",
+    "orgcode": "STAMI"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": "default",
-  "ConsentText": {
-    "nb": "Lengre tekst kommer.. Kort: Dette er et samtykke til at STAMI kan ta vare p\u00E5, og forske p\u00E5 din besvarelser i MUST. (medarbeiderunders\u00F8kelse i staten)  Det er frivillig \u00E5 gi samtykke, du kan uansett delta i unders\u00F8kelsen og bedriftens rapport, men uten samtykke vil dine data slettes etter at unders\u00F8kelsen er avsluttet.",
-    "en": "Lengre tekst kommer.. Kort: Dette er et samtykke til at STAMI kan ta vare p\u00E5, og forske p\u00E5 din besvarelser i MUST. (medarbeiderunders\u00F8kelse i staten)  Det er frivillig \u00E5 gi samtykke, du kan uansett delta i unders\u00F8kelsen og bedriftens rapport, men uten samtykke vil dine data slettes etter at unders\u00F8kelsen er avsluttet.",
-    "nn": "Lengre tekst kommer.. Kort: Dette er et samtykke til at STAMI kan ta vare p\u00E5, og forske p\u00E5 din besvarelser i MUST. (medarbeiderunders\u00F8kelse i staten)  Det er frivillig \u00E5 gi samtykke, du kan uansett delta i unders\u00F8kelsen og bedriftens rapport, men uten samtykke vil dine data slettes etter at unders\u00F8kelsen er avsluttet."
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Lengre tekst kommer.. Kort: Dette er et samtykke til at STAMI kan ta vare på, og forske på din besvarelser i MUST. (medarbeiderundersøkelse i staten)  Det er frivillig å gi samtykke, du kan uansett delta i undersøkelsen og bedriftens rapport, men uten samtykke vil dine data slettes etter at undersøkelsen er avsluttet.",
+    "en": "Lengre tekst kommer.. Kort: Dette er et samtykke til at STAMI kan ta vare på, og forske på din besvarelser i MUST. (medarbeiderundersøkelse i staten)  Det er frivillig å gi samtykke, du kan uansett delta i undersøkelsen og bedriftens rapport, men uten samtykke vil dine data slettes etter at undersøkelsen er avsluttet.",
+    "nn": "Lengre tekst kommer.. Kort: Dette er et samtykke til at STAMI kan ta vare på, og forske på din besvarelser i MUST. (medarbeiderundersøkelse i staten)  Det er frivillig å gi samtykke, du kan uansett delta i undersøkelsen og bedriftens rapport, men uten samtykke vil dine data slettes etter at undersøkelsen er avsluttet."
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

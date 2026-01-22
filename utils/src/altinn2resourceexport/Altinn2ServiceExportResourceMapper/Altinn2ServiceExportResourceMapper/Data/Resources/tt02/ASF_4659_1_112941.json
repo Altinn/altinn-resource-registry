@@ -1,69 +1,69 @@
-{
-  "Identifier": "ASF_4659_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "ASF_4659_1",
+  "version": "1.0",
+  "title": {
     "nb": "Ligningsdata",
     "en": "Ligningsdata",
     "nn": "Ligningsdata"
   },
-  "Description": {
+  "description": {
     "nb": "Ligningsdata",
     "en": "Ligningsdata",
     "nn": "Ligningsdata"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4659",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "4659",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "112941",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "112941",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974706121",
-    "Orgcode": "ASF"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "Det vil bli gitt innsyn i dine opplysninger om inntekt og formue for det siste inntekts\u00E5ret. ",
-    "en": "Det vil bli gitt innsyn i dine opplysninger om inntekt og formue for det siste inntekts\u00E5ret. ",
-    "nn": "Det vil bli gitt innsyn i dine opplysninger om inntekt og formue for det siste inntekts\u00E5ret. "
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Det vil bli gitt innsyn i dine opplysninger om inntekt og formue for det siste inntektsåret. ",
+    "en": "Det vil bli gitt innsyn i dine opplysninger om inntekt og formue for det siste inntektsåret. ",
+    "nn": "Det vil bli gitt innsyn i dine opplysninger om inntekt og formue for det siste inntektsåret. "
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

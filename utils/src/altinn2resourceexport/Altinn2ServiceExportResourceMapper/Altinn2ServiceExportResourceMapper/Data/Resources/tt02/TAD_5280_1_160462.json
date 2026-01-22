@@ -1,69 +1,69 @@
-{
-  "Identifier": "TAD_5280_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "TAD_5280_1",
+  "version": "1.0",
+  "title": {
     "nb": "Se og levere manifest til Tolletaten",
     "en": "Se og levere manifest til Tolletaten",
     "nn": "Se og levere manifest til Tolletaten"
   },
-  "Description": {
+  "description": {
     "nb": "Se og levere manifest til Tolletaten",
     "en": "Se og levere manifest til Tolletaten",
     "nn": "Se og levere manifest til Tolletaten"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5280",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5280",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "160462",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "160462",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "880455702",
-    "Orgcode": "TAD"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "880455702",
+    "orgcode": "TAD"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "Dette gir rettighet til \u00E5 levere inn manifest til Tolletaten (denne teksten kan endres i tjenesteutviklingsl\u00F8sningen).",
-    "en": "Dette gir rettighet til \u00E5 levere inn manifest til Tolletaten (denne teksten kan endres i tjenesteutviklingsl\u00F8sningen).",
-    "nn": "Dette gir rettighet til \u00E5 levere inn manifest til Tolletaten (denne teksten kan endres i tjenesteutviklingsl\u00F8sningen)."
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Dette gir rettighet til å levere inn manifest til Tolletaten (denne teksten kan endres i tjenesteutviklingsløsningen).",
+    "en": "Dette gir rettighet til å levere inn manifest til Tolletaten (denne teksten kan endres i tjenesteutviklingsløsningen).",
+    "nn": "Dette gir rettighet til å levere inn manifest til Tolletaten (denne teksten kan endres i tjenesteutviklingsløsningen)."
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

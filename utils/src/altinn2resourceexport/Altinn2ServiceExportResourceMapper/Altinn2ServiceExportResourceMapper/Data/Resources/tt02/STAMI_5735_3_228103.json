@@ -1,76 +1,76 @@
-{
-  "Identifier": "STAMI_5735_3",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "STAMI_5735_3",
+  "version": "1.0",
+  "title": {
     "nb": "Samtykke til deltakelse i forskning",
     "en": "Samtykke til deltakelse i forskning",
     "nn": "Samtykke til deltakelse i forskning"
   },
-  "Description": {
+  "description": {
     "nb": "Samtykke til deltakelse i forskning",
     "en": "Samtykke til deltakelse i forskning",
     "nn": "Samtykke til deltakelse i forskning"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5735",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5735",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "228103",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "228103",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "3",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "3",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "874761222",
-    "Orgcode": "STAMI"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "874761222",
+    "orgcode": "STAMI"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": "simpleconsent",
-  "ConsentText": {
-    "nb": "\u003Cp\u003E\u003Ca href=\u0027{samtykkelink}\u0027 target=\u0027_blank\u0027\u003ELes informasjonsskrivet p\u00E5 nytt her (\u00E5pnes i ny fane)\u003C/a\u003E\u003C/p\u003E \u003Cp\u003EJeg har mottatt og forst\u00E5tt informasjonen om forskningsprosjektet, og har f\u00E5tt anledning til \u00E5 stille sp\u00F8rsm\u00E5l. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 \u00E5r etter at prosjektet er avsluttet - inntil {sluttdato} \u2013 eller f\u00F8r dette om jeg trekker mitt samtykke.\u003C/p\u003E \u003Cp\u003EKlikk \u00ABJa, jeg gir samtykke\u00BB for \u003Cb\u003Etillatelse\u003C/b\u003E til at \u003Cb\u003ESTAMI kan bruke dine opplysninger\u003C/b\u003E i sin \u003Cb\u003Eforskning p\u00E5 arbeidsmilj\u00F8 og helse\u003C/b\u003E - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere \u2013 se \u00ABSamtykker og fullmakter\u00BB, under din profil i Altinn.\u003C/p\u003E \u003Cp\u003EKlikk \u00ABNei, jeg gir ikke samtykke\u00BB hvis du \u003Cb\u003Eikke\u003C/b\u003E \u00F8nsker \u00E5 delta i forskningsprosjektet.\u003C/p\u003E",
-    "en": "\u003Cp\u003E\u003Ca href=\u0027{samtykkelink}\u0027 target=\u0027_blank\u0027\u003ELes informasjonsskrivet p\u00E5 nytt her (\u00E5pnes i ny fane)\u003C/a\u003E\u003C/p\u003E \u003Cp\u003EJeg har mottatt og forst\u00E5tt informasjonen om forskningsprosjektet, og har f\u00E5tt anledning til \u00E5 stille sp\u00F8rsm\u00E5l. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 \u00E5r etter at prosjektet er avsluttet - inntil {sluttdato} \u2013 eller f\u00F8r dette om jeg trekker mitt samtykke.\u003C/p\u003E \u003Cp\u003EKlikk \u00ABJa, jeg gir samtykke\u00BB for \u003Cb\u003Etillatelse\u003C/b\u003E til at \u003Cb\u003ESTAMI kan bruke dine opplysninger\u003C/b\u003E i sin \u003Cb\u003Eforskning p\u00E5 arbeidsmilj\u00F8 og helse\u003C/b\u003E - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere \u2013 se \u00ABSamtykker og fullmakter\u00BB, under din profil i Altinn.\u003C/p\u003E \u003Cp\u003EKlikk \u00ABNei, jeg gir ikke samtykke\u00BB hvis du \u003Cb\u003Eikke\u003C/b\u003E \u00F8nsker \u00E5 delta i forskningsprosjektet.\u003C/p\u003E",
-    "nn": "\u003Cp\u003E\u003Ca href=\u0027{samtykkelink}\u0027 target=\u0027_blank\u0027\u003ELes informasjonsskrivet p\u00E5 nytt her (\u00E5pnes i ny fane)\u003C/a\u003E\u003C/p\u003E \u003Cp\u003EJeg har mottatt og forst\u00E5tt informasjonen om forskningsprosjektet, og har f\u00E5tt anledning til \u00E5 stille sp\u00F8rsm\u00E5l. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 \u00E5r etter at prosjektet er avsluttet - inntil {sluttdato} \u2013 eller f\u00F8r dette om jeg trekker mitt samtykke.\u003C/p\u003E \u003Cp\u003EKlikk \u00ABJa, jeg gir samtykke\u00BB for \u003Cb\u003Etillatelse\u003C/b\u003E til at \u003Cb\u003ESTAMI kan bruke dine opplysninger\u003C/b\u003E i sin \u003Cb\u003Eforskning p\u00E5 arbeidsmilj\u00F8 og helse\u003C/b\u003E - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere \u2013 se \u00ABSamtykker og fullmakter\u00BB, under din profil i Altinn.\u003C/p\u003E \u003Cp\u003EKlikk \u00ABNei, jeg gir ikke samtykke\u00BB hvis du \u003Cb\u003Eikke\u003C/b\u003E \u00F8nsker \u00E5 delta i forskningsprosjektet.\u003C/p\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "simpleconsent",
+  "consentText": {
+    "nb": "<p><a href='{samtykkelink}' target='_blank'>Les informasjonsskrivet på nytt her (åpnes i ny fane)</a></p> <p>Jeg har mottatt og forstått informasjonen om forskningsprosjektet, og har fått anledning til å stille spørsmål. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 år etter at prosjektet er avsluttet - inntil {sluttdato} – eller før dette om jeg trekker mitt samtykke.</p> <p>Klikk «Ja, jeg gir samtykke» for <b>tillatelse</b> til at <b>STAMI kan bruke dine opplysninger</b> i sin <b>forskning på arbeidsmiljø og helse</b> - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere – se «Samtykker og fullmakter», under din profil i Altinn.</p> <p>Klikk «Nei, jeg gir ikke samtykke» hvis du <b>ikke</b> ønsker å delta i forskningsprosjektet.</p>",
+    "en": "<p><a href='{samtykkelink}' target='_blank'>Les informasjonsskrivet på nytt her (åpnes i ny fane)</a></p> <p>Jeg har mottatt og forstått informasjonen om forskningsprosjektet, og har fått anledning til å stille spørsmål. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 år etter at prosjektet er avsluttet - inntil {sluttdato} – eller før dette om jeg trekker mitt samtykke.</p> <p>Klikk «Ja, jeg gir samtykke» for <b>tillatelse</b> til at <b>STAMI kan bruke dine opplysninger</b> i sin <b>forskning på arbeidsmiljø og helse</b> - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere – se «Samtykker og fullmakter», under din profil i Altinn.</p> <p>Klikk «Nei, jeg gir ikke samtykke» hvis du <b>ikke</b> ønsker å delta i forskningsprosjektet.</p>",
+    "nn": "<p><a href='{samtykkelink}' target='_blank'>Les informasjonsskrivet på nytt her (åpnes i ny fane)</a></p> <p>Jeg har mottatt og forstått informasjonen om forskningsprosjektet, og har fått anledning til å stille spørsmål. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 år etter at prosjektet er avsluttet - inntil {sluttdato} – eller før dette om jeg trekker mitt samtykke.</p> <p>Klikk «Ja, jeg gir samtykke» for <b>tillatelse</b> til at <b>STAMI kan bruke dine opplysninger</b> i sin <b>forskning på arbeidsmiljø og helse</b> - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere – se «Samtykker og fullmakter», under din profil i Altinn.</p> <p>Klikk «Nei, jeg gir ikke samtykke» hvis du <b>ikke</b> ønsker å delta i forskningsprosjektet.</p>"
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "samtykkelink": {
-      "Optional": false
+      "optional": false
     },
     "sluttdato": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

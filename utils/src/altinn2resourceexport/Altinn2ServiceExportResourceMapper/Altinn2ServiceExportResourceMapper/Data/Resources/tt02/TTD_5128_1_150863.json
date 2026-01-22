@@ -1,76 +1,76 @@
-{
-  "Identifier": "TTD_5128_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "TTD_5128_1",
+  "version": "1.0",
+  "title": {
     "nb": "Er virksomheten konkurs eller under tvangsavvikling",
     "en": "Er virksomheten konkurs eller under tvangsavvikling",
     "nn": "Er virksomheten konkurs eller under tvangsavvikling"
   },
-  "Description": {
+  "description": {
     "nb": "Er virksomheten konkurs eller under tvangsavvikling",
     "en": "Er virksomheten konkurs eller under tvangsavvikling",
     "nn": "Er virksomheten konkurs eller under tvangsavvikling"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5128",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5128",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "150863",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "150863",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "",
-    "Orgcode": "TTD"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "",
+    "orgcode": "TTD"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "P\u00E5 vegne av \u003Cstrong\u003E{requestorname}\u003C/strong\u003E trenger vi \u00E5 kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  \u003Cscript\u003Etry { var r1 = $(\u0027.panel-section\u0027).find(\u0027h4\u0027); var r2 = $(\u0027.panel-section\u0027).find(\u0027p.font-size-lg.pad-top-2\u0027); var s = \u0027registerenheten i br\u00F8nn\u00F8ysund\u0027; var r = document.location.href.match(/nadobecoveredby=([^\u0026]\u002B)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}\u003C/script\u003E",
-    "en": "P\u00E5 vegne av \u003Cstrong\u003E{requestorname}\u003C/strong\u003E trenger vi \u00E5 kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  \u003Cscript\u003Etry { var r1 = $(\u0027.panel-section\u0027).find(\u0027h4\u0027); var r2 = $(\u0027.panel-section\u0027).find(\u0027p.font-size-lg.pad-top-2\u0027); var s = \u0027registerenheten i br\u00F8nn\u00F8ysund\u0027; var r = document.location.href.match(/nadobecoveredby=([^\u0026]\u002B)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}\u003C/script\u003E",
-    "nn": "P\u00E5 vegne av \u003Cstrong\u003E{requestorname}\u003C/strong\u003E trenger vi \u00E5 kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  \u003Cscript\u003Etry { var r1 = $(\u0027.panel-section\u0027).find(\u0027h4\u0027); var r2 = $(\u0027.panel-section\u0027).find(\u0027p.font-size-lg.pad-top-2\u0027); var s = \u0027registerenheten i br\u00F8nn\u00F8ysund\u0027; var r = document.location.href.match(/nadobecoveredby=([^\u0026]\u002B)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}\u003C/script\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "På vegne av <strong>{requestorname}</strong> trenger vi å kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  <script>try { var r1 = $('.panel-section').find('h4'); var r2 = $('.panel-section').find('p.font-size-lg.pad-top-2'); var s = 'registerenheten i brønnøysund'; var r = document.location.href.match(/nadobecoveredby=([^&]+)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}</script>",
+    "en": "På vegne av <strong>{requestorname}</strong> trenger vi å kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  <script>try { var r1 = $('.panel-section').find('h4'); var r2 = $('.panel-section').find('p.font-size-lg.pad-top-2'); var s = 'registerenheten i brønnøysund'; var r = document.location.href.match(/nadobecoveredby=([^&]+)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}</script>",
+    "nn": "På vegne av <strong>{requestorname}</strong> trenger vi å kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  <script>try { var r1 = $('.panel-section').find('h4'); var r2 = $('.panel-section').find('p.font-size-lg.pad-top-2'); var s = 'registerenheten i brønnøysund'; var r = document.location.href.match(/nadobecoveredby=([^&]+)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}</script>"
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "requestorname": {
-      "Optional": false
+      "optional": false
     },
-    " var r1 = $(\u0027.panel-section\u0027).find(\u0027h4\u0027); var r2 = $(\u0027.panel-section\u0027).find(\u0027p.font-size-lg.pad-top-2\u0027); var s = \u0027registerenheten i br\u00F8nn\u00F8ysund\u0027; var r = document.location.href.match(/nadobecoveredby=([^\u0026]\u002B)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) ": {
-      "Optional": false
+    " var r1 = $('.panel-section').find('h4'); var r2 = $('.panel-section').find('p.font-size-lg.pad-top-2'); var s = 'registerenheten i brønnøysund'; var r = document.location.href.match(/nadobecoveredby=([^&]+)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) ": {
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

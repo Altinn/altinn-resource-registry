@@ -1,76 +1,76 @@
-{
-  "Identifier": "NAV_5252_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "NAV_5252_1",
+  "version": "1.0",
+  "title": {
     "nb": "Opplysninger om arbeidsavklaringspenger fra NAV",
     "en": "Opplysninger om arbeidsavklaringspenger fra NAV",
     "nn": "Opplysninger om arbeidsavklaringspenger fra NAV"
   },
-  "Description": {
+  "description": {
     "nb": "Opplysninger om arbeidsavklaringspenger fra NAV",
     "en": "Opplysninger om arbeidsavklaringspenger fra NAV",
     "nn": "Opplysninger om arbeidsavklaringspenger fra NAV"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5252",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5252",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "162078",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "162078",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "889640782",
-    "Orgcode": "NAV"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "889640782",
+    "orgcode": "NAV"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "\u003Cp\u003EOpplysninger om vedtak og meldekort om AAP for perioden {fraogmed} til {tilogmed}.\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EPeriode vedtaket gjelder\u003C/li\u003E \u003Cli\u003EType vedtak (ny rettighet/endring/gjenopptak)\u003C/li\u003E \u003Cli\u003EVedtaksvariant (mer utfyllende enn punktet ovenfor)\u003C/li\u003E \u003Cli\u003EAktivitetsfase\u003C/li\u003E \u003Cli\u003EOm vedtaket er innvilget/avsl\u0026aring;tt/stanset/opph\u0026oslash;rt\u003C/li\u003E \u003Cli\u003EDato for stans \u003C/li\u003E \u003Cli\u003EPerioden meldekortet gjelder fra (fra og til dato)\u003C/li\u003E \u003Cli\u003EAntall timer du har meldt fra om at du har arbeidet i perioden\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EFor \u0026aring; behandle din sak, vil forsikringsselskapet kunne ha behov for \u0026aring; innhente oppdaterte personopplysninger fra NAV. Forsikringsselskapet vil derfor kunne innhente personopplysninger om deg flere ganger i l\u0026oslash;pet av denne perioden.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EAlle personopplysninger som NAV utleverer om deg til forsikringsselskapet vil bli registrert og v\u0026aelig;re synlig for deg p\u0026aring; \u003Ca href=\u0022http://www.nav.no\u0022 target=\u0022_blank\u0022\u003Ewww.nav.no\u003C/a\u003E.\u003C/p\u003E",
-    "en": "\u003Cp\u003EOpplysninger om vedtak og meldekort om AAP for perioden {fraogmed} til {tilogmed}.\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EPeriode vedtaket gjelder\u003C/li\u003E \u003Cli\u003EType vedtak (ny rettighet/endring/gjenopptak)\u003C/li\u003E \u003Cli\u003EVedtaksvariant (mer utfyllende enn punktet ovenfor)\u003C/li\u003E \u003Cli\u003EAktivitetsfase\u003C/li\u003E \u003Cli\u003EOm vedtaket er innvilget/avsl\u0026aring;tt/stanset/opph\u0026oslash;rt\u003C/li\u003E \u003Cli\u003EDato for stans \u003C/li\u003E \u003Cli\u003EPerioden meldekortet gjelder fra (fra og til dato)\u003C/li\u003E \u003Cli\u003EAntall timer du har meldt fra om at du har arbeidet i perioden\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EFor \u0026aring; behandle din sak, vil forsikringsselskapet kunne ha behov for \u0026aring; innhente oppdaterte personopplysninger fra NAV. Forsikringsselskapet vil derfor kunne innhente personopplysninger om deg flere ganger i l\u0026oslash;pet av denne perioden.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EAlle personopplysninger som NAV utleverer om deg til forsikringsselskapet vil bli registrert og v\u0026aelig;re synlig for deg p\u0026aring; \u003Ca href=\u0022http://www.nav.no\u0022 target=\u0022_blank\u0022\u003Ewww.nav.no\u003C/a\u003E.\u003C/p\u003E",
-    "nn": "\u003Cp\u003EOpplysninger om vedtak og meldekort om AAP for perioden {fraogmed} til {tilogmed}.\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EPeriode vedtaket gjelder\u003C/li\u003E \u003Cli\u003EType vedtak (ny rettighet/endring/gjenopptak)\u003C/li\u003E \u003Cli\u003EVedtaksvariant (mer utfyllende enn punktet ovenfor)\u003C/li\u003E \u003Cli\u003EAktivitetsfase\u003C/li\u003E \u003Cli\u003EOm vedtaket er innvilget/avsl\u0026aring;tt/stanset/opph\u0026oslash;rt\u003C/li\u003E \u003Cli\u003EDato for stans \u003C/li\u003E \u003Cli\u003EPerioden meldekortet gjelder fra (fra og til dato)\u003C/li\u003E \u003Cli\u003EAntall timer du har meldt fra om at du har arbeidet i perioden\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EFor \u0026aring; behandle din sak, vil forsikringsselskapet kunne ha behov for \u0026aring; innhente oppdaterte personopplysninger fra NAV. Forsikringsselskapet vil derfor kunne innhente personopplysninger om deg flere ganger i l\u0026oslash;pet av denne perioden.\u0026nbsp;\u003C/p\u003E \u003Cp\u003EAlle personopplysninger som NAV utleverer om deg til forsikringsselskapet vil bli registrert og v\u0026aelig;re synlig for deg p\u0026aring; \u003Ca href=\u0022http://www.nav.no\u0022 target=\u0022_blank\u0022\u003Ewww.nav.no\u003C/a\u003E.\u003C/p\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "<p>Opplysninger om vedtak og meldekort om AAP for perioden {fraogmed} til {tilogmed}.</p> <ul> <li>Periode vedtaket gjelder</li> <li>Type vedtak (ny rettighet/endring/gjenopptak)</li> <li>Vedtaksvariant (mer utfyllende enn punktet ovenfor)</li> <li>Aktivitetsfase</li> <li>Om vedtaket er innvilget/avsl&aring;tt/stanset/opph&oslash;rt</li> <li>Dato for stans </li> <li>Perioden meldekortet gjelder fra (fra og til dato)</li> <li>Antall timer du har meldt fra om at du har arbeidet i perioden</li> </ul> <p>For &aring; behandle din sak, vil forsikringsselskapet kunne ha behov for &aring; innhente oppdaterte personopplysninger fra NAV. Forsikringsselskapet vil derfor kunne innhente personopplysninger om deg flere ganger i l&oslash;pet av denne perioden.&nbsp;</p> <p>Alle personopplysninger som NAV utleverer om deg til forsikringsselskapet vil bli registrert og v&aelig;re synlig for deg p&aring; <a href=\"http://www.nav.no\" target=\"_blank\">www.nav.no</a>.</p>",
+    "en": "<p>Opplysninger om vedtak og meldekort om AAP for perioden {fraogmed} til {tilogmed}.</p> <ul> <li>Periode vedtaket gjelder</li> <li>Type vedtak (ny rettighet/endring/gjenopptak)</li> <li>Vedtaksvariant (mer utfyllende enn punktet ovenfor)</li> <li>Aktivitetsfase</li> <li>Om vedtaket er innvilget/avsl&aring;tt/stanset/opph&oslash;rt</li> <li>Dato for stans </li> <li>Perioden meldekortet gjelder fra (fra og til dato)</li> <li>Antall timer du har meldt fra om at du har arbeidet i perioden</li> </ul> <p>For &aring; behandle din sak, vil forsikringsselskapet kunne ha behov for &aring; innhente oppdaterte personopplysninger fra NAV. Forsikringsselskapet vil derfor kunne innhente personopplysninger om deg flere ganger i l&oslash;pet av denne perioden.&nbsp;</p> <p>Alle personopplysninger som NAV utleverer om deg til forsikringsselskapet vil bli registrert og v&aelig;re synlig for deg p&aring; <a href=\"http://www.nav.no\" target=\"_blank\">www.nav.no</a>.</p>",
+    "nn": "<p>Opplysninger om vedtak og meldekort om AAP for perioden {fraogmed} til {tilogmed}.</p> <ul> <li>Periode vedtaket gjelder</li> <li>Type vedtak (ny rettighet/endring/gjenopptak)</li> <li>Vedtaksvariant (mer utfyllende enn punktet ovenfor)</li> <li>Aktivitetsfase</li> <li>Om vedtaket er innvilget/avsl&aring;tt/stanset/opph&oslash;rt</li> <li>Dato for stans </li> <li>Perioden meldekortet gjelder fra (fra og til dato)</li> <li>Antall timer du har meldt fra om at du har arbeidet i perioden</li> </ul> <p>For &aring; behandle din sak, vil forsikringsselskapet kunne ha behov for &aring; innhente oppdaterte personopplysninger fra NAV. Forsikringsselskapet vil derfor kunne innhente personopplysninger om deg flere ganger i l&oslash;pet av denne perioden.&nbsp;</p> <p>Alle personopplysninger som NAV utleverer om deg til forsikringsselskapet vil bli registrert og v&aelig;re synlig for deg p&aring; <a href=\"http://www.nav.no\" target=\"_blank\">www.nav.no</a>.</p>"
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "fraogmed": {
-      "Optional": false
+      "optional": false
     },
     "tilogmed": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

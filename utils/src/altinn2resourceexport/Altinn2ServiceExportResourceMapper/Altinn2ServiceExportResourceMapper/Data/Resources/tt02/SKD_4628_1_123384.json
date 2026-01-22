@@ -1,73 +1,73 @@
-{
-  "Identifier": "SKD_4628_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "SKD_4628_1",
+  "version": "1.0",
+  "title": {
     "nb": "Summert skattegrunnlag fra Skattetaten",
     "en": "Summert skattegrunnlag fra Skattetaten",
     "nn": "Summert skattegrunnlag fra Skattetaten"
   },
-  "Description": {
+  "description": {
     "nb": "Summert skattegrunnlag fra Skattetaten",
     "en": "Summert skattegrunnlag fra Skattetaten",
     "nn": "Summert skattegrunnlag fra Skattetaten"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4628",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "4628",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "123384",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "123384",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974761076",
-    "Orgcode": "SKD"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974761076",
+    "orgcode": "SKD"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: \u003Cbr\u003E \u2022 Inntekt \u003Cbr\u003E \u2022 Skattefradrag \u003Cbr\u003E \u2022 Formue (inkl bolig, bil og andre verdier) \u003Cbr\u003E \u2022 Gjeld \u003Cbr\u003E",
-    "en": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: \u003Cbr\u003E \u2022 Inntekt \u003Cbr\u003E \u2022 Skattefradrag \u003Cbr\u003E \u2022 Formue (inkl bolig, bil og andre verdier) \u003Cbr\u003E \u2022 Gjeld \u003Cbr\u003E",
-    "nn": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: \u003Cbr\u003E \u2022 Inntekt \u003Cbr\u003E \u2022 Skattefradrag \u003Cbr\u003E \u2022 Formue (inkl bolig, bil og andre verdier) \u003Cbr\u003E \u2022 Gjeld \u003Cbr\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: <br> • Inntekt <br> • Skattefradrag <br> • Formue (inkl bolig, bil og andre verdier) <br> • Gjeld <br>",
+    "en": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: <br> • Inntekt <br> • Skattefradrag <br> • Formue (inkl bolig, bil og andre verdier) <br> • Gjeld <br>",
+    "nn": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: <br> • Inntekt <br> • Skattefradrag <br> • Formue (inkl bolig, bil og andre verdier) <br> • Gjeld <br>"
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "inntektsaar": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

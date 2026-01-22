@@ -1,76 +1,76 @@
-{
-  "Identifier": "NAV_5252_2",
-  "Version": "1.0",
-  "Title": {
-    "nb": "Opplysninger om uf\u00F8retrygd fra NAV",
-    "en": "Opplysninger om uf\u00F8retrygd fra NAV",
-    "nn": "Opplysninger om uf\u00F8retrygd fra NAV"
+﻿{
+  "identifier": "NAV_5252_2",
+  "version": "1.0",
+  "title": {
+    "nb": "Opplysninger om uføretrygd fra NAV",
+    "en": "Opplysninger om uføretrygd fra NAV",
+    "nn": "Opplysninger om uføretrygd fra NAV"
   },
-  "Description": {
-    "nb": "Opplysninger om uf\u00F8retrygd fra NAV",
-    "en": "Opplysninger om uf\u00F8retrygd fra NAV",
-    "nn": "Opplysninger om uf\u00F8retrygd fra NAV"
+  "description": {
+    "nb": "Opplysninger om uføretrygd fra NAV",
+    "en": "Opplysninger om uføretrygd fra NAV",
+    "nn": "Opplysninger om uføretrygd fra NAV"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5252",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5252",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "165351",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "165351",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "2",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "2",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "889640782",
-    "Orgcode": "NAV"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "889640782",
+    "orgcode": "NAV"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "\u003Ch2\u003EUnder utvikling\u003C/h2\u003E \u003Cul\u003E \u003Cli\u003EPerioder for vedtak om uf\u0026oslash;retrygd og uf\u0026oslash;repensjon\u003C/li\u003E \u003Cli\u003EOm vedtaket gjelder innvilgelse, avslag, endring, eller opph\u0026oslash;r\u003C/li\u003E \u003Cli\u003EOm du har flyttet til utlandet\u003C/li\u003E \u003Cli\u003EHvilke opplysninger NAV har brukt i beregningen av uf\u0026oslash;retrygd/uf\u0026oslash;repensjon: \u003Cul\u003E \u003Cli\u003EInntekt f\u0026oslash;r uf\u0026oslash;rhet\u003C/li\u003E \u003Cli\u003EUf\u0026oslash;retidspunkt\u003C/li\u003E \u003Cli\u003EUf\u0026oslash;regrad\u003C/li\u003E \u003Cli\u003EInntekt brukt i avkorting av uf\u0026oslash;retrygden\u003C/li\u003E \u003C/ul\u003E \u003C/li\u003E \u003Cli\u003EOm du har en s\u0026oslash;knad eller klage til behandling\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EVed \u0026aring; samtykke, gir du NAV rett til i en periode p\u0026aring; tre \u0026aring;r, \u0026aring; gi ut disse opplysningene om vedtak om uf\u0026oslash;retrygd for perioden {fom} - {tom}.\u003C/p\u003E \u003Cp\u003EP\u0026aring; Ditt NAV p\u0026aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs\u0026aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p\u0026aring; ditt samtykke.\u003C/p\u003E",
-    "en": "\u003Ch2\u003EUnder utvikling\u003C/h2\u003E \u003Cul\u003E \u003Cli\u003EPerioder for vedtak om uf\u0026oslash;retrygd og uf\u0026oslash;repensjon\u003C/li\u003E \u003Cli\u003EOm vedtaket gjelder innvilgelse, avslag, endring, eller opph\u0026oslash;r\u003C/li\u003E \u003Cli\u003EOm du har flyttet til utlandet\u003C/li\u003E \u003Cli\u003EHvilke opplysninger NAV har brukt i beregningen av uf\u0026oslash;retrygd/uf\u0026oslash;repensjon: \u003Cul\u003E \u003Cli\u003EInntekt f\u0026oslash;r uf\u0026oslash;rhet\u003C/li\u003E \u003Cli\u003EUf\u0026oslash;retidspunkt\u003C/li\u003E \u003Cli\u003EUf\u0026oslash;regrad\u003C/li\u003E \u003Cli\u003EInntekt brukt i avkorting av uf\u0026oslash;retrygden\u003C/li\u003E \u003C/ul\u003E \u003C/li\u003E \u003Cli\u003EOm du har en s\u0026oslash;knad eller klage til behandling\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EVed \u0026aring; samtykke, gir du NAV rett til i en periode p\u0026aring; tre \u0026aring;r, \u0026aring; gi ut disse opplysningene om vedtak om uf\u0026oslash;retrygd for perioden {fom} - {tom}.\u003C/p\u003E \u003Cp\u003EP\u0026aring; Ditt NAV p\u0026aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs\u0026aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p\u0026aring; ditt samtykke.\u003C/p\u003E",
-    "nn": "\u003Ch2\u003EUnder utvikling\u003C/h2\u003E \u003Cul\u003E \u003Cli\u003EPerioder for vedtak om uf\u0026oslash;retrygd og uf\u0026oslash;repensjon\u003C/li\u003E \u003Cli\u003EOm vedtaket gjelder innvilgelse, avslag, endring, eller opph\u0026oslash;r\u003C/li\u003E \u003Cli\u003EOm du har flyttet til utlandet\u003C/li\u003E \u003Cli\u003EHvilke opplysninger NAV har brukt i beregningen av uf\u0026oslash;retrygd/uf\u0026oslash;repensjon: \u003Cul\u003E \u003Cli\u003EInntekt f\u0026oslash;r uf\u0026oslash;rhet\u003C/li\u003E \u003Cli\u003EUf\u0026oslash;retidspunkt\u003C/li\u003E \u003Cli\u003EUf\u0026oslash;regrad\u003C/li\u003E \u003Cli\u003EInntekt brukt i avkorting av uf\u0026oslash;retrygden\u003C/li\u003E \u003C/ul\u003E \u003C/li\u003E \u003Cli\u003EOm du har en s\u0026oslash;knad eller klage til behandling\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EVed \u0026aring; samtykke, gir du NAV rett til i en periode p\u0026aring; tre \u0026aring;r, \u0026aring; gi ut disse opplysningene om vedtak om uf\u0026oslash;retrygd for perioden {fom} - {tom}.\u003C/p\u003E \u003Cp\u003EP\u0026aring; Ditt NAV p\u0026aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs\u0026aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p\u0026aring; ditt samtykke.\u003C/p\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "<h2>Under utvikling</h2> <ul> <li>Perioder for vedtak om uf&oslash;retrygd og uf&oslash;repensjon</li> <li>Om vedtaket gjelder innvilgelse, avslag, endring, eller opph&oslash;r</li> <li>Om du har flyttet til utlandet</li> <li>Hvilke opplysninger NAV har brukt i beregningen av uf&oslash;retrygd/uf&oslash;repensjon: <ul> <li>Inntekt f&oslash;r uf&oslash;rhet</li> <li>Uf&oslash;retidspunkt</li> <li>Uf&oslash;regrad</li> <li>Inntekt brukt i avkorting av uf&oslash;retrygden</li> </ul> </li> <li>Om du har en s&oslash;knad eller klage til behandling</li> </ul> <p>Ved &aring; samtykke, gir du NAV rett til i en periode p&aring; tre &aring;r, &aring; gi ut disse opplysningene om vedtak om uf&oslash;retrygd for perioden {fom} - {tom}.</p> <p>P&aring; Ditt NAV p&aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs&aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p&aring; ditt samtykke.</p>",
+    "en": "<h2>Under utvikling</h2> <ul> <li>Perioder for vedtak om uf&oslash;retrygd og uf&oslash;repensjon</li> <li>Om vedtaket gjelder innvilgelse, avslag, endring, eller opph&oslash;r</li> <li>Om du har flyttet til utlandet</li> <li>Hvilke opplysninger NAV har brukt i beregningen av uf&oslash;retrygd/uf&oslash;repensjon: <ul> <li>Inntekt f&oslash;r uf&oslash;rhet</li> <li>Uf&oslash;retidspunkt</li> <li>Uf&oslash;regrad</li> <li>Inntekt brukt i avkorting av uf&oslash;retrygden</li> </ul> </li> <li>Om du har en s&oslash;knad eller klage til behandling</li> </ul> <p>Ved &aring; samtykke, gir du NAV rett til i en periode p&aring; tre &aring;r, &aring; gi ut disse opplysningene om vedtak om uf&oslash;retrygd for perioden {fom} - {tom}.</p> <p>P&aring; Ditt NAV p&aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs&aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p&aring; ditt samtykke.</p>",
+    "nn": "<h2>Under utvikling</h2> <ul> <li>Perioder for vedtak om uf&oslash;retrygd og uf&oslash;repensjon</li> <li>Om vedtaket gjelder innvilgelse, avslag, endring, eller opph&oslash;r</li> <li>Om du har flyttet til utlandet</li> <li>Hvilke opplysninger NAV har brukt i beregningen av uf&oslash;retrygd/uf&oslash;repensjon: <ul> <li>Inntekt f&oslash;r uf&oslash;rhet</li> <li>Uf&oslash;retidspunkt</li> <li>Uf&oslash;regrad</li> <li>Inntekt brukt i avkorting av uf&oslash;retrygden</li> </ul> </li> <li>Om du har en s&oslash;knad eller klage til behandling</li> </ul> <p>Ved &aring; samtykke, gir du NAV rett til i en periode p&aring; tre &aring;r, &aring; gi ut disse opplysningene om vedtak om uf&oslash;retrygd for perioden {fom} - {tom}.</p> <p>P&aring; Ditt NAV p&aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs&aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p&aring; ditt samtykke.</p>"
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "fom": {
-      "Optional": false
+      "optional": false
     },
     "tom": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

@@ -1,76 +1,76 @@
-{
-  "Identifier": "NAV_5252_2",
-  "Version": "1.0",
-  "Title": {
-    "nb": "Opplysninger om AAP og uf\u00F8retrygd fra NAV",
-    "en": "Opplysninger om AAP og uf\u00F8retrygd fra NAV",
-    "nn": "Opplysninger om AAP og uf\u00F8retrygd fra NAV"
+﻿{
+  "identifier": "NAV_5252_2",
+  "version": "1.0",
+  "title": {
+    "nb": "Opplysninger om AAP og uføretrygd fra NAV",
+    "en": "Opplysninger om AAP og uføretrygd fra NAV",
+    "nn": "Opplysninger om AAP og uføretrygd fra NAV"
   },
-  "Description": {
-    "nb": "Opplysninger om AAP og uf\u00F8retrygd fra NAV",
-    "en": "Opplysninger om AAP og uf\u00F8retrygd fra NAV",
-    "nn": "Opplysninger om AAP og uf\u00F8retrygd fra NAV"
+  "description": {
+    "nb": "Opplysninger om AAP og uføretrygd fra NAV",
+    "en": "Opplysninger om AAP og uføretrygd fra NAV",
+    "nn": "Opplysninger om AAP og uføretrygd fra NAV"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5252",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5252",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "175640",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "175640",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "2",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "2",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "889640782",
-    "Orgcode": "NAV"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "889640782",
+    "orgcode": "NAV"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "\u003CH1\u003EUnder utvikling\u003C/H1\u003E Her kommer felles samtykketekst for AAP og Uf\u00F8retrygd. For perioden {fraogmed} \u0026ndash; {tilogmed} ",
-    "en": "\u003CH1\u003EUnder utvikling\u003C/H1\u003E Her kommer felles samtykketekst for AAP og Uf\u00F8retrygd. For perioden {fraogmed} \u0026ndash; {tilogmed} ",
-    "nn": "\u003CH1\u003EUnder utvikling\u003C/H1\u003E Her kommer felles samtykketekst for AAP og Uf\u00F8retrygd. For perioden {fraogmed} \u0026ndash; {tilogmed} "
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "<H1>Under utvikling</H1> Her kommer felles samtykketekst for AAP og Uføretrygd. For perioden {fraogmed} &ndash; {tilogmed} ",
+    "en": "<H1>Under utvikling</H1> Her kommer felles samtykketekst for AAP og Uføretrygd. For perioden {fraogmed} &ndash; {tilogmed} ",
+    "nn": "<H1>Under utvikling</H1> Her kommer felles samtykketekst for AAP og Uføretrygd. For perioden {fraogmed} &ndash; {tilogmed} "
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "fraogmed": {
-      "Optional": false
+      "optional": false
     },
     "tilogmed": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

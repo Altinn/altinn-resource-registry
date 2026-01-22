@@ -1,73 +1,73 @@
-{
-  "Identifier": "STAMI_5341_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "STAMI_5341_1",
+  "version": "1.0",
+  "title": {
     "nb": "Samtykke STAMID",
     "en": "Samtykke STAMID",
     "nn": "Samtykke STAMID"
   },
-  "Description": {
+  "description": {
     "nb": "Samtykke STAMID",
     "en": "Samtykke STAMID",
     "nn": "Samtykke STAMID"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5341",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5341",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "169419",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "169419",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "874761222",
-    "Orgcode": "STAMI"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "874761222",
+    "orgcode": "STAMI"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "\u003Cp\u003E\u003Cstrong\u003EStatens arbeidsmilj\u0026oslash;institutt (STAMI) ber om ditt samtykke\u003C/strong\u003E\u003C/p\u003E \u003Cp\u003E{virksomhet} er positiv til et samarbeid med STAMI om bruk av arbeidstidsdata.\u003C/p\u003E \u003Cp\u003EVed \u0026aring; samtykke er du med p\u0026aring; \u0026aring; bygge opp et nasjonalt arbeidstidsregister, som arbeidsgiver, myndigheter og partene kan bruke til \u00E5 planlegge de beste arbeidstidene.\u003C/p\u003E \u003Cp\u003ESamtykke gir {virksomhet} rett til \u0026aring; sende disse data til STAMI:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EAnsattnummer\u003C/li\u003E \u003Cli\u003EDaglig inn- og ut tidspspunkt, evt syk eller perm\u003C/li\u003E \u003Cli\u003EStartdato, stillingsprosent\u003C/li\u003E \u003Cli\u003ESivilstand og statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst endre eller trekke samtykket. Arbeidstidsregisteret har strengest mulig personvernkontroll.\u003C/p\u003E \u003Cp\u003ELes mer her: \u003Ca href=\u0022https://stami.no/\u0022\u003EInformasjon om STAMID\u003C/a\u003E\u003C/p\u003E",
-    "en": "\u003Cp\u003E\u003Cstrong\u003EStatens arbeidsmilj\u0026oslash;institutt (STAMI) ber om ditt samtykke\u003C/strong\u003E\u003C/p\u003E \u003Cp\u003E{virksomhet} er positiv til et samarbeid med STAMI om bruk av arbeidstidsdata.\u003C/p\u003E \u003Cp\u003EVed \u0026aring; samtykke er du med p\u0026aring; \u0026aring; bygge opp et nasjonalt arbeidstidsregister, som arbeidsgiver, myndigheter og partene kan bruke til \u00E5 planlegge de beste arbeidstidene.\u003C/p\u003E \u003Cp\u003ESamtykke gir {virksomhet} rett til \u0026aring; sende disse data til STAMI:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EAnsattnummer\u003C/li\u003E \u003Cli\u003EDaglig inn- og ut tidspspunkt, evt syk eller perm\u003C/li\u003E \u003Cli\u003EStartdato, stillingsprosent\u003C/li\u003E \u003Cli\u003ESivilstand og statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst endre eller trekke samtykket. Arbeidstidsregisteret har strengest mulig personvernkontroll.\u003C/p\u003E \u003Cp\u003ELes mer her: \u003Ca href=\u0022https://stami.no/\u0022\u003EInformasjon om STAMID\u003C/a\u003E\u003C/p\u003E",
-    "nn": "\u003Cp\u003E\u003Cstrong\u003EStatens arbeidsmilj\u0026oslash;institutt (STAMI) ber om ditt samtykke\u003C/strong\u003E\u003C/p\u003E \u003Cp\u003E{virksomhet} er positiv til et samarbeid med STAMI om bruk av arbeidstidsdata.\u003C/p\u003E \u003Cp\u003EVed \u0026aring; samtykke er du med p\u0026aring; \u0026aring; bygge opp et nasjonalt arbeidstidsregister, som arbeidsgiver, myndigheter og partene kan bruke til \u00E5 planlegge de beste arbeidstidene.\u003C/p\u003E \u003Cp\u003ESamtykke gir {virksomhet} rett til \u0026aring; sende disse data til STAMI:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EAnsattnummer\u003C/li\u003E \u003Cli\u003EDaglig inn- og ut tidspspunkt, evt syk eller perm\u003C/li\u003E \u003Cli\u003EStartdato, stillingsprosent\u003C/li\u003E \u003Cli\u003ESivilstand og statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst endre eller trekke samtykket. Arbeidstidsregisteret har strengest mulig personvernkontroll.\u003C/p\u003E \u003Cp\u003ELes mer her: \u003Ca href=\u0022https://stami.no/\u0022\u003EInformasjon om STAMID\u003C/a\u003E\u003C/p\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "<p><strong>Statens arbeidsmilj&oslash;institutt (STAMI) ber om ditt samtykke</strong></p> <p>{virksomhet} er positiv til et samarbeid med STAMI om bruk av arbeidstidsdata.</p> <p>Ved &aring; samtykke er du med p&aring; &aring; bygge opp et nasjonalt arbeidstidsregister, som arbeidsgiver, myndigheter og partene kan bruke til å planlegge de beste arbeidstidene.</p> <p>Samtykke gir {virksomhet} rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Ansattnummer</li> <li>Daglig inn- og ut tidspspunkt, evt syk eller perm</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand og statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Arbeidstidsregisteret har strengest mulig personvernkontroll.</p> <p>Les mer her: <a href=\"https://stami.no/\">Informasjon om STAMID</a></p>",
+    "en": "<p><strong>Statens arbeidsmilj&oslash;institutt (STAMI) ber om ditt samtykke</strong></p> <p>{virksomhet} er positiv til et samarbeid med STAMI om bruk av arbeidstidsdata.</p> <p>Ved &aring; samtykke er du med p&aring; &aring; bygge opp et nasjonalt arbeidstidsregister, som arbeidsgiver, myndigheter og partene kan bruke til å planlegge de beste arbeidstidene.</p> <p>Samtykke gir {virksomhet} rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Ansattnummer</li> <li>Daglig inn- og ut tidspspunkt, evt syk eller perm</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand og statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Arbeidstidsregisteret har strengest mulig personvernkontroll.</p> <p>Les mer her: <a href=\"https://stami.no/\">Informasjon om STAMID</a></p>",
+    "nn": "<p><strong>Statens arbeidsmilj&oslash;institutt (STAMI) ber om ditt samtykke</strong></p> <p>{virksomhet} er positiv til et samarbeid med STAMI om bruk av arbeidstidsdata.</p> <p>Ved &aring; samtykke er du med p&aring; &aring; bygge opp et nasjonalt arbeidstidsregister, som arbeidsgiver, myndigheter og partene kan bruke til å planlegge de beste arbeidstidene.</p> <p>Samtykke gir {virksomhet} rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Ansattnummer</li> <li>Daglig inn- og ut tidspspunkt, evt syk eller perm</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand og statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Arbeidstidsregisteret har strengest mulig personvernkontroll.</p> <p>Les mer her: <a href=\"https://stami.no/\">Informasjon om STAMID</a></p>"
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "virksomhet": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

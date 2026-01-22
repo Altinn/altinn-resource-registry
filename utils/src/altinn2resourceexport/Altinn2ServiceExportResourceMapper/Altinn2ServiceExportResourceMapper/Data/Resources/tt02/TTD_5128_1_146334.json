@@ -1,69 +1,69 @@
-{
-  "Identifier": "TTD_5128_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "TTD_5128_1",
+  "version": "1.0",
+  "title": {
     "nb": "NADOBE_TEST_ESBR_ISBANKRUPT",
     "en": "NADOBE_TEST_ESBR_ISBANKRUPT",
     "nn": "NADOBE_TEST_ESBR_ISBANKRUPT"
   },
-  "Description": {
+  "description": {
     "nb": "NADOBE_TEST_ESBR_ISBANKRUPT",
     "en": "NADOBE_TEST_ESBR_ISBANKRUPT",
     "nn": "NADOBE_TEST_ESBR_ISBANKRUPT"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5128",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5128",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "146334",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "146334",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "",
-    "Orgcode": "TTD"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "",
+    "orgcode": "TTD"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. \u003Cb\u003EVi kan ha HTML\u003C/b\u003E\u003Cscript\u003Ealert(\u0027test\u0027)\u003C/script\u003E",
-    "en": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. \u003Cb\u003EVi kan ha HTML\u003C/b\u003E\u003Cscript\u003Ealert(\u0027test\u0027)\u003C/script\u003E",
-    "nn": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. \u003Cb\u003EVi kan ha HTML\u003C/b\u003E\u003Cscript\u003Ealert(\u0027test\u0027)\u003C/script\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. <b>Vi kan ha HTML</b><script>alert('test')</script>",
+    "en": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. <b>Vi kan ha HTML</b><script>alert('test')</script>",
+    "nn": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. <b>Vi kan ha HTML</b><script>alert('test')</script>"
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

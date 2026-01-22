@@ -1,69 +1,69 @@
-{
-  "Identifier": "ASF_4367_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "ASF_4367_1",
+  "version": "1.0",
+  "title": {
     "nb": "Ligningsopplysninger",
     "en": "Ligningsopplysninger",
     "nn": "Ligningsopplysninger"
   },
-  "Description": {
+  "description": {
     "nb": "Ligningsopplysninger",
     "en": "Ligningsopplysninger",
     "nn": "Ligningsopplysninger"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4367",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "4367",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "95684",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "95684",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974706121",
-    "Orgcode": "ASF"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn, renter, innskudd og gjeld fra selvangivelsen fra siste \u00E5r.",
-    "en": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn, renter, innskudd og gjeld fra selvangivelsen fra siste \u00E5r.",
-    "nn": "Det vil bli gitt innsyn i dine opplysninger om l\u00F8nn, renter, innskudd og gjeld fra selvangivelsen fra siste \u00E5r."
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Det vil bli gitt innsyn i dine opplysninger om lønn, renter, innskudd og gjeld fra selvangivelsen fra siste år.",
+    "en": "Det vil bli gitt innsyn i dine opplysninger om lønn, renter, innskudd og gjeld fra selvangivelsen fra siste år.",
+    "nn": "Det vil bli gitt innsyn i dine opplysninger om lønn, renter, innskudd og gjeld fra selvangivelsen fra siste år."
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

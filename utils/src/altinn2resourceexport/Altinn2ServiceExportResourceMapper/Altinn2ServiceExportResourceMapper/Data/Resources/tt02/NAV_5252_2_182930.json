@@ -1,76 +1,76 @@
-{
-  "Identifier": "NAV_5252_2",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "NAV_5252_2",
+  "version": "1.0",
+  "title": {
     "en": "Information about work assessment allowance and disability pension from NAV",
-    "nb": "Opplysninger om arbeidsavklaringspenger og uf\u00F8retrygd fra NAV",
-    "nn": "Opplysninger om arbeidsavklaringspenger og uf\u00F8retrygd fra NAV"
+    "nb": "Opplysninger om arbeidsavklaringspenger og uføretrygd fra NAV",
+    "nn": "Opplysninger om arbeidsavklaringspenger og uføretrygd fra NAV"
   },
-  "Description": {
+  "description": {
     "en": "Information about work assessment allowance and disability pension from NAV",
-    "nb": "Opplysninger om arbeidsavklaringspenger og uf\u00F8retrygd fra NAV",
-    "nn": "Opplysninger om arbeidsavklaringspenger og uf\u00F8retrygd fra NAV"
+    "nb": "Opplysninger om arbeidsavklaringspenger og uføretrygd fra NAV",
+    "nn": "Opplysninger om arbeidsavklaringspenger og uføretrygd fra NAV"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5252",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5252",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "182930",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "182930",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "2",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "2",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "889640782",
-    "Orgcode": "NAV"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "889640782",
+    "orgcode": "NAV"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "en": "\u003Cul\u003E \u003Cli\u003EInformation from decisions concerning work assessment allowance and disability pension, including information about the level of benefit, the time period the decisions apply to, and the reason for termination if the benefit from NAV has ceased.\u003C/li\u003E \u003Cli\u003EInformation from the employment status form about how much time you worked during the period for which you received work assessment allowance or information about employment income if you receive disability pension.\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EYou can see the personal data NAV has disclosed based on your consent at \u003Ca href=\u0022https://www.nav.no/person/personopplysninger/dsop\u0022\u003Enav.no\u003C/a\u003E. Information may be released during the period {fraogmed} \u0026ndash; {tilogmed}.\u003C/p\u003E",
-    "nb": "\u003Cul\u003E \u003Cli\u003EOpplysninger fra vedtak om arbeidsavklaringspenger og uf\u0026oslash;retrygd, herunder opplysninger om grad av ytelsen, tidsperiode vedtakene gjelder for og \u0026aring;rsaken til opph\u0026oslash;r dersom ytelsen fra NAV er opph\u0026oslash;rt.\u003C/li\u003E \u003Cli\u003EOpplysninger fra meldekort om hvor mye du har arbeidet i perioden du mottar arbeidsavklaringspenger, eller opplysninger om arbeidsinntekt dersom du mottar uf\u0026oslash;retrygd.\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EP\u0026aring; \u003Ca href=\u0022https://www.nav.no/person/personopplysninger/dsop\u0022\u003Enav.no\u003C/a\u003E kan du se hvilke personopplysninger NAV har utlevert basert p\u0026aring; ditt samtykke. Opplysninger vil kunne bli utgitt i perioden {fraogmed} \u0026ndash; {tilogmed}.\u003C/p\u003E",
-    "nn": "\u003Cul\u003E \u003Cli\u003EOpplysninger fra vedtak om arbeidsavklaringspenger og uf\u0026oslash;retrygd, herunder opplysninger om grad av ytelsen, tidsperiode vedtakene gjelder for og \u0026aring;rsaken til opph\u0026oslash;r dersom ytelsen fra NAV er opph\u0026oslash;rt.\u003C/li\u003E \u003Cli\u003EOpplysninger fra meldekort om hvor mye du har arbeidet i perioden du mottar arbeidsavklaringspenger, eller opplysninger om arbeidsinntekt dersom du mottar uf\u0026oslash;retrygd.\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EP\u0026aring; \u003Ca href=\u0022https://www.nav.no/person/personopplysninger/dsop\u0022\u003Enav.no\u003C/a\u003E kan du se hvilke personopplysninger NAV har utlevert basert p\u0026aring; ditt samtykke. Opplysninger vil kunne bli utgitt i perioden {fraogmed} \u0026ndash; {tilogmed}.\u003C/p\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "en": "<ul> <li>Information from decisions concerning work assessment allowance and disability pension, including information about the level of benefit, the time period the decisions apply to, and the reason for termination if the benefit from NAV has ceased.</li> <li>Information from the employment status form about how much time you worked during the period for which you received work assessment allowance or information about employment income if you receive disability pension.</li> </ul> <p>You can see the personal data NAV has disclosed based on your consent at <a href=\"https://www.nav.no/person/personopplysninger/dsop\">nav.no</a>. Information may be released during the period {fraogmed} &ndash; {tilogmed}.</p>",
+    "nb": "<ul> <li>Opplysninger fra vedtak om arbeidsavklaringspenger og uf&oslash;retrygd, herunder opplysninger om grad av ytelsen, tidsperiode vedtakene gjelder for og &aring;rsaken til opph&oslash;r dersom ytelsen fra NAV er opph&oslash;rt.</li> <li>Opplysninger fra meldekort om hvor mye du har arbeidet i perioden du mottar arbeidsavklaringspenger, eller opplysninger om arbeidsinntekt dersom du mottar uf&oslash;retrygd.</li> </ul> <p>P&aring; <a href=\"https://www.nav.no/person/personopplysninger/dsop\">nav.no</a> kan du se hvilke personopplysninger NAV har utlevert basert p&aring; ditt samtykke. Opplysninger vil kunne bli utgitt i perioden {fraogmed} &ndash; {tilogmed}.</p>",
+    "nn": "<ul> <li>Opplysninger fra vedtak om arbeidsavklaringspenger og uf&oslash;retrygd, herunder opplysninger om grad av ytelsen, tidsperiode vedtakene gjelder for og &aring;rsaken til opph&oslash;r dersom ytelsen fra NAV er opph&oslash;rt.</li> <li>Opplysninger fra meldekort om hvor mye du har arbeidet i perioden du mottar arbeidsavklaringspenger, eller opplysninger om arbeidsinntekt dersom du mottar uf&oslash;retrygd.</li> </ul> <p>P&aring; <a href=\"https://www.nav.no/person/personopplysninger/dsop\">nav.no</a> kan du se hvilke personopplysninger NAV har utlevert basert p&aring; ditt samtykke. Opplysninger vil kunne bli utgitt i perioden {fraogmed} &ndash; {tilogmed}.</p>"
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "fraogmed": {
-      "Optional": false
+      "optional": false
     },
     "tilogmed": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

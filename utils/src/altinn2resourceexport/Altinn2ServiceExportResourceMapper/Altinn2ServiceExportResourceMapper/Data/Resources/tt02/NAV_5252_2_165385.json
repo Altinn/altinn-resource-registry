@@ -1,69 +1,69 @@
-{
-  "Identifier": "NAV_5252_2",
-  "Version": "1.0",
-  "Title": {
-    "nb": "Opplysninger om uf\u00F8retrygd fra NAV",
-    "en": "Opplysninger om uf\u00F8retrygd fra NAV",
-    "nn": "Opplysninger om uf\u00F8retrygd fra NAV"
+﻿{
+  "identifier": "NAV_5252_2",
+  "version": "1.0",
+  "title": {
+    "nb": "Opplysninger om uføretrygd fra NAV",
+    "en": "Opplysninger om uføretrygd fra NAV",
+    "nn": "Opplysninger om uføretrygd fra NAV"
   },
-  "Description": {
-    "nb": "Opplysninger om uf\u00F8retrygd fra NAV",
-    "en": "Opplysninger om uf\u00F8retrygd fra NAV",
-    "nn": "Opplysninger om uf\u00F8retrygd fra NAV"
+  "description": {
+    "nb": "Opplysninger om uføretrygd fra NAV",
+    "en": "Opplysninger om uføretrygd fra NAV",
+    "nn": "Opplysninger om uføretrygd fra NAV"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5252",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5252",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "165385",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "165385",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "2",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "2",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "889640782",
-    "Orgcode": "NAV"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "889640782",
+    "orgcode": "NAV"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "\u003Ch2\u003EUnder utvikling\u003C/h2\u003E \u003Cul style=\u0022margin-left: 5px;\u0022\u003E \u003Cli\u003EPerioder for vedtak om uf\u00F8retrygd og uf\u00F8repensjon\u003C/li\u003E \u003Cli\u003EOm vedtaket gjelder innvilgelse, avslag, endring, eller opph\u00F8r\u003C/li\u003E \u003Cli\u003EOm du har flyttet til utlandet\u003C/li\u003E \u003Cli\u003EHvilke opplysninger NAV har brukt i beregningen av uf\u00F8retrygd/uf\u00F8repensjon: \u003Cul style=\u0022margin-left: 10px;\u0022\u003E \u003Cli\u003EInntekt f\u00F8r uf\u00F8rhet\u003C/li\u003E \u003Cli\u003EUf\u00F8retidspunkt\u003C/li\u003E \u003Cli\u003EUf\u00F8regrad\u003C/li\u003E \u003Cli\u003EInntekt brukt i avkorting av uf\u00F8retrygden\u003C/li\u003E \u003C/ul\u003E \u003C/li\u003E \u003Cli\u003EOm du har en s\u00F8knad eller klage til behandling\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EVed \u00E5 samtykke, gir du NAV rett til i en periode p\u00E5 tre \u00E5r, \u00E5 gi ut disse opplysningene om vedtak om uf\u00F8retrygd for perioden 01.12.2018 - 30.01.2020.\u003C/p\u003E \u003Cp\u003EP\u00E5 Ditt NAV p\u00E5 nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs\u00E5 se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p\u00E5 ditt samtykke.\u003C/p\u003E",
-    "en": "\u003Ch2\u003EUnder utvikling\u003C/h2\u003E \u003Cul style=\u0022margin-left: 5px;\u0022\u003E \u003Cli\u003EPerioder for vedtak om uf\u00F8retrygd og uf\u00F8repensjon\u003C/li\u003E \u003Cli\u003EOm vedtaket gjelder innvilgelse, avslag, endring, eller opph\u00F8r\u003C/li\u003E \u003Cli\u003EOm du har flyttet til utlandet\u003C/li\u003E \u003Cli\u003EHvilke opplysninger NAV har brukt i beregningen av uf\u00F8retrygd/uf\u00F8repensjon: \u003Cul style=\u0022margin-left: 10px;\u0022\u003E \u003Cli\u003EInntekt f\u00F8r uf\u00F8rhet\u003C/li\u003E \u003Cli\u003EUf\u00F8retidspunkt\u003C/li\u003E \u003Cli\u003EUf\u00F8regrad\u003C/li\u003E \u003Cli\u003EInntekt brukt i avkorting av uf\u00F8retrygden\u003C/li\u003E \u003C/ul\u003E \u003C/li\u003E \u003Cli\u003EOm du har en s\u00F8knad eller klage til behandling\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EVed \u00E5 samtykke, gir du NAV rett til i en periode p\u00E5 tre \u00E5r, \u00E5 gi ut disse opplysningene om vedtak om uf\u00F8retrygd for perioden 01.12.2018 - 30.01.2020.\u003C/p\u003E \u003Cp\u003EP\u00E5 Ditt NAV p\u00E5 nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs\u00E5 se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p\u00E5 ditt samtykke.\u003C/p\u003E",
-    "nn": "\u003Ch2\u003EUnder utvikling\u003C/h2\u003E \u003Cul style=\u0022margin-left: 5px;\u0022\u003E \u003Cli\u003EPerioder for vedtak om uf\u00F8retrygd og uf\u00F8repensjon\u003C/li\u003E \u003Cli\u003EOm vedtaket gjelder innvilgelse, avslag, endring, eller opph\u00F8r\u003C/li\u003E \u003Cli\u003EOm du har flyttet til utlandet\u003C/li\u003E \u003Cli\u003EHvilke opplysninger NAV har brukt i beregningen av uf\u00F8retrygd/uf\u00F8repensjon: \u003Cul style=\u0022margin-left: 10px;\u0022\u003E \u003Cli\u003EInntekt f\u00F8r uf\u00F8rhet\u003C/li\u003E \u003Cli\u003EUf\u00F8retidspunkt\u003C/li\u003E \u003Cli\u003EUf\u00F8regrad\u003C/li\u003E \u003Cli\u003EInntekt brukt i avkorting av uf\u00F8retrygden\u003C/li\u003E \u003C/ul\u003E \u003C/li\u003E \u003Cli\u003EOm du har en s\u00F8knad eller klage til behandling\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EVed \u00E5 samtykke, gir du NAV rett til i en periode p\u00E5 tre \u00E5r, \u00E5 gi ut disse opplysningene om vedtak om uf\u00F8retrygd for perioden 01.12.2018 - 30.01.2020.\u003C/p\u003E \u003Cp\u003EP\u00E5 Ditt NAV p\u00E5 nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs\u00E5 se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p\u00E5 ditt samtykke.\u003C/p\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "<h2>Under utvikling</h2> <ul style=\"margin-left: 5px;\"> <li>Perioder for vedtak om uføretrygd og uførepensjon</li> <li>Om vedtaket gjelder innvilgelse, avslag, endring, eller opphør</li> <li>Om du har flyttet til utlandet</li> <li>Hvilke opplysninger NAV har brukt i beregningen av uføretrygd/uførepensjon: <ul style=\"margin-left: 10px;\"> <li>Inntekt før uførhet</li> <li>Uføretidspunkt</li> <li>Uføregrad</li> <li>Inntekt brukt i avkorting av uføretrygden</li> </ul> </li> <li>Om du har en søknad eller klage til behandling</li> </ul> <p>Ved å samtykke, gir du NAV rett til i en periode på tre år, å gi ut disse opplysningene om vedtak om uføretrygd for perioden 01.12.2018 - 30.01.2020.</p> <p>På Ditt NAV på nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan også se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert på ditt samtykke.</p>",
+    "en": "<h2>Under utvikling</h2> <ul style=\"margin-left: 5px;\"> <li>Perioder for vedtak om uføretrygd og uførepensjon</li> <li>Om vedtaket gjelder innvilgelse, avslag, endring, eller opphør</li> <li>Om du har flyttet til utlandet</li> <li>Hvilke opplysninger NAV har brukt i beregningen av uføretrygd/uførepensjon: <ul style=\"margin-left: 10px;\"> <li>Inntekt før uførhet</li> <li>Uføretidspunkt</li> <li>Uføregrad</li> <li>Inntekt brukt i avkorting av uføretrygden</li> </ul> </li> <li>Om du har en søknad eller klage til behandling</li> </ul> <p>Ved å samtykke, gir du NAV rett til i en periode på tre år, å gi ut disse opplysningene om vedtak om uføretrygd for perioden 01.12.2018 - 30.01.2020.</p> <p>På Ditt NAV på nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan også se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert på ditt samtykke.</p>",
+    "nn": "<h2>Under utvikling</h2> <ul style=\"margin-left: 5px;\"> <li>Perioder for vedtak om uføretrygd og uførepensjon</li> <li>Om vedtaket gjelder innvilgelse, avslag, endring, eller opphør</li> <li>Om du har flyttet til utlandet</li> <li>Hvilke opplysninger NAV har brukt i beregningen av uføretrygd/uførepensjon: <ul style=\"margin-left: 10px;\"> <li>Inntekt før uførhet</li> <li>Uføretidspunkt</li> <li>Uføregrad</li> <li>Inntekt brukt i avkorting av uføretrygden</li> </ul> </li> <li>Om du har en søknad eller klage til behandling</li> </ul> <p>Ved å samtykke, gir du NAV rett til i en periode på tre år, å gi ut disse opplysningene om vedtak om uføretrygd for perioden 01.12.2018 - 30.01.2020.</p> <p>På Ditt NAV på nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan også se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert på ditt samtykke.</p>"
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

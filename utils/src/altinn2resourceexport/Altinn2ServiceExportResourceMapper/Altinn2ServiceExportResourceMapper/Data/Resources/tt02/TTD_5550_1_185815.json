@@ -1,73 +1,73 @@
-{
-  "Identifier": "TTD_5550_1",
-  "Version": "1.0",
-  "Title": {
-    "nb": "Tilgang til \u00E5 hente dine data",
-    "en": "Tilgang til \u00E5 hente dine data",
-    "nn": "Tilgang til \u00E5 hente dine data"
+﻿{
+  "identifier": "TTD_5550_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Tilgang til å hente dine data",
+    "en": "Tilgang til å hente dine data",
+    "nn": "Tilgang til å hente dine data"
   },
-  "Description": {
-    "nb": "Tilgang til \u00E5 hente dine data",
-    "en": "Tilgang til \u00E5 hente dine data",
-    "nn": "Tilgang til \u00E5 hente dine data"
+  "description": {
+    "nb": "Tilgang til å hente dine data",
+    "en": "Tilgang til å hente dine data",
+    "nn": "Tilgang til å hente dine data"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5550",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5550",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "185815",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "185815",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "",
-    "Orgcode": "TTD"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "",
+    "orgcode": "TTD"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": "default",
-  "ConsentText": {
-    "nb": "Dette er en tekst som forklarer hva tjenesten g\u00E5r ut p\u00E5.\u003Cbr\u003E\u003Cbr\u003E  Her \u003Cb\u003Ekan det v\u00E6re HTML\u003C/b\u003E og plassholdere fra samtykkeforesp\u00F8rselen, for eksempel er dette ordet, \u0022{{somevalue}}\u0022.",
-    "en": "Dette er en tekst som forklarer hva tjenesten g\u00E5r ut p\u00E5.\u003Cbr\u003E\u003Cbr\u003E  Her \u003Cb\u003Ekan det v\u00E6re HTML\u003C/b\u003E og plassholdere fra samtykkeforesp\u00F8rselen, for eksempel er dette ordet, \u0022{{somevalue}}\u0022.",
-    "nn": "Dette er en tekst som forklarer hva tjenesten g\u00E5r ut p\u00E5.\u003Cbr\u003E\u003Cbr\u003E  Her \u003Cb\u003Ekan det v\u00E6re HTML\u003C/b\u003E og plassholdere fra samtykkeforesp\u00F8rselen, for eksempel er dette ordet, \u0022{{somevalue}}\u0022."
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Dette er en tekst som forklarer hva tjenesten går ut på.<br><br>  Her <b>kan det være HTML</b> og plassholdere fra samtykkeforespørselen, for eksempel er dette ordet, \"{{somevalue}}\".",
+    "en": "Dette er en tekst som forklarer hva tjenesten går ut på.<br><br>  Her <b>kan det være HTML</b> og plassholdere fra samtykkeforespørselen, for eksempel er dette ordet, \"{{somevalue}}\".",
+    "nn": "Dette er en tekst som forklarer hva tjenesten går ut på.<br><br>  Her <b>kan det være HTML</b> og plassholdere fra samtykkeforespørselen, for eksempel er dette ordet, \"{{somevalue}}\"."
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "{somevalue": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

@@ -1,69 +1,69 @@
-{
-  "Identifier": "TTD_5625_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "TTD_5625_1",
+  "version": "1.0",
+  "title": {
     "nb": "Samtykke helsetjenester",
     "en": "Samtykke helsetjenester",
     "nn": "Samtykke helsetjenester"
   },
-  "Description": {
+  "description": {
     "nb": "Samtykke helsetjenester",
     "en": "Samtykke helsetjenester",
     "nn": "Samtykke helsetjenester"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5625",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5625",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "190461",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "190461",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "",
-    "Orgcode": "TTD"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "",
+    "orgcode": "TTD"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": "default",
-  "ConsentText": {
-    "nb": "N\u00E5r du samtykker godtar du at Br\u00F8nn\u00F8y kommune: \u2022\tBehandler personopplysninger elektronisk og formidler opplysninger til de ansatte som deltar i saksbehandling og tjenesteyting \u2022\tInnhenter n\u00F8dvendig opplysninger fra din fastlege, andre enheter i kommunen eller sykehus \u2022\tInnhenter inntektsopplysninger fra skatte-/likningsmyndighetene for de tjenester det kan kreves egen betalingen for  Du kan n\u00E5r som helst trekke tilbake ditt samtykke jmf ny personvernlovgivning fra 2018. ",
-    "en": "N\u00E5r du samtykker godtar du at Br\u00F8nn\u00F8y kommune: \u2022\tBehandler personopplysninger elektronisk og formidler opplysninger til de ansatte som deltar i saksbehandling og tjenesteyting \u2022\tInnhenter n\u00F8dvendig opplysninger fra din fastlege, andre enheter i kommunen eller sykehus \u2022\tInnhenter inntektsopplysninger fra skatte-/likningsmyndighetene for de tjenester det kan kreves egen betalingen for  Du kan n\u00E5r som helst trekke tilbake ditt samtykke jmf ny personvernlovgivning fra 2018. ",
-    "nn": "N\u00E5r du samtykker godtar du at Br\u00F8nn\u00F8y kommune: \u2022\tBehandler personopplysninger elektronisk og formidler opplysninger til de ansatte som deltar i saksbehandling og tjenesteyting \u2022\tInnhenter n\u00F8dvendig opplysninger fra din fastlege, andre enheter i kommunen eller sykehus \u2022\tInnhenter inntektsopplysninger fra skatte-/likningsmyndighetene for de tjenester det kan kreves egen betalingen for  Du kan n\u00E5r som helst trekke tilbake ditt samtykke jmf ny personvernlovgivning fra 2018. "
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Når du samtykker godtar du at Brønnøy kommune: •\tBehandler personopplysninger elektronisk og formidler opplysninger til de ansatte som deltar i saksbehandling og tjenesteyting •\tInnhenter nødvendig opplysninger fra din fastlege, andre enheter i kommunen eller sykehus •\tInnhenter inntektsopplysninger fra skatte-/likningsmyndighetene for de tjenester det kan kreves egen betalingen for  Du kan når som helst trekke tilbake ditt samtykke jmf ny personvernlovgivning fra 2018. ",
+    "en": "Når du samtykker godtar du at Brønnøy kommune: •\tBehandler personopplysninger elektronisk og formidler opplysninger til de ansatte som deltar i saksbehandling og tjenesteyting •\tInnhenter nødvendig opplysninger fra din fastlege, andre enheter i kommunen eller sykehus •\tInnhenter inntektsopplysninger fra skatte-/likningsmyndighetene for de tjenester det kan kreves egen betalingen for  Du kan når som helst trekke tilbake ditt samtykke jmf ny personvernlovgivning fra 2018. ",
+    "nn": "Når du samtykker godtar du at Brønnøy kommune: •\tBehandler personopplysninger elektronisk og formidler opplysninger til de ansatte som deltar i saksbehandling og tjenesteyting •\tInnhenter nødvendig opplysninger fra din fastlege, andre enheter i kommunen eller sykehus •\tInnhenter inntektsopplysninger fra skatte-/likningsmyndighetene for de tjenester det kan kreves egen betalingen for  Du kan når som helst trekke tilbake ditt samtykke jmf ny personvernlovgivning fra 2018. "
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

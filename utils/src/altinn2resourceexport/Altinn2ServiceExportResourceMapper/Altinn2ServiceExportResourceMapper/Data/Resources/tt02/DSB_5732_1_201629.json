@@ -1,76 +1,76 @@
-{
-  "Identifier": "DSB_5732_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "DSB_5732_1",
+  "version": "1.0",
+  "title": {
     "nb": "Avtale om retur av eksplosiver",
     "en": "Avtale om retur av eksplosiver",
     "nn": "Avtale om retur av eksplosiver"
   },
-  "Description": {
+  "description": {
     "nb": "Avtale om retur av eksplosiver",
     "en": "Avtale om retur av eksplosiver",
     "nn": "Avtale om retur av eksplosiver"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5732",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5732",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "201629",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "201629",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974760983",
-    "Orgcode": "DSB"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974760983",
+    "orgcode": "DSB"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": "simpleconsent",
-  "ConsentText": {
-    "nb": "{returavtalevirksomhet} samtykker til \u00E5 inneha en avtale om retur av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen p\u00E5 et tidspunkt opph\u00F8rer vil vi trekke dette samtykke.",
-    "en": "{returavtalevirksomhet} samtykker til \u00E5 inneha en avtale om retur av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen p\u00E5 et tidspunkt opph\u00F8rer vil vi trekke dette samtykke.",
-    "nn": "{returavtalevirksomhet} samtykker til \u00E5 inneha en avtale om retur av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen p\u00E5 et tidspunkt opph\u00F8rer vil vi trekke dette samtykke."
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "simpleconsent",
+  "consentText": {
+    "nb": "{returavtalevirksomhet} samtykker til å inneha en avtale om retur av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen på et tidspunkt opphører vil vi trekke dette samtykke.",
+    "en": "{returavtalevirksomhet} samtykker til å inneha en avtale om retur av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen på et tidspunkt opphører vil vi trekke dette samtykke.",
+    "nn": "{returavtalevirksomhet} samtykker til å inneha en avtale om retur av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen på et tidspunkt opphører vil vi trekke dette samtykke."
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "returavtalevirksomhet": {
-      "Optional": false
+      "optional": false
     },
     "ervervsokervirksomhet": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

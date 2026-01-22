@@ -1,69 +1,69 @@
-{
-  "Identifier": "ASF_4574_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "ASF_4574_1",
+  "version": "1.0",
+  "title": {
     "nb": "Politiattest",
     "en": "Politiattest",
     "nn": "Politiattest"
   },
-  "Description": {
+  "description": {
     "nb": "Politiattest",
     "en": "Politiattest",
     "nn": "Politiattest"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4574",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "4574",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "105710",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "105710",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974706121",
-    "Orgcode": "ASF"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "En politiattest eller en vandelsattest inneholder opplysninger om en persons oppf\u00F8ringer i politiregistrene. Det kreves politiattest i flere yrker, ogs\u00E5 verv i frivillige organisasjoner.",
-    "en": "En politiattest eller en vandelsattest inneholder opplysninger om en persons oppf\u00F8ringer i politiregistrene. Det kreves politiattest i flere yrker, ogs\u00E5 verv i frivillige organisasjoner.",
-    "nn": "En politiattest eller en vandelsattest inneholder opplysninger om en persons oppf\u00F8ringer i politiregistrene. Det kreves politiattest i flere yrker, ogs\u00E5 verv i frivillige organisasjoner."
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "En politiattest eller en vandelsattest inneholder opplysninger om en persons oppføringer i politiregistrene. Det kreves politiattest i flere yrker, også verv i frivillige organisasjoner.",
+    "en": "En politiattest eller en vandelsattest inneholder opplysninger om en persons oppføringer i politiregistrene. Det kreves politiattest i flere yrker, også verv i frivillige organisasjoner.",
+    "nn": "En politiattest eller en vandelsattest inneholder opplysninger om en persons oppføringer i politiregistrene. Det kreves politiattest i flere yrker, også verv i frivillige organisasjoner."
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

@@ -75,7 +75,7 @@ namespace Altinn2ServiceExportResourceMapper
 
         static void Main(string[] args)
         {
-            string csvFilePath = @"Data\Samtykke_ressurser_tt02.csv";
+            string csvFilePath = @"Data\Samtykke_ressurser.csv";
             
             try
             {
@@ -575,6 +575,14 @@ namespace Altinn2ServiceExportResourceMapper
                 Directory.CreateDirectory(outputDirectory);
             }
 
+            // Configure JSON serializer options for proper UTF-8 encoding
+            var jsonOptions = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
             foreach (var kvp in serviceResources)
             {
                 string serviceKey = kvp.Key;
@@ -585,12 +593,10 @@ namespace Altinn2ServiceExportResourceMapper
                 
                 try
                 {
-                    string json = JsonSerializer.Serialize(serviceResource, new JsonSerializerOptions
-                    {
-                        WriteIndented = true
-                    });
+                    string json = JsonSerializer.Serialize(serviceResource, jsonOptions);
                     
-                    File.WriteAllText(filePath, json);
+                    // Write file with explicit UTF-8 encoding
+                    File.WriteAllText(filePath, json, System.Text.Encoding.UTF8);
                     Console.WriteLine($"Saved service resource: {fileName}");
                 }
                 catch (Exception ex)

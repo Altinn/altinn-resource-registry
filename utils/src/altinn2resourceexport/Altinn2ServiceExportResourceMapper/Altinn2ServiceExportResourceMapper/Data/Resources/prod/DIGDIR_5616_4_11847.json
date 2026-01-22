@@ -1,69 +1,69 @@
-{
-  "Identifier": "DIGDIR_5616_4",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "DIGDIR_5616_4",
+  "version": "1.0",
+  "title": {
     "nb": "Opplysninger fra MVA-registeret",
     "en": "Opplysninger fra MVA-registeret",
     "nn": "Opplysninger fra MVA-registeret"
   },
-  "Description": {
+  "description": {
     "nb": "Opplysninger fra MVA-registeret",
     "en": "Opplysninger fra MVA-registeret",
     "nn": "Opplysninger fra MVA-registeret"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5616",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5616",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "11847",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "11847",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "4",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "991825827",
-    "Orgcode": "DIGDIR"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "991825827",
+    "orgcode": "DIGDIR"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": "poa",
-  "ConsentText": {
-    "nb": "\u003Cul\u003E \u003Cli\u003EF\u00F8rste eller siste termin for mva-melding og type termin\u003C/li\u003E \u003Cli\u003EMerverdiavgift for de siste tre terminene\u003C/li\u003E \u003C/ul\u003E",
-    "en": "\u003Cul\u003E \u003Cli\u003EF\u00F8rste eller siste termin for mva-melding og type termin\u003C/li\u003E \u003Cli\u003EMerverdiavgift for de siste tre terminene\u003C/li\u003E \u003C/ul\u003E",
-    "nn": "\u003Cul\u003E \u003Cli\u003EF\u00F8rste eller siste termin for mva-melding og type termin\u003C/li\u003E \u003Cli\u003EMerverdiavgift for de siste tre terminene\u003C/li\u003E \u003C/ul\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "poa",
+  "consentText": {
+    "nb": "<ul> <li>Første eller siste termin for mva-melding og type termin</li> <li>Merverdiavgift for de siste tre terminene</li> </ul>",
+    "en": "<ul> <li>Første eller siste termin for mva-melding og type termin</li> <li>Merverdiavgift for de siste tre terminene</li> </ul>",
+    "nn": "<ul> <li>Første eller siste termin for mva-melding og type termin</li> <li>Merverdiavgift for de siste tre terminene</li> </ul>"
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

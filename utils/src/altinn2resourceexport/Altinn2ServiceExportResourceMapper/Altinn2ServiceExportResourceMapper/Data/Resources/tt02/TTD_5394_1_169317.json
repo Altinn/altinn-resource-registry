@@ -1,69 +1,69 @@
-{
-  "Identifier": "TTD_5394_1",
-  "Version": "1.0",
-  "Title": {
-    "nb": "UDIR DigiL\u00E6r - Samtykke",
-    "en": "UDIR DigiL\u00E6r - Samtykke",
-    "nn": "UDIR DigiL\u00E6r - Samtykke"
+﻿{
+  "identifier": "TTD_5394_1",
+  "version": "1.0",
+  "title": {
+    "nb": "UDIR DigiLær - Samtykke",
+    "en": "UDIR DigiLær - Samtykke",
+    "nn": "UDIR DigiLær - Samtykke"
   },
-  "Description": {
-    "nb": "UDIR DigiL\u00E6r - Samtykke",
-    "en": "UDIR DigiL\u00E6r - Samtykke",
-    "nn": "UDIR DigiL\u00E6r - Samtykke"
+  "description": {
+    "nb": "UDIR DigiLær - Samtykke",
+    "en": "UDIR DigiLær - Samtykke",
+    "nn": "UDIR DigiLær - Samtykke"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5394",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5394",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "169317",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "169317",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "",
-    "Orgcode": "TTD"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "",
+    "orgcode": "TTD"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
     "nb": "Samtykketekst",
     "en": "Samtykketekst",
     "nn": "Samtykketekst"
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

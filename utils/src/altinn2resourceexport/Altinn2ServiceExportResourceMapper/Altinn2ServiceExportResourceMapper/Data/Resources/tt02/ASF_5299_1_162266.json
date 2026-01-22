@@ -1,73 +1,73 @@
-{
-  "Identifier": "ASF_5299_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "ASF_5299_1",
+  "version": "1.0",
+  "title": {
     "nb": "Restanser hos Skatteetaten",
     "en": "Restanser hos Skatteetaten",
     "nn": "Restanser hos Skatteetaten"
   },
-  "Description": {
+  "description": {
     "nb": "Restanser hos Skatteetaten",
     "en": "Restanser hos Skatteetaten",
     "nn": "Restanser hos Skatteetaten"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5299",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5299",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "162266",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "162266",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974706121",
-    "Orgcode": "ASF"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "Ved \u00E5 samtykke gir du \u003Cstrong\u003E{requestorname}\u003C/strong\u003Etilgang til \u00E5 se opplysniger om eventuelle restanser for skatter og avgifter foretaket har mot Skatteetaten.",
-    "en": "Ved \u00E5 samtykke gir du \u003Cstrong\u003E{requestorname}\u003C/strong\u003Etilgang til \u00E5 se opplysniger om eventuelle restanser for skatter og avgifter foretaket har mot Skatteetaten.",
-    "nn": "Ved \u00E5 samtykke gir du \u003Cstrong\u003E{requestorname}\u003C/strong\u003Etilgang til \u00E5 se opplysniger om eventuelle restanser for skatter og avgifter foretaket har mot Skatteetaten."
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Ved å samtykke gir du <strong>{requestorname}</strong>tilgang til å se opplysniger om eventuelle restanser for skatter og avgifter foretaket har mot Skatteetaten.",
+    "en": "Ved å samtykke gir du <strong>{requestorname}</strong>tilgang til å se opplysniger om eventuelle restanser for skatter og avgifter foretaket har mot Skatteetaten.",
+    "nn": "Ved å samtykke gir du <strong>{requestorname}</strong>tilgang til å se opplysniger om eventuelle restanser for skatter og avgifter foretaket har mot Skatteetaten."
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "requestorname": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

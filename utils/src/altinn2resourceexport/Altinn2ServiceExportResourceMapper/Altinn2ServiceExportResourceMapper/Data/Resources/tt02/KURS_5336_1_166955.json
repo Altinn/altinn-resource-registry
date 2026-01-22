@@ -1,69 +1,69 @@
-{
-  "Identifier": "KURS_5336_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "KURS_5336_1",
+  "version": "1.0",
+  "title": {
     "nb": "STAMI ber om ditt samtykke",
     "en": "STAMI ber om ditt samtykke",
     "nn": "STAMI ber om ditt samtykke"
   },
-  "Description": {
+  "description": {
     "nb": "STAMI ber om ditt samtykke",
     "en": "STAMI ber om ditt samtykke",
     "nn": "STAMI ber om ditt samtykke"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5336",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5336",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "166955",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "166955",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": null,
-    "Orgcode": "KURS"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": null,
+    "orgcode": "KURS"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "\u003Cp\u003ESamtykket gir Virksomheten AS rett til \u0026aring; sende disse data til STAMI:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EDaglig inn- og ut tidspunkt\u003C/li\u003E \u003Cli\u003EStartdato, stillingsprosent\u003C/li\u003E \u003Cli\u003ESivilstand, statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.\u003C/p\u003E \u003Cp\u003ELes mer her:\u0026nbsp;\u003Ca href=\u0022https://www.stami.no\u0022\u003E\u003Cu\u003EInformasjon om A-TID\u003C/u\u003E\u003C/a\u003E\u003C/p\u003E",
-    "en": "\u003Cp\u003ESamtykket gir Virksomheten AS rett til \u0026aring; sende disse data til STAMI:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EDaglig inn- og ut tidspunkt\u003C/li\u003E \u003Cli\u003EStartdato, stillingsprosent\u003C/li\u003E \u003Cli\u003ESivilstand, statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.\u003C/p\u003E \u003Cp\u003ELes mer her:\u0026nbsp;\u003Ca href=\u0022https://www.stami.no\u0022\u003E\u003Cu\u003EInformasjon om A-TID\u003C/u\u003E\u003C/a\u003E\u003C/p\u003E",
-    "nn": "\u003Cp\u003ESamtykket gir Virksomheten AS rett til \u0026aring; sende disse data til STAMI:\u003C/p\u003E \u003Cul\u003E \u003Cli\u003EF\u0026oslash;dselsnummer (kryptert)\u003C/li\u003E \u003Cli\u003EDaglig inn- og ut tidspunkt\u003C/li\u003E \u003Cli\u003EStartdato, stillingsprosent\u003C/li\u003E \u003Cli\u003ESivilstand, statsborgerskap\u003C/li\u003E \u003C/ul\u003E \u003Cp\u003EDu kan n\u0026aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.\u003C/p\u003E \u003Cp\u003ELes mer her:\u0026nbsp;\u003Ca href=\u0022https://www.stami.no\u0022\u003E\u003Cu\u003EInformasjon om A-TID\u003C/u\u003E\u003C/a\u003E\u003C/p\u003E"
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "<p>Samtykket gir Virksomheten AS rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Daglig inn- og ut tidspunkt</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand, statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.</p> <p>Les mer her:&nbsp;<a href=\"https://www.stami.no\"><u>Informasjon om A-TID</u></a></p>",
+    "en": "<p>Samtykket gir Virksomheten AS rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Daglig inn- og ut tidspunkt</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand, statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.</p> <p>Les mer her:&nbsp;<a href=\"https://www.stami.no\"><u>Informasjon om A-TID</u></a></p>",
+    "nn": "<p>Samtykket gir Virksomheten AS rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Daglig inn- og ut tidspunkt</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand, statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.</p> <p>Les mer her:&nbsp;<a href=\"https://www.stami.no\"><u>Informasjon om A-TID</u></a></p>"
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

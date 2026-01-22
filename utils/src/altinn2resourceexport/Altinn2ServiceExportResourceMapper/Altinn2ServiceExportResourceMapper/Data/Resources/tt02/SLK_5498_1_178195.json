@@ -1,69 +1,69 @@
-{
-  "Identifier": "SLK_5498_1",
-  "Version": "1.0",
-  "Title": {
-    "nb": "L\u00E5nesaldo fra L\u00E5nekassen",
-    "en": "L\u00E5nesaldo fra L\u00E5nekassen",
-    "nn": "L\u00E5nesaldo fra L\u00E5nekassen"
+﻿{
+  "identifier": "SLK_5498_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Lånesaldo fra Lånekassen",
+    "en": "Lånesaldo fra Lånekassen",
+    "nn": "Lånesaldo fra Lånekassen"
   },
-  "Description": {
-    "nb": "L\u00E5nesaldo fra L\u00E5nekassen",
-    "en": "L\u00E5nesaldo fra L\u00E5nekassen",
-    "nn": "L\u00E5nesaldo fra L\u00E5nekassen"
+  "description": {
+    "nb": "Lånesaldo fra Lånekassen",
+    "en": "Lånesaldo fra Lånekassen",
+    "nn": "Lånesaldo fra Lånekassen"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "5498",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "5498",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "178195",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "178195",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "960885406",
-    "Orgcode": "SLK"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "960885406",
+    "orgcode": "SLK"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
     "nb": "Test (tekst som forklarer hva brukeren samtykker til)",
     "en": "Test (tekst som forklarer hva brukeren samtykker til)",
     "nn": "Test (tekst som forklarer hva brukeren samtykker til)"
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

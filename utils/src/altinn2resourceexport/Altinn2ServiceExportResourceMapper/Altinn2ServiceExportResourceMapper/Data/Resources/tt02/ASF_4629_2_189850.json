@@ -1,73 +1,73 @@
-{
-  "Identifier": "ASF_4629_2",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "ASF_4629_2",
+  "version": "1.0",
+  "title": {
     "en": "Summarized tax base from the Tax Administration",
     "nb": "Summert skattegrunnlag fra Skatteetaten",
     "nn": "Skattegrunnlag "
   },
-  "Description": {
+  "description": {
     "en": "Summarized tax base from the Tax Administration",
     "nb": "Summert skattegrunnlag fra Skatteetaten",
     "nn": "Skattegrunnlag "
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4629",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "4629",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "189850",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "189850",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "2",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "2",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974706121",
-    "Orgcode": "ASF"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": "default",
-  "ConsentText": {
-    "en": "(Engelsk) Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.\u003Cbr /\u003E\u003Cbr/\u003E \u003Cul\u003E \u003Cli\u003E Inntekt\u003Cbr /\u003E \u003Cli\u003E Skattefradrag\u003Cbr /\u003E \u003Cli\u003E Formue (inkl bolig, bil og andre verdier)\u003Cbr /\u003E \u003Cli\u003E Gjeld\u003Cbr /\u003E \u003C/ul\u003E  ",
-    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.\u003Cbr /\u003E\u003Cbr/\u003E \u003Cul\u003E \u003Cli\u003E Inntekt\u003Cbr /\u003E \u003Cli\u003E Skattefradrag\u003Cbr /\u003E \u003Cli\u003E Formue (inkl bolig, bil og andre verdier)\u003Cbr /\u003E \u003Cli\u003E Gjeld\u003Cbr /\u003E \u003C/ul\u003E ",
-    "nn": "(Nynorsk) Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.\u003Cbr /\u003E\u003Cbr/\u003E \u003Cul\u003E \u003Cli\u003E Inntekt\u003Cbr /\u003E \u003Cli\u003E Skattefradrag\u003Cbr /\u003E \u003Cli\u003E Formue (inkl bolig, bil og andre verdier)\u003Cbr /\u003E \u003Cli\u003E Gjeld\u003Cbr /\u003E \u003C/ul\u003E  "
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "en": "(Engelsk) Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil og andre verdier)<br /> <li> Gjeld<br /> </ul>  ",
+    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil og andre verdier)<br /> <li> Gjeld<br /> </ul> ",
+    "nn": "(Nynorsk) Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil og andre verdier)<br /> <li> Gjeld<br /> </ul>  "
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "inntektsaar": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

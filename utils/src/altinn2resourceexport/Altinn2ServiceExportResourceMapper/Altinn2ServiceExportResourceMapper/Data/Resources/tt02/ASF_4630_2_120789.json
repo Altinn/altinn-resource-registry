@@ -1,69 +1,69 @@
-{
-  "Identifier": "ASF_4630_2",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "ASF_4630_2",
+  "version": "1.0",
+  "title": {
     "nb": "Inntektsopplysninger",
     "en": "Inntektsopplysninger",
     "nn": "Inntektsopplysninger"
   },
-  "Description": {
+  "description": {
     "nb": "Inntektsopplysninger",
     "en": "Inntektsopplysninger",
     "nn": "Inntektsopplysninger"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4630",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "4630",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "120789",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "120789",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "2",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "2",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974706121",
-    "Orgcode": "ASF"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "Opplysningene som utleveres er rapportert til Skatteetaten fra din arbeidsgiver eller andre opplysningspliktige. Dette vil v\u00E6re informasjon om inntekter som l\u00F8nn, pensjon, trygd og andre ytelser fra det offentlige. Det kan ogs\u00E5 v\u00E6re n\u00E6ringsinntekt. Det gis i tillegg opplysninger om skattefradrag og forskuddstrekk.                                                                                                                                                                                                                                                 Opplysningene gjelder for perioden fra 11/2016 til 1/2017.                                                                                                                                                                                                                                                         Du oppfordres til \u00E5 benytte innsynsl\u00F8sningen for \u00E5 kontrollere om opplysningene er korrekte. Dersom du finner feil i de rapporterte opplysningene, m\u00E5 du kontakte arbeidsgiver for korrigering og informere banken der du s\u00F8ker l\u00E5n.",
-    "en": "Opplysningene som utleveres er rapportert til Skatteetaten fra din arbeidsgiver eller andre opplysningspliktige. Dette vil v\u00E6re informasjon om inntekter som l\u00F8nn, pensjon, trygd og andre ytelser fra det offentlige. Det kan ogs\u00E5 v\u00E6re n\u00E6ringsinntekt. Det gis i tillegg opplysninger om skattefradrag og forskuddstrekk.                                                                                                                                                                                                                                                 Opplysningene gjelder for perioden fra 11/2016 til 1/2017.                                                                                                                                                                                                                                                         Du oppfordres til \u00E5 benytte innsynsl\u00F8sningen for \u00E5 kontrollere om opplysningene er korrekte. Dersom du finner feil i de rapporterte opplysningene, m\u00E5 du kontakte arbeidsgiver for korrigering og informere banken der du s\u00F8ker l\u00E5n.",
-    "nn": "Opplysningene som utleveres er rapportert til Skatteetaten fra din arbeidsgiver eller andre opplysningspliktige. Dette vil v\u00E6re informasjon om inntekter som l\u00F8nn, pensjon, trygd og andre ytelser fra det offentlige. Det kan ogs\u00E5 v\u00E6re n\u00E6ringsinntekt. Det gis i tillegg opplysninger om skattefradrag og forskuddstrekk.                                                                                                                                                                                                                                                 Opplysningene gjelder for perioden fra 11/2016 til 1/2017.                                                                                                                                                                                                                                                         Du oppfordres til \u00E5 benytte innsynsl\u00F8sningen for \u00E5 kontrollere om opplysningene er korrekte. Dersom du finner feil i de rapporterte opplysningene, m\u00E5 du kontakte arbeidsgiver for korrigering og informere banken der du s\u00F8ker l\u00E5n."
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Opplysningene som utleveres er rapportert til Skatteetaten fra din arbeidsgiver eller andre opplysningspliktige. Dette vil være informasjon om inntekter som lønn, pensjon, trygd og andre ytelser fra det offentlige. Det kan også være næringsinntekt. Det gis i tillegg opplysninger om skattefradrag og forskuddstrekk.                                                                                                                                                                                                                                                 Opplysningene gjelder for perioden fra 11/2016 til 1/2017.                                                                                                                                                                                                                                                         Du oppfordres til å benytte innsynsløsningen for å kontrollere om opplysningene er korrekte. Dersom du finner feil i de rapporterte opplysningene, må du kontakte arbeidsgiver for korrigering og informere banken der du søker lån.",
+    "en": "Opplysningene som utleveres er rapportert til Skatteetaten fra din arbeidsgiver eller andre opplysningspliktige. Dette vil være informasjon om inntekter som lønn, pensjon, trygd og andre ytelser fra det offentlige. Det kan også være næringsinntekt. Det gis i tillegg opplysninger om skattefradrag og forskuddstrekk.                                                                                                                                                                                                                                                 Opplysningene gjelder for perioden fra 11/2016 til 1/2017.                                                                                                                                                                                                                                                         Du oppfordres til å benytte innsynsløsningen for å kontrollere om opplysningene er korrekte. Dersom du finner feil i de rapporterte opplysningene, må du kontakte arbeidsgiver for korrigering og informere banken der du søker lån.",
+    "nn": "Opplysningene som utleveres er rapportert til Skatteetaten fra din arbeidsgiver eller andre opplysningspliktige. Dette vil være informasjon om inntekter som lønn, pensjon, trygd og andre ytelser fra det offentlige. Det kan også være næringsinntekt. Det gis i tillegg opplysninger om skattefradrag og forskuddstrekk.                                                                                                                                                                                                                                                 Opplysningene gjelder for perioden fra 11/2016 til 1/2017.                                                                                                                                                                                                                                                         Du oppfordres til å benytte innsynsløsningen for å kontrollere om opplysningene er korrekte. Dersom du finner feil i de rapporterte opplysningene, må du kontakte arbeidsgiver for korrigering og informere banken der du søker lån."
   },
-  "ConsentMetadata": {},
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

@@ -1,76 +1,76 @@
-{
-  "Identifier": "SKD_4804_170223",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "SKD_4804_170223",
+  "version": "1.0",
+  "title": {
     "nb": "Inntektsopplysninger",
     "en": "Inntektsopplysninger",
     "nn": "Inntektsopplysninger"
   },
-  "Description": {
+  "description": {
     "nb": "Inntektsopplysninger",
     "en": "Inntektsopplysninger",
     "nn": "Inntektsopplysninger"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4804",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "4804",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "132700",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "132700",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "170223",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "170223",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974761076",
-    "Orgcode": "SKD"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974761076",
+    "orgcode": "SKD"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
-    "nb": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt l\u00F8nn eller ytelser, i perioden {fraogmed} til {tilogmed}:\u003Cbr\u003E \u2022 Utbetalt l\u00F8nn, n\u00E6ringsinntekt \u003Cbr\u003E \u2022 Pensjon \u003Cbr\u003E \u2022 Trygd eller ytelser\u003Cbr\u003E \u2022 Skattefradrag og forskuddstrekk\u003Cbr\u003E \u003Cbr\u003E Her kan du se inntektsopplysningene Skatteetaten har om deg \u003Ca href=\u0022http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\u0022 target=\u0022_blank\u0022\u003EMine inntekter og arbeidsforhold\u003C/a\u003E.",
-    "en": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt l\u00F8nn eller ytelser, i perioden {fraogmed} til {tilogmed}:\u003Cbr\u003E \u2022 Utbetalt l\u00F8nn, n\u00E6ringsinntekt \u003Cbr\u003E \u2022 Pensjon \u003Cbr\u003E \u2022 Trygd eller ytelser\u003Cbr\u003E \u2022 Skattefradrag og forskuddstrekk\u003Cbr\u003E \u003Cbr\u003E Her kan du se inntektsopplysningene Skatteetaten har om deg \u003Ca href=\u0022http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\u0022 target=\u0022_blank\u0022\u003EMine inntekter og arbeidsforhold\u003C/a\u003E.",
-    "nn": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt l\u00F8nn eller ytelser, i perioden {fraogmed} til {tilogmed}:\u003Cbr\u003E \u2022 Utbetalt l\u00F8nn, n\u00E6ringsinntekt \u003Cbr\u003E \u2022 Pensjon \u003Cbr\u003E \u2022 Trygd eller ytelser\u003Cbr\u003E \u2022 Skattefradrag og forskuddstrekk\u003Cbr\u003E \u003Cbr\u003E Her kan du se inntektsopplysningene Skatteetaten har om deg \u003Ca href=\u0022http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\u0022 target=\u0022_blank\u0022\u003EMine inntekter og arbeidsforhold\u003C/a\u003E."
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt lønn eller ytelser, i perioden {fraogmed} til {tilogmed}:<br> • Utbetalt lønn, næringsinntekt <br> • Pensjon <br> • Trygd eller ytelser<br> • Skattefradrag og forskuddstrekk<br> <br> Her kan du se inntektsopplysningene Skatteetaten har om deg <a href=\"http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\" target=\"_blank\">Mine inntekter og arbeidsforhold</a>.",
+    "en": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt lønn eller ytelser, i perioden {fraogmed} til {tilogmed}:<br> • Utbetalt lønn, næringsinntekt <br> • Pensjon <br> • Trygd eller ytelser<br> • Skattefradrag og forskuddstrekk<br> <br> Her kan du se inntektsopplysningene Skatteetaten har om deg <a href=\"http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\" target=\"_blank\">Mine inntekter og arbeidsforhold</a>.",
+    "nn": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt lønn eller ytelser, i perioden {fraogmed} til {tilogmed}:<br> • Utbetalt lønn, næringsinntekt <br> • Pensjon <br> • Trygd eller ytelser<br> • Skattefradrag og forskuddstrekk<br> <br> Her kan du se inntektsopplysningene Skatteetaten har om deg <a href=\"http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\" target=\"_blank\">Mine inntekter og arbeidsforhold</a>."
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "fraogmed": {
-      "Optional": false
+      "optional": false
     },
     "tilogmed": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": true,
-  "VersionId": 0
+  "isOneTimeConsent": true,
+  "versionId": 0
 }

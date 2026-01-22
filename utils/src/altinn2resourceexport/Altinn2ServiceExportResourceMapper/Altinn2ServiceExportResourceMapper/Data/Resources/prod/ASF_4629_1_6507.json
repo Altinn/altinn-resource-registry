@@ -1,73 +1,73 @@
-{
-  "Identifier": "ASF_4629_1",
-  "Version": "1.0",
-  "Title": {
+﻿{
+  "identifier": "ASF_4629_1",
+  "version": "1.0",
+  "title": {
     "en": "Data from Skatteetaten - English version",
     "nb": "Ligningsdata fra Skatteetaten TEST",
-    "nn": "Likningsdata fr\u00E5 Skatteetaten - Nynorsk versjon"
+    "nn": "Likningsdata frå Skatteetaten - Nynorsk versjon"
   },
-  "Description": {
+  "description": {
     "en": "Data from Skatteetaten - English version",
     "nb": "Ligningsdata fra Skatteetaten TEST",
-    "nn": "Likningsdata fr\u00E5 Skatteetaten - Nynorsk versjon"
+    "nn": "Likningsdata frå Skatteetaten - Nynorsk versjon"
   },
-  "RightDescription": null,
-  "Homepage": null,
-  "Status": "Discontinued",
-  "Spatial": null,
-  "ContactPoints": [
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
     {
-      "Category": "Support",
-      "Email": "servicedesk@altinn.no",
-      "Telephone": null,
-      "ContactPage": null
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
     }
   ],
-  "Produces": null,
-  "IsPartOf": null,
-  "ThematicAreas": null,
-  "ResourceReferences": [
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "4629",
-      "ReferenceType": "ServiceEditionCode"
+      "referenceSource": "Altinn2",
+      "reference": "4629",
+      "referenceType": "ServiceEditionCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "6507",
-      "ReferenceType": "ServiceCode"
+      "referenceSource": "Altinn2",
+      "reference": "6507",
+      "referenceType": "ServiceCode"
     },
     {
-      "ReferenceSource": "Altinn2",
-      "Reference": "1",
-      "ReferenceType": "ServiceEditionVersion"
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionVersion"
     }
   ],
-  "Delegable": false,
-  "Visible": false,
-  "HasCompetentAuthority": {
-    "Name": {},
-    "Organization": "974706121",
-    "Orgcode": "ASF"
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
   },
-  "Keywords": null,
-  "AccessListMode": "Disabled",
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
-  "ResourceType": "Consent",
-  "AvailableForType": null,
-  "AuthorizationReference": null,
-  "ConsentTemplate": null,
-  "ConsentText": {
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
     "en": "The information is reported in connection with tax release (tax return) {inntektsaar}",
-    "nb": "Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.\u003Cbr /\u003E\u003Cbr/\u003E \u003Cul\u003E \u003Cli\u003E Inntekt\u003Cbr /\u003E \u003Cli\u003E Skattefradrag\u003Cbr /\u003E \u003Cli\u003E Formue (inkl bolig, bil mm)\u003Cbr /\u003E \u003Cli\u003E Gjeld\u003Cbr /\u003E \u003C/ul\u003E\u003Cbr/\u003E Test lenke \u003Ca href=\u0022http://www.altinn.no\u0022 target=\u0022_blank\u0022\u003EAltinn.\u003C/a\u003E",
+    "nb": "Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul><br/> Test lenke <a href=\"http://www.altinn.no\" target=\"_blank\">Altinn.</a>",
     "nn": "Opplysningane som vert utlevert er rapportert i samband med skattemeldinga (selvangivelsen) {inntektsaar}"
   },
-  "ConsentMetadata": {
+  "consentMetadata": {
     "inntektsaar": {
-      "Optional": false
+      "optional": false
     }
   },
-  "IsOneTimeConsent": false,
-  "VersionId": 0
+  "isOneTimeConsent": false,
+  "versionId": 0
 }

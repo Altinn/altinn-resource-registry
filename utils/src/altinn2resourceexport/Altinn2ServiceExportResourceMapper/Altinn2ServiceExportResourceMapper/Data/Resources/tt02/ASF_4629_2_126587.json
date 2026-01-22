@@ -34,12 +34,12 @@
     },
     {
       "referenceSource": "Altinn2",
-      "reference": "126587",
+      "reference": "2",
       "referenceType": "ServiceEditionCode"
     },
     {
       "referenceSource": "Altinn2",
-      "reference": "2",
+      "reference": "126587",
       "referenceType": "ServiceEditionVersion"
     }
   ],

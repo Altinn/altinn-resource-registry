@@ -158,7 +158,7 @@ namespace Altinn2ServiceExportResourceMapper
                         {
                             ReferenceSource = Altinn.ResourceRegistry.Core.Enums.ReferenceSource.Altinn2,
                             ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceEditionCode,
-                            Reference = resource.ServiceEditionVersionId.ToString()
+                            Reference = resource.ServiceEditionCode.ToString()
                         };
                         resourceReferences.Add(resourceReference);
                     }
@@ -169,7 +169,7 @@ namespace Altinn2ServiceExportResourceMapper
                         {
                             ReferenceSource = Altinn.ResourceRegistry.Core.Enums.ReferenceSource.Altinn2,
                             ReferenceType = Altinn.ResourceRegistry.Core.Enums.ReferenceType.ServiceEditionVersion,
-                            Reference = resource.ServiceEditionCode.ToString()
+                            Reference = resource.ServiceEditionVersionId.ToString()
                         };
                         resourceReferences.Add(resourceReference);
                     }

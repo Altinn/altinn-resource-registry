@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "brg_5065_1111",
+  "version": "1.0",
+  "title": {
+    "nb": "BRG engangssamtykke",
+    "en": "BRG engangssamtykke",
+    "nn": "BRG engangssamtykke"
+  },
+  "description": {
+    "nb": "BRG engangssamtykke",
+    "en": "BRG engangssamtykke",
+    "nn": "BRG engangssamtykke"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5065",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1111",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "101",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974760673",
+    "orgcode": "BRG"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "nb": "Da er det bare å gi samtykke  Denne tjenesten tilhører til BRG Dette er en engangssamtykke",
+    "en": "Da er det bare å gi samtykke  Denne tjenesten tilhører til BRG Dette er en engangssamtykke",
+    "nn": "Da er det bare å gi samtykke  Denne tjenesten tilhører til BRG Dette er en engangssamtykke"
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": true,
+  "versionId": 0
+}

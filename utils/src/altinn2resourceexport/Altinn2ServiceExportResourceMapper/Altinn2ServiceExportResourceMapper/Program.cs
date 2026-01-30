@@ -75,7 +75,7 @@ namespace Altinn2ServiceExportResourceMapper
 
         static void Main(string[] args)
         {
-            string csvFilePath = @"Data\Samtykke_ressurser_tt02.csv";
+            string csvFilePath = @"Data\samtykke_ressurser_at23.csv";
             
             try
             {

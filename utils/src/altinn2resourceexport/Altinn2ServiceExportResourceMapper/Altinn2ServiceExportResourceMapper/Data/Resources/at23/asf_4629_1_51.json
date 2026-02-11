@@ -1,0 +1,73 @@
+﻿{
+  "identifier": "asf_4629_1",
+  "version": "1.0",
+  "title": {
+    "en": "Data from Skatteetaten - English version",
+    "nb": "Ligningsdata fra Skatteetaten TEST",
+    "nn": "Likningsdata frå Skatteetaten - Nynorsk versjon"
+  },
+  "description": {
+    "en": "Data from Skatteetaten - English version",
+    "nb": "Ligningsdata fra Skatteetaten TEST",
+    "nn": "Likningsdata frå Skatteetaten - Nynorsk versjon"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4629",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "51",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "en": "The information is reported in connection with tax release (tax return) {inntektsaar}",
+    "nb": "Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul><br/> Test lenke <a href=\"http://www.altinn.no\" target=\"_blank\">Altinn.</a>",
+    "nn": "Opplysningane som vert utlevert er rapportert i samband med skattemeldinga (selvangivelsen) {inntektsaar}"
+  },
+  "consentMetadata": {
+    "inntektsaar": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

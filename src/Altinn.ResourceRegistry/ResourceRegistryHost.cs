@@ -61,6 +61,7 @@ internal static class ResourceRegistryHost
         services.AddTransient<ISigningCredentialsResolver, SigningCredentialsResolver>();
         services.AddSingleton<IAuthorizationHandler, AccessTokenHandler>();
         services.AddSingleton<IPublicSigningKeyProvider, PublicSigningKeyProvider>(); 
+        services.AddSingleton<IConsentTemplatesService, ConsentTemplatesService>(); 
         services.Configure<PlatformSettings>(config.GetSection("PlatformSettings"));
         services.Configure<ResourceRegistrySettings>(config.GetSection("ResourceRegistrySettings"));
         services.Configure<OidcProviderSettings>(config.GetSection("OidcProviders"));
@@ -86,6 +87,7 @@ internal static class ResourceRegistryHost
 
         services.AddUrnSwaggerSupport();
         services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
+        services.AddHttpClient<IConsentTemplatesClient, ConsentTemplatesClient>();
         services.AddHttpClient<IOrgListClient, OrgListClient>();
         services.AddHttpClient<IAltinn2Services, Altinn2ServicesClient>();
         services.AddHttpClient<IApplications, ApplicationsClient>();

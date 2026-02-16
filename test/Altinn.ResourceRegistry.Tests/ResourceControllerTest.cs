@@ -326,9 +326,9 @@ namespace Altinn.ResourceRegistry.Tests
                 {
                     new ()
                     {
-                        ReferenceSource = ReferenceSource.Altinn2,
+                        ReferenceSource = ReferenceSource.Altinn3,
                         ReferenceType = ReferenceType.ApplicationId,
-                        Reference = "altinn:skd/flyttemelding"
+                        Reference = "skd/flyttemelding"
                     }
                 },
                 Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },

@@ -190,7 +190,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             static bool IsInvalidAppResourceReferences(ServiceResource serviceResource)
             {
                 string prefix = $"{ResourceConstants.APPLICATION_RESOURCE_PREFIX}{serviceResource.HasCompetentAuthority.Orgcode}_";
-                string appName = serviceResource.Identifier.Substring(prefix.Length);
+                string appName = serviceResource.Identifier.Replace(prefix, string.Empty);
                 if (serviceResource.ResourceType == ResourceType.AltinnApp
                     && (serviceResource.ResourceReferences == null
                     || !serviceResource.ResourceReferences.Any()

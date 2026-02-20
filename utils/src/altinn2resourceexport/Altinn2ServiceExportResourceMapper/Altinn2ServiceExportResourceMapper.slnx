@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../../../../src/Altinn.ResourceRegistry.Core/Altinn.ResourceRegistry.Core.csproj" />
+  <Project Path="Altinn2ServiceExportResourceMapper/Altinn2ServiceExportResourceMapper.csproj" />
+</Solution>

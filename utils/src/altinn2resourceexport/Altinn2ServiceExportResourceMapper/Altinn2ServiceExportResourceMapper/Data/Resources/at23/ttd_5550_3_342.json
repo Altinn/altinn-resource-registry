@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": "default_nomessage",
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Dette er en tekst som forklarer hva tjenesten går ut på.<br><br>  Her <b>kan det være HTML</b> og plassholdere fra samtykkeforespørselen, for eksempel er dette ordet, \"{{somevalue}}\".",
     "en": "Dette er en tekst som forklarer hva tjenesten går ut på.<br><br>  Her <b>kan det være HTML</b> og plassholdere fra samtykkeforespørselen, for eksempel er dette ordet, \"{{somevalue}}\".",

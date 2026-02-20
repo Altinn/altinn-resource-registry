@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": "simpleconsent",
+"consentTemplate": "samtykkemal_simpleconsent",
   "consentText": {
     "en": "Enkeltsamtykke test english text",
     "nb": "Enkelt samtykke test",

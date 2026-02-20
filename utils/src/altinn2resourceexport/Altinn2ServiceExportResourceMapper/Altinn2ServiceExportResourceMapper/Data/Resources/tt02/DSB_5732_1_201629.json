@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": "simpleconsent",
+"consentTemplate": "samtykkemal_simpleconsent",
   "consentText": {
     "nb": "{returavtalevirksomhet} samtykker til å inneha en avtale om retur av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen på et tidspunkt opphører vil vi trekke dette samtykke.",
     "en": "{returavtalevirksomhet} samtykker til å inneha en avtale om retur av eksplosiver med {ervervsokervirksomhet}. Hvis avtalen på et tidspunkt opphører vil vi trekke dette samtykke.",

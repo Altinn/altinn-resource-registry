@@ -18,9 +18,9 @@ public class InternalScopeOrAccessTokenRequirement : IAccessTokenRequirement, IS
     /// <summary>
     /// Initializes a new instance of the <see cref="InternalScopeOrAccessTokenRequirement"/> class with the given scope.
     /// </summary>
-    public InternalScopeOrAccessTokenRequirement(string scope)
+    public InternalScopeOrAccessTokenRequirement(string issuer, string scope)
     {
-        ApprovedIssuers = Array.Empty<string>();
+        ApprovedIssuers = new string[] { issuer };
         Scope = new string[] { scope };
     }
 

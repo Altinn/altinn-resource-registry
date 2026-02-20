@@ -110,7 +110,7 @@ internal static class ResourceRegistryHost
             .AddPolicy(AuthzConstants.POLICY_PLATFORM_COMPONENT_ONLY, policy =>
                 policy.Requirements.Add(new AccessTokenRequirement("platform")))
             .AddPolicy(AuthzConstants.POLICY_INTERNAL_OR_PLATFORM, policy =>
-                policy.Requirements.Add(new InternalScopeOrAccessTokenRequirement("altinn:resourceregistry/resource.admin")))
+                policy.Requirements.Add(new InternalScopeOrAccessTokenRequirement("platform", "altinn:resourceregistry/resource.admin")))
             .AddPolicy(AuthzConstants.POLICY_STUDIO_DESIGNER, policy => policy.Requirements.Add(new ClaimAccessRequirement("urn:altinn:app", "studio.designer")));
 
         services.AddResourceRegistryAuthorizationHandlers();

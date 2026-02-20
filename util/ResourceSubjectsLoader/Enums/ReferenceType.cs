@@ -27,5 +27,8 @@ namespace ResourceSubjectsLoader.Enums
 
         [EnumMember(Value = "ApplicationId")]
         ApplicationId = 6,
+
+        [EnumMember(Value = "ServiceEditionVersion")]
+        ServiceEditionVersion = 7,
     }
 }

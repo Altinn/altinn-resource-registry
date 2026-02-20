@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Samtykket gir Skatteetaten tillatelse til å gi elektronisk tilgang til opplysninger om din inntekt, fradrag, formue og gjeld for 2016.",
     "en": "Samtykket gir Skatteetaten tillatelse til å gi elektronisk tilgang til opplysninger om din inntekt, fradrag, formue og gjeld for 2016.",

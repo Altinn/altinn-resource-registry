@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "<p>Samtykket gir Virksomheten AS rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Daglig inn- og ut tidspunkt</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand, statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.</p> <p>Les mer her:&nbsp;<a href=\"https://www.stami.no\"><u>Informasjon om A-TID</u></a></p>",
     "en": "<p>Samtykket gir Virksomheten AS rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Daglig inn- og ut tidspunkt</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand, statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Registeret har strengest mulig personvernkontroll.</p> <p>Les mer her:&nbsp;<a href=\"https://www.stami.no\"><u>Informasjon om A-TID</u></a></p>",

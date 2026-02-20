@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "En politiattest eller en vandelsattest inneholder opplysninger om en persons oppføringer i politiregistrene. Det kreves politiattest i flere yrker, også verv i frivillige organisasjoner.",
     "en": "En politiattest eller en vandelsattest inneholder opplysninger om en persons oppføringer i politiregistrene. Det kreves politiattest i flere yrker, også verv i frivillige organisasjoner.",

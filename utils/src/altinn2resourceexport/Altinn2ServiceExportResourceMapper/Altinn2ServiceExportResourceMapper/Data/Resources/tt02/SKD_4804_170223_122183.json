@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Opplysninger  for perioden fra <{fraogmed}> til <{tilogmed}>   Opplysningene er rapportert av arbeidsgiver eller andre som er  opplysningspliktige. For å se alt som er innrapportert gå til  https://skatt-at.sits.no/web/innsynamelding/   Utleveres: •Utbetalt lønn •Skattefradrag og forskuddstrekk •Utbetalte ytelser fra det offentlige, som foreldrepenger, osv.  •Utbetalt pensjon eller trygd. •Næringsinntekt når rapporteringspliktig Utleveres ikke: •opplysninger om selve arbeidsforholdet (stillingsprosent osv.) ",
     "en": "Opplysninger  for perioden fra <{fraogmed}> til <{tilogmed}>   Opplysningene er rapportert av arbeidsgiver eller andre som er  opplysningspliktige. For å se alt som er innrapportert gå til  https://skatt-at.sits.no/web/innsynamelding/   Utleveres: •Utbetalt lønn •Skattefradrag og forskuddstrekk •Utbetalte ytelser fra det offentlige, som foreldrepenger, osv.  •Utbetalt pensjon eller trygd. •Næringsinntekt når rapporteringspliktig Utleveres ikke: •opplysninger om selve arbeidsforholdet (stillingsprosent osv.) ",

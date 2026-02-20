@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "en": "<ul> <li>Information from decisions concerning work assessment allowance and disability pension, including information about the level of benefit, the time period the decisions apply to, and the reason for termination if the benefit from NAV has ceased.</li> <li>Information from the employment status form about how much time you worked during the period for which you received work assessment allowance or information about employment income if you receive disability pension.</li> </ul> <p>You can see the personal data NAV has disclosed based on your consent at <a href=\"https://www.nav.no/person/personopplysninger/dsop\">nav.no</a>. Information may be released during the period {fraogmed} &ndash; {tilogmed}.</p>",
     "nb": "<ul> <li>Opplysninger fra vedtak om arbeidsavklaringspenger og uf&oslash;retrygd, herunder opplysninger om grad av ytelsen, tidsperiode vedtakene gjelder for og &aring;rsaken til opph&oslash;r dersom ytelsen fra NAV er opph&oslash;rt.</li> <li>Opplysninger fra meldekort om hvor mye du har arbeidet i perioden du mottar arbeidsavklaringspenger, eller opplysninger om arbeidsinntekt dersom du mottar uf&oslash;retrygd.</li> </ul> <p>P&aring; <a href=\"https://www.nav.no/person/personopplysninger/dsop\">nav.no</a> kan du se hvilke personopplysninger NAV har utlevert basert p&aring; ditt samtykke. Opplysninger vil kunne bli utgitt i perioden {fraogmed} &ndash; {tilogmed}.</p>",

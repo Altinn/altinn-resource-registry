@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Opplysningene som utleveres er rapportert  i forbindelse med skattemeldingen (selvangivelsen)  {4629_2_inntektsaar}: <br> •Inntekt <br> •Skattefradrag <br> •formue (inkl bolig, bil mm) <br> •gjeld <br>",
     "en": "Opplysningene som utleveres er rapportert  i forbindelse med skattemeldingen (selvangivelsen)  {4629_2_inntektsaar}: <br> •Inntekt <br> •Skattefradrag <br> •formue (inkl bolig, bil mm) <br> •gjeld <br>",

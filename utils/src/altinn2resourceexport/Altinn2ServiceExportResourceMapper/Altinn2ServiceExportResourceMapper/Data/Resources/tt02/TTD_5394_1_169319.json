@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "<p>&gt;&gt;&gt; Denne teksten settes i TUL, maks 1000 tegn inkludert formattering &gt;&gt;&gt;</p> <p>Dette er en samtykkeerkl&aelig;ring. Dersom du samtykker, er denne samtykkeerkl&aelig;ringen det rettslige grunnlaget for at vi kan behandle dine barns ({elevfornavn} {elevetternavn}) personopplysninger, jf. personvernforordningen art. 6 nr. 1 bokstav a og art. 9 nr. 2 bokstav a. Ved at du samtykker f&aring;r Digil&aelig;r.no rett til &aring; samle inn og analysere opplysninger om elevens bruk av plattformen og plattformens l&aelig;ringsressurser.</p> <p>Kan her bruke flere metadata fra innsendt skjema, f.eks.:<br />ARreferanse: {arreferanse}</p> <p>&lt;&lt;&lt; Denne teksten settes i TUL,&nbsp;maks 1000 tegn inkludert formattering &lt;&lt;&lt;</p>",
     "en": "<p>&gt;&gt;&gt; Denne teksten settes i TUL, maks 1000 tegn inkludert formattering &gt;&gt;&gt;</p> <p>Dette er en samtykkeerkl&aelig;ring. Dersom du samtykker, er denne samtykkeerkl&aelig;ringen det rettslige grunnlaget for at vi kan behandle dine barns ({elevfornavn} {elevetternavn}) personopplysninger, jf. personvernforordningen art. 6 nr. 1 bokstav a og art. 9 nr. 2 bokstav a. Ved at du samtykker f&aring;r Digil&aelig;r.no rett til &aring; samle inn og analysere opplysninger om elevens bruk av plattformen og plattformens l&aelig;ringsressurser.</p> <p>Kan her bruke flere metadata fra innsendt skjema, f.eks.:<br />ARreferanse: {arreferanse}</p> <p>&lt;&lt;&lt; Denne teksten settes i TUL,&nbsp;maks 1000 tegn inkludert formattering &lt;&lt;&lt;</p>",

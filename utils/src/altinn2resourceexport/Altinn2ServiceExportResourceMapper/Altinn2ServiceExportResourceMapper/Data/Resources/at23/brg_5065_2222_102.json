@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Testing av fullmakt tjenetse {test}.<br /><br/> <ul> <li> fullmakt<br /> <li> testet av ACN<br /> <li> må bruke fullmakt template<br /> <li> fingers crossed<br /> </ul",
     "en": "Testing av fullmakt tjenetse {test}.<br /><br/> <ul> <li> fullmakt<br /> <li> testet av ACN<br /> <li> må bruke fullmakt template<br /> <li> fingers crossed<br /> </ul",

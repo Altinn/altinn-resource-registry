@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "en": "Information reported in connection with the {inntektsaar} tax return:<br> •\tIncome<br> •\tTax deduction<br> •\tWealth (including housing, car and other assets)<br> •\tDebt<br>",
     "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}: <br> • Inntekt <br> • Skattefradrag <br> • Formue (inkl. bolig, bil og andre verdier) <br> • Gjeld <br>",

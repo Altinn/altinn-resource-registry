@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Dette er for å testes samtykke i produksjonstest Testing consent text for {year} and go to <a href=\"https://www.folkeuniversitetet.no/\">Visit our website</a> Provide {month} and {time}",
     "en": "Dette er for å testes samtykke i produksjonstest Testing consent text for {year} and go to <a href=\"https://www.folkeuniversitetet.no/\">Visit our website</a> Provide {month} and {time}",

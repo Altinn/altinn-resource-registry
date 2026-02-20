@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Test av lenke i samtykketest:  <a href=\"https://www.brreg.no\" target=\"_blank\">Brønnøysundregistrene</a>",
     "en": "Test av lenke i samtykketest:  <a href=\"https://www.brreg.no\" target=\"_blank\">Brønnøysundregistrene</a>",

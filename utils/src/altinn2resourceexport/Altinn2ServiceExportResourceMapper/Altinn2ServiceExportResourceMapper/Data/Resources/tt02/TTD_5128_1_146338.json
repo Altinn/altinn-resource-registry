@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. <b>Vi kan ha HTML</b><script>alert('test')</script>",
     "en": "Dette er samtykketeksten som brukes i forbindelse med IS_BANKRUPT kode. <b>Vi kan ha HTML</b><script>alert('test')</script>",

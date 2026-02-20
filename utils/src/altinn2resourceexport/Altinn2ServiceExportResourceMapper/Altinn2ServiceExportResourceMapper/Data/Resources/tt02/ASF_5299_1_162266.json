@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Ved å samtykke gir du <strong>{requestorname}</strong>tilgang til å se opplysniger om eventuelle restanser for skatter og avgifter foretaket har mot Skatteetaten.",
     "en": "Ved å samtykke gir du <strong>{requestorname}</strong>tilgang til å se opplysniger om eventuelle restanser for skatter og avgifter foretaket har mot Skatteetaten.",

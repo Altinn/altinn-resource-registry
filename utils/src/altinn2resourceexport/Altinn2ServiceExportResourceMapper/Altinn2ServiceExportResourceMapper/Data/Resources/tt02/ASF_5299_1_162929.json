@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Gir tilgang til å se opplysninger om eventuelle restanser for skatter og avgifter mot Skatteetaten.",
     "en": "Gir tilgang til å se opplysninger om eventuelle restanser for skatter og avgifter mot Skatteetaten.",

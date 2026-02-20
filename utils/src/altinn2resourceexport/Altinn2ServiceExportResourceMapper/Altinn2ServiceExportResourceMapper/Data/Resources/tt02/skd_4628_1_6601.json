@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: <br> • Inntekt <br> • Skattefradrag <br> • Formue (inkl bolig, bil og andre verdier) <br> • Gjeld <br>",
     "en": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: <br> • Inntekt <br> • Skattefradrag <br> • Formue (inkl bolig, bil og andre verdier) <br> • Gjeld <br>",

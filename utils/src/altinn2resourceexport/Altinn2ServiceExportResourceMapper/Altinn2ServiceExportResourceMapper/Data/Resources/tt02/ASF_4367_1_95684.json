@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Det vil bli gitt innsyn i dine opplysninger om lønn, renter, innskudd og gjeld fra selvangivelsen fra siste år.",
     "en": "Det vil bli gitt innsyn i dine opplysninger om lønn, renter, innskudd og gjeld fra selvangivelsen fra siste år.",

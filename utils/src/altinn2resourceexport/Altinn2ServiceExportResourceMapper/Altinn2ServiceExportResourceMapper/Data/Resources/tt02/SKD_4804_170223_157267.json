@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "en": "Information reported by employers or others who have paid salary or benefits during the period {fraogmed} to {tilogmed}:<br> •\tPaid salary, business Income<br> •\tPension<br> •\tNational Insurance or benefits<br> •\tTax deduction and withholding tax<br> <br> Here, you can see the income information that the Norwegian Tax Administration has about you: <a href=\"http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\" target=\"_blank\">My income and employment.</a> ",
     "nb": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt lønn eller ytelser, i perioden {fraogmed} til {tilogmed}:<br> • Utbetalt lønn, næringsinntekt <br> • Pensjon <br> • Trygd eller ytelser<br> • Skattefradrag og forskuddstrekk<br> <br> Her kan du se inntektsopplysningene Skatteetaten har om deg: <a href=\"http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold\" target=\"_blank\">Mine inntekter og arbeidsforhold</a>.",

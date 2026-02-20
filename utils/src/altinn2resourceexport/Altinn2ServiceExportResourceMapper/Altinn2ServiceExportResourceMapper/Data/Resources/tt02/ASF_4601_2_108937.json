@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Du samtykker nå til å dele hele ditt liv med Hilde Therese Lauvset Rafaelsen",
     "en": "Du samtykker nå til å dele hele ditt liv med Hilde Therese Lauvset Rafaelsen",

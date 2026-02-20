@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "<p>{virksomhet} har inng&aring;tt samarbeid med STAMI om bruk av arbeidstidsdata i et nasjonalt arbeidstidsregister (A-TID). Vi ber om ditt samtykke til at dine data blir inkludert i dette registeret i kryptert form. &nbsp;</p> <p>Samtykket gir samtidig STAMI rett til &aring; hente inn f&oslash;lgende data:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Yrke, startdato, stillingsprosent i n&aring;v&aelig;rende stilling</li> <li>Sivilstand, statsborgerskap</li> </ul> <p>Registeret har strengest mulig personvernkontroll. Data oppbevares inntil videre, men du kan n&aring;r som helst endre eller trekke samtykket.</p> <p>Les mer her: <a href=\"https://stami.no/a-tid-utvidet-informasjon-om-samtykke-i-altinn/\">Informasjon om A-TID</a></p> <p>&nbsp;</p>",
     "en": "<p>{virksomhet} har inng&aring;tt samarbeid med STAMI om bruk av arbeidstidsdata i et nasjonalt arbeidstidsregister (A-TID). Vi ber om ditt samtykke til at dine data blir inkludert i dette registeret i kryptert form. &nbsp;</p> <p>Samtykket gir samtidig STAMI rett til &aring; hente inn f&oslash;lgende data:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Yrke, startdato, stillingsprosent i n&aring;v&aelig;rende stilling</li> <li>Sivilstand, statsborgerskap</li> </ul> <p>Registeret har strengest mulig personvernkontroll. Data oppbevares inntil videre, men du kan n&aring;r som helst endre eller trekke samtykket.</p> <p>Les mer her: <a href=\"https://stami.no/a-tid-utvidet-informasjon-om-samtykke-i-altinn/\">Informasjon om A-TID</a></p> <p>&nbsp;</p>",

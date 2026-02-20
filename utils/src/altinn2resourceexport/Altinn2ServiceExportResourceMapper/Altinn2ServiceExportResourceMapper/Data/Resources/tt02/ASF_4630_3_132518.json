@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Inntektsopplysninger for perioden fra {fraogmed} til {tilogmed}.<br/><br/>Opplysningene er rapportert av arbeidsgiver eller andre som er opplysningspliktige. For å se alt som er innrapportert gå til <a href=\"http://www.skatteetaten.no\" target=\"_blank\">innsynsløsning.no</a><br/><br/>Utleveres:<br/><ul><li> Utbetalt lønn fra arbeidsgiver/oppdragsgiver<br/><li> Skattefradrag og forskuddstrekk<br/><li> Utbetalte ytelser fra det offentlige, som foreldrepenger, arbeidsavklaringspenger osv.<br/><li> Utbetalt pensjon eller trygd.<br/><li> Næringsinntekt når rapporteringspliktig<br/></ul><br/>",
     "en": "Inntektsopplysninger for perioden fra {fraogmed} til {tilogmed}.<br/><br/>Opplysningene er rapportert av arbeidsgiver eller andre som er opplysningspliktige. For å se alt som er innrapportert gå til <a href=\"http://www.skatteetaten.no\" target=\"_blank\">innsynsløsning.no</a><br/><br/>Utleveres:<br/><ul><li> Utbetalt lønn fra arbeidsgiver/oppdragsgiver<br/><li> Skattefradrag og forskuddstrekk<br/><li> Utbetalte ytelser fra det offentlige, som foreldrepenger, arbeidsavklaringspenger osv.<br/><li> Utbetalt pensjon eller trygd.<br/><li> Næringsinntekt når rapporteringspliktig<br/></ul><br/>",

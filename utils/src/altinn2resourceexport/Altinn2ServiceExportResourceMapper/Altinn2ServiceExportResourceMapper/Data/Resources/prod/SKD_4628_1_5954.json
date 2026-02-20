@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Innsyn i ditt skattegrunnlag.",
     "en": "Innsyn i ditt skattegrunnlag.",

@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Da er det bare å gi samtykke  Denne tjenesten tilhører til BRG Dette er en engangssamtykke",
     "en": "Da er det bare å gi samtykke  Denne tjenesten tilhører til BRG Dette er en engangssamtykke",

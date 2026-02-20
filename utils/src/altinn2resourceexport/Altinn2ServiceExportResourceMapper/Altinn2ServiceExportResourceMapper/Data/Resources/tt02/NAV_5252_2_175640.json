@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "<H1>Under utvikling</H1> Her kommer felles samtykketekst for AAP og Uføretrygd. For perioden {fraogmed} &ndash; {tilogmed} ",
     "en": "<H1>Under utvikling</H1> Her kommer felles samtykketekst for AAP og Uføretrygd. For perioden {fraogmed} &ndash; {tilogmed} ",

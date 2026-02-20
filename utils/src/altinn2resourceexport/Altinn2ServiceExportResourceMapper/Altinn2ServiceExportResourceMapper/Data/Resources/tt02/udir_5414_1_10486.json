@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Dette er en samtykkeerklæring.   Dersom du samtykker, er denne samtykkeerklæringen det rettslige grunnlaget for at vi kan behandle dine eller dine barns personopplysninger.  Vi behandler personopplysninger i Digilær.no for å legge til rette for nettbasert opplæring og oppfølging av hver enkelt elev.     Deltakelse i Digilær.no er frivillig. Du kan når som helst trekke tilbake samtykket, og dermed eleven fra tilbudet. Dette kan du gjøre enten i Altinn eller ved å sende en epost til digilaer@udir.no.  Les <a href=\"https://digilaer.no/admin/tool/policy/viewall.php?returnurl=https%3A%2F%2Fdigilaer.no%2F#policy-6\" target=\"_blank\">hele samtykkeerklæringen.</a> ",
     "en": "Dette er en samtykkeerklæring.   Dersom du samtykker, er denne samtykkeerklæringen det rettslige grunnlaget for at vi kan behandle dine eller dine barns personopplysninger.  Vi behandler personopplysninger i Digilær.no for å legge til rette for nettbasert opplæring og oppfølging av hver enkelt elev.     Deltakelse i Digilær.no er frivillig. Du kan når som helst trekke tilbake samtykket, og dermed eleven fra tilbudet. Dette kan du gjøre enten i Altinn eller ved å sende en epost til digilaer@udir.no.  Les <a href=\"https://digilaer.no/admin/tool/policy/viewall.php?returnurl=https%3A%2F%2Fdigilaer.no%2F#policy-6\" target=\"_blank\">hele samtykkeerklæringen.</a> ",

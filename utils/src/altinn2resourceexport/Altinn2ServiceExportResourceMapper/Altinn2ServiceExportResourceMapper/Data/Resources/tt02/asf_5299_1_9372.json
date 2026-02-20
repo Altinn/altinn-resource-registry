@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "<p>Restanser p&aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p&aring;:</p> <ul> <li>Skatt</li> <li>Arbeidsgiveravgift</li> <li>Merverdiavgift</li> <li>Forskuddstrekk</li> <li>Ansvarskrav skatt</li> <li>Ansvarskrav merverdiavgift</li> </ul> <p>Du har rett til innsyn i opplysningene som utleveres. Ta kontakt med oppdragsgiver for &aring; f&aring; innsyn i hvilke opplysninger som har blitt utlevert.</p> <p>Fullmakten vil ikke lenger benyttes dersom du ikke tildeles kontrakten.</p>",
     "en": "<p>Restanser p&aring; skatter og avgifter, inkludert forfalte og ubetalte renter og gebyrer p&aring;:</p> <ul> <li>Skatt</li> <li>Arbeidsgiveravgift</li> <li>Merverdiavgift</li> <li>Forskuddstrekk</li> <li>Ansvarskrav skatt</li> <li>Ansvarskrav merverdiavgift</li> </ul> <p>Du har rett til innsyn i opplysningene som utleveres. Ta kontakt med oppdragsgiver for &aring; f&aring; innsyn i hvilke opplysninger som har blitt utlevert.</p> <p>Fullmakten vil ikke lenger benyttes dersom du ikke tildeles kontrakten.</p>",

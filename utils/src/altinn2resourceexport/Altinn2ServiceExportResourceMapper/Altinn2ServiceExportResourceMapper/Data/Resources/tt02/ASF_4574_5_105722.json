@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Informasjon om kontoer og bankrelasjoner, inkludert kontonumre og navn på bank.",
     "en": "Informasjon om kontoer og bankrelasjoner, inkludert kontonumre og navn på bank.",

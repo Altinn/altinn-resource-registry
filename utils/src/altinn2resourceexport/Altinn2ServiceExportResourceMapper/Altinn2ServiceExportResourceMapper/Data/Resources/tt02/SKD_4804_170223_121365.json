@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Her kommer teksten som forklarer hva brukeren samtykker til.",
     "en": "Her kommer teksten som forklarer hva brukeren samtykker til.",

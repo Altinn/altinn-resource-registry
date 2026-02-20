@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "På vegne av <strong>{requestorname}</strong> trenger vi å kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  <script>try { var r1 = $('.panel-section').find('h4'); var r2 = $('.panel-section').find('p.font-size-lg.pad-top-2'); var s = 'registerenheten i brønnøysund'; var r = document.location.href.match(/nadobecoveredby=([^&]+)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}</script>",
     "en": "På vegne av <strong>{requestorname}</strong> trenger vi å kunne hente ut opplysninger om din virksomhet fra Enhetsregisteret.  <script>try { var r1 = $('.panel-section').find('h4'); var r2 = $('.panel-section').find('p.font-size-lg.pad-top-2'); var s = 'registerenheten i brønnøysund'; var r = document.location.href.match(/nadobecoveredby=([^&]+)/i)[1]; r1.html(r1.html().replace(s, decodeuri(r).touppercase())) r2.html(r2.html().replace(s, decodeuri(r).touppercase())) } catch {}</script>",

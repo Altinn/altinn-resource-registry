@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "<ul> <li>Opplysninger fra vedtak om arbeidsavklaringspenger og uf&oslash;retrygd, herunder opplysninger om grad av ytelsen, tidsperiode vedtakene gjelder for og &aring;rsaken til opph&oslash;r dersom ytelsen fra NAV er opph&oslash;rt.</li> <li>Opplysninger fra meldekort om hvor mye du har arbeidet i perioden du mottar arbeidsavklaringspenger, eller opplysninger om arbeidsinntekt dersom du mottar uf&oslash;retrygd.</li> </ul> <p>P&aring; <a href=\"https://www.nav.no/person/personopplysninger/dsop\">nav.no</a> kan du se hvilke personopplysninger NAV har utlevert basert p&aring; ditt samtykke. Opplysninger vil kunne bli utgitt i perioden {fraogmed} &ndash; {tilogmed}.</p>",
     "en": "<ul> <li>Opplysninger fra vedtak om arbeidsavklaringspenger og uf&oslash;retrygd, herunder opplysninger om grad av ytelsen, tidsperiode vedtakene gjelder for og &aring;rsaken til opph&oslash;r dersom ytelsen fra NAV er opph&oslash;rt.</li> <li>Opplysninger fra meldekort om hvor mye du har arbeidet i perioden du mottar arbeidsavklaringspenger, eller opplysninger om arbeidsinntekt dersom du mottar uf&oslash;retrygd.</li> </ul> <p>P&aring; <a href=\"https://www.nav.no/person/personopplysninger/dsop\">nav.no</a> kan du se hvilke personopplysninger NAV har utlevert basert p&aring; ditt samtykke. Opplysninger vil kunne bli utgitt i perioden {fraogmed} &ndash; {tilogmed}.</p>",

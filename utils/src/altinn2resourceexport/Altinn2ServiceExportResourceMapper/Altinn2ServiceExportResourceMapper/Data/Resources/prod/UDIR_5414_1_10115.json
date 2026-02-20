@@ -57,7 +57,7 @@
   "resourceType": "Consent",
   "availableForType": null,
   "authorizationReference": null,
-  "consentTemplate": null,
+  "consentTemplate": "default",
   "consentText": {
     "nb": "Dette er en samtykkeerklæring. Dersom du samtykker, er denne samtykkeerklæringen det rettslige grunnlaget for at vi kan behandle personopplysninger om {elevfornavn} {elevetternavn}, jf. personvernforordningen art. 6 nr. 1 bokstav a og art. 9 nr. 2 bokstav a. Ved at du samtykker får Digilær.no rett til å samle inn og analysere opplysninger om {elevfornavn} {elevetternavn}, bruk av plattformen og plattformens læringsressurser.   Les <a href=\"https://digilaer.no/admin/tool/policy/viewall.php?returnurl=https%3A%2F%2Fdigilaer.no%2F#policy-6\" target=\"_blank\">hele samtykkeerklæringen.</a> ",
     "en": "Dette er en samtykkeerklæring. Dersom du samtykker, er denne samtykkeerklæringen det rettslige grunnlaget for at vi kan behandle personopplysninger om {elevfornavn} {elevetternavn}, jf. personvernforordningen art. 6 nr. 1 bokstav a og art. 9 nr. 2 bokstav a. Ved at du samtykker får Digilær.no rett til å samle inn og analysere opplysninger om {elevfornavn} {elevetternavn}, bruk av plattformen og plattformens læringsressurser.   Les <a href=\"https://digilaer.no/admin/tool/policy/viewall.php?returnurl=https%3A%2F%2Fdigilaer.no%2F#policy-6\" target=\"_blank\">hele samtykkeerklæringen.</a> ",

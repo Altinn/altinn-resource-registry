@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.Xml;
 
 namespace Altinn.ResourceRegistry.Controllers
 {
@@ -434,6 +435,11 @@ namespace Altinn.ResourceRegistry.Controllers
                 }
             }
             catch (ArgumentException ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
+            catch (XmlException ex)
             {
                 _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);

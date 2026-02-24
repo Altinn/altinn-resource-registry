@@ -31,7 +31,7 @@
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel" Version="2.23.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.9" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.12" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.12" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="9.0.12" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.12" />

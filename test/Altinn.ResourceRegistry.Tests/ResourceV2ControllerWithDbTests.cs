@@ -54,6 +54,13 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         ResourceDecomposedDto? policyRights = await response.Content.ReadFromJsonAsync<ResourceDecomposedDto>();
         Assert.NotNull(policyRights);
         Assert.NotEmpty(policyRights!.Rights);
+
+        foreach(RightDecomposedDto right in policyRights.Rights)
+        {
+            Assert.NotNull(right.Right.Key);
+            Assert.NotNull(right.Right.Name);
+            Assert.Equal(right.Right.Key, right.Right.Key.ToLowerInvariant());
+        }
     }
 
 

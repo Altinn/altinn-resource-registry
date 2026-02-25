@@ -41,13 +41,6 @@ namespace Altinn.ResourceRegistry.Controllers
         [Consumes("application/json")]
         public async Task<ActionResult<ResourceDecomposedDto>> GetRights(string id, CancellationToken cancellationToken = default)
         {
-            ServiceResource resource = await _resourceRegistry.GetResource(id, null, cancellationToken);
-
-            if (resource == null) 
-            {
-                return NotFound($"Resource with id {id} not found.");
-            }
-
             List<Right> rights = await _resourceRegistry.GetPolicyRightsV2(id, cancellationToken);
 
             // Map to result

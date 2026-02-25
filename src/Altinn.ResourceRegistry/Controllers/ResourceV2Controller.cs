@@ -71,11 +71,11 @@ namespace Altinn.ResourceRegistry.Controllers
         {
             ResourceAndAction resourceAndAction = DelegationCheckHelper.SplitRightKey(rights.Key);
 
-            RightDecomposedDto currentAction = new RightDecomposedDto
+            RightDecomposedDto currentAction = new()
             {
                 Right = new RightDto
                 {
-                    Key = rights.Key,
+                    Key = rights.Key.ToLowerInvariant(),
                     Name = GetActionNameFromRightKey(rights.Key, resource),
                     Resource = resourceAndAction.Resource,
                     Action = resourceAndAction.Action
@@ -88,7 +88,7 @@ namespace Altinn.ResourceRegistry.Controllers
         private string GetActionNameFromRightKey(string key, string resourceId)
         {
             string[] parts = key.Split("urn:", options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             foreach (string part in parts)
             {

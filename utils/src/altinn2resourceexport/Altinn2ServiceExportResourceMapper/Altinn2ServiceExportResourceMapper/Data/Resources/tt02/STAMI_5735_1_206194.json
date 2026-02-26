@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "stami_5735_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Samtykke til medarbeiderundersøkelse",
+    "en": "Samtykke til medarbeiderundersøkelse",
+    "nn": "Samtykke til medarbeiderundersøkelse"
+  },
+  "description": {
+    "nb": "Samtykke til medarbeiderundersøkelse",
+    "en": "Samtykke til medarbeiderundersøkelse",
+    "nn": "Samtykke til medarbeiderundersøkelse"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5735",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "206194",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "874761222",
+    "orgcode": "STAMI"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Lengre tekst kommer.. Kort: Dette er et samtykke til at STAMI kan ta vare på, og forske på din besvarelser i MUST. (medarbeiderundersøkelse i staten)  Det er frivillig å gi samtykke, du kan uansett delta i undersøkelsen og bedriftens rapport, men uten samtykke vil dine data slettes etter at undersøkelsen er avsluttet.",
+    "en": "Lengre tekst kommer.. Kort: Dette er et samtykke til at STAMI kan ta vare på, og forske på din besvarelser i MUST. (medarbeiderundersøkelse i staten)  Det er frivillig å gi samtykke, du kan uansett delta i undersøkelsen og bedriftens rapport, men uten samtykke vil dine data slettes etter at undersøkelsen er avsluttet.",
+    "nn": "Lengre tekst kommer.. Kort: Dette er et samtykke til at STAMI kan ta vare på, og forske på din besvarelser i MUST. (medarbeiderundersøkelse i staten)  Det er frivillig å gi samtykke, du kan uansett delta i undersøkelsen og bedriftens rapport, men uten samtykke vil dine data slettes etter at undersøkelsen er avsluttet."
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

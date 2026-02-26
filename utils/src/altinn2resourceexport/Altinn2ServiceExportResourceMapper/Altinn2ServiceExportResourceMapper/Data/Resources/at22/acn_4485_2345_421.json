@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "acn_4485_2345",
+  "version": "1.0",
+  "title": {
+    "en": "Enkeltsamtykke test english text",
+    "nb": "Enkeltsamtykkemal test",
+    "nn": "Enkeltsamtykke test Nynorsk text"
+  },
+  "description": {
+    "en": "Enkeltsamtykke test english text",
+    "nb": "Enkeltsamtykkemal test",
+    "nn": "Enkeltsamtykke test Nynorsk text"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4485",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "2345",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "421",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "999999990",
+    "orgcode": "ACN"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+"consentTemplate": "samtykkemal_simpleconsent",
+  "consentText": {
+    "en": "Enkeltsamtykke test english text",
+    "nb": "Enkelt samtykke test",
+    "nn": "Enkeltsamtykke test Nynorsk text"
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

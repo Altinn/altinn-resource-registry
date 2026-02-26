@@ -1,0 +1,73 @@
+﻿{
+  "identifier": "kurs_5336_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Test samtykke STAMID",
+    "en": "Test samtykke STAMID",
+    "nn": "Test samtykke STAMID"
+  },
+  "description": {
+    "nb": "Test samtykke STAMID",
+    "en": "Test samtykke STAMID",
+    "nn": "Test samtykke STAMID"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5336",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "166210",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": null,
+    "orgcode": "KURS"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "<p><strong>Statens arbeidsmilj&oslash;institutt (STAMI) ber om ditt samtykke</strong></p> <p>{virksomhet} er positiv til et samarbeid med STAMI om bruk av arbeidstidsdata.</p> <p>Ved &aring; samtykke er du med p&aring; &aring; bygge opp et nasjonalt arbeidstidsregister, som arbeidsgiver, myndigheter og partene kan bruke til å planlegge de beste arbeidstidene.</p> <p>Samtykke gir {virksomhet} rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Ansattnummer</li> <li>Daglig inn- og ut tidspspunkt, evt syk eller perm</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand og statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Arbeidstidsregisteret har strengest mulig personvernkontroll.</p> <p>Les mer her: <a href=\"https://stami.no/\">Informasjon om STAMID</a></p>",
+    "en": "<p><strong>Statens arbeidsmilj&oslash;institutt (STAMI) ber om ditt samtykke</strong></p> <p>{virksomhet} er positiv til et samarbeid med STAMI om bruk av arbeidstidsdata.</p> <p>Ved &aring; samtykke er du med p&aring; &aring; bygge opp et nasjonalt arbeidstidsregister, som arbeidsgiver, myndigheter og partene kan bruke til å planlegge de beste arbeidstidene.</p> <p>Samtykke gir {virksomhet} rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Ansattnummer</li> <li>Daglig inn- og ut tidspspunkt, evt syk eller perm</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand og statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Arbeidstidsregisteret har strengest mulig personvernkontroll.</p> <p>Les mer her: <a href=\"https://stami.no/\">Informasjon om STAMID</a></p>",
+    "nn": "<p><strong>Statens arbeidsmilj&oslash;institutt (STAMI) ber om ditt samtykke</strong></p> <p>{virksomhet} er positiv til et samarbeid med STAMI om bruk av arbeidstidsdata.</p> <p>Ved &aring; samtykke er du med p&aring; &aring; bygge opp et nasjonalt arbeidstidsregister, som arbeidsgiver, myndigheter og partene kan bruke til å planlegge de beste arbeidstidene.</p> <p>Samtykke gir {virksomhet} rett til &aring; sende disse data til STAMI:</p> <ul> <li>F&oslash;dselsnummer (kryptert)</li> <li>Ansattnummer</li> <li>Daglig inn- og ut tidspspunkt, evt syk eller perm</li> <li>Startdato, stillingsprosent</li> <li>Sivilstand og statsborgerskap</li> </ul> <p>Du kan n&aring;r som helst endre eller trekke samtykket. Arbeidstidsregisteret har strengest mulig personvernkontroll.</p> <p>Les mer her: <a href=\"https://stami.no/\">Informasjon om STAMID</a></p>"
+  },
+  "consentMetadata": {
+    "virksomhet": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

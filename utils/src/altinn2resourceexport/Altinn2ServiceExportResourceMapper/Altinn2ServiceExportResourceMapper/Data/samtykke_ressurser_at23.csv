@@ -1,0 +1,60 @@
+﻿ACN,3181,120803,72,0,NULL,1044,LookUp Security Level 3 120803,1
+ACN,3181,120803,72,0,NULL,1044,"samtykke test ",18
+ACN,3181,120803,95,0,NULL,1044,LookUp Security Level 3 120803,1
+ACN,3181,120803,95,0,NULL,1044,"samtykke test ",18
+ACN,3181,120803,96,0,NULL,1044,LookUp Security Level 3 120803,1
+ACN,3181,120803,96,0,NULL,1044,"samtykke test ",18
+ACN,3181,120803,97,0,NULL,1044,LookUp Security Level 3 120803,1
+ACN,3181,120803,97,0,NULL,1044,"samtykke test ",18
+ACN,3181,120804,74,0,NULL,1044,LookUp Security Level 1 120804,1
+ACN,3181,120804,74,0,NULL,1044,TEST Samtykke,18
+ACN,4485,4444,677,0,default,1033,ACN samtykke test2,1
+ACN,4485,4444,677,0,default,1033,Samtykke test - Engelsk,18
+ACN,4485,4444,677,0,default,1044,Samtykke test - Bokmål,18
+ACN,4485,4444,677,0,default,1044,ACN samtykke test2,1
+ASF,4629,1,51,NULL,NULL,1033,Data from Skatteetaten - English version,1
+ASF,4629,1,51,NULL,NULL,1033,The information is reported in connection with tax release (tax return) {inntektsaar},18
+ASF,4629,1,51,NULL,NULL,1044,"Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul><br/> Test lenke <a href=""http://www.altinn.no"" target=""_blank"">Altinn.</a>",18
+ASF,4629,1,51,NULL,NULL,1044,Ligningsdata fra Skatteetaten TEST,1
+ASF,4629,1,51,NULL,NULL,2068,Likningsdata frå Skatteetaten - Nynorsk versjon,1
+ASF,4629,1,51,NULL,NULL,2068,Opplysningane som vert utlevert er rapportert i samband med skattemeldinga (selvangivelsen) {inntektsaar},18
+ASF,4629,1,618,0,default,1033,The information is reported in connection with tax release (tax return) {inntektsaar},18
+ASF,4629,1,618,0,default,1033,Data from Skatteetaten - English version,1
+ASF,4629,1,618,0,default,1044,Ligningsdata fra Skatteetaten TEST,1
+ASF,4629,1,618,0,default,1044,"Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul><br/> Test lenke <a href=""http://www.altinn.no"" target=""_blank"">Altinn.</a>",18
+ASF,4629,1,618,0,default,2068,Opplysningane som vert utlevert er rapportert i samband med skattemeldinga (selvangivelsen) {inntektsaar},18
+ASF,4629,1,618,0,default,2068,Likningsdata frå Skatteetaten - Nynorsk versjon,1
+BRG,5065,23,100,0,default,1044,BRG samtykke standard mal,1
+BRG,5065,23,100,0,default,1044,Da er det bare å gi samtykke  Denne tjenesten tilhører til BRG (4485/1111),18
+BRG,5065,1111,101,1,NULL,1044,BRG engangssamtykke,1
+BRG,5065,1111,101,1,NULL,1044,Da er det bare å gi samtykke  Denne tjenesten tilhører til BRG Dette er en engangssamtykke,18
+BRG,5065,2222,102,0,NULL,1044,BRG Fullmakt,1
+BRG,5065,2222,102,0,NULL,1044,Testing av fullmakt tjenetse {test}.<br /><br/> <ul> <li> fullmakt<br /> <li> testet av ACN<br /> <li> må bruke fullmakt template<br /> <li> fingers crossed<br /> </ul,18
+BRG,5065,3333,123,1,NULL,1044,BRG Engangs fullmakt,1
+BRG,5065,3333,123,1,NULL,1044,Testing av engangs fullmakt tjenetse {test}.<br /><br/> <ul> <li> engangs fullmakt<br /> <li> testet av ACN<br /> <li> skal vi teste om det funker???<br /> <li> fingers crossed<br /> </ul,18
+TTD,5550,3,342,0,default_nomessage,1044,Tilgang til å hente dine data med overstyrt melding,1
+TTD,5550,3,342,0,default_nomessage,1044,"Dette er en tekst som forklarer hva tjenesten går ut på.<br><br>  Her <b>kan det være HTML</b> og plassholdere fra samtykkeforespørselen, for eksempel er dette ordet, ""{{somevalue}}"".",18
+ACN,5565,1111,339,0,poa,1044,ACN Fullmakt service Automation_Test,1
+ACN,5565,1111,339,0,poa,1044,"ACN Fullmakt service for automation testing  Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul><br/> Test lenke <a href=""http://www.altinn.no"" target=""_blank"">Altinn.</a>",18
+DIGDIR,5576,1111,353,0,default_nomessage,1044,DIGDIR samtykke test,1
+DIGDIR,5576,1111,353,0,default_nomessage,1044,"Da er det bare å samtykke ",18
+ACN,5607,2,375,0,sblanesoknad,1044,consent with overridden rm template,1
+ACN,5607,2,375,0,sblanesoknad,1044,Test consent template With overridden rm for multiple services,18
+ACN,5607,3,377,0,default,1044,consent with standard template1,1
+ACN,5607,3,377,0,default,1044,Test consent With standard template for multiple services 1,18
+ACN,5607,4,379,0,default,1044,consent with standard template 2,1
+ACN,5607,4,379,0,default,1044,Test consent With standard template for multiple services 2,18
+ACN,5607,5,381,0,poa,1044,Fullmakt with overrridden rm,1
+ACN,5607,5,381,0,poa,1044,Test fullmakt With overrridden rm tempate,18
+ACN,5607,1207,373,0,sblanesoknad,1044,Consent service with overriden request message,1
+ACN,5607,1207,373,0,sblanesoknad,1044,Consent template test for overriden request message,18
+DIGDIR,5618,1010,391,0,default,1044,Samtykke test for DIGDIR,1
+DIGDIR,5618,1010,391,0,default,1044,Det er bare å gi samtykke,18
+ACN,u5348,1111,385,0,default,1044,Link_Access_UTINN,1
+ACN,u5348,1111,385,0,default,1044,test samtykke for lenketjeneste med Access operasjon,18
+DIGDIR,u5356,2,437,0,default,1044,consent with SRR,1
+DIGDIR,u5356,2,437,0,default,1044,This is a consent test,18
+DIGDIR,u5356,4,399,0,default,1044,Standard Consent,1
+DIGDIR,u5356,4,399,0,default,1044,This is a consent test with standard template,18
+DIGDIR,u5356,4,401,0,consent_sharing,1044,Standard Consent,1
+DIGDIR,u5356,4,401,0,consent_sharing,1044,This is a consent test with standard template that was changed to samtykke til å dele data,18

@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "asf_4601_2",
+  "version": "1.0",
+  "title": {
+    "nb": "SamtykkeTestElin",
+    "en": "SamtykkeTestElin",
+    "nn": "SamtykkeTestElin"
+  },
+  "description": {
+    "nb": "SamtykkeTestElin",
+    "en": "SamtykkeTestElin",
+    "nn": "SamtykkeTestElin"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4601",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "2",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "109282",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Test av lenke i samtykketest:  <a href=\"https://www.brreg.no\" target=\"_blank\">Brønnøysundregistrene</a>.  Test av ÆØÅ æ ø å.  Nytt avsnitt.",
+    "en": "Test av lenke i samtykketest:  <a href=\"https://www.brreg.no\" target=\"_blank\">Brønnøysundregistrene</a>.  Test av ÆØÅ æ ø å.  Nytt avsnitt.",
+    "nn": "Test av lenke i samtykketest:  <a href=\"https://www.brreg.no\" target=\"_blank\">Brønnøysundregistrene</a>.  Test av ÆØÅ æ ø å.  Nytt avsnitt."
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

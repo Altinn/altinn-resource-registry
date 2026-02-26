@@ -1,0 +1,73 @@
+﻿{
+  "identifier": "stami_5735_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Samtykkeerklæring Medarbeiderundersøkelsen i staten - MUST",
+    "en": "Samtykkeerklæring Medarbeiderundersøkelsen i staten - MUST",
+    "nn": "Samtykkeerklæring Medarbeiderundersøkelsen i staten - MUST"
+  },
+  "description": {
+    "nb": "Samtykkeerklæring Medarbeiderundersøkelsen i staten - MUST",
+    "en": "Samtykkeerklæring Medarbeiderundersøkelsen i staten - MUST",
+    "nn": "Samtykkeerklæring Medarbeiderundersøkelsen i staten - MUST"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5735",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "228223",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "874761222",
+    "orgcode": "STAMI"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "<p><a href='https://static.stami.no/files/MUST/SAMTYKKE_MUST_STAMI_V5_A_NO.pdf' target='_blank'>Les informasjonsskrivet på nytt her (åpnes i ny fane)</a></p> <p> Jeg har mottatt og forstått informasjonen om MUST, og har fått anledning til å stille spørsmål. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 år etter at prosjektet er avsluttet - inntil 31.12.2045 – eller før dette om jeg trekker mitt samtykke. </p><p> Klikk «Ja, jeg gir samtykke» for <b>tillatelse</b> til at <b>STAMI kan bruke dine opplysninger</b> i sin <b>forskning på arbeidsmiljø og helse</b> - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere – se «Samtykker og fullmakter», under din profil i Altinn.  </p><p> Klikk «Nei, jeg gir ikke samtykke» hvis du <b>kun vil</b> at <b>dine opplysninger</b> skal inngå i <b>resultatrapportene</b> som {virksomhet} mottar etter endt medarbeiderundersøkelse. </p>",
+    "en": "<p><a href='https://static.stami.no/files/MUST/SAMTYKKE_MUST_STAMI_V5_A_NO.pdf' target='_blank'>Les informasjonsskrivet på nytt her (åpnes i ny fane)</a></p> <p> Jeg har mottatt og forstått informasjonen om MUST, og har fått anledning til å stille spørsmål. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 år etter at prosjektet er avsluttet - inntil 31.12.2045 – eller før dette om jeg trekker mitt samtykke. </p><p> Klikk «Ja, jeg gir samtykke» for <b>tillatelse</b> til at <b>STAMI kan bruke dine opplysninger</b> i sin <b>forskning på arbeidsmiljø og helse</b> - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere – se «Samtykker og fullmakter», under din profil i Altinn.  </p><p> Klikk «Nei, jeg gir ikke samtykke» hvis du <b>kun vil</b> at <b>dine opplysninger</b> skal inngå i <b>resultatrapportene</b> som {virksomhet} mottar etter endt medarbeiderundersøkelse. </p>",
+    "nn": "<p><a href='https://static.stami.no/files/MUST/SAMTYKKE_MUST_STAMI_V5_A_NO.pdf' target='_blank'>Les informasjonsskrivet på nytt her (åpnes i ny fane)</a></p> <p> Jeg har mottatt og forstått informasjonen om MUST, og har fått anledning til å stille spørsmål. Jeg er informert om at hvis jeg samtykker, vil mine opplysninger brukes i STAMI sin forskning, og oppbevares inntil 5 år etter at prosjektet er avsluttet - inntil 31.12.2045 – eller før dette om jeg trekker mitt samtykke. </p><p> Klikk «Ja, jeg gir samtykke» for <b>tillatelse</b> til at <b>STAMI kan bruke dine opplysninger</b> i sin <b>forskning på arbeidsmiljø og helse</b> - slik det fremkommer i informasjonsskrivet. Samtykket kan trekkes igjen senere – se «Samtykker og fullmakter», under din profil i Altinn.  </p><p> Klikk «Nei, jeg gir ikke samtykke» hvis du <b>kun vil</b> at <b>dine opplysninger</b> skal inngå i <b>resultatrapportene</b> som {virksomhet} mottar etter endt medarbeiderundersøkelse. </p>"
+  },
+  "consentMetadata": {
+    "virksomhet": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

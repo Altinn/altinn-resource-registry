@@ -63,6 +63,38 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         }
     }
 
+    /// <summary>
+    /// Scenario: Get Policy rules for RRH innrapportering
+    /// </summary>
+    [Fact]
+    public async Task GetpolicyRightsTerjeApp()
+    {
+        await LoadTestDataWithUpdates();
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v2/resource/app_ttd_terje-sin-test-app/policy/rights";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        string content = await response.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        ResourceDecomposedDto? policyRights = await response.Content.ReadFromJsonAsync<ResourceDecomposedDto>();
+        Assert.NotNull(policyRights);
+        Assert.NotEmpty(policyRights!.Rights);
+
+        foreach (RightDecomposedDto right in policyRights.Rights)
+        {
+            Assert.NotNull(right.Right.Key);
+            Assert.NotNull(right.Right.Name);
+            Assert.Equal(right.Right.Key, right.Right.Key.ToLowerInvariant());
+        }
+    }
+
 
     #region Utils
     private static ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)

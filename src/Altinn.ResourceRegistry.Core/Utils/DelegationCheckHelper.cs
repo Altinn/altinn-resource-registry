@@ -129,9 +129,9 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
                 resource.Sort((a, b) => string.Compare(a.Id, b.Id, StringComparison.InvariantCultureIgnoreCase));
                 foreach (var item in resource)
                 {
-                    resourceKey.Append(item.Id);
+                    resourceKey.Append(item.Id.ToLowerInvariant());
                     resourceKey.Append(':');
-                    resourceKey.Append(item.Value);
+                    resourceKey.Append(item.Value.ToLowerInvariant());
                     resourceKey.Append(':');
                 }
 

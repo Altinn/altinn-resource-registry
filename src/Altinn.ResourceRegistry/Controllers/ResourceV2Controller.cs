@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text;
 using Altinn.AccessMgmt.Core.Utils.Helper;
 using Altinn.Authorization.ServiceDefaults;
@@ -75,7 +76,7 @@ namespace Altinn.ResourceRegistry.Controllers
             {
                 Right = new RightDto
                 {
-                    Key = rights.Key.ToLowerInvariant(),
+                    Key = rights.Key,
                     Name = GetActionNameFromRightKey(rights.Key, resource),
                     Resource = resourceAndAction.Resource,
                     Action = resourceAndAction.Action
@@ -90,7 +91,7 @@ namespace Altinn.ResourceRegistry.Controllers
             string[] parts = key.Split("urn:", options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             StringBuilder sb = new();
 
-            foreach (string part in parts)
+            foreach (string part in parts.OrderDescending())
             {
                 string currentPart = part;
                 if (currentPart.Substring(currentPart.Length - 1, 1) == ":")
@@ -130,5 +131,11 @@ namespace Altinn.ResourceRegistry.Controllers
 
             return char.ToUpper(input[0]) + input.Substring(1);
         }
+
+
+        private string GetActionName(string actionName, string language) {
+            {
+
+            }
     }
 }

@@ -124,6 +124,7 @@ namespace Altinn.ResourceRegistry.Controllers
                 if (part.StartsWith("oasis:names:tc:xacml:1.0:action:action-id"))
                 {
                    currentPart = GetActionName(currentPart, language);
+                   currentPart += ":";
                 }
 
                 sb.Append(UppercaseFirstLetter(currentPart));

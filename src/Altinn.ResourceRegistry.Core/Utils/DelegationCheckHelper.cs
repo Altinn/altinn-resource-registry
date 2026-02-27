@@ -150,9 +150,9 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
                 action.Sort((a, b) => string.Compare(a.Id, b.Id, StringComparison.InvariantCultureIgnoreCase));
                 foreach (var item in action)
                 {
-                    actionKey.Append(item.Id);
+                    actionKey.Append(item.Id.ToLowerInvariant());
                     actionKey.Append(':');
-                    actionKey.Append(item.Value);
+                    actionKey.Append(item.Value.ToLowerInvariant());
                     actionKey.Append(':');
                 }
 

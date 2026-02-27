@@ -63,6 +63,36 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         }
     }
 
+    [Fact]
+    public async Task GetpolicyRightsRRHEnglish()
+    {
+        await LoadTestDataWithUpdates();
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v2/resource/app_brg_rrh-innrapportering/policy/rights";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        httpRequestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue("en"));
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        string content = await response.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        ResourceDecomposedDto? policyRights = await response.Content.ReadFromJsonAsync<ResourceDecomposedDto>();
+        Assert.NotNull(policyRights);
+        Assert.NotEmpty(policyRights!.Rights);
+
+        foreach (RightDecomposedDto right in policyRights.Rights)
+        {
+            Assert.NotNull(right.Right.Key);
+            Assert.NotNull(right.Right.Name);
+            Assert.Equal(right.Right.Key, right.Right.Key.ToLowerInvariant());
+        }
+    }
+
     /// <summary>
     /// Scenario: Get Policy rules for RRH innrapportering
     /// </summary>
@@ -73,6 +103,38 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         using var client = CreateAuthenticatedClient();
 
         string requestUri = "resourceregistry/api/v2/resource/app_ttd_terje-sin-test-app/policy/rights";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        string content = await response.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        ResourceDecomposedDto? policyRights = await response.Content.ReadFromJsonAsync<ResourceDecomposedDto>();
+        Assert.NotNull(policyRights);
+        Assert.NotEmpty(policyRights!.Rights);
+
+        foreach (RightDecomposedDto right in policyRights.Rights)
+        {
+            Assert.NotNull(right.Right.Key);
+            Assert.NotNull(right.Right.Name);
+            Assert.Equal(right.Right.Key, right.Right.Key.ToLowerInvariant());
+        }
+    }
+
+    /// <summary>
+    /// Scenario: Get Policy rules for Aarsregnskap Vanlig 202406
+    /// </summary>
+    [Fact]
+    public async Task GetpolicyRightsaarsregnskapvanlig202406()
+    {
+        await LoadTestDataWithUpdates();
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v2/resource/app_brg_aarsregnskap-vanlig-202406/policy/rights";
 
         HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
         {

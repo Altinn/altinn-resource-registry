@@ -102,6 +102,7 @@ namespace Altinn.ResourceRegistry.Controllers
             string[] parts = key.Split("urn:", options: StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             StringBuilder sb = new();
 
+            bool actionAdded = false;
             foreach (string part in parts.OrderDescending())
             {
                 string currentPart = part;
@@ -124,7 +125,12 @@ namespace Altinn.ResourceRegistry.Controllers
                 if (part.StartsWith("oasis:names:tc:xacml:1.0:action:action-id"))
                 {
                    currentPart = GetActionName(currentPart, language);
-                   currentPart += ":";
+                   actionAdded = true;
+                }
+                else if (actionAdded)
+                {
+                    sb = new StringBuilder(sb.ToString().TrimEnd());
+                    currentPart = ": " + currentPart;
                 }
 
                 sb.Append(UppercaseFirstLetter(currentPart));

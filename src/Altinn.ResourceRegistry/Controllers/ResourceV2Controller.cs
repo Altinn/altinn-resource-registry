@@ -87,7 +87,7 @@ namespace Altinn.ResourceRegistry.Controllers
             {
                 Right = new RightDto
                 {
-                    Key = rights.Key,
+                    Key = rights.Key.ToLowerInvariant(),
                     Name = GetActionNameFromRightKey(rights.Key, resource, language),
                     Resource = resourceAndAction.Resource,
                     Action = resourceAndAction.Action
@@ -129,8 +129,7 @@ namespace Altinn.ResourceRegistry.Controllers
                 }
                 else if (actionAdded)
                 {
-                    sb = new StringBuilder(sb.ToString().TrimEnd());
-                    currentPart = ": " + currentPart;
+                    currentPart = "(" + currentPart + ")";
                 }
 
                 sb.Append(UppercaseFirstLetter(currentPart));

@@ -129,9 +129,9 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
                 resource.Sort((a, b) => string.Compare(a.Id, b.Id, StringComparison.InvariantCultureIgnoreCase));
                 foreach (var item in resource)
                 {
-                    resourceKey.Append(item.Id.ToLowerInvariant());
+                    resourceKey.Append(item.Id);
                     resourceKey.Append(':');
-                    resourceKey.Append(item.Value.ToLowerInvariant());
+                    resourceKey.Append(item.Value);
                     resourceKey.Append(':');
                 }
 
@@ -150,9 +150,9 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
                 action.Sort((a, b) => string.Compare(a.Id, b.Id, StringComparison.InvariantCultureIgnoreCase));
                 foreach (var item in action)
                 {
-                    actionKey.Append(item.Id.ToLowerInvariant());
+                    actionKey.Append(item.Id);
                     actionKey.Append(':');
-                    actionKey.Append(item.Value.ToLowerInvariant());
+                    actionKey.Append(item.Value);
                     actionKey.Append(':');
                 }
 
@@ -200,7 +200,7 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
                 }
                 else
                 {
-                    resourceList.Add(current);
+                    resourceList.Add(current.ToLowerInvariant());
                 }
             }
 

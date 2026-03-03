@@ -222,7 +222,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             // Validate that resource owner (hasCompetentAuthority) is immutable
             if (currentResource.HasCompetentAuthority?.Organization != serviceResource.HasCompetentAuthority?.Organization ||
-                currentResource.HasCompetentAuthority?.Orgcode != serviceResource.HasCompetentAuthority?.Orgcode)
+                !currentResource.HasCompetentAuthority?.Orgcode.Equals(serviceResource.HasCompetentAuthority?.Orgcode, StringComparison.InvariantCultureIgnoreCase) == true)
             {
                 return BadRequest("Cannot change resource owner (hasCompetentAuthority). Organization and orgcode are immutable after creation.");
             }

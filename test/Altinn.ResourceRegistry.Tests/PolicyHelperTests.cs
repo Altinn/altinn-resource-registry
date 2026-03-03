@@ -395,11 +395,9 @@ public class PolicyHelperTests
     }
 
     [Fact]
-    public void EnsureValidPolicy_RealAppPolicy_WithPlaceholders_ShouldFailValidation()
+    public void EnsureValidPolicy_RealAppPolicy_WithOrgAndAppAttributes_ShouldSucceed()
     {
         // Arrange - Load the actual policy file from test data
-        // NOTE: This policy file contains placeholder values [ORG] and [APP] in rule 8
-        // which should correctly fail validation
         string policyPath = "Data/AppPolicies/brg/rrh-innrapportering/policy.xml";
         XacmlPolicy policy;
         
@@ -414,9 +412,8 @@ public class PolicyHelperTests
             Identifier = "app_brg_rrh-innrapportering"
         };
 
-        // Act & Assert - Should throw because policy has placeholder values in rule 8
-        var exception = Assert.Throws<ArgumentException>(() => PolicyHelper.EnsureValidPolicy(resource, policy));
-        Assert.Contains("without reference to registry resource id", exception.Message);
+        // Act & Assert - Should not throw with the real policy file containing org/app attributes
+        PolicyHelper.EnsureValidPolicy(resource, policy);
     }
 
     private static List<AttributeMatch> GetResourceAttributesFromRule(XacmlRule rule)

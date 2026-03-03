@@ -58,13 +58,7 @@ namespace Altinn.ResourceRegistry.Controllers
             // Map to result
             IEnumerable<RightDecomposedDto> decomposedRights = await MapFromInternalToDecomposedRights(rights, id, language, cancellationToken);
 
-            // build result with reason based on roles, packages, resource rights and users delegable
-            ResourceDecomposedDto resourceDecomposedDto = new ResourceDecomposedDto
-            {
-                Rights = decomposedRights
-            };
-
-            return resourceDecomposedDto;
+            return Ok(decomposedRights);
         }
 
         private async Task<IEnumerable<RightDecomposedDto>> MapFromInternalToDecomposedRights(List<Right> rights, string resource, string language, CancellationToken cancellationToken = default)

@@ -51,11 +51,10 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
         string content = await response.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        ResourceDecomposedDto? policyRights = await response.Content.ReadFromJsonAsync<ResourceDecomposedDto>();
+        List<RightDecomposedDto>? policyRights = await response.Content.ReadFromJsonAsync<List<RightDecomposedDto>>();
         Assert.NotNull(policyRights);
-        Assert.NotEmpty(policyRights!.Rights);
 
-        foreach(RightDecomposedDto right in policyRights.Rights)
+        foreach (RightDecomposedDto right in policyRights)
         {
             Assert.NotNull(right.Right.Key);
             Assert.NotNull(right.Right.Name);
@@ -81,11 +80,10 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
         string content = await response.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        ResourceDecomposedDto? policyRights = await response.Content.ReadFromJsonAsync<ResourceDecomposedDto>();
+        List<RightDecomposedDto>? policyRights = await response.Content.ReadFromJsonAsync<List<RightDecomposedDto>>();
         Assert.NotNull(policyRights);
-        Assert.NotEmpty(policyRights!.Rights);
 
-        foreach (RightDecomposedDto right in policyRights.Rights)
+        foreach (RightDecomposedDto right in policyRights)
         {
             Assert.NotNull(right.Right.Key);
             Assert.NotNull(right.Right.Name);
@@ -113,11 +111,10 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
         string content = await response.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        ResourceDecomposedDto? policyRights = await response.Content.ReadFromJsonAsync<ResourceDecomposedDto>();
+        List<RightDecomposedDto>? policyRights = await response.Content.ReadFromJsonAsync<List<RightDecomposedDto>>();
         Assert.NotNull(policyRights);
-        Assert.NotEmpty(policyRights!.Rights);
-
-        foreach (RightDecomposedDto right in policyRights.Rights)
+     
+        foreach (RightDecomposedDto right in policyRights)
         {
             Assert.NotNull(right.Right.Key);
             Assert.NotNull(right.Right.Name);
@@ -145,11 +142,9 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
         string content = await response.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        ResourceDecomposedDto? policyRights = await response.Content.ReadFromJsonAsync<ResourceDecomposedDto>();
+        List<RightDecomposedDto>? policyRights = await response.Content.ReadFromJsonAsync<List<RightDecomposedDto>>();
         Assert.NotNull(policyRights);
-        Assert.NotEmpty(policyRights!.Rights);
-
-        foreach (RightDecomposedDto right in policyRights.Rights)
+        foreach (RightDecomposedDto right in policyRights)
         {
             Assert.NotNull(right.Right.Key);
             Assert.NotNull(right.Right.Name);

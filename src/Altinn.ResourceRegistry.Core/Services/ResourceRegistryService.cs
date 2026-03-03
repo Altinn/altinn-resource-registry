@@ -228,7 +228,14 @@ namespace Altinn.ResourceRegistry.Core.Services
                 resources.AddRange(resourceList);
             }
 
-            return resources;
+            // Remove duplicates: If an app is both in Resource Registry and Storage, keep only the Resource Registry version
+            // This prevents apps published to Resource Registry from appearing twice in the delegation list
+            var uniqueResources = resources
+                .GroupBy(r => r.Identifier)
+                .Select(g => g.First())
+                .ToList();
+
+            return uniqueResources;
 
             async Task<List<ServiceResource>> GetResourceListInner(CancellationToken cancellationToken)
             {

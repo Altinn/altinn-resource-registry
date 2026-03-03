@@ -1204,7 +1204,7 @@ namespace Altinn.ResourceRegistry.Tests
         public async Task UpdateResource_Ok()
         {
             var client = CreateClient();
-            string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
             ServiceResource resource = new ServiceResource()
             {
                 Identifier = "altinn_access_management",
@@ -1212,11 +1212,11 @@ namespace Altinn.ResourceRegistry.Tests
                 Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
                 RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
                 Status = "Completed",
-                ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
+                ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.digdir.no", Email = "support@digdir.no", Telephone = "+4790012345" } },
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
-                    Organization = "974761076",
-                    Orgcode = "skd",
+                    Organization = "991825827",  // Match the existing resource owner
+                    Orgcode = "digdir",
                 },
                 ResourceType = ResourceType.GenericAccessResource
             };
@@ -1235,6 +1235,84 @@ namespace Altinn.ResourceRegistry.Tests
             HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateResource_ChangeOrganization_BadRequest()
+        {
+            var client = CreateClient();
+            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
+            ServiceResource resource = new ServiceResource()
+            {
+                Identifier = "altinn_access_management",
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                Status = "Completed",
+                ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.digdir.no", Email = "support@digdir.no", Telephone = "+4790012345" } },
+                HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+                {
+                    Organization = "991825827",  // Changed from 974761076 to 991825827
+                    Orgcode = "digdir",          // Changed from skd to digdir
+                },
+                ResourceType = ResourceType.GenericAccessResource
+            };
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, requestUri)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+            };
+
+            httpRequestMessage.Headers.Add("Accept", "application/json");
+            httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            string content = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Cannot change resource owner", content);
+        }
+
+        [Fact]
+        public async Task UpdateResource_ChangeOrgcode_BadRequest()
+        {
+            var client = CreateClient();
+            string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+            ServiceResource resource = new ServiceResource()
+            {
+                Identifier = "altinn_access_management",
+                Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+                Status = "Completed",
+                ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
+                HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+                {
+                    Organization = "974761076",  // Same org number
+                    Orgcode = "changed",         // Changed orgcode
+                },
+                ResourceType = ResourceType.GenericAccessResource
+            };
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string requestUri = "resourceregistry/api/v1/Resource/altinn_access_management";
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, requestUri)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+            };
+
+            httpRequestMessage.Headers.Add("Accept", "application/json");
+            httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            string content = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Cannot change resource owner", content);
         }
 
         [Fact]

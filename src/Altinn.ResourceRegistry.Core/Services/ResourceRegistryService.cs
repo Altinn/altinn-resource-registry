@@ -221,21 +221,37 @@ namespace Altinn.ResourceRegistry.Core.Services
             }
 
             var resourceLists = await Task.WhenAll(tasks);
-            var resourcesCount = resourceLists.Sum(list => list.Count);
-            var resources = new List<ServiceResource>(resourcesCount);
-            foreach (var resourceList in resourceLists)
+            
+            // Get Resource Registry resources (always first in the list)
+            var registryResources = resourceLists[0];
+            
+            // Build a HashSet of app identifiers that exist in Resource Registry
+            var registryAppIdentifiers = new HashSet<string>(
+                registryResources
+                    .Where(r => r.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX, StringComparison.OrdinalIgnoreCase))
+                    .Select(r => r.Identifier),
+                StringComparer.OrdinalIgnoreCase);
+            
+            // Combine all resources, but filter out Storage apps that are already in Resource Registry
+            var resources = new List<ServiceResource>(registryResources);
+            
+            for (int i = 1; i < resourceLists.Length; i++)
             {
-                resources.AddRange(resourceList);
+                var resourceList = resourceLists[i];
+                foreach (var resource in resourceList)
+                {
+                    // Skip Storage apps that are already published to Resource Registry
+                    if (resource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX, StringComparison.OrdinalIgnoreCase) 
+                        && registryAppIdentifiers.Contains(resource.Identifier))
+                    {
+                        continue; // Skip this duplicate
+                    }
+                    
+                    resources.Add(resource);
+                }
             }
 
-            // Remove duplicates: If an app is both in Resource Registry and Storage, keep only the Resource Registry version
-            // This prevents apps published to Resource Registry from appearing twice in the delegation list
-            var uniqueResources = resources
-                .GroupBy(r => r.Identifier)
-                .Select(g => g.First())
-                .ToList();
-
-            return uniqueResources;
+            return resources;
 
             async Task<List<ServiceResource>> GetResourceListInner(CancellationToken cancellationToken)
             {

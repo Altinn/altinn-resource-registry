@@ -56,14 +56,14 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             // Map to result
-            IEnumerable<RightDecomposedDto> decomposedRights = await MapFromInternalToDecomposedRights(rights, id, language, cancellationToken);
+            IEnumerable<RightDto> decomposedRights = await MapFromInternalToDecomposedRights(rights, id, language, cancellationToken);
 
             return Ok(decomposedRights);
         }
 
-        private async Task<IEnumerable<RightDecomposedDto>> MapFromInternalToDecomposedRights(List<Right> rights, string resource, string language, CancellationToken cancellationToken = default)
+        private async Task<IEnumerable<RightDto>> MapFromInternalToDecomposedRights(List<Right> rights, string resource, string language, CancellationToken cancellationToken = default)
         {
-            List<RightDecomposedDto> result = [];
+            List<RightDto> result = [];
 
             foreach (var right in rights)
             {
@@ -73,22 +73,19 @@ namespace Altinn.ResourceRegistry.Controllers
             return result;
         }
 
-        private async Task<RightDecomposedDto> MapFromInternalToDecomposeRight(Right rights, string resource, string language, CancellationToken cancellationToken)
+        private async Task<RightDto> MapFromInternalToDecomposeRight(Right rights, string resource, string language, CancellationToken cancellationToken)
         {
             ResourceAndAction resourceAndAction = DelegationCheckHelper.SplitRightKey(rights.Key);
 
-            RightDecomposedDto currentAction = new()
+            RightDto right = new()
             {
-                Right = new RightDto
-                {
-                    Key = rights.Key.ToLowerInvariant(),
-                    Name = GetActionNameFromRightKey(rights.Key, resource, language),
-                    Resource = resourceAndAction.Resource,
-                    Action = resourceAndAction.Action
-                }
+                Key = rights.Key.ToLowerInvariant(),
+                Name = GetActionNameFromRightKey(rights.Key, resource, language),
+                Resource = resourceAndAction.Resource,
+                Action = resourceAndAction.Action
             };
-
-            return currentAction;
+    
+            return right;
         }
 
         private string GetActionNameFromRightKey(string key, string resourceId, string language)

@@ -1,3 +1,4 @@
+using Altinn.Authorization.ABAC.Constants;
 using Altinn.Authorization.ABAC.Utils;
 using Altinn.Authorization.ABAC.Xacml;
 using Altinn.ResourceRegistry.Core.Constants;
@@ -366,6 +367,75 @@ public class PolicyHelperTests
 
         // Act & Assert - should succeed with case insensitive comparison
         PolicyHelper.EnsureValidPolicy(resource, policy);
+    }
+
+    [Fact]
+    public void Debug_CheckOrgAppMatching()
+    {
+        // Arrange
+        string identifier = "app_brg_rrh-innrapportering";
+        string[] parts = identifier.Split('_');
+        
+        string expectedOrg = parts[1];  // "brg"
+        string expectedApp = parts[2];  // "rrh-innrapportering"
+        
+        var xacmlResources = new List<AttributeMatch>
+        {
+            new AttributeMatch { Id = "urn:altinn:org", Value = "brg" },
+            new AttributeMatch { Id = "urn:altinn:app", Value = "rrh-innrapportering" }
+        };
+        
+        // Act
+        bool hasOrgAttribute = xacmlResources.Any(r => r.Id.Equals(AltinnXacmlConstants.MatchAttributeIdentifiers.OrgAttribute) && r.Value.Equals(expectedOrg, StringComparison.OrdinalIgnoreCase));
+        bool hasAppAttribute = xacmlResources.Any(r => r.Id.Equals(AltinnXacmlConstants.MatchAttributeIdentifiers.AppAttribute) && r.Value.Equals(expectedApp, StringComparison.OrdinalIgnoreCase));
+        
+        // Assert
+        Assert.True(hasOrgAttribute, $"Should find org attribute. Looking for '{AltinnXacmlConstants.MatchAttributeIdentifiers.OrgAttribute}' with value '{expectedOrg}'");
+        Assert.True(hasAppAttribute, $"Should find app attribute. Looking for '{AltinnXacmlConstants.MatchAttributeIdentifiers.AppAttribute}' with value '{expectedApp}'");
+    }
+
+    [Fact]
+    public void EnsureValidPolicy_RealAppPolicy_WithPlaceholders_ShouldFailValidation()
+    {
+        // Arrange - Load the actual policy file from test data
+        // NOTE: This policy file contains placeholder values [ORG] and [APP] in rule 8
+        // which should correctly fail validation
+        string policyPath = "Data/AppPolicies/brg/rrh-innrapportering/policy.xml";
+        XacmlPolicy policy;
+        
+        using (var stream = File.OpenRead(policyPath))
+        using (var reader = XmlReader.Create(stream))
+        {
+            policy = XacmlParser.ParseXacmlPolicy(reader);
+        }
+
+        var resource = new ServiceResource
+        {
+            Identifier = "app_brg_rrh-innrapportering"
+        };
+
+        // Act & Assert - Should throw because policy has placeholder values in rule 8
+        var exception = Assert.Throws<ArgumentException>(() => PolicyHelper.EnsureValidPolicy(resource, policy));
+        Assert.Contains("without reference to registry resource id", exception.Message);
+    }
+
+    private static List<AttributeMatch> GetResourceAttributesFromRule(XacmlRule rule)
+    {
+        var result = new List<AttributeMatch>();
+        if (rule.Target == null) return result;
+
+        foreach (var anyOf in rule.Target.AnyOf)
+        {
+            foreach (var allOf in anyOf.AllOf)
+            {
+                foreach (var xacmlMatch in allOf.Matches.Where(m => m.AttributeDesignator.Category.Equals(XacmlConstants.MatchAttributeCategory.Resource)))
+                {
+                    result.Add(new AttributeMatch { Id = xacmlMatch.AttributeDesignator.AttributeId.OriginalString, Value = xacmlMatch.AttributeValue.Value });
+                }
+            }
+        }
+
+        return result;
     }
 
     private static XacmlPolicy ParsePolicy(string xml)

@@ -30,7 +30,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             string expectedOrg = null;
             string expectedApp = null;
 
-            if (isAppResource && serviceResources.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
+            if (isAppResource)
             {
                 string[] parts = serviceResources.Identifier.Split('_');
                 if (parts.Length == 3)

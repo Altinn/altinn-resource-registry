@@ -245,10 +245,37 @@ namespace Altinn.ResourceRegistry.Core.Services
 
                 foreach (ServiceResource resource in resources)
                 {
-                    resource.AuthorizationReference = new List<AuthorizationReferenceAttribute>
+                    // For app resources, use org/app format like Storage apps do
+                    if (resource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX, StringComparison.OrdinalIgnoreCase))
                     {
-                        new AuthorizationReferenceAttribute() { Id = "urn:altinn:resource", Value = resource.Identifier }
-                    };
+                        string[] parts = resource.Identifier.Split('_');
+                        if (parts.Length >= 3)
+                        {
+                            string org = parts[1];
+                            string app = string.Join("_", parts.Skip(2)); // Handle app names with underscores
+                            resource.AuthorizationReference = new List<AuthorizationReferenceAttribute>
+                            {
+                                new AuthorizationReferenceAttribute() { Id = "urn:altinn:org", Value = org },
+                                new AuthorizationReferenceAttribute() { Id = "urn:altinn:app", Value = app }
+                            };
+                        }
+                        else
+                        {
+                            // Fallback if identifier format is unexpected
+                            resource.AuthorizationReference = new List<AuthorizationReferenceAttribute>
+                            {
+                                new AuthorizationReferenceAttribute() { Id = "urn:altinn:resource", Value = resource.Identifier }
+                            };
+                        }
+                    }
+                    else
+                    {
+                        // Non-app resources use resource format
+                        resource.AuthorizationReference = new List<AuthorizationReferenceAttribute>
+                        {
+                            new AuthorizationReferenceAttribute() { Id = "urn:altinn:resource", Value = resource.Identifier }
+                        };
+                    }
                 }
 
                 return resources;

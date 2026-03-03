@@ -116,7 +116,7 @@ namespace Altinn.ResourceRegistry.Tests
             List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
 
             Assert.NotNull(resource);
-            Assert.Equal(3, resource.Count);
+            Assert.Equal(4, resource.Count);
         }
 
         [Fact]
@@ -886,7 +886,7 @@ namespace Altinn.ResourceRegistry.Tests
 
             ServiceResource resource = new ServiceResource()
             {
-                Identifier = "altinn_access_management",
+                Identifier = "altinn_access_management_skd",
                 Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
                 Status = "Active",
                 Homepage = "www.altinn.no",
@@ -898,7 +898,7 @@ namespace Altinn.ResourceRegistry.Tests
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
-                    Orgcode = "digdir",
+                    Orgcode = "skd",
                 },
                 ResourceType = ResourceType.GenericAccessResource,
                 ResourceReferences = new List<ResourceReference>
@@ -962,7 +962,7 @@ namespace Altinn.ResourceRegistry.Tests
 
             ServiceResource resource = new ServiceResource()
             {
-                Identifier = "altinn_access_management",
+                Identifier = "altinn_access_management_skd",
                 Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
                 Status = "Active",
                 Homepage = "www.altinn.no",
@@ -974,7 +974,7 @@ namespace Altinn.ResourceRegistry.Tests
                 HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
                 {
                     Organization = "974761076",
-                    Orgcode = "digdir",
+                    Orgcode = "skd",
                 },
                 ResourceType = ResourceType.GenericAccessResource,
                 ResourceReferences = new List<ResourceReference>

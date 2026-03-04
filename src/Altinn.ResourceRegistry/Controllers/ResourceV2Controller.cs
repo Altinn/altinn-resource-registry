@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Text;
 using Altinn.AccessMgmt.Core.Utils.Helper;
 using Altinn.Authorization.ServiceDefaults;
@@ -6,7 +5,6 @@ using Altinn.ResourceRegistry.Core.Configuration;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Models;
-using Altinn.ResourceRegistry.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 

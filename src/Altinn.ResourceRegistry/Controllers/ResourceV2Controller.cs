@@ -6,6 +6,7 @@ using Altinn.ResourceRegistry.Core.Configuration;
 using Altinn.ResourceRegistry.Core.Models;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Models;
+using Altinn.ResourceRegistry.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -79,7 +80,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             RightDto right = new()
             {
-                Key = rights.Key.ToLowerInvariant(),
+                Key = "01" + Base64UrlEncoder.Encode(rights.Key.ToLowerInvariant()),
                 Name = GetActionNameFromRightKey(rights.Key, resource, language),
                 Resource = resourceAndAction.Resource.OrderBy(r => !r.StartsWith("urn:altinn:resource", StringComparison.OrdinalIgnoreCase)).ToArray(),
                 Action = resourceAndAction.Action

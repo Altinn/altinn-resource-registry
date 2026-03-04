@@ -81,7 +81,7 @@ namespace Altinn.ResourceRegistry.Controllers
             {
                 Key = rights.Key.ToLowerInvariant(),
                 Name = GetActionNameFromRightKey(rights.Key, resource, language),
-                Resource = resourceAndAction.Resource,
+                Resource = resourceAndAction.Resource.OrderBy(r => !r.StartsWith("urn:altinn:resource", StringComparison.OrdinalIgnoreCase)).ToArray(),
                 Action = resourceAndAction.Action
             };
     

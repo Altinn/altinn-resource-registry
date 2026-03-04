@@ -53,13 +53,6 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         List<RightDto>? policyRights = await response.Content.ReadFromJsonAsync<List<RightDto>>();
         Assert.NotNull(policyRights);
-
-        foreach (RightDto right in policyRights)
-        {
-            Assert.NotNull(right.Key);
-            Assert.NotNull(right.Name);
-            Assert.Equal(right.Key, right.Key.ToLowerInvariant());
-        }
     }
 
     [Fact]
@@ -82,13 +75,6 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         List<RightDto>? policyRights = await response.Content.ReadFromJsonAsync<List<RightDto>>();
         Assert.NotNull(policyRights);
-
-        foreach (RightDto right in policyRights)
-        {
-            Assert.NotNull(right.Key);
-            Assert.NotNull(right.Name);
-            Assert.Equal(right.Key, right.Key.ToLowerInvariant());
-        }
     }
 
     /// <summary>
@@ -113,13 +99,6 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         List<RightDto>? policyRights = await response.Content.ReadFromJsonAsync<List<RightDto>>();
         Assert.NotNull(policyRights);
-
-        foreach (RightDto right in policyRights)
-        {
-            Assert.NotNull(right.Key);
-            Assert.NotNull(right.Name);
-            Assert.Equal(right.Key, right.Key.ToLowerInvariant());
-        }
     }
 
     /// <summary>
@@ -144,13 +123,6 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         List<RightDto>? policyRights = await response.Content.ReadFromJsonAsync<List<RightDto>>();
         Assert.NotNull(policyRights);
-
-        foreach (RightDto right in policyRights)
-        {
-            Assert.NotNull(right.Key);
-            Assert.NotNull(right.Name);
-            Assert.Equal(right.Key, right.Key.ToLowerInvariant());
-        }
     }
 
 

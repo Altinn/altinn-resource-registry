@@ -45,9 +45,9 @@ namespace Altinn.ResourceRegistry.Controllers
         [HttpGet("{id}/policy/rights")]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public async Task<ActionResult<ResourceDecomposedDto>> GetRights(string id, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<ResourceDecomposedDto>> GetRights(string id, bool includeServiceOwnerRights = false, bool includeAppRights = false, CancellationToken cancellationToken = default)
         {
-            List<Right> rights = await _resourceRegistry.GetPolicyRightsV2(id, cancellationToken);
+            List<Right> rights = await _resourceRegistry.GetPolicyRightsV2(id, includeServiceOwnerRights, includeAppRights, cancellationToken);
 
             string language = HttpContext.Request.Headers.AcceptLanguage.FirstOrDefault();
             if (language == null) 

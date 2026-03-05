@@ -1,8 +1,6 @@
-﻿using System.Reflection;
-using System.Text;
+﻿using System.Text;
 using Altinn.Authorization.ABAC.Constants;
 using Altinn.Authorization.ABAC.Xacml;
-using Altinn.ResourceRegistry.Core.AccessLists;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
@@ -107,11 +105,6 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
 
             foreach (var resource in resources)
             {
-                Right rightWithKey = new Right
-                {
-                    Resource = resource
-                };
-
                 var org = resource.FirstOrDefault(r => r.Type.Equals(AltinnXacmlConstants.MatchAttributeIdentifiers.OrgAttribute));
                 var app = resource.FirstOrDefault(r => r.Type.Equals(AltinnXacmlConstants.MatchAttributeIdentifiers.AppAttribute));
 
@@ -128,6 +121,11 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
                 {
                     continue;
                 }
+
+                Right rightWithKey = new Right
+                {
+                    Resource = [..resource] // Collection expression with spread - creates a new list
+                };
 
                 StringBuilder resourceKey = new();
 

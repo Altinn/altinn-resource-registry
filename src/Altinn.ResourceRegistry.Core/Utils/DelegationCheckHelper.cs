@@ -65,7 +65,7 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
 
                 ruleSubjects = FilterSubjects(ruleSubjects, includeServiceOwnerRights, includeAppRights);
 
-                if (!ruleSubjects.Any() || !rightsWithKeys.Any())
+                if (ruleSubjects.Count == 0 || !rightsWithKeys.Any())
                 {
                     continue;
                 }

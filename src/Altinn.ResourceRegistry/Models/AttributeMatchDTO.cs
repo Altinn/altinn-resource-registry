@@ -5,8 +5,14 @@
     /// </summary>
     public class AttributeMatchDTO
     {
+        /// <summary>
+        /// Type
+        /// </summary>
         public string Type { get; set; }
 
+        /// <summary>
+        /// Value
+        /// </summary>
         public string Value { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Altinn.ResourceRegistry.Core.AccessLists;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
+using static Altinn.ResourceRegistry.Core.Constants.AltinnXacmlConstants;
 
 namespace Altinn.AccessMgmt.Core.Utils.Helper
 {
@@ -61,32 +62,26 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
 
             foreach (XacmlRule rule in policy.Rules)
             {
-                IEnumerable<string> keys = DelegationCheckHelper.CalculateActionKey(rule, resourceId);
+                IEnumerable<Right> rightsWithKeys = DelegationCheckHelper.CalculateActionKey(rule, resourceId);
                 List<string> ruleSubjects = DelegationCheckHelper.GetFirstAccessorValuesFromPolicy(rule, XacmlConstants.MatchAttributeCategory.Subject).ToList();
-                IEnumerable<PolicyAttributeMatch> resourceAttributes = PolicyHelper.GetRulePolicyAttributeMatchesForCategory(rule, XacmlConstants.MatchAttributeCategory.Resource).SelectMany(m => m).ToList();
 
                 ruleSubjects = FilterSubjects(ruleSubjects, includeServiceOwnerRights, includeAppRights);
-                if (!ruleSubjects.Any() || !keys.Any())
+
+                if (!ruleSubjects.Any() || !rightsWithKeys.Any())
                 {
                     continue;
                 }
 
-                foreach (string key in keys)
+                foreach (Right rightWithKey in rightsWithKeys)
                 {
-                    if (!rights.ContainsKey(key))
+                    if (!rights.ContainsKey(rightWithKey.Key))
                     {
-                        Right right = new Right
-                        {
-                            Key = key,
-                            Resource = resourceAttributes,
-                            AccessorUrns = ruleSubjects.ToHashSet(),
-                        };
-
-                        rights.Add(key, right);
+                        rightWithKey.AccessorUrns = new HashSet<string>(ruleSubjects);
+                        rights.Add(rightWithKey.Key, rightWithKey);
                     }
                     else
                     {
-                        rights[key].AccessorUrns.UnionWith(ruleSubjects);
+                        rights[rightWithKey.Key].AccessorUrns.UnionWith(ruleSubjects);
                     }
                 }
             }
@@ -100,18 +95,23 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
         /// <param name="rule">the rule to analyze</param>
         /// <param name="resourceId">the resourceid subjects must contain</param>
         /// <returns>list of resource/action keys</returns>
-        public static IEnumerable<string> CalculateActionKey(XacmlRule rule, string resourceId)
+        public static IEnumerable<Right> CalculateActionKey(XacmlRule rule, string resourceId)
         {
-            List<string> result = [];
+            List<Right> result = [];
 
             // Use policy to calculate the rest of the key
             List<List<PolicyAttributeMatch>> resources = PolicyHelper.GetRulePolicyAttributeMatchesForCategory(rule, XacmlConstants.MatchAttributeCategory.Resource).ToList();
             List<List<PolicyAttributeMatch>> actions = PolicyHelper.GetRulePolicyAttributeMatchesForCategory(rule, XacmlConstants.MatchAttributeCategory.Action);
-            List<string> resourceKeys = new List<string>();
+            List<Right> resourceKeys = new List<Right>();
             List<string> actionKeys = new List<string>();
 
             foreach (var resource in resources)
             {
+                Right rightWithKey = new Right
+                {
+                    Resource = resource
+                };
+
                 var org = resource.FirstOrDefault(r => r.Type.Equals(AltinnXacmlConstants.MatchAttributeIdentifiers.OrgAttribute));
                 var app = resource.FirstOrDefault(r => r.Type.Equals(AltinnXacmlConstants.MatchAttributeIdentifiers.AppAttribute));
 
@@ -145,7 +145,8 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
                     resourceKey.Remove(resourceKey.Length - 1, 1);
                 }
 
-                resourceKeys.Add(resourceKey.ToString());
+                rightWithKey.Key = resourceKey.ToString();
+                resourceKeys.Add(rightWithKey);
             }
 
             foreach (var action in actions)
@@ -169,11 +170,11 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
                 actionKeys.Add(actionKey.ToString());
             }
 
-            foreach (var resource in resourceKeys)
+            foreach (Right resource in resourceKeys)
             {
                 foreach (var action in actionKeys)
                 {
-                    result.Add(resource + ":" + action);
+                    result.Add(new Right { Key = resource.Key + ":" + action, Resource = resource.Resource, Action = new PolicyAttributeMatch() { Type = MatchAttributeIdentifiers.ActionId, Value = action.Replace(MatchAttributeIdentifiers.ActionId + ":", string.Empty) } });
                 }
             }
 

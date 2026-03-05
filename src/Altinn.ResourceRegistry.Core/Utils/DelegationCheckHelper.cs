@@ -72,14 +72,14 @@ namespace Altinn.AccessMgmt.Core.Utils.Helper
 
                 foreach (Right rightWithKey in rightsWithKeys)
                 {
-                    if (!rights.ContainsKey(rightWithKey.Key))
+                    if (!rights.TryGetValue(rightWithKey.Key, out Right value))
                     {
-                        rightWithKey.AccessorUrns = new HashSet<string>(ruleSubjects);
+                        rightWithKey.AccessorUrns = [.. ruleSubjects];
                         rights.Add(rightWithKey.Key, rightWithKey);
                     }
                     else
                     {
-                        rights[rightWithKey.Key].AccessorUrns.UnionWith(ruleSubjects);
+                        value.AccessorUrns.UnionWith(ruleSubjects);
                     }
                 }
             }

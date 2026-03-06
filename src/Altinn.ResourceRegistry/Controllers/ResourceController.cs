@@ -6,6 +6,8 @@ using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
+using Altinn.ResourceRegistry.Core.Register;
+using Altinn.ResourceRegistry.Core.ServiceOwners;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Extensions;
 using Altinn.ResourceRegistry.Models;
@@ -28,6 +30,7 @@ namespace Altinn.ResourceRegistry.Controllers
         private readonly IResourceRegistry _resourceRegistry;
         private readonly ILogger<ResourceController> _logger;
         private readonly AltinnServiceDescriptor _serviceDescriptor;
+        private readonly IServiceOwnerService _serviceOwnerService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceController"/> controller.
@@ -35,11 +38,13 @@ namespace Altinn.ResourceRegistry.Controllers
         public ResourceController(
             IResourceRegistry resourceRegistry,
             ILogger<ResourceController> logger,
-            AltinnServiceDescriptor serviceDescriptor)
+            AltinnServiceDescriptor serviceDescriptor,
+            IServiceOwnerService serviceOwnerService)
         {
             _resourceRegistry = resourceRegistry;
             _logger = logger;
             _serviceDescriptor = serviceDescriptor;
+            _serviceOwnerService = serviceOwnerService;
         }
 
         /// <summary>
@@ -154,6 +159,12 @@ namespace Altinn.ResourceRegistry.Controllers
                 return Forbid();
             }
 
+            if (!await IsRegisteredServiceOwner(serviceResource, cancellationToken))
+            {
+                ModelState.AddModelError("HasCompetentAuthority", "The organization is not registered as a service owner");
+                return ValidationProblem(ModelState);
+            }
+
             List<string> scopes = MaskinportenSchemaAuthorizer.GetMaskinportenScopesFromServiceResource(serviceResource);
 
             if (scopes is { Count: > 0 } && !MaskinportenSchemaAuthorizer.IsAuthorizedForChangeResourceWithScopes(scopes, HttpContext.User, out List<string> forbiddenScopes))
@@ -223,6 +234,12 @@ namespace Altinn.ResourceRegistry.Controllers
             if (!AuthorizationUtil.HasWriteAccess(serviceResource.HasCompetentAuthority?.Organization, User))
             {
                 return Forbid();
+            }
+
+            if (!await IsRegisteredServiceOwner(serviceResource, cancellationToken))
+            {
+                ModelState.AddModelError("HasCompetentAuthority", "The organization is not registered as a service owner");
+                return ValidationProblem(ModelState);
             }
 
             List<string> scopes = MaskinportenSchemaAuthorizer.GetMaskinportenScopesFromServiceResource(serviceResource);
@@ -560,6 +577,27 @@ namespace Altinn.ResourceRegistry.Controllers
             });
 
             return Paginated.Create(updatedResourceSubjects, nextUrl);
+        }
+
+        private async Task<bool> IsRegisteredServiceOwner(ServiceResource serviceResource, CancellationToken cancellationToken)
+        {
+            var serviceOwners = await _serviceOwnerService.GetServiceOwners(cancellationToken);
+
+            var orgCode = serviceResource.HasCompetentAuthority?.Orgcode;
+            if (!string.IsNullOrEmpty(orgCode) && serviceOwners.TryGet(orgCode, out _))
+            {
+                return true;
+            }
+
+            var orgNumberStr = serviceResource.HasCompetentAuthority?.Organization;
+            if (!string.IsNullOrEmpty(orgNumberStr)
+                && OrganizationNumber.TryParse(orgNumberStr, provider: null, out var orgNumber)
+                && serviceOwners.TryFind(orgNumber, out _))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 

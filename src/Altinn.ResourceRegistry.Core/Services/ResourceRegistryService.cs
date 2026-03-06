@@ -1,4 +1,4 @@
-﻿using System.Buffers;
+using System.Buffers;
 using System.Net;
 using Altinn.AccessMgmt.Core.Utils.Helper;
 using Altinn.Authorization.ABAC.Constants;
@@ -124,8 +124,8 @@ namespace Altinn.ResourceRegistry.Core.Services
             // App resources should be stored in the metadata container at org/app/policy.xml
             if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX, StringComparison.OrdinalIgnoreCase))
             {
-                string[] parts = serviceResource.Identifier.Split('_');
-                if (parts.Length >= 3)
+                string[] parts = serviceResource.Identifier.Split('_', 3);
+                if (parts.Length == 3)
                 {
                     string org = parts[1];
                     string app = parts[2];
@@ -274,11 +274,11 @@ namespace Altinn.ResourceRegistry.Core.Services
                     // For app resources, use org/app format like Storage apps do
                     if (resource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX, StringComparison.OrdinalIgnoreCase))
                     {
-                        string[] parts = resource.Identifier.Split('_');
-                        if (parts.Length >= 3)
+                        string[] parts = resource.Identifier.Split('_', 3);
+                        if (parts.Length == 3)
                         {
                             string org = parts[1];
-                            string app = string.Join("_", parts.Skip(2)); // Handle app names with underscores
+                            string app = parts[2];
                             resource.AuthorizationReference = new List<AuthorizationReferenceAttribute>
                             {
                                 new AuthorizationReferenceAttribute() { Id = "urn:altinn:org", Value = org },
@@ -548,13 +548,13 @@ namespace Altinn.ResourceRegistry.Core.Services
             Stream? policyContent = null;
             if (resourceIdentifer.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
             {
-                string[] idParts = resourceIdentifer.Split('_');
+                string[] idParts = resourceIdentifer.Split('_', 3);
 
                 // Scenario for app imported in to resource registry
-                if (idParts.Length >= 3)
+                if (idParts.Length == 3)
                 {
                     string org = idParts[1];
-                    string app = string.Join("_", idParts.Skip(2)); // Handle app names with underscores
+                    string app = idParts[2];
                     policyContent = await _policyRepository.GetAppPolicyAsync(org, app, cancellationToken);
                 }
             }

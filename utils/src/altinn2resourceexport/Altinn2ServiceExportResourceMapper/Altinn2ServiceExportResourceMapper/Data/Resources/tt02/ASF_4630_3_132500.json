@@ -1,0 +1,76 @@
+﻿{
+  "identifier": "asf_4630_3",
+  "version": "1.0",
+  "title": {
+    "nb": "Inntektsopplysninger",
+    "en": "Inntektsopplysninger",
+    "nn": "Inntektsopplysninger"
+  },
+  "description": {
+    "nb": "Inntektsopplysninger",
+    "en": "Inntektsopplysninger",
+    "nn": "Inntektsopplysninger"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4630",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "3",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "132500",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Inntektsopplysninger for perioden fra {fraogmed} til {tilogmed}.<br/><br/>Opplysningene er rapportert av arbeidsgiver eller andre som er opplysningspliktige. For å se alt som er innrapportert gå til <a href=\"http://www.skatteetaten.no\" target=\"_blank\">innsynsløsning.no</a><br/><br/>Utleveres:<br/><ul><li> Utbetalt lønn fra arbeidsgiver/oppdragsgiver<br/><li> Skattefradrag og forskuddstrekk<br/><li> Utbetalte ytelser fra det offentlige, som foreldrepenger, arbeidsavklaringspenger osv.<br/><li> Utbetalt pensjon eller trygd.<br/><li> Næringsinntekt når rapporteringspliktig<br/></ul><br/>",
+    "en": "Inntektsopplysninger for perioden fra {fraogmed} til {tilogmed}.<br/><br/>Opplysningene er rapportert av arbeidsgiver eller andre som er opplysningspliktige. For å se alt som er innrapportert gå til <a href=\"http://www.skatteetaten.no\" target=\"_blank\">innsynsløsning.no</a><br/><br/>Utleveres:<br/><ul><li> Utbetalt lønn fra arbeidsgiver/oppdragsgiver<br/><li> Skattefradrag og forskuddstrekk<br/><li> Utbetalte ytelser fra det offentlige, som foreldrepenger, arbeidsavklaringspenger osv.<br/><li> Utbetalt pensjon eller trygd.<br/><li> Næringsinntekt når rapporteringspliktig<br/></ul><br/>",
+    "nn": "Inntektsopplysninger for perioden fra {fraogmed} til {tilogmed}.<br/><br/>Opplysningene er rapportert av arbeidsgiver eller andre som er opplysningspliktige. For å se alt som er innrapportert gå til <a href=\"http://www.skatteetaten.no\" target=\"_blank\">innsynsløsning.no</a><br/><br/>Utleveres:<br/><ul><li> Utbetalt lønn fra arbeidsgiver/oppdragsgiver<br/><li> Skattefradrag og forskuddstrekk<br/><li> Utbetalte ytelser fra det offentlige, som foreldrepenger, arbeidsavklaringspenger osv.<br/><li> Utbetalt pensjon eller trygd.<br/><li> Næringsinntekt når rapporteringspliktig<br/></ul><br/>"
+  },
+  "consentMetadata": {
+    "fraogmed": {
+      "optional": false
+    },
+    "tilogmed": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": true,
+  "versionId": 0
+}

@@ -1,0 +1,76 @@
+﻿{
+  "identifier": "nav_5382_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Opplysninger om uføretrygd fra NAV",
+    "en": "Opplysninger om uføretrygd fra NAV",
+    "nn": "Opplysninger om uføretrygd fra NAV"
+  },
+  "description": {
+    "nb": "Opplysninger om uføretrygd fra NAV",
+    "en": "Opplysninger om uføretrygd fra NAV",
+    "nn": "Opplysninger om uføretrygd fra NAV"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5382",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "169229",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "889640782",
+    "orgcode": "NAV"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "<h2>Under utvikling</h2> <ul> <li>Perioder for vedtak om uf&oslash;retrygd og uf&oslash;repensjon</li> <li>Om vedtaket gjelder innvilgelse, avslag, endring, eller opph&oslash;r</li> <li>Om du har flyttet til utlandet</li> <li>Hvilke opplysninger NAV har brukt i beregningen av uf&oslash;retrygd/uf&oslash;repensjon: <ul style=\"margin-left: 20px\"> <li>Inntekt f&oslash;r uf&oslash;rhet</li> <li>Uf&oslash;retidspunkt</li> <li>Uf&oslash;regrad</li> <li>Inntekt brukt i avkorting av uf&oslash;retrygden</li> </ul> </li> <li>Om du har en s&oslash;knad eller klage til behandling</li> </ul> <p>Ved &aring; samtykke, gir du NAV rett til i en periode p&aring; tre &aring;r, &aring; gi ut disse opplysningene om vedtak om uf&oslash;retrygd for perioden {fraogmed} - {tilogmed}.</p> <p>P&aring; Ditt NAV p&aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs&aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p&aring; ditt samtykke.</p>",
+    "en": "<h2>Under utvikling</h2> <ul> <li>Perioder for vedtak om uf&oslash;retrygd og uf&oslash;repensjon</li> <li>Om vedtaket gjelder innvilgelse, avslag, endring, eller opph&oslash;r</li> <li>Om du har flyttet til utlandet</li> <li>Hvilke opplysninger NAV har brukt i beregningen av uf&oslash;retrygd/uf&oslash;repensjon: <ul style=\"margin-left: 20px\"> <li>Inntekt f&oslash;r uf&oslash;rhet</li> <li>Uf&oslash;retidspunkt</li> <li>Uf&oslash;regrad</li> <li>Inntekt brukt i avkorting av uf&oslash;retrygden</li> </ul> </li> <li>Om du har en s&oslash;knad eller klage til behandling</li> </ul> <p>Ved &aring; samtykke, gir du NAV rett til i en periode p&aring; tre &aring;r, &aring; gi ut disse opplysningene om vedtak om uf&oslash;retrygd for perioden {fraogmed} - {tilogmed}.</p> <p>P&aring; Ditt NAV p&aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs&aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p&aring; ditt samtykke.</p>",
+    "nn": "<h2>Under utvikling</h2> <ul> <li>Perioder for vedtak om uf&oslash;retrygd og uf&oslash;repensjon</li> <li>Om vedtaket gjelder innvilgelse, avslag, endring, eller opph&oslash;r</li> <li>Om du har flyttet til utlandet</li> <li>Hvilke opplysninger NAV har brukt i beregningen av uf&oslash;retrygd/uf&oslash;repensjon: <ul style=\"margin-left: 20px\"> <li>Inntekt f&oslash;r uf&oslash;rhet</li> <li>Uf&oslash;retidspunkt</li> <li>Uf&oslash;regrad</li> <li>Inntekt brukt i avkorting av uf&oslash;retrygden</li> </ul> </li> <li>Om du har en s&oslash;knad eller klage til behandling</li> </ul> <p>Ved &aring; samtykke, gir du NAV rett til i en periode p&aring; tre &aring;r, &aring; gi ut disse opplysningene om vedtak om uf&oslash;retrygd for perioden {fraogmed} - {tilogmed}.</p> <p>P&aring; Ditt NAV p&aring; nav.no kan du selv se hvilke opplysninger NAV har om deg, og du kan ogs&aring; se hvilke opplysninger vi har sendt til ditt forsikringsselskap basert p&aring; ditt samtykke.</p>"
+  },
+  "consentMetadata": {
+    "fraogmed": {
+      "optional": false
+    },
+    "tilogmed": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

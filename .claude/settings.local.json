@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh issue:*)",
+      "Bash(dotnet build:*)",
+      "Bash(find /c/repos/altinn-resource-registry/test -type f -name *ResourceList* -o -name *Resource*Controller*)",
+      "Bash(xargs grep:*)",
+      "Bash(grep -r \"Data/Resources\\\\|Data/Altinn\\\\|applications.json\" /c/repos/altinn-resource-registry/test/Altinn.ResourceRegistry.Tests/*.cs)"
+    ]
+  }
+}

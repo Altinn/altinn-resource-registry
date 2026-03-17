@@ -28,7 +28,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             foreach (ServiceResource serviceResource in resourceList)
             {
                 if (MatchingIdentifier(serviceResource, resourceSearch) && MatchingDescription(serviceResource, resourceSearch) && MatchingResourceType(serviceResource, resourceSearch) && MatchingKeywords(serviceResource, resourceSearch)
-                    && MatchingReference(serviceResource, resourceSearch))
+                    && MatchingReference(serviceResource, resourceSearch) && MatchingOrgCode(serviceResource, resourceSearch))
                 {
                     searchResults.Add(serviceResource);
                 }
@@ -280,6 +280,11 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                     return resource.ResourceReferences.Any(r => r.Reference.Contains(resourceSearch.Reference, StringComparison.InvariantCultureIgnoreCase));
                 }
             }
+        }
+
+        private static bool MatchingOrgCode(ServiceResource resource, ResourceSearch resourceSearch)
+        {
+            return resourceSearch.OrgCode == null || (resource.HasCompetentAuthority?.Orgcode != null && resource.HasCompetentAuthority.Orgcode.Equals(resourceSearch.OrgCode, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private static bool MatchingIdentifier(ServiceResource resource, ResourceSearch resourceSearch)

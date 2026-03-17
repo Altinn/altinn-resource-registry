@@ -48,6 +48,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <param name="includeApps">Include App resources</param>
         /// <param name="includeAltinn2">Include Altinn 2 resources</param>
         /// <param name="includeMigratedApps">Include migrated apps from A1/A2</param>
+        /// <param name="orgCode">Filter by orgcode of the competent authority</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         [HttpGet("resourcelist")]
@@ -56,9 +57,10 @@ namespace Altinn.ResourceRegistry.Controllers
             bool includeApps = true,
             bool includeAltinn2 = true,
             bool includeMigratedApps = false,
+            string? orgCode = null,
             CancellationToken cancellationToken = default)
         {
-            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, includeExpired: false, includeMigratedApps, includeAllVersions: false, cancellationToken);
+            return await _resourceRegistry.GetResourceList(includeApps, includeAltinn2, includeExpired: false, includeMigratedApps, includeAllVersions: false, orgCode, cancellationToken);
         }
 
         /// <summary>
@@ -91,7 +93,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             if (resource == null && id.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX) && !id.Contains("_a1-"))
             {
-                List<ServiceResource> resourceList = await _resourceRegistry.GetResourceList(includeApps: true, includeAltinn2: false, includeExpired: true, includeMigratedApps: true, includeAllVersions:false, cancellationToken);
+                List<ServiceResource> resourceList = await _resourceRegistry.GetResourceList(includeApps: true, includeAltinn2: false, includeExpired: true, includeMigratedApps: true, includeAllVersions: false, orgCode: null, cancellationToken);
                 ServiceResource appResource = resourceList.FirstOrDefault(r => r.Identifier == id);
                 if (appResource != null)
                 {

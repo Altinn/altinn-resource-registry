@@ -109,7 +109,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task<List<ServiceResource>> GetSearchResults(ResourceSearch resourceSearch, CancellationToken cancellationToken = default)
         {
-            List<ServiceResource> resourceList = await GetResourceList(includeApps: false, includeAltinn2: false, includeExpired: false, includeMigratedApps: false, includeAllVersions: true, cancellationToken);
+            List<ServiceResource> resourceList = await GetResourceList(includeApps: false, includeAltinn2: false, includeExpired: false, includeMigratedApps: false, includeAllVersions: true, orgCode: null, cancellationToken);
             return ServiceResourceHelper.GetSearchResultsFromResourceList(resourceList, resourceSearch);
         }
 
@@ -210,7 +210,7 @@ namespace Altinn.ResourceRegistry.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<ServiceResource>> GetResourceList(bool includeApps, bool includeAltinn2, bool includeExpired, bool includeMigratedApps, bool includeAllVersions = false, CancellationToken cancellationToken = default)
+        public async Task<List<ServiceResource>> GetResourceList(bool includeApps, bool includeAltinn2, bool includeExpired, bool includeMigratedApps, bool includeAllVersions = false, string? orgCode = null, CancellationToken cancellationToken = default)
         {
             var tasks = new List<Task<List<ServiceResource>>>(3)
             {
@@ -259,6 +259,11 @@ namespace Altinn.ResourceRegistry.Core.Services
                     
                     resources.Add(resource);
                 }
+            }
+
+            if (orgCode != null)
+            {
+                resources = resources.Where(r => r.HasCompetentAuthority?.Orgcode?.Equals(orgCode, StringComparison.InvariantCultureIgnoreCase) == true).ToList();
             }
 
             return resources;

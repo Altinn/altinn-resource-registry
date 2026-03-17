@@ -37,5 +37,10 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// To search for a specific reference
         /// </summary>
         public string? Reference { get; set; }
+
+        /// <summary>
+        /// Filter by orgcode of the competent authority (hasCompetentAuthority.orgcode)
+        /// </summary>
+        public string? OrgCode { get; set; }
     }
 }

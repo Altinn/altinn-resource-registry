@@ -1,0 +1,79 @@
+﻿{
+  "identifier": "acn_4021_1601",
+  "version": "1.0",
+  "title": {
+    "nb": "Link service for consent",
+    "en": "Link service for consent",
+    "nn": "Link service for consent"
+  },
+  "description": {
+    "nb": "Link service for consent",
+    "en": "Link service for consent",
+    "nn": "Link service for consent"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4021",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1601",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "130863",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "999999990",
+    "orgcode": "ACN"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Dette er for å testes samtykke i produksjonstest Testing consent text for {year} and go to <a href=\"https://www.folkeuniversitetet.no/\">Visit our website</a> Provide {month} and {mon}  Microservices is an architecture for breaking down “monolithic” applications into stand-alone components connected to one another by API services. Its promise is that dev teams will be able to adapt / deploy applications quickly and flexibly. But what is often lost in considering this architectural path is the increased complexity that comes as a result of the explosion in the number of APIs and the number of potential connections/dependencies along with it. <br>  Given the increased complexity and the inherent difficulties in ensuring API quality, what steps can Accenture teams take to ensure rock-solid quality in microservices applications? <br>  The good news is that Accenture has established a tight partnership with the leader in API quality, SmartBear Software. SmartBear is the creator of the popular open source tool SoapUI, and offers",
+    "en": "Dette er for å testes samtykke i produksjonstest Testing consent text for {year} and go to <a href=\"https://www.folkeuniversitetet.no/\">Visit our website</a> Provide {month} and {mon}  Microservices is an architecture for breaking down “monolithic” applications into stand-alone components connected to one another by API services. Its promise is that dev teams will be able to adapt / deploy applications quickly and flexibly. But what is often lost in considering this architectural path is the increased complexity that comes as a result of the explosion in the number of APIs and the number of potential connections/dependencies along with it. <br>  Given the increased complexity and the inherent difficulties in ensuring API quality, what steps can Accenture teams take to ensure rock-solid quality in microservices applications? <br>  The good news is that Accenture has established a tight partnership with the leader in API quality, SmartBear Software. SmartBear is the creator of the popular open source tool SoapUI, and offers",
+    "nn": "Dette er for å testes samtykke i produksjonstest Testing consent text for {year} and go to <a href=\"https://www.folkeuniversitetet.no/\">Visit our website</a> Provide {month} and {mon}  Microservices is an architecture for breaking down “monolithic” applications into stand-alone components connected to one another by API services. Its promise is that dev teams will be able to adapt / deploy applications quickly and flexibly. But what is often lost in considering this architectural path is the increased complexity that comes as a result of the explosion in the number of APIs and the number of potential connections/dependencies along with it. <br>  Given the increased complexity and the inherent difficulties in ensuring API quality, what steps can Accenture teams take to ensure rock-solid quality in microservices applications? <br>  The good news is that Accenture has established a tight partnership with the leader in API quality, SmartBear Software. SmartBear is the creator of the popular open source tool SoapUI, and offers"
+  },
+  "consentMetadata": {
+    "year": {
+      "optional": false
+    },
+    "month": {
+      "optional": false
+    },
+    "mon": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

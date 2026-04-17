@@ -46,6 +46,9 @@
     <None Update="Data\ResourcePolicies\altinn_access_management.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Data\ResourcePolicies\app_skd_flyttemelding.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="platform-org.pem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

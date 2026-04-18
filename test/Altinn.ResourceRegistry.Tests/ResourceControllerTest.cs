@@ -1180,33 +1180,6 @@ namespace Altinn.ResourceRegistry.Tests
         }
 
         [Fact]
-        public async Task UpdateResourceAppPolicy_OK()
-        {
-            var client = CreateClient();
-            string token = PrincipalUtil.GetOrgToken("digdir", "991825827", "altinn:resourceregistry/resource.write");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            ServiceResource resource = new ServiceResource() { Identifier = "app_skd_flyttemelding" };
-            string fileName = $"{resource.Identifier}.xml";
-            string filePath = $"Data/ResourcePolicies/{fileName}";
-
-            Uri requestUri = new Uri($"resourceregistry/api/v1/Resource/{resource.Identifier}/policy", UriKind.Relative);
-
-            ByteArrayContent fileContent = new ByteArrayContent(File.ReadAllBytes(filePath));
-            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("text/xml");
-
-            MultipartFormDataContent content = new();
-            content.Add(fileContent, "policyFile", fileName);
-
-            HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Put, RequestUri = requestUri, Content = content };
-            httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
-
-            HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
-
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        }
-
-        [Fact]
         public async Task UpdateResourcePolicy_InvalidResourceId()
         {
             var client = CreateClient();

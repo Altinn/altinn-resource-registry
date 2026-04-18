@@ -25,8 +25,6 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
 
         public async Task<ServiceResource?> GetResource(string id, int? versionID, CancellationToken cancellationToken = default)
         {
-            if(id == "app_skd_flyttemelding") {  return null; }
-
             string? resourcePath = GetResourcePath(id);
             resourcePath.AsFilePath(true);
             if (File.Exists(resourcePath))

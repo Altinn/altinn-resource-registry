@@ -178,9 +178,9 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             static bool IsInvalidAppResource(ServiceResource serviceResource)
             {
                 if (serviceResource.Identifier.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX)
-                    && serviceResource.ResourceType != ResourceType.AltinnApp)
+                    && serviceResource.ResourceType != ResourceType.AltinnApp && serviceResource.ResourceType != ResourceType.MigratedApp)
                 {
-                    // Uses app prefix without it being resourceType AltinnApp
+                    // Uses app prefix without it being resourceType AltinnApp or MigratedApp
                     return true;
                 }
 
@@ -191,7 +191,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
             {
                 string prefix = $"{ResourceConstants.APPLICATION_RESOURCE_PREFIX}{serviceResource.HasCompetentAuthority.Orgcode}_";
                 string appName = serviceResource.Identifier.Replace(prefix, string.Empty);
-                if (serviceResource.ResourceType == ResourceType.AltinnApp
+                if ((serviceResource.ResourceType == ResourceType.AltinnApp || serviceResource.ResourceType == ResourceType.MigratedApp)
                     && (serviceResource.ResourceReferences == null
                     || !serviceResource.ResourceReferences.Any()
                     || !serviceResource.ResourceReferences.Exists(rf =>
@@ -208,7 +208,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
 
             static bool IsInvalidAppIdentifier(ServiceResource serviceResource)
             {
-                if (serviceResource.ResourceType == ResourceType.AltinnApp
+                if ((serviceResource.ResourceType == ResourceType.AltinnApp || serviceResource.ResourceType == ResourceType.MigratedApp)
                     && !serviceResource.Identifier.StartsWith($"{ResourceConstants.APPLICATION_RESOURCE_PREFIX}{serviceResource.HasCompetentAuthority.Orgcode}", StringComparison.OrdinalIgnoreCase))
                 {
                     // Uses app ResourceType without having correct identifier prefix for app resource

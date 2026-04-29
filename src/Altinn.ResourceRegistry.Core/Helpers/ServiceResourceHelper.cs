@@ -92,7 +92,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 isValid = false;
             }
 
-            if (isNew && !ResourceIdentifierRegex().IsMatch(serviceResource.Identifier))
+            if (isNew && !ResourceIdentifierRegex().IsMatch(serviceResource.Identifier) && !IsMigratedAltinn1App(serviceResource))
             {
                 AddValidationMessage(validationMessages, "Identifier", "Invalid id. Only a-z and 0-9 is allowed together with _ and -.  Minimum 4 characters");
                 isValid = false;
@@ -216,6 +216,17 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                 }
 
                 return false;
+            }
+
+            static bool IsMigratedAltinn1App(ServiceResource serviceResource)
+            {
+                if (string.IsNullOrEmpty(serviceResource.Identifier))
+                {
+                    return false;
+                }
+
+                // Pattern: app_{org}_a1-{service}-{edition}:{version}
+                return Regex.IsMatch(serviceResource.Identifier, @"^app_[a-z0-9]+_a1-.+:[a-z0-9.]+$", RegexOptions.IgnoreCase);
             }
 
             // Validates that orgs that is not TTD needs to have orgnumber set.

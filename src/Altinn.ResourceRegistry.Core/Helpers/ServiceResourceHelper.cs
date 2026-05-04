@@ -17,6 +17,13 @@ namespace Altinn.ResourceRegistry.Core.Helpers
         internal static partial Regex ResourceIdentifierRegex();
 
         /// <summary>
+        /// Migrated Altinn1 app identifier regex.
+        /// Pattern: app_{org}_a1-{service}-{edition}:{version}
+        /// </summary>
+        [GeneratedRegex(@"^app_[a-z0-9]+_a1-.+:[a-z0-9.]+$", RegexOptions.IgnoreCase)]
+        internal static partial Regex MigratedAltinn1AppRegex();
+
+        /// <summary>
         /// Gets resources from the resourcelist that fits the search criteria
         /// </summary>
         /// <param name="resourceList">The resourceList that needs to be searched</param>
@@ -225,8 +232,7 @@ namespace Altinn.ResourceRegistry.Core.Helpers
                     return false;
                 }
 
-                // Pattern: app_{org}_a1-{service}-{edition}:{version}
-                return Regex.IsMatch(serviceResource.Identifier, @"^app_[a-z0-9]+_a1-.+:[a-z0-9.]+$", RegexOptions.IgnoreCase);
+                return MigratedAltinn1AppRegex().IsMatch(serviceResource.Identifier);
             }
 
             // Validates that orgs that is not TTD needs to have orgnumber set.

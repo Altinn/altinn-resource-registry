@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "acn_4021_9890",
+  "version": "1.0",
+  "title": {
+    "nb": "ACN Fullmakt service",
+    "en": "ACN Fullmakt service",
+    "nn": "ACN Fullmakt service"
+  },
+  "description": {
+    "nb": "ACN Fullmakt service",
+    "en": "ACN Fullmakt service",
+    "nn": "ACN Fullmakt service"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4021",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "9890",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "183363",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "999999990",
+    "orgcode": "ACN"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "poa",
+  "consentText": {
+    "nb": "test fullmakt",
+    "en": "test fullmakt",
+    "nn": "test fullmakt"
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

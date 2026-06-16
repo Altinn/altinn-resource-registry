@@ -1,0 +1,76 @@
+﻿{
+  "identifier": "nav_5252_2",
+  "version": "1.0",
+  "title": {
+    "nb": "Opplysninger om AAP og uføretrygd fra NAV",
+    "en": "Opplysninger om AAP og uføretrygd fra NAV",
+    "nn": "Opplysninger om AAP og uføretrygd fra NAV"
+  },
+  "description": {
+    "nb": "Opplysninger om AAP og uføretrygd fra NAV",
+    "en": "Opplysninger om AAP og uføretrygd fra NAV",
+    "nn": "Opplysninger om AAP og uføretrygd fra NAV"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5252",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "2",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "175640",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "889640782",
+    "orgcode": "NAV"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "<H1>Under utvikling</H1> Her kommer felles samtykketekst for AAP og Uføretrygd. For perioden {fraogmed} &ndash; {tilogmed} ",
+    "en": "<H1>Under utvikling</H1> Her kommer felles samtykketekst for AAP og Uføretrygd. For perioden {fraogmed} &ndash; {tilogmed} ",
+    "nn": "<H1>Under utvikling</H1> Her kommer felles samtykketekst for AAP og Uføretrygd. For perioden {fraogmed} &ndash; {tilogmed} "
+  },
+  "consentMetadata": {
+    "fraogmed": {
+      "optional": false
+    },
+    "tilogmed": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "asf_4367_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Ligningsopplysninger",
+    "en": "Ligningsopplysninger",
+    "nn": "Ligningsopplysninger"
+  },
+  "description": {
+    "nb": "Ligningsopplysninger",
+    "en": "Ligningsopplysninger",
+    "nn": "Ligningsopplysninger"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4367",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "95684",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Det vil bli gitt innsyn i dine opplysninger om lønn, renter, innskudd og gjeld fra selvangivelsen fra siste år.",
+    "en": "Det vil bli gitt innsyn i dine opplysninger om lønn, renter, innskudd og gjeld fra selvangivelsen fra siste år.",
+    "nn": "Det vil bli gitt innsyn i dine opplysninger om lønn, renter, innskudd og gjeld fra selvangivelsen fra siste år."
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

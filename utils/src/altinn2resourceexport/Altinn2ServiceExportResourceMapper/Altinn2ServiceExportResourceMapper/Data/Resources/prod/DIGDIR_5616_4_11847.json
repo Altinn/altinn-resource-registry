@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "digdir_5616_4",
+  "version": "1.0",
+  "title": {
+    "nb": "Opplysninger fra MVA-registeret",
+    "en": "Opplysninger fra MVA-registeret",
+    "nn": "Opplysninger fra MVA-registeret"
+  },
+  "description": {
+    "nb": "Opplysninger fra MVA-registeret",
+    "en": "Opplysninger fra MVA-registeret",
+    "nn": "Opplysninger fra MVA-registeret"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5616",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "11847",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "991825827",
+    "orgcode": "DIGDIR"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "poa",
+  "consentText": {
+    "nb": "<ul> <li>Første eller siste termin for mva-melding og type termin</li> <li>Merverdiavgift for de siste tre terminene</li> </ul>",
+    "en": "<ul> <li>Første eller siste termin for mva-melding og type termin</li> <li>Merverdiavgift for de siste tre terminene</li> </ul>",
+    "nn": "<ul> <li>Første eller siste termin for mva-melding og type termin</li> <li>Merverdiavgift for de siste tre terminene</li> </ul>"
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

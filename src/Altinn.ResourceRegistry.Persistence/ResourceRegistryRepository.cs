@@ -190,16 +190,20 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<ServiceResource?> DeleteResource(string id, CancellationToken cancellationToken = default)
     {
+        // Deleting a resource removes all its version rows; the latest version is returned.
         const string QUERY = /*strpsql*/@"
             WITH del AS (
                 DELETE FROM resourceregistry.resources
                 WHERE identifier = @identifier
-                RETURNING identifier, created, modified, serviceresourcejson
+                RETURNING identifier, created, modified, serviceresourcejson, version_id
             ), changelog AS (
                 INSERT INTO resourceregistry.resource_change_log(identifier, change_source)
                 SELECT DISTINCT identifier, 'deleted' FROM del
             )
-            SELECT identifier, created, modified, serviceresourcejson FROM del
+            SELECT identifier, created, modified, serviceresourcejson, version_id
+            FROM del
+            ORDER BY version_id DESC
+            LIMIT 1
             ";
 
         try

@@ -323,6 +323,30 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Equal("altinn_access_management", changes.Items.Last().ResourceId);
     }
 
+    [Fact]
+    public async Task GetResourceChanges_DeletedResourceIsExcluded()
+    {
+        await Repository.CreateResource(CreateTestResource("changes_deleted_res"));
+        await Repository.CreateResource(CreateTestResource("changes_kept_res"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_deleted_res", ["urn:altinn:rolecode:r001"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_kept_res", ["urn:altinn:rolecode:r001"], "ttd"));
+
+        using var client = CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("resourceregistry/api/v1/resource/changes");
+        Paginated<ResourceChange>? changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+        Assert.NotNull(changes);
+        Assert.Equal(2, changes.Items.Count());
+
+        await Repository.DeleteResource("changes_deleted_res");
+
+        response = await client.GetAsync("resourceregistry/api/v1/resource/changes");
+        changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+        Assert.NotNull(changes);
+        Assert.Single(changes.Items);
+        Assert.Equal("changes_kept_res", changes.Items.First().ResourceId);
+    }
+
     [Theory]
     [InlineData(0)]
     [InlineData(1001)]

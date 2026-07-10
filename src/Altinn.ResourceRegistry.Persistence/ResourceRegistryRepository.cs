@@ -161,6 +161,18 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                 }
             }
 
+            await using (var cmd3 = new NpgsqlCommand(
+                @"
+                INSERT INTO resourceregistry.resource_change_log(identifier, changed_at, change_source)
+                VALUES (@identifier, @changedat, 'metadata');",
+                conn,
+                tx))
+            {
+                cmd3.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
+                cmd3.Parameters.AddWithValue("changedat", NpgsqlDbType.TimestampTz, modified);
+                await cmd3.ExecuteNonQueryAsync(cancellationToken);
+            }
+
             await tx.CommitAsync(cancellationToken);
             return serviceResource;
         }
@@ -179,9 +191,15 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     public async Task<ServiceResource?> DeleteResource(string id, CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            DELETE FROM resourceregistry.resources
-            WHERE identifier = @identifier
-            RETURNING identifier, created, modified, serviceresourcejson    
+            WITH del AS (
+                DELETE FROM resourceregistry.resources
+                WHERE identifier = @identifier
+                RETURNING identifier, created, modified, serviceresourcejson
+            ), changelog AS (
+                INSERT INTO resourceregistry.resource_change_log(identifier, change_source)
+                SELECT DISTINCT identifier, 'deleted' FROM del
+            )
+            SELECT identifier, created, modified, serviceresourcejson FROM del
             ";
 
         try
@@ -285,20 +303,26 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     public async Task<ServiceResource> UpdateResource(ServiceResource resource, CancellationToken cancellationToken = default)
     {
         const string QUERY = /*strpsql*/@"
-            INSERT INTO resourceregistry.resources(
-                identifier,
-                created,
-                modified,
-                serviceresourcejson
+            WITH ins AS (
+                INSERT INTO resourceregistry.resources(
+                    identifier,
+                    created,
+                    modified,
+                    serviceresourcejson
+                )
+                VALUES
+                (
+                    @identifier,
+                    Now(),
+                    Now(),
+                    @serviceresourcejson
+                )
+                RETURNING identifier, created, modified, serviceresourcejson, version_id
+            ), changelog AS (
+                INSERT INTO resourceregistry.resource_change_log(identifier, changed_at, change_source)
+                SELECT identifier, modified, 'metadata' FROM ins
             )
-            VALUES
-            (
-                @identifier,
-                Now(),
-                Now(),
-                @serviceresourcejson
-            )
-            RETURNING identifier, created, modified, serviceresourcejson, version_id
+            SELECT identifier, created, modified, serviceresourcejson, version_id FROM ins
             ";
 
         ArgumentNullException.ThrowIfNull(resource);
@@ -469,36 +493,37 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     }
 
     /// <inheritdoc/>
-    public async Task<List<ResourceChange>> FindChangedResources(long skipPastVersionId, int limit, CancellationToken cancellationToken = default)
+    public async Task<List<ResourceChange>> FindChangedResources(long skipPastChangeId, int limit, CancellationToken cancellationToken = default)
     {
-        // The version_id > @version_id predicate is pushed into the CTE so PostgreSQL can prune
-        // via the primary key index before the window function runs. This does not change the
-        // result: dropping rows at or below the cursor never changes which row is the per-resource
-        // max when that max is above the cursor, and resources whose max is at or below the cursor
-        // are excluded either way.
+        // The seq > @seq predicate is pushed into the CTE so PostgreSQL can prune via the primary
+        // key index before the window function runs. This does not change the result: dropping
+        // rows at or below the cursor never changes which row is the per-resource max when that
+        // max is above the cursor, and resources whose max is at or below the cursor are excluded
+        // either way. Resources whose latest change is a delete are excluded from the feed.
         const string selectChangedResources = /*strpsql*/
             """
             WITH latest AS (
-                SELECT identifier, version_id, modified,
-                       ROW_NUMBER() OVER (PARTITION BY identifier ORDER BY version_id DESC) AS rn
-                FROM resourceregistry.resources
-                WHERE version_id > @version_id
+                SELECT identifier, seq, changed_at, change_source,
+                       ROW_NUMBER() OVER (PARTITION BY identifier ORDER BY seq DESC) AS rn
+                FROM resourceregistry.resource_change_log
+                WHERE seq > @seq
             )
-            SELECT identifier, version_id, modified
+            SELECT identifier, seq, changed_at
             FROM latest
             WHERE rn = 1
+              AND change_source <> 'deleted'
               AND EXISTS (
                   SELECT 1 FROM resourceregistry.resourcesubjects rs
                   WHERE rs.resource_urn = concat('urn:altinn:resource:', latest.identifier)
                     AND rs.deleted = false
               )
-            ORDER BY version_id
+            ORDER BY seq
             LIMIT @limit
             """;
 
         await using NpgsqlConnection conn = await _conn.OpenConnectionAsync(cancellationToken);
         await using NpgsqlCommand selectCmd = new NpgsqlCommand(selectChangedResources, conn);
-        selectCmd.Parameters.AddWithValue("version_id", NpgsqlDbType.Bigint, skipPastVersionId);
+        selectCmd.Parameters.AddWithValue("seq", NpgsqlDbType.Bigint, skipPastChangeId);
         selectCmd.Parameters.AddWithValue("limit", NpgsqlDbType.Integer, limit);
         await selectCmd.PrepareAsync(cancellationToken);
         await using NpgsqlDataReader reader = await selectCmd.ExecuteReaderAsync(cancellationToken);
@@ -510,8 +535,8 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             changedResources.Add(new ResourceChange
             {
                 ResourceId = await reader.GetFieldValueAsync<string>("identifier", cancellationToken: cancellationToken),
-                VersionId = await reader.GetFieldValueAsync<long>("version_id", cancellationToken: cancellationToken),
-                ChangedAt = await reader.GetFieldValueAsync<DateTimeOffset>("modified", cancellationToken: cancellationToken)
+                ChangeId = await reader.GetFieldValueAsync<long>("seq", cancellationToken: cancellationToken),
+                ChangedAt = await reader.GetFieldValueAsync<DateTimeOffset>("changed_at", cancellationToken: cancellationToken)
             });
         }
 
@@ -519,18 +544,17 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     }
 
     /// <inheritdoc/>
-    public async Task TouchResourceModified(string identifier, CancellationToken cancellationToken = default)
+    public async Task LogPolicyChanged(string identifier, CancellationToken cancellationToken = default)
     {
-        // Copies the latest version row forward entirely inside SQL, so a concurrent metadata
-        // update can never be overwritten by stale in-memory state.
+        // Guarded on the resource existing, mirroring metadata/delete logging which happens
+        // atomically inside the respective statements. No-op for unknown identifiers.
         const string QUERY = /*strpsql*/
             """
-            INSERT INTO resourceregistry.resources (identifier, created, modified, serviceresourcejson)
-            SELECT identifier, now(), now(), serviceresourcejson
-            FROM resourceregistry.resources
-            WHERE identifier = @identifier
-            ORDER BY version_id DESC
-            LIMIT 1
+            INSERT INTO resourceregistry.resource_change_log (identifier, change_source)
+            SELECT @identifier, 'policy'
+            WHERE EXISTS (
+                SELECT 1 FROM resourceregistry.resources WHERE identifier = @identifier
+            )
             """;
 
         ArgumentNullException.ThrowIfNull(identifier);
@@ -543,7 +567,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Authorization // ResourceRegistryRepository // TouchResourceModified // Exception");
+            _logger.LogError(e, "Authorization // ResourceRegistryRepository // LogPolicyChanged // Exception");
             throw;
         }
     }

@@ -587,10 +587,10 @@ namespace Altinn.ResourceRegistry.Controllers
                 ]).ToActionResult();
             }
 
-            long skipPastVersionId = token?.Value ?? 0;
+            long skipPastChangeId = token?.Value ?? 0;
 
             // Use limit + 1 in order to determine if there are more items to fetch
-            List<ResourceChange> changedResources = await _resourceRegistry.FindChangedResources(skipPastVersionId, limit + 1, cancellationToken);
+            List<ResourceChange> changedResources = await _resourceRegistry.FindChangedResources(skipPastChangeId, limit + 1, cancellationToken);
 
             if (changedResources.Count != limit + 1)
             {
@@ -602,7 +602,7 @@ namespace Altinn.ResourceRegistry.Controllers
 
             string nextUrl = Url.Link("changes", new
             {
-                token = Opaque.Create(last.VersionId),
+                token = Opaque.Create(last.ChangeId),
                 limit
             });
 

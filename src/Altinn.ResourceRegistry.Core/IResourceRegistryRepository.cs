@@ -84,23 +84,24 @@ namespace Altinn.ResourceRegistry.Core
         Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Returns a list of changed resources ordered by version_id. Only the latest version of each resource is
-        /// included, and only resources that have an active policy (at least one non-deleted resource subject).
+        /// Returns a list of changed resources ordered by change-log sequence number. Each resource appears
+        /// at most once, at its latest change, and only resources that have an active policy (at least one
+        /// non-deleted resource subject) and whose latest change is not a delete are included.
         /// </summary>
-        /// <param name="skipPastVersionId">Only resources with a version_id greater than this value are returned. Use 0 to start from the beginning</param>
+        /// <param name="skipPastChangeId">Only changes with a sequence number greater than this value are returned. Use 0 to start from the beginning</param>
         /// <param name="limit">The maximum number of entries to return</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns>List of changed resources ordered by version_id</returns>
-        Task<List<ResourceChange>> FindChangedResources(long skipPastVersionId, int limit, CancellationToken cancellationToken = default);
+        /// <returns>List of changed resources ordered by change-log sequence number</returns>
+        Task<List<ResourceChange>> FindChangedResources(long skipPastChangeId, int limit, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Inserts a new version of a resource with an updated modified timestamp, copying the current
-        /// resource data unchanged. Used to mark a resource as changed when its policy is updated.
-        /// Does nothing if the resource does not exist.
+        /// Records a policy change for a resource in the resource change log, so the change is
+        /// reflected in the resource change feed. Does nothing if the resource does not exist.
+        /// Metadata and delete changes are logged by the respective repository methods themselves.
         /// </summary>
         /// <param name="identifier">The resource identifier</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        Task TouchResourceModified(string identifier, CancellationToken cancellationToken = default);
+        Task LogPolicyChanged(string identifier, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Resett subjects for a given resource

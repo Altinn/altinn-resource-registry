@@ -19,9 +19,9 @@ public class ResourceChange
     public DateTimeOffset ChangedAt { get; set; }
 
     /// <summary>
-    /// The version id of the latest version of the resource. Used as continuation cursor
+    /// The sequence number of the change-log entry. Used as continuation cursor
     /// when paginating over changes and not exposed in the API response.
     /// </summary>
     [JsonIgnore]
-    public long VersionId { get; set; }
+    public long ChangeId { get; set; }
 }

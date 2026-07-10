@@ -566,6 +566,48 @@ namespace Altinn.ResourceRegistry.Controllers
 
             return Paginated.Create(updatedResourceSubjects, nextUrl);
         }
+
+        /// <summary>
+        /// Gets a paginated feed of resources that have changed, ordered by change. Only resources with an
+        /// active policy are included, and each resource appears at most once, at the position of its latest
+        /// change. A change is any create or update of the resource metadata or an update of the resource policy.
+        /// </summary>
+        /// <param name="token">Opaque continuation token from the previous page's next-link. Omit to start from the beginning</param>
+        /// <param name="limit">Maximum number of resources returned (1-1000, default: 1000)</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A paginated list of changed resources</returns>
+        [HttpGet("changes", Name = "changes")]
+        [Produces("application/json")]
+        public async Task<ActionResult<Paginated<ResourceChange>>> ResourceChanges([FromQuery(Name = "token")] Opaque<long> token = null, [FromQuery] int limit = 1000, CancellationToken cancellationToken = default)
+        {
+            if (limit is < 1 or > 1000)
+            {
+                return new AltinnValidationProblemDetails([
+                    ValidationErrors.ResourceChanges_InvalidLimit.ToValidationError(),
+                ]).ToActionResult();
+            }
+
+            long skipPastVersionId = token?.Value ?? 0;
+
+            // Use limit + 1 in order to determine if there are more items to fetch
+            List<ResourceChange> changedResources = await _resourceRegistry.FindChangedResources(skipPastVersionId, limit + 1, cancellationToken);
+
+            if (changedResources.Count != limit + 1)
+            {
+                return Paginated.Create(changedResources, null);
+            }
+
+            changedResources.RemoveAt(limit);
+            ResourceChange last = changedResources[^1];
+
+            string nextUrl = Url.Link("changes", new
+            {
+                token = Opaque.Create(last.VersionId),
+                limit
+            });
+
+            return Paginated.Create(changedResources, nextUrl);
+        }
     }
 
     /// <summary>

@@ -84,6 +84,25 @@ namespace Altinn.ResourceRegistry.Core
         Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Returns a list of changed resources ordered by version_id. Only the latest version of each resource is
+        /// included, and only resources that have an active policy (at least one non-deleted resource subject).
+        /// </summary>
+        /// <param name="skipPastVersionId">Only resources with a version_id greater than this value are returned. Use 0 to start from the beginning</param>
+        /// <param name="limit">The maximum number of entries to return</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>List of changed resources ordered by version_id</returns>
+        Task<List<ResourceChange>> FindChangedResources(long skipPastVersionId, int limit, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Inserts a new version of a resource with an updated modified timestamp, copying the current
+        /// resource data unchanged. Used to mark a resource as changed when its policy is updated.
+        /// Does nothing if the resource does not exist.
+        /// </summary>
+        /// <param name="identifier">The resource identifier</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        Task TouchResourceModified(string identifier, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Resett subjects for a given resource
         /// </summary>
         /// <param name="resourceSubjects">The resourceSubjects with resource and list of subjects</param>

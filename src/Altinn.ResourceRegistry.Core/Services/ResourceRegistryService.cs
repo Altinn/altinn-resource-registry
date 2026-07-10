@@ -143,6 +143,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
             await _repository.SetResourceSubjects(resourceSubjects, CancellationToken.None);
+            await _repository.TouchResourceModified(serviceResource.Identifier, CancellationToken.None);
             return response?.GetRawResponse()?.Status == (int)HttpStatusCode.Created;
         }
 
@@ -373,6 +374,12 @@ namespace Altinn.ResourceRegistry.Core.Services
         public async Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default)
         {
             return await _repository.FindUpdatedResourceSubjects(lastUpdated, limit, skipPast, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<ResourceChange>> FindChangedResources(long skipPastVersionId, int limit, CancellationToken cancellationToken = default)
+        {
+            return await _repository.FindChangedResources(skipPastVersionId, limit, cancellationToken);
         }
 
         private static ResourceSubjects GetResourceSubjects(ServiceResource resource, IDictionary<string, ICollection<string>> subjectAttributes)

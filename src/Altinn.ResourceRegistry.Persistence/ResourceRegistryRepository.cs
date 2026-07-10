@@ -469,6 +469,81 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     }
 
     /// <inheritdoc/>
+    public async Task<List<ResourceChange>> FindChangedResources(long skipPastVersionId, int limit, CancellationToken cancellationToken = default)
+    {
+        const string selectChangedResources = /*strpsql*/
+            """
+            WITH latest AS (
+                SELECT identifier, version_id, modified,
+                       ROW_NUMBER() OVER (PARTITION BY identifier ORDER BY version_id DESC) AS rn
+                FROM resourceregistry.resources
+            )
+            SELECT identifier, version_id, modified
+            FROM latest
+            WHERE rn = 1
+              AND version_id > @version_id
+              AND EXISTS (
+                  SELECT 1 FROM resourceregistry.resourcesubjects rs
+                  WHERE rs.resource_urn = concat('urn:altinn:resource:', latest.identifier)
+                    AND rs.deleted = false
+              )
+            ORDER BY version_id
+            LIMIT @limit
+            """;
+
+        await using NpgsqlConnection conn = await _conn.OpenConnectionAsync(cancellationToken);
+        await using NpgsqlCommand selectCmd = new NpgsqlCommand(selectChangedResources, conn);
+        selectCmd.Parameters.AddWithValue("version_id", NpgsqlDbType.Bigint, skipPastVersionId);
+        selectCmd.Parameters.AddWithValue("limit", NpgsqlDbType.Integer, limit);
+        await selectCmd.PrepareAsync(cancellationToken);
+        await using NpgsqlDataReader reader = await selectCmd.ExecuteReaderAsync(cancellationToken);
+
+        List<ResourceChange> changedResources = new List<ResourceChange>();
+
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            changedResources.Add(new ResourceChange
+            {
+                ResourceId = await reader.GetFieldValueAsync<string>("identifier", cancellationToken: cancellationToken),
+                VersionId = await reader.GetFieldValueAsync<long>("version_id", cancellationToken: cancellationToken),
+                ChangedAt = await reader.GetFieldValueAsync<DateTimeOffset>("modified", cancellationToken: cancellationToken)
+            });
+        }
+
+        return changedResources;
+    }
+
+    /// <inheritdoc/>
+    public async Task TouchResourceModified(string identifier, CancellationToken cancellationToken = default)
+    {
+        // Copies the latest version row forward entirely inside SQL, so a concurrent metadata
+        // update can never be overwritten by stale in-memory state.
+        const string QUERY = /*strpsql*/
+            """
+            INSERT INTO resourceregistry.resources (identifier, created, modified, serviceresourcejson)
+            SELECT identifier, now(), now(), serviceresourcejson
+            FROM resourceregistry.resources
+            WHERE identifier = @identifier
+            ORDER BY version_id DESC
+            LIMIT 1
+            """;
+
+        ArgumentNullException.ThrowIfNull(identifier);
+
+        try
+        {
+            await using var pgcom = _conn.CreateCommand(QUERY);
+            pgcom.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, identifier);
+            await pgcom.ExecuteNonQueryAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Authorization // ResourceRegistryRepository // TouchResourceModified // Exception");
+            throw;
+        }
+    }
+
+    /// <inheritdoc/>
     public async Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken = default)
     {
         const string selectExistingPairsSQL = "SELECT subject_urn FROM resourceregistry.resourcesubjects WHERE resource_urn = @resourceurn AND deleted = false";

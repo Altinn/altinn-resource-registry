@@ -471,17 +471,22 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<ResourceChange>> FindChangedResources(long skipPastVersionId, int limit, CancellationToken cancellationToken = default)
     {
+        // The version_id > @version_id predicate is pushed into the CTE so PostgreSQL can prune
+        // via the primary key index before the window function runs. This does not change the
+        // result: dropping rows at or below the cursor never changes which row is the per-resource
+        // max when that max is above the cursor, and resources whose max is at or below the cursor
+        // are excluded either way.
         const string selectChangedResources = /*strpsql*/
             """
             WITH latest AS (
                 SELECT identifier, version_id, modified,
                        ROW_NUMBER() OVER (PARTITION BY identifier ORDER BY version_id DESC) AS rn
                 FROM resourceregistry.resources
+                WHERE version_id > @version_id
             )
             SELECT identifier, version_id, modified
             FROM latest
             WHERE rn = 1
-              AND version_id > @version_id
               AND EXISTS (
                   SELECT 1 FROM resourceregistry.resourcesubjects rs
                   WHERE rs.resource_urn = concat('urn:altinn:resource:', latest.identifier)

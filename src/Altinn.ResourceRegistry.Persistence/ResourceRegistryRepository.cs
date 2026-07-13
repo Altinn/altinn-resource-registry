@@ -161,19 +161,8 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                 }
             }
 
-            // changed_at is left to the column default (now()) so all change-log entries use the
-            // database clock, regardless of which path wrote them.
-            await using (var cmd3 = new NpgsqlCommand(
-                @"
-                INSERT INTO resourceregistry.resource_change_log(identifier, change_source)
-                VALUES (@identifier, 'metadata');",
-                conn,
-                tx))
-            {
-                cmd3.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
-                await cmd3.ExecuteNonQueryAsync(cancellationToken);
-            }
-
+            // The new resource_identifier row gets its global_change_id and last_changed from the
+            // column defaults (tx_nextval and now()).
             await tx.CommitAsync(cancellationToken);
             return serviceResource;
         }
@@ -191,15 +180,21 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<ServiceResource?> DeleteResource(string id, CancellationToken cancellationToken = default)
     {
-        // Deleting a resource removes all its version rows; the latest version is returned.
+        // Deleting a resource removes all its version rows; the latest version is returned. The
+        // resource_identifier row is kept and marked deleted, so the change feed can exclude the
+        // resource (and expose the deletion later if needed).
         const string QUERY = /*strpsql*/@"
             WITH del AS (
                 DELETE FROM resourceregistry.resources
                 WHERE identifier = @identifier
                 RETURNING identifier, created, modified, serviceresourcejson, version_id
-            ), changelog AS (
-                INSERT INTO resourceregistry.resource_change_log(identifier, change_source)
-                SELECT DISTINCT identifier, 'deleted' FROM del
+            ), bump AS (
+                UPDATE resourceregistry.resource_identifier ri
+                SET deleted = true,
+                    global_change_id = resourceregistry.tx_nextval('resourceregistry.resource_change_id_seq'),
+                    last_changed = now()
+                WHERE ri.identifier = @identifier
+                  AND EXISTS (SELECT 1 FROM del)
             )
             SELECT identifier, created, modified, serviceresourcejson, version_id
             FROM del
@@ -323,9 +318,12 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                     @serviceresourcejson
                 )
                 RETURNING identifier, created, modified, serviceresourcejson, version_id
-            ), changelog AS (
-                INSERT INTO resourceregistry.resource_change_log(identifier, changed_at, change_source)
-                SELECT identifier, modified, 'metadata' FROM ins
+            ), bump AS (
+                UPDATE resourceregistry.resource_identifier ri
+                SET global_change_id = resourceregistry.tx_nextval('resourceregistry.resource_change_id_seq'),
+                    last_changed = ins.modified
+                FROM ins
+                WHERE ri.identifier = ins.identifier
             )
             SELECT identifier, created, modified, serviceresourcejson, version_id FROM ins
             ";
@@ -500,34 +498,26 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<ResourceChange>> FindChangedResources(long skipPastChangeId, int limit, CancellationToken cancellationToken = default)
     {
-        // The seq > @seq predicate is pushed into the CTE so PostgreSQL can prune via the primary
-        // key index before the window function runs. This does not change the result: dropping
-        // rows at or below the cursor never changes which row is the per-resource max when that
-        // max is above the cursor, and resources whose max is at or below the cursor are excluded
-        // either way. Resources whose latest change is a delete are excluded from the feed, as are
-        // resources that have never had a policy uploaded. A policy may be empty on purpose, so
-        // "has a policy" is the policy_uploaded flag, not the presence of resource subjects.
+        // Deleted resources and resources that have never had a policy uploaded are excluded from
+        // the feed. A policy may be empty on purpose, so "has a policy" is the policy_uploaded
+        // flag, not the presence of resource subjects. The scan is capped at tx_max_safeval so a
+        // change id drawn by a still-running transaction can never be paged past and lost; see
+        // Migration/v0.10-resource-change-feed/01-functions.sql.
         const string selectChangedResources = /*strpsql*/
             """
-            WITH latest AS (
-                SELECT identifier, seq, changed_at, change_source,
-                       ROW_NUMBER() OVER (PARTITION BY identifier ORDER BY seq DESC) AS rn
-                FROM resourceregistry.resource_change_log
-                WHERE seq > @seq
-            )
-            SELECT l.identifier, l.seq, l.changed_at
-            FROM latest l
-            JOIN resourceregistry.resource_identifier ri ON ri.identifier = l.identifier
-            WHERE l.rn = 1
-              AND l.change_source <> 'deleted'
-              AND ri.policy_uploaded = true
-            ORDER BY l.seq
+            SELECT identifier, global_change_id, last_changed
+            FROM resourceregistry.resource_identifier
+            WHERE global_change_id > @change_id
+              AND global_change_id <= resourceregistry.tx_max_safeval('resourceregistry.resource_change_id_seq')
+              AND policy_uploaded = true
+              AND deleted = false
+            ORDER BY global_change_id
             LIMIT @limit
             """;
 
         await using NpgsqlConnection conn = await _conn.OpenConnectionAsync(cancellationToken);
         await using NpgsqlCommand selectCmd = new NpgsqlCommand(selectChangedResources, conn);
-        selectCmd.Parameters.AddWithValue("seq", NpgsqlDbType.Bigint, skipPastChangeId);
+        selectCmd.Parameters.AddWithValue("change_id", NpgsqlDbType.Bigint, skipPastChangeId);
         selectCmd.Parameters.AddWithValue("limit", NpgsqlDbType.Integer, limit);
         await selectCmd.PrepareAsync(cancellationToken);
         await using NpgsqlDataReader reader = await selectCmd.ExecuteReaderAsync(cancellationToken);
@@ -539,8 +529,8 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             changedResources.Add(new ResourceChange
             {
                 ResourceId = await reader.GetFieldValueAsync<string>("identifier", cancellationToken: cancellationToken),
-                ChangeId = await reader.GetFieldValueAsync<long>("seq", cancellationToken: cancellationToken),
-                ChangedAt = await reader.GetFieldValueAsync<DateTimeOffset>("changed_at", cancellationToken: cancellationToken)
+                ChangeId = await reader.GetFieldValueAsync<long>("global_change_id", cancellationToken: cancellationToken),
+                ChangedAt = await reader.GetFieldValueAsync<DateTimeOffset>("last_changed", cancellationToken: cancellationToken)
             });
         }
 
@@ -627,26 +617,18 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             await resourceCmd.ExecuteNonQueryAsync(cancellationToken);
         }
 
-        // Step 4: Mark the resource as having a policy and record the policy change in the resource
-        // change log, in the same transaction as the subject changes so the feed can never miss a
-        // committed policy update. Guarded on the resource existing; no-op for unknown identifiers.
+        // Step 4: Mark the resource as having a policy and bump its global change id, in the same
+        // transaction as the subject changes so the feed can never miss a committed policy update.
+        // No-op for identifiers not in the registry (e.g. apps not imported as resources).
         if (logPolicyChange)
         {
             const string flagPolicyUploadedSQL = /*strpsql*/
                 """
                 UPDATE resourceregistry.resource_identifier
-                SET policy_uploaded = true
+                SET policy_uploaded = true,
+                    global_change_id = resourceregistry.tx_nextval('resourceregistry.resource_change_id_seq'),
+                    last_changed = now()
                 WHERE identifier = @identifier
-                  AND policy_uploaded = false
-                """;
-
-            const string logPolicyChangeSQL = /*strpsql*/
-                """
-                INSERT INTO resourceregistry.resource_change_log (identifier, change_source)
-                SELECT @identifier, 'policy'
-                WHERE EXISTS (
-                    SELECT 1 FROM resourceregistry.resources WHERE identifier = @identifier
-                )
                 """;
 
             await using (var flagCmd = new NpgsqlCommand(flagPolicyUploadedSQL, conn, tx))
@@ -655,14 +637,6 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
                 await flagCmd.PrepareAsync(cancellationToken);
                 await flagCmd.ExecuteNonQueryAsync(cancellationToken);
-            }
-
-            await using (var logCmd = new NpgsqlCommand(logPolicyChangeSQL, conn, tx))
-            {
-                logCmd.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resourceSubjects.Resource.Value);
-
-                await logCmd.PrepareAsync(cancellationToken);
-                await logCmd.ExecuteNonQueryAsync(cancellationToken);
             }
         }
 

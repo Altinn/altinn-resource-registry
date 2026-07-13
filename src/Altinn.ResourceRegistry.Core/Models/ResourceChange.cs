@@ -19,7 +19,7 @@ public class ResourceChange
     public DateTimeOffset ChangedAt { get; set; }
 
     /// <summary>
-    /// The sequence number of the change-log entry. Used as continuation cursor
+    /// The global change id of the resource. Used as continuation cursor
     /// when paginating over changes and not exposed in the API response.
     /// </summary>
     [JsonIgnore]

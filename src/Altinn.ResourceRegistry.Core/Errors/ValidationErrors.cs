@@ -79,8 +79,9 @@ public static class ValidationErrors
         = _factory.Create(10, "Access list owner must be a valid and registered org-code.");
 
     /// <summary>
-    /// Gets a validation error descriptor for when an invalid limit is provided for the resource changes endpoint.
+    /// Gets a validation error descriptor for when a value is outside its valid range. Add a detail
+    /// to the instance describing the valid range and the actual value.
     /// </summary>
-    public static ValidationErrorDescriptor ResourceChanges_InvalidLimit { get; }
-        = _factory.Create(11, "Limit must be between 1 and 1000.");
+    public static ValidationErrorDescriptor ValueOutsideRange { get; }
+        = _factory.Create(11, "Value outside valid range.");
 }

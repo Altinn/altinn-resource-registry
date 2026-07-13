@@ -581,10 +581,19 @@ namespace Altinn.ResourceRegistry.Controllers
         [Produces("application/json")]
         public async Task<ActionResult<Paginated<ResourceChange>>> ResourceChanges([FromQuery(Name = "token")] Opaque<long> token = null, [FromQuery] int limit = 1000, CancellationToken cancellationToken = default)
         {
-            if (limit is < 1 or > 1000)
+            const int MinLimit = 1;
+            const int MaxLimit = 1000;
+
+            if (limit is < MinLimit or > MaxLimit)
             {
                 return new AltinnValidationProblemDetails([
-                    ValidationErrors.ResourceChanges_InvalidLimit.ToValidationError(),
+                    ValidationErrors.ValueOutsideRange.ToValidationError(
+                        "/$QUERY/limit",
+                        [
+                            KeyValuePair.Create("minValue", (object)MinLimit),
+                            KeyValuePair.Create("maxValue", (object)MaxLimit),
+                            KeyValuePair.Create("actualValue", (object)limit),
+                        ]),
                 ]).ToActionResult();
             }
 

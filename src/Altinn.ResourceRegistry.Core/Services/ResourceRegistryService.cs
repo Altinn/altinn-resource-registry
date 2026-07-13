@@ -142,8 +142,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
-            await _repository.SetResourceSubjects(resourceSubjects, CancellationToken.None);
-            await _repository.LogPolicyChanged(serviceResource.Identifier, CancellationToken.None);
+            await _repository.SetResourceSubjects(resourceSubjects, logPolicyChange: true, CancellationToken.None);
             return response?.GetRawResponse()?.Status == (int)HttpStatusCode.Created;
         }
 
@@ -158,7 +157,7 @@ namespace Altinn.ResourceRegistry.Core.Services
 
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
-            await _repository.SetResourceSubjects(resourceSubjects, cancellationToken);
+            await _repository.SetResourceSubjects(resourceSubjects, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -182,7 +181,7 @@ namespace Altinn.ResourceRegistry.Core.Services
                 }
             };
             ResourceSubjects resourceSubjects = GetResourceSubjects(virtualAppResource, subjectAttributes);
-            await _repository.SetResourceSubjects(resourceSubjects, cancellationToken);
+            await _repository.SetResourceSubjects(resourceSubjects, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>

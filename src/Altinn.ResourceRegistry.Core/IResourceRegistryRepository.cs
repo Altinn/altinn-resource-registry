@@ -95,20 +95,14 @@ namespace Altinn.ResourceRegistry.Core
         Task<List<ResourceChange>> FindChangedResources(long skipPastChangeId, int limit, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Records a policy change for a resource in the resource change log, so the change is
-        /// reflected in the resource change feed. Does nothing if the resource does not exist.
-        /// Metadata and delete changes are logged by the respective repository methods themselves.
-        /// </summary>
-        /// <param name="identifier">The resource identifier</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        Task LogPolicyChanged(string identifier, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Resett subjects for a given resource
         /// </summary>
         /// <param name="resourceSubjects">The resourceSubjects with resource and list of subjects</param>
+        /// <param name="logPolicyChange">If true, a 'policy' entry is recorded in the resource change log in the same
+        /// transaction, so the change is reflected in the resource change feed. No entry is recorded if the resource
+        /// does not exist. Metadata and delete changes are logged by the respective repository methods themselves.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
-        Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken = default);
+        Task SetResourceSubjects(ResourceSubjects resourceSubjects, bool logPolicyChange = false, CancellationToken cancellationToken = default);
     }
 }

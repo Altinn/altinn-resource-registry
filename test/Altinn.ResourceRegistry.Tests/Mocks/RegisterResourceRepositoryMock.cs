@@ -192,7 +192,7 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             };
         }
 
-        public Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken)
+        public Task SetResourceSubjects(ResourceSubjects resourceSubjects, bool logPolicyChange = false, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
@@ -210,10 +210,5 @@ namespace Altinn.ResourceRegistry.Tests.Mocks
             return Task.FromResult(changes.Where(c => c.ChangeId > skipPastChangeId).Take(limit).ToList());
         }
 
-        /// <inheritdoc/>
-        public Task LogPolicyChanged(string identifier, CancellationToken cancellationToken = default)
-        {
-            return Task.CompletedTask;
-        }
     }
 }

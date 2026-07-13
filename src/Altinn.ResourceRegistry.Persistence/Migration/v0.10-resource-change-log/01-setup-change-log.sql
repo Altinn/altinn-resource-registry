@@ -6,7 +6,7 @@ CREATE TABLE resourceregistry.resource_change_log
     seq BIGSERIAL NOT NULL PRIMARY KEY,
     identifier text NOT NULL,
     changed_at timestamp with time zone NOT NULL DEFAULT now(),
-    change_source text NOT NULL
+    change_source text NOT NULL CHECK (change_source IN ('metadata', 'policy', 'deleted'))
 );
 
 CREATE INDEX idx_resource_change_log_identifier ON resourceregistry.resource_change_log (identifier, seq DESC);

@@ -161,15 +161,16 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                 }
             }
 
+            // changed_at is left to the column default (now()) so all change-log entries use the
+            // database clock, regardless of which path wrote them.
             await using (var cmd3 = new NpgsqlCommand(
                 @"
-                INSERT INTO resourceregistry.resource_change_log(identifier, changed_at, change_source)
-                VALUES (@identifier, @changedat, 'metadata');",
+                INSERT INTO resourceregistry.resource_change_log(identifier, change_source)
+                VALUES (@identifier, 'metadata');",
                 conn,
                 tx))
             {
                 cmd3.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resource.Identifier);
-                cmd3.Parameters.AddWithValue("changedat", NpgsqlDbType.TimestampTz, modified);
                 await cmd3.ExecuteNonQueryAsync(cancellationToken);
             }
 
@@ -548,36 +549,7 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     }
 
     /// <inheritdoc/>
-    public async Task LogPolicyChanged(string identifier, CancellationToken cancellationToken = default)
-    {
-        // Guarded on the resource existing, mirroring metadata/delete logging which happens
-        // atomically inside the respective statements. No-op for unknown identifiers.
-        const string QUERY = /*strpsql*/
-            """
-            INSERT INTO resourceregistry.resource_change_log (identifier, change_source)
-            SELECT @identifier, 'policy'
-            WHERE EXISTS (
-                SELECT 1 FROM resourceregistry.resources WHERE identifier = @identifier
-            )
-            """;
-
-        ArgumentNullException.ThrowIfNull(identifier);
-
-        try
-        {
-            await using var pgcom = _conn.CreateCommand(QUERY);
-            pgcom.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, identifier);
-            await pgcom.ExecuteNonQueryAsync(cancellationToken);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Authorization // ResourceRegistryRepository // LogPolicyChanged // Exception");
-            throw;
-        }
-    }
-
-    /// <inheritdoc/>
-    public async Task SetResourceSubjects(ResourceSubjects resourceSubjects, CancellationToken cancellationToken = default)
+    public async Task SetResourceSubjects(ResourceSubjects resourceSubjects, bool logPolicyChange = false, CancellationToken cancellationToken = default)
     {
         const string selectExistingPairsSQL = "SELECT subject_urn FROM resourceregistry.resourcesubjects WHERE resource_urn = @resourceurn AND deleted = false";
         const string softDeletePairSQL = "UPDATE resourceregistry.resourcesubjects SET deleted = true, updated_at = NOW() WHERE resource_urn = @resourceurn AND subject_urn = ANY(@subjecturns)";
@@ -654,6 +626,29 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
 
             await resourceCmd.PrepareAsync(cancellationToken);
             await resourceCmd.ExecuteNonQueryAsync(cancellationToken);
+        }
+
+        // Step 4: Record the policy change in the resource change log, in the same transaction as
+        // the subject changes so the feed can never miss a committed policy update. Guarded on the
+        // resource existing; no-op for unknown identifiers.
+        if (logPolicyChange)
+        {
+            const string logPolicyChangeSQL = /*strpsql*/
+                """
+                INSERT INTO resourceregistry.resource_change_log (identifier, change_source)
+                SELECT @identifier, 'policy'
+                WHERE EXISTS (
+                    SELECT 1 FROM resourceregistry.resources WHERE identifier = @identifier
+                )
+                """;
+
+            await using (var logCmd = new NpgsqlCommand(logPolicyChangeSQL, conn, tx))
+            {
+                logCmd.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resourceSubjects.Resource.Value);
+
+                await logCmd.PrepareAsync(cancellationToken);
+                await logCmd.ExecuteNonQueryAsync(cancellationToken);
+            }
         }
 
         await tx.CommitAsync(cancellationToken);

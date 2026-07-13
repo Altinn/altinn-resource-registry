@@ -568,9 +568,10 @@ namespace Altinn.ResourceRegistry.Controllers
         }
 
         /// <summary>
-        /// Gets a paginated feed of resources that have changed, ordered by change. Only resources with an
-        /// active policy are included, and each resource appears at most once, at the position of its latest
-        /// change. A change is any create or update of the resource metadata or an update of the resource policy.
+        /// Gets a paginated feed of resources that have changed, ordered by change. Only resources that have
+        /// had a policy uploaded at least once (the policy may be empty) are included, and each resource
+        /// appears at most once, at the position of its latest change. A change is any create or update of
+        /// the resource metadata or an update of the resource policy.
         /// </summary>
         /// <param name="token">Opaque continuation token from the previous page's next-link. Omit to start from the beginning</param>
         /// <param name="limit">Maximum number of resources returned (1-1000, default: 1000)</param>

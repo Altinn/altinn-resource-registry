@@ -504,7 +504,9 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
         // key index before the window function runs. This does not change the result: dropping
         // rows at or below the cursor never changes which row is the per-resource max when that
         // max is above the cursor, and resources whose max is at or below the cursor are excluded
-        // either way. Resources whose latest change is a delete are excluded from the feed.
+        // either way. Resources whose latest change is a delete are excluded from the feed, as are
+        // resources that have never had a policy uploaded. A policy may be empty on purpose, so
+        // "has a policy" is the policy_uploaded flag, not the presence of resource subjects.
         const string selectChangedResources = /*strpsql*/
             """
             WITH latest AS (
@@ -513,16 +515,13 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                 FROM resourceregistry.resource_change_log
                 WHERE seq > @seq
             )
-            SELECT identifier, seq, changed_at
-            FROM latest
-            WHERE rn = 1
-              AND change_source <> 'deleted'
-              AND EXISTS (
-                  SELECT 1 FROM resourceregistry.resourcesubjects rs
-                  WHERE rs.resource_urn = concat('urn:altinn:resource:', latest.identifier)
-                    AND rs.deleted = false
-              )
-            ORDER BY seq
+            SELECT l.identifier, l.seq, l.changed_at
+            FROM latest l
+            JOIN resourceregistry.resource_identifier ri ON ri.identifier = l.identifier
+            WHERE l.rn = 1
+              AND l.change_source <> 'deleted'
+              AND ri.policy_uploaded = true
+            ORDER BY l.seq
             LIMIT @limit
             """;
 
@@ -628,11 +627,19 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
             await resourceCmd.ExecuteNonQueryAsync(cancellationToken);
         }
 
-        // Step 4: Record the policy change in the resource change log, in the same transaction as
-        // the subject changes so the feed can never miss a committed policy update. Guarded on the
-        // resource existing; no-op for unknown identifiers.
+        // Step 4: Mark the resource as having a policy and record the policy change in the resource
+        // change log, in the same transaction as the subject changes so the feed can never miss a
+        // committed policy update. Guarded on the resource existing; no-op for unknown identifiers.
         if (logPolicyChange)
         {
+            const string flagPolicyUploadedSQL = /*strpsql*/
+                """
+                UPDATE resourceregistry.resource_identifier
+                SET policy_uploaded = true
+                WHERE identifier = @identifier
+                  AND policy_uploaded = false
+                """;
+
             const string logPolicyChangeSQL = /*strpsql*/
                 """
                 INSERT INTO resourceregistry.resource_change_log (identifier, change_source)
@@ -641,6 +648,14 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                     SELECT 1 FROM resourceregistry.resources WHERE identifier = @identifier
                 )
                 """;
+
+            await using (var flagCmd = new NpgsqlCommand(flagPolicyUploadedSQL, conn, tx))
+            {
+                flagCmd.Parameters.AddWithValue("identifier", NpgsqlDbType.Text, resourceSubjects.Resource.Value);
+
+                await flagCmd.PrepareAsync(cancellationToken);
+                await flagCmd.ExecuteNonQueryAsync(cancellationToken);
+            }
 
             await using (var logCmd = new NpgsqlCommand(logPolicyChangeSQL, conn, tx))
             {

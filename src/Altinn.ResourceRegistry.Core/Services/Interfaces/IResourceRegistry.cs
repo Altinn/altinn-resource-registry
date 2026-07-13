@@ -174,8 +174,8 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
 
         /// <summary>
         /// Returns a list of changed resources ordered by change-log sequence number. Each resource appears
-        /// at most once, at its latest change, and only resources that have an active policy (at least one
-        /// non-deleted resource subject) and whose latest change is not a delete are included.
+        /// at most once, at its latest change, and only resources that have had a policy uploaded at least
+        /// once (the policy may be empty) and whose latest change is not a delete are included.
         /// </summary>
         /// <param name="skipPastChangeId">Only changes with a sequence number greater than this value are returned. Use 0 to start from the beginning</param>
         /// <param name="limit">The maximum number of entries to return</param>

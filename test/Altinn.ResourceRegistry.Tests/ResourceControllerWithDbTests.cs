@@ -198,9 +198,9 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         await Repository.CreateResource(CreateTestResource("changes_res1"));
         await Repository.CreateResource(CreateTestResource("changes_res2"));
         await Repository.CreateResource(CreateTestResource("changes_res3"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_res1", ["urn:altinn:rolecode:r001"], "ttd"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_res2", ["urn:altinn:rolecode:r001"], "ttd"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_res3", ["urn:altinn:rolecode:r001"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_res1", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_res2", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_res3", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
 
         using var client = CreateClient();
 
@@ -233,7 +233,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     {
         await Repository.CreateResource(CreateTestResource("changes_with_policy"));
         await Repository.CreateResource(CreateTestResource("changes_without_policy"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_with_policy", ["urn:altinn:rolecode:r001"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_with_policy", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
 
         using var client = CreateClient();
 
@@ -252,8 +252,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         ServiceResource resource1 = CreateTestResource("changes_updated_res");
         await Repository.CreateResource(resource1);
         await Repository.CreateResource(CreateTestResource("changes_other_res"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_updated_res", ["urn:altinn:rolecode:r001"], "ttd"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_other_res", ["urn:altinn:rolecode:r001"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_updated_res", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_other_res", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
 
         // Update the first resource - it should move to the end of the feed and still appear only once
         await Repository.UpdateResource(resource1);
@@ -287,7 +287,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         // Resource with policy - in the feed
         await Repository.CreateResource(CreateTestResource("changes_baseline_res"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_baseline_res", ["urn:altinn:rolecode:r001"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_baseline_res", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
 
         using var client = CreateClient();
 
@@ -324,12 +324,30 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     }
 
     [Fact]
+    public async Task GetResourceChanges_EmptyPolicyResourceIsListed()
+    {
+        // A policy may be empty on purpose - the resource must still be listed in the feed
+        await Repository.CreateResource(CreateTestResource("changes_empty_policy_res"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_empty_policy_res", [], "ttd"), logPolicyChange: true);
+
+        using var client = CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("resourceregistry/api/v1/resource/changes");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Paginated<ResourceChange>? changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+
+        Assert.NotNull(changes);
+        Assert.Single(changes.Items);
+        Assert.Equal("changes_empty_policy_res", changes.Items.First().ResourceId);
+    }
+
+    [Fact]
     public async Task GetResourceChanges_DeletedResourceIsExcluded()
     {
         await Repository.CreateResource(CreateTestResource("changes_deleted_res"));
         await Repository.CreateResource(CreateTestResource("changes_kept_res"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_deleted_res", ["urn:altinn:rolecode:r001"], "ttd"));
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_kept_res", ["urn:altinn:rolecode:r001"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_deleted_res", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_kept_res", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
 
         using var client = CreateClient();
 

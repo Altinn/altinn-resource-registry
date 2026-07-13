@@ -21,3 +21,16 @@ FROM (
     ORDER BY identifier, version_id DESC
 ) latest
 ORDER BY latest.version_id;
+
+-- Flag telling that a policy has been uploaded at least once for the resource. Only flagged
+-- resources are listed in the resource change feed. A policy may be empty on purpose, so this
+-- is tracked as an explicit flag rather than derived from resourcesubjects.
+-- Adding the column with DEFAULT true sets all existing rows to true (existing resources are
+-- assumed to have a policy; the policy documents live in blob storage and cannot be checked
+-- from a migration), then the default is flipped so future resources start unflagged until
+-- their first policy upload.
+ALTER TABLE resourceregistry.resource_identifier
+    ADD COLUMN policy_uploaded boolean NOT NULL DEFAULT true;
+
+ALTER TABLE resourceregistry.resource_identifier
+    ALTER COLUMN policy_uploaded SET DEFAULT false;

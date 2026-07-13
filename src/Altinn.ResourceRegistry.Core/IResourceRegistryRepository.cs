@@ -85,8 +85,8 @@ namespace Altinn.ResourceRegistry.Core
 
         /// <summary>
         /// Returns a list of changed resources ordered by change-log sequence number. Each resource appears
-        /// at most once, at its latest change, and only resources that have an active policy (at least one
-        /// non-deleted resource subject) and whose latest change is not a delete are included.
+        /// at most once, at its latest change, and only resources that have had a policy uploaded at least
+        /// once (the policy may be empty) and whose latest change is not a delete are included.
         /// </summary>
         /// <param name="skipPastChangeId">Only changes with a sequence number greater than this value are returned. Use 0 to start from the beginning</param>
         /// <param name="limit">The maximum number of entries to return</param>
@@ -98,9 +98,10 @@ namespace Altinn.ResourceRegistry.Core
         /// Resett subjects for a given resource
         /// </summary>
         /// <param name="resourceSubjects">The resourceSubjects with resource and list of subjects</param>
-        /// <param name="logPolicyChange">If true, a 'policy' entry is recorded in the resource change log in the same
-        /// transaction, so the change is reflected in the resource change feed. No entry is recorded if the resource
-        /// does not exist. Metadata and delete changes are logged by the respective repository methods themselves.</param>
+        /// <param name="logPolicyChange">If true, the resource is marked as having a policy uploaded and a 'policy'
+        /// entry is recorded in the resource change log in the same transaction, so the change is reflected in the
+        /// resource change feed. No entry is recorded if the resource does not exist. Metadata and delete changes
+        /// are logged by the respective repository methods themselves.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns></returns>
         Task SetResourceSubjects(ResourceSubjects resourceSubjects, bool logPolicyChange = false, CancellationToken cancellationToken = default);

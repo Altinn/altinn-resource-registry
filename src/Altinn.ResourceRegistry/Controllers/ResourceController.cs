@@ -584,17 +584,15 @@ namespace Altinn.ResourceRegistry.Controllers
             const int MinLimit = 1;
             const int MaxLimit = 1000;
 
+            ValidationProblemBuilder errors = default;
             if (limit is < MinLimit or > MaxLimit)
             {
-                return new AltinnValidationProblemDetails([
-                    ValidationErrors.ValueOutsideRange.ToValidationError(
-                        "/$QUERY/limit",
-                        [
-                            KeyValuePair.Create("minValue", (object)MinLimit),
-                            KeyValuePair.Create("maxValue", (object)MaxLimit),
-                            KeyValuePair.Create("actualValue", (object)limit),
-                        ]),
-                ]).ToActionResult();
+                errors.Add(ValidationErrors.ValueOutsideRange, "/$QUERY/limit", $"Limit must be between {MinLimit} and {MaxLimit}, was {limit}.");
+            }
+
+            if (errors.TryToActionResult(out var errorResult))
+            {
+                return errorResult;
             }
 
             long skipPastChangeId = token?.Value ?? 0;
@@ -602,12 +600,12 @@ namespace Altinn.ResourceRegistry.Controllers
             // Use limit + 1 in order to determine if there are more items to fetch
             List<ResourceChange> changedResources = await _resourceRegistry.FindChangedResources(skipPastChangeId, limit + 1, cancellationToken);
 
-            if (changedResources.Count != limit + 1)
+            if (changedResources.Count < limit + 1)
             {
                 return Paginated.Create(changedResources, null);
             }
 
-            changedResources.RemoveAt(limit);
+            changedResources.RemoveRange(limit, changedResources.Count - limit);
             ResourceChange last = changedResources[^1];
 
             string nextUrl = Url.Link("changes", new

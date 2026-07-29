@@ -488,6 +488,92 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Single(resource);
     }
 
+    [Fact]
+    public async Task SearchResources_ByOrgCode_Ok()
+    {
+        await LoadTestData();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?OrgCode=dsb";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+        Assert.NotNull(resources);
+        Assert.NotEmpty(resources);
+        Assert.All(resources, r => Assert.Equal("dsb", r.HasCompetentAuthority?.Orgcode, ignoreCase: true));
+    }
+
+    [Fact]
+    public async Task SearchResources_ByOrgCode_NoMatch()
+    {
+        await LoadTestData();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?OrgCode=nonexistentorg";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+        Assert.NotNull(resources);
+        Assert.Empty(resources);
+    }
+
+    [Fact]
+    public async Task SearchResources_ByOrganizationId_Ok()
+    {
+        await LoadTestData();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?OrganizationId=974760983";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+        Assert.NotNull(resources);
+        Assert.NotEmpty(resources);
+        Assert.All(resources, r => Assert.Equal("974760983", r.HasCompetentAuthority?.Organization));
+    }
+
+    [Fact]
+    public async Task SearchResources_ByOrganizationId_NoMatch()
+    {
+        await LoadTestData();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?OrganizationId=000000000";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+
+        Assert.NotNull(resources);
+        Assert.Empty(resources);
+    }
+
     /// <summary>
     /// Scenario: Search for resources by ServiceEditionVersion reference
     /// This is relevant when migrating consents from Altinn 2 to Altinn 3 where the consent is tied to a specific version of a service edition

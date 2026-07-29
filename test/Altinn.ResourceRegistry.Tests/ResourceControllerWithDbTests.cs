@@ -1,4 +1,4 @@
-﻿using Altinn.Platform.Storage.Interface.Models;
+using Altinn.Platform.Storage.Interface.Models;
 using Altinn.ResourceRegistry.Controllers;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Constants;
@@ -23,6 +23,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         : WebApplicationTests(dbFixture, webApplicationFixture)
 {
     private const string ORG_NR = "974761076";
+
+    private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     protected IResourceRegistryRepository Repository => Services.GetRequiredService<IResourceRegistryRepository>();
     protected AdvanceableTimeProvider TimeProvider => Services.GetRequiredService<AdvanceableTimeProvider>();
@@ -482,7 +484,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(resource);
         Assert.Single(resource);
@@ -503,7 +505,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(resources);
         Assert.NotEmpty(resources);
@@ -525,7 +527,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(resources);
         Assert.Empty(resources);
@@ -546,7 +548,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(resources);
         Assert.NotEmpty(resources);
@@ -568,7 +570,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(resources);
         Assert.Empty(resources);
@@ -595,7 +597,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? matchingResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? matchingResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(matchingResources);
         Assert.Single(matchingResources);
@@ -616,7 +618,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         };
         HttpResponseMessage responseAllResources = await client.SendAsync(httpRequestMessageAllResources);
         string responseContentAllResources = await responseAllResources.Content.ReadAsStringAsync();
-        List<ServiceResource>? allResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContentAllResources, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? allResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContentAllResources, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(allResources);
         Assert.True(allResources.Count > 1, "Expected multiple resources in test data");
@@ -640,7 +642,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage responseSearch = await client.SendAsync(httpRequestMessageSearch);
 
         string responseContentSearch = await responseSearch.Content.ReadAsStringAsync();
-        List<ServiceResource>? matchingResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContentSearch, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? matchingResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContentSearch, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(matchingResources);
         Assert.Single(matchingResources);
@@ -657,7 +659,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+        ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, _jsonOptions) as ServiceResource;
 
         Assert.NotNull(resource);
         Assert.Equal("skd-migrert-4628-1", resource.Identifier);
@@ -671,7 +673,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         };
         HttpResponseMessage responseWithVersion = await client.SendAsync(httpRequestMessageWithVersion);
         string responseContentWithVersion = await responseWithVersion.Content.ReadAsStringAsync();
-        ServiceResource? resourceWithVersion = JsonSerializer.Deserialize<ServiceResource>(responseContentWithVersion, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;  
+        ServiceResource? resourceWithVersion = JsonSerializer.Deserialize<ServiceResource>(responseContentWithVersion, _jsonOptions) as ServiceResource;  
         Assert.NotNull(resourceWithVersion);
         Assert.Equal("skd-migrert-4628-1", resourceWithVersion.Identifier);
         Assert.Equal(oldVersion.VersionId, resourceWithVersion.VersionId);
@@ -738,7 +740,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, responseGet.StatusCode);
 
-        ServiceResource? createdResource = JsonSerializer.Deserialize<ServiceResource>(await responseGet.Content.ReadAsStringAsync(), new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+        ServiceResource? createdResource = JsonSerializer.Deserialize<ServiceResource>(await responseGet.Content.ReadAsStringAsync(), _jsonOptions) as ServiceResource;
 
         Assert.NotNull(createdResource);
 
@@ -782,7 +784,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, responseGetUpdated.StatusCode);
 
-        ServiceResource? updatedResource = JsonSerializer.Deserialize<ServiceResource>(await responseGetUpdated.Content.ReadAsStringAsync(), new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+        ServiceResource? updatedResource = JsonSerializer.Deserialize<ServiceResource>(await responseGetUpdated.Content.ReadAsStringAsync(), _jsonOptions) as ServiceResource;
 
         Assert.NotNull(updatedResource);
 
@@ -803,7 +805,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(resource);
         Assert.Equal(6, resource.Count);

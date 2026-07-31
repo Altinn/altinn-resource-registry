@@ -1,6 +1,5 @@
 ﻿using Altinn.Common.Authentication.Configuration;
 using Altinn.ResourceRegistry.Core;
-using Altinn.ResourceRegistry.Core.Clients.Interfaces;
 using Altinn.ResourceRegistry.Core.Services;
 using Altinn.ResourceRegistry.Tests.Mocks;
 using Altinn.ResourceRegistry.TestUtils;
@@ -68,7 +67,6 @@ public class WebApplicationFixture
                 services.AddSingleton<AdvanceableTimeProvider>(timeProvider);
                 services.AddSingleton<IPolicyRepository, PolicyRepositoryMock>();
                 services.AddSingleton<IAltinn2Services, Altinn2ServicesClientMock>();
-                services.AddSingleton<IAccessManagementClient, AccessManagementMock>();
             });
 
             base.ConfigureWebHost(builder);

@@ -5,7 +5,6 @@ using Altinn.Authorization.ABAC.Constants;
 using Altinn.Authorization.ABAC.Xacml;
 using Altinn.Authorization.ProblemDetails;
 using Altinn.Platform.Storage.Interface.Models;
-using Altinn.ResourceRegistry.Core.Clients.Interfaces;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Exceptions;
 using Altinn.ResourceRegistry.Core.Extensions;
@@ -27,7 +26,6 @@ namespace Altinn.ResourceRegistry.Core.Services
     {
         private readonly IResourceRegistryRepository _repository;
         private readonly IPolicyRepository _policyRepository;
-        private readonly IAccessManagementClient _accessManagementClient;
         private readonly IAltinn2Services _altinn2ServicesClient;
         private readonly IApplications _applicationsClient;
         private readonly IServiceOwnerService _serviceOwnerService;
@@ -39,14 +37,12 @@ namespace Altinn.ResourceRegistry.Core.Services
         public ResourceRegistryService(
             IResourceRegistryRepository repository,
             IPolicyRepository policyRepository,
-            IAccessManagementClient accessManagementClient,
             IAltinn2Services altinn2ServicesClient,
             IApplications applicationsClient,
             IServiceOwnerService serviceOwnerService)
         {
             _repository = repository;
             _policyRepository = policyRepository;
-            _accessManagementClient = accessManagementClient;
             _altinn2ServicesClient = altinn2ServicesClient;
             _applicationsClient = applicationsClient;
             _serviceOwnerService = serviceOwnerService;
@@ -55,24 +51,12 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task CreateResource(ServiceResource serviceResource, CancellationToken cancellationToken = default)
         {
-            bool result = await UpdateResourceInAccessManagement(serviceResource, cancellationToken);
-            if (!result)
-            {
-                throw new AccessManagementUpdateException("Updating Access management failed");
-            }
-
             await _repository.CreateResource(serviceResource, cancellationToken);
         }
 
         /// <inheritdoc/>
         public async Task UpdateResource(ServiceResource serviceResource, CancellationToken cancellationToken = default)
         {
-            bool result = await UpdateResourceInAccessManagement(serviceResource, cancellationToken);
-            if (!result)
-            {
-                throw new AccessManagementUpdateException("Updating Access management failed");
-            }
-
             await _repository.UpdateResource(serviceResource, cancellationToken);
         }
 
@@ -197,16 +181,6 @@ namespace Altinn.ResourceRegistry.Core.Services
         public async Task<Stream> GetAppPolicy(string org, string app,CancellationToken cancellationToken = default)
         {
             return await _policyRepository.GetAppPolicyAsync(org, app, cancellationToken);
-        }
-
-        /// <inheritdoc />
-        public async Task<bool> UpdateResourceInAccessManagement(ServiceResource serviceResource, CancellationToken cancellationToken = default)
-        {
-            AccessManagementResource convertedElement = new AccessManagementResource(serviceResource);
-            List<AccessManagementResource> convertedElementList = convertedElement.ElementToList();
-            HttpResponseMessage response = await _accessManagementClient.AddResourceToAccessManagement(convertedElementList, cancellationToken);
-
-            return response.StatusCode == HttpStatusCode.Created;
         }
 
         /// <inheritdoc />

@@ -5,8 +5,6 @@ using Altinn.Authorization.ABAC.Constants;
 using Altinn.Authorization.ABAC.Xacml;
 using Altinn.Authorization.ProblemDetails;
 using Altinn.Platform.Storage.Interface.Models;
-using Altinn.ResourceRegistry.Core.Clients.Interfaces;
-using Altinn.ResourceRegistry.Core.Configuration;
 using Altinn.ResourceRegistry.Core.Constants;
 using Altinn.ResourceRegistry.Core.Exceptions;
 using Altinn.ResourceRegistry.Core.Extensions;
@@ -27,7 +25,6 @@ namespace Altinn.ResourceRegistry.Core.Services
     {
         private readonly IResourceRegistryRepository _repository;
         private readonly IPolicyRepository _policyRepository;
-        private readonly IAccessManagementClient _accessManagementClient;
         private readonly IApplications _applicationsClient;
         private readonly IServiceOwnerService _serviceOwnerService;
 
@@ -38,13 +35,11 @@ namespace Altinn.ResourceRegistry.Core.Services
         public ResourceRegistryService(
             IResourceRegistryRepository repository,
             IPolicyRepository policyRepository,
-            IAccessManagementClient accessManagementClient,
             IApplications applicationsClient,
             IServiceOwnerService serviceOwnerService)
         {
             _repository = repository;
             _policyRepository = policyRepository;
-            _accessManagementClient = accessManagementClient;
             _applicationsClient = applicationsClient;
             _serviceOwnerService = serviceOwnerService;
         }
@@ -52,24 +47,12 @@ namespace Altinn.ResourceRegistry.Core.Services
         /// <inheritdoc/>
         public async Task CreateResource(ServiceResource serviceResource, CancellationToken cancellationToken = default)
         {
-            bool result = await UpdateResourceInAccessManagement(serviceResource, cancellationToken);
-            if (!result)
-            {
-                throw new AccessManagementUpdateException("Updating Access management failed");
-            }
-
             await _repository.CreateResource(serviceResource, cancellationToken);
         }
 
         /// <inheritdoc/>
         public async Task UpdateResource(ServiceResource serviceResource, CancellationToken cancellationToken = default)
         {
-            bool result = await UpdateResourceInAccessManagement(serviceResource, cancellationToken);
-            if (!result)
-            {
-                throw new AccessManagementUpdateException("Updating Access management failed");
-            }
-
             await _repository.UpdateResource(serviceResource, cancellationToken);
         }
 
@@ -89,6 +72,19 @@ namespace Altinn.ResourceRegistry.Core.Services
         public async Task<ServiceResource> GetResource(string id, int? versionId, CancellationToken cancellationToken = default)
         {
             return await _repository.GetResource(id, versionId,  cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ServiceResource> GetAppResource(string org, string app, CancellationToken cancellationToken = default)
+        {
+            Application application = await _applicationsClient.GetApplication(org, app, cancellationToken);
+            if (application == null)
+            {
+                return null;
+            }
+
+            ServiceOwnerLookup serviceOwners = await _serviceOwnerService.GetServiceOwners(cancellationToken);
+            return MapApplicationToApplicationResource(application, serviceOwners);
         }
 
         /// <inheritdoc/>
@@ -142,7 +138,7 @@ namespace Altinn.ResourceRegistry.Core.Services
             
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
-            await _repository.SetResourceSubjects(resourceSubjects, CancellationToken.None);
+            await _repository.SetResourceSubjects(resourceSubjects, logPolicyChange: true, CancellationToken.None);
             return response?.GetRawResponse()?.Status == (int)HttpStatusCode.Created;
         }
 
@@ -157,7 +153,7 @@ namespace Altinn.ResourceRegistry.Core.Services
 
             IDictionary<string, ICollection<string>> subjectAttributes = policy.GetAttributeDictionaryByCategory(XacmlConstants.MatchAttributeCategory.Subject);
             ResourceSubjects resourceSubjects = GetResourceSubjects(serviceResource, subjectAttributes);
-            await _repository.SetResourceSubjects(resourceSubjects, cancellationToken);
+            await _repository.SetResourceSubjects(resourceSubjects, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -181,7 +177,7 @@ namespace Altinn.ResourceRegistry.Core.Services
                 }
             };
             ResourceSubjects resourceSubjects = GetResourceSubjects(virtualAppResource, subjectAttributes);
-            await _repository.SetResourceSubjects(resourceSubjects, cancellationToken);
+            await _repository.SetResourceSubjects(resourceSubjects, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -194,16 +190,6 @@ namespace Altinn.ResourceRegistry.Core.Services
         public async Task<Stream> GetAppPolicy(string org, string app,CancellationToken cancellationToken = default)
         {
             return await _policyRepository.GetAppPolicyAsync(org, app, cancellationToken);
-        }
-
-        /// <inheritdoc />
-        public async Task<bool> UpdateResourceInAccessManagement(ServiceResource serviceResource, CancellationToken cancellationToken = default)
-        {
-            AccessManagementResource convertedElement = new AccessManagementResource(serviceResource);
-            List<AccessManagementResource> convertedElementList = convertedElement.ElementToList();
-            HttpResponseMessage response = await _accessManagementClient.AddResourceToAccessManagement(convertedElementList, cancellationToken);
-
-            return response.StatusCode == HttpStatusCode.Created;
         }
 
         /// <inheritdoc />
@@ -315,46 +301,50 @@ namespace Altinn.ResourceRegistry.Core.Services
 
                 return applicationList.Applications.Select(application => MapApplicationToApplicationResource(application, serviceOwners)).ToList();
             }
+        }
 
-            ServiceResource MapApplicationToApplicationResource(Application application, ServiceOwnerLookup serviceOwners)
+        /// <summary>
+        /// Maps an Altinn Storage <see cref="Application"/> to a <see cref="ServiceResource"/>. Shared by the
+        /// full resource list and the direct single-app lookup so both produce identical app resources.
+        /// </summary>
+        private static ServiceResource MapApplicationToApplicationResource(Application application, ServiceOwnerLookup serviceOwners)
+        {
+            ServiceResource service = new ServiceResource();
+            service.Title = application.Title;
+            service.Identifier = $"{ResourceConstants.APPLICATION_RESOURCE_PREFIX}{application.Org}_{application.Id.Substring(application.Id.IndexOf("/") + 1)}";
+            if (service.Identifier.Contains("_a2-") || service.Identifier.Contains("_a1-"))
             {
-                ServiceResource service = new ServiceResource();
-                service.Title = application.Title;
-                service.Identifier = $"{ResourceConstants.APPLICATION_RESOURCE_PREFIX}{application.Org}_{application.Id.Substring(application.Id.IndexOf("/") + 1)}";
-                if (service.Identifier.Contains("_a2-") || service.Identifier.Contains("_a1-"))
-                {
-                    service.ResourceType = Enums.ResourceType.MigratedApp;
-                }
-                else
-                {
-                    service.ResourceType = Enums.ResourceType.AltinnApp;
-                }
-
-                service.ResourceReferences = new List<ResourceReference>
-                {
-                    new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.ApplicationId, Reference = application.Id }
-                };
-                service.AuthorizationReference = new List<AuthorizationReferenceAttribute>
-                {
-                    new AuthorizationReferenceAttribute() { Id = "urn:altinn:org", Value = application.Org },
-                    new AuthorizationReferenceAttribute() { Id = "urn:altinn:app", Value = application.Id.Substring(application.Id.IndexOf("/") + 1) }
-                };
-                service.HasCompetentAuthority = new CompetentAuthority();
-                service.HasCompetentAuthority.Orgcode = application.Org.ToLower();
-                if (serviceOwners.TryGet(service.HasCompetentAuthority.Orgcode, out var orgentity))
-                {
-                    service.HasCompetentAuthority.Organization = orgentity.OrganizationNumber.ToString();
-                    service.HasCompetentAuthority.Name = orgentity.Name;
-                }
-
-                if (application.Id.StartsWith("a1-"))
-                {
-                    service.Delegable = false;
-                    service.Visible = false;
-                }
-
-                return service;
+                service.ResourceType = Enums.ResourceType.MigratedApp;
             }
+            else
+            {
+                service.ResourceType = Enums.ResourceType.AltinnApp;
+            }
+
+            service.ResourceReferences = new List<ResourceReference>
+            {
+                new ResourceReference() { ReferenceSource = Enums.ReferenceSource.Altinn3, ReferenceType = Enums.ReferenceType.ApplicationId, Reference = application.Id }
+            };
+            service.AuthorizationReference = new List<AuthorizationReferenceAttribute>
+            {
+                new AuthorizationReferenceAttribute() { Id = "urn:altinn:org", Value = application.Org },
+                new AuthorizationReferenceAttribute() { Id = "urn:altinn:app", Value = application.Id.Substring(application.Id.IndexOf("/") + 1) }
+            };
+            service.HasCompetentAuthority = new CompetentAuthority();
+            service.HasCompetentAuthority.Orgcode = application.Org.ToLower();
+            if (serviceOwners.TryGet(service.HasCompetentAuthority.Orgcode, out var orgentity))
+            {
+                service.HasCompetentAuthority.Organization = orgentity.OrganizationNumber.ToString();
+                service.HasCompetentAuthority.Name = orgentity.Name;
+            }
+
+            if (application.Id.StartsWith("a1-"))
+            {
+                service.Delegable = false;
+                service.Visible = false;
+            }
+
+            return service;
         }
 
         /// <inheritdoc/>
@@ -373,6 +363,12 @@ namespace Altinn.ResourceRegistry.Core.Services
         public async Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default)
         {
             return await _repository.FindUpdatedResourceSubjects(lastUpdated, limit, skipPast, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<ResourceChange>> FindChangedResources(long skipPastChangeId, int limit, CancellationToken cancellationToken = default)
+        {
+            return await _repository.FindChangedResources(skipPastChangeId, limit, cancellationToken);
         }
 
         private static ResourceSubjects GetResourceSubjects(ServiceResource resource, IDictionary<string, ICollection<string>> subjectAttributes)

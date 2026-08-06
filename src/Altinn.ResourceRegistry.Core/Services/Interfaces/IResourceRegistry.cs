@@ -19,6 +19,18 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         Task<ServiceResource> GetResource(string id, int? versionId,  CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Gets a single Altinn app as a <see cref="ServiceResource"/> directly from application storage.
+        /// Used for apps that are not registered as resources in the resource registry. Bypasses the cached
+        /// application list so a freshly published app is resolvable immediately instead of returning
+        /// <see langword="null"/> until the list cache expires.
+        /// </summary>
+        /// <param name="org">The organisation/service owner code</param>
+        /// <param name="app">The application name (without the org prefix)</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>The app as a service resource, or <see langword="null"/> if it does not exist</returns>
+        Task<ServiceResource> GetAppResource(string org, string app, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets the resource owner for a given resource, or <see langword="null"/> if it has no owner.
         /// </summary>
         /// <param name="id">The resource identifier to retrieve</param>
@@ -123,14 +135,6 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         Task<List<Right>> GetPolicyRightsV2(string resourceId, bool includeServiceOwnerRights, bool includeAppRights, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Updates Access management with changes in recource registry
-        /// </summary>
-        /// <param name="serviceResource">The resource to add to access management</param>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
-        /// <returns><see langword="true"/> if the update succeeded, otherwise <see langword="false"/></returns>
-        Task<bool> UpdateResourceInAccessManagement(ServiceResource serviceResource, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Returns a list over resources for what each subject has access to
         /// </summary>
         /// <param name="subjects">List of subjects</param>
@@ -171,5 +175,17 @@ namespace Altinn.ResourceRegistry.Core.Services.Interfaces
         /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
         /// <returns>List of resource/subject pairs updated since lastUpdated</returns>
         Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Returns a list of changed resources ordered by their global change id, which is bumped on every
+        /// metadata create/update, policy upload and delete. Each resource appears at most once, at its
+        /// latest change, and only resources that have had a policy uploaded at least once (the policy may
+        /// be empty) and that are not deleted are included.
+        /// </summary>
+        /// <param name="skipPastChangeId">Only changes with a sequence number greater than this value are returned. Use 0 to start from the beginning</param>
+        /// <param name="limit">The maximum number of entries to return</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>List of changed resources ordered by change-log sequence number</returns>
+        Task<List<ResourceChange>> FindChangedResources(long skipPastChangeId, int limit, CancellationToken cancellationToken = default);
     }
 }

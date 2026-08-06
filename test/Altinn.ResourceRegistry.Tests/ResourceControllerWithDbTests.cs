@@ -1,4 +1,4 @@
-﻿using Altinn.Platform.Storage.Interface.Models;
+using Altinn.Platform.Storage.Interface.Models;
 using Altinn.ResourceRegistry.Controllers;
 using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Constants;
@@ -23,6 +23,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         : WebApplicationTests(dbFixture, webApplicationFixture)
 {
     private const string ORG_NR = "974761076";
+
+    private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     protected IResourceRegistryRepository Repository => Services.GetRequiredService<IResourceRegistryRepository>();
     protected AdvanceableTimeProvider TimeProvider => Services.GetRequiredService<AdvanceableTimeProvider>();
@@ -190,6 +192,191 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.Single(subjectResources.Items);
         Assert.Equal("urn:altinn:rolecode:r002", subjectResources.Items.First().SubjectUrn.ToString());
         Assert.Null(subjectResources.Links.Next);
+    }
+
+    [Fact]
+    public async Task GetResourceChanges_Paginates()
+    {
+        await Repository.CreateResource(CreateTestResource("changes_res1"));
+        await Repository.CreateResource(CreateTestResource("changes_res2"));
+        await Repository.CreateResource(CreateTestResource("changes_res3"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_res1", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_res2", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_res3", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+
+        using var client = CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("resourceregistry/api/v1/resource/changes?limit=2");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Paginated<ResourceChange>? changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+
+        Assert.NotNull(changes);
+        Assert.Equal(2, changes.Items.Count());
+        Assert.Equal("changes_res1", changes.Items.First().ResourceId);
+        Assert.Equal("changes_res2", changes.Items.Last().ResourceId);
+        Assert.True(changes.Items.All(c => c.ChangedAt > DateTimeOffset.MinValue));
+        Assert.NotNull(changes.Links.Next);
+        Assert.Contains("?token=", changes.Links.Next);
+        Assert.Contains("&limit=2", changes.Links.Next);
+
+        Assert.True(Uri.TryCreate(changes.Links.Next, UriKind.Absolute, out Uri? nextUri));
+        Assert.NotNull(nextUri);
+        response = await client.GetAsync(nextUri.PathAndQuery);
+        changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+
+        Assert.NotNull(changes);
+        Assert.Single(changes.Items);
+        Assert.Equal("changes_res3", changes.Items.First().ResourceId);
+        Assert.Null(changes.Links.Next);
+    }
+
+    [Fact]
+    public async Task GetResourceChanges_ExcludesResourcesWithoutPolicy()
+    {
+        await Repository.CreateResource(CreateTestResource("changes_with_policy"));
+        await Repository.CreateResource(CreateTestResource("changes_without_policy"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_with_policy", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+
+        using var client = CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("resourceregistry/api/v1/resource/changes");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Paginated<ResourceChange>? changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+
+        Assert.NotNull(changes);
+        Assert.Single(changes.Items);
+        Assert.Equal("changes_with_policy", changes.Items.First().ResourceId);
+    }
+
+    [Fact]
+    public async Task GetResourceChanges_ListsResourceOnceAtItsLatestChange()
+    {
+        ServiceResource resource1 = CreateTestResource("changes_updated_res");
+        await Repository.CreateResource(resource1);
+        await Repository.CreateResource(CreateTestResource("changes_other_res"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_updated_res", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_other_res", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+
+        // Update the first resource - it should move to the end of the feed and still appear only once
+        await Repository.UpdateResource(resource1);
+
+        using var client = CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("resourceregistry/api/v1/resource/changes");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Paginated<ResourceChange>? changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+
+        Assert.NotNull(changes);
+        Assert.Equal(2, changes.Items.Count());
+        Assert.Equal("changes_other_res", changes.Items.First().ResourceId);
+        Assert.Equal("changes_updated_res", changes.Items.Last().ResourceId);
+    }
+
+    [Fact]
+    public async Task GetResourceChanges_PolicyUpdateBumpsChange()
+    {
+        // Resource without policy - should not be in the feed
+        ServiceResource resource = new ServiceResource()
+        {
+            Identifier = "altinn_access_management",
+            HasCompetentAuthority = new CompetentAuthority()
+            {
+                Organization = "974761076",
+                Orgcode = "skd"
+            }
+        };
+        await Repository.CreateResource(resource);
+
+        // Resource with policy - in the feed
+        await Repository.CreateResource(CreateTestResource("changes_baseline_res"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_baseline_res", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+
+        using var client = CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("resourceregistry/api/v1/resource/changes");
+        Paginated<ResourceChange>? changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+        Assert.NotNull(changes);
+        Assert.Single(changes.Items);
+        Assert.Equal("changes_baseline_res", changes.Items.First().ResourceId);
+
+        // Upload a policy for the resource
+        string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        string fileName = $"{resource.Identifier}.xml";
+        string filePath = $"Data/ResourcePolicies/{fileName}";
+        ByteArrayContent fileContent = new ByteArrayContent(File.ReadAllBytes(filePath));
+        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("text/xml");
+        MultipartFormDataContent content = new();
+        content.Add(fileContent, "policyFile", fileName);
+        Uri requestUri = new Uri($"resourceregistry/api/v1/Resource/{resource.Identifier}/policy", UriKind.Relative);
+        HttpRequestMessage httpRequestMessage = new() { Method = HttpMethod.Post, RequestUri = requestUri, Content = content };
+        httpRequestMessage.Headers.Add("ContentType", "multipart/form-data");
+
+        HttpResponseMessage policyResponse = await client.SendAsync(httpRequestMessage);
+        Assert.Equal(HttpStatusCode.Created, policyResponse.StatusCode);
+
+        // The policy update should have bumped the resource into the feed, after the baseline resource
+        response = await client.GetAsync("resourceregistry/api/v1/resource/changes");
+        changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+        Assert.NotNull(changes);
+        Assert.Equal(2, changes.Items.Count());
+        Assert.Equal("changes_baseline_res", changes.Items.First().ResourceId);
+        Assert.Equal("altinn_access_management", changes.Items.Last().ResourceId);
+    }
+
+    [Fact]
+    public async Task GetResourceChanges_EmptyPolicyResourceIsListed()
+    {
+        // A policy may be empty on purpose - the resource must still be listed in the feed
+        await Repository.CreateResource(CreateTestResource("changes_empty_policy_res"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_empty_policy_res", [], "ttd"), logPolicyChange: true);
+
+        using var client = CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("resourceregistry/api/v1/resource/changes");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Paginated<ResourceChange>? changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+
+        Assert.NotNull(changes);
+        Assert.Single(changes.Items);
+        Assert.Equal("changes_empty_policy_res", changes.Items.First().ResourceId);
+    }
+
+    [Fact]
+    public async Task GetResourceChanges_DeletedResourceIsExcluded()
+    {
+        await Repository.CreateResource(CreateTestResource("changes_deleted_res"));
+        await Repository.CreateResource(CreateTestResource("changes_kept_res"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_deleted_res", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:changes_kept_res", ["urn:altinn:rolecode:r001"], "ttd"), logPolicyChange: true);
+
+        using var client = CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("resourceregistry/api/v1/resource/changes");
+        Paginated<ResourceChange>? changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+        Assert.NotNull(changes);
+        Assert.Equal(2, changes.Items.Count());
+
+        await Repository.DeleteResource("changes_deleted_res");
+
+        response = await client.GetAsync("resourceregistry/api/v1/resource/changes");
+        changes = await response.Content.ReadFromJsonAsync<Paginated<ResourceChange>>();
+        Assert.NotNull(changes);
+        Assert.Single(changes.Items);
+        Assert.Equal("changes_kept_res", changes.Items.First().ResourceId);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1001)]
+    public async Task GetResourceChanges_InvalidLimit_ReturnsValidationProblem(int limit)
+    {
+        using var client = CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync($"resourceregistry/api/v1/resource/changes?limit={limit}");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
@@ -482,10 +669,96 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(resource);
         Assert.Single(resource);
+    }
+
+    [Fact]
+    public async Task SearchResources_ByOrgCode_Ok()
+    {
+        await LoadTestData();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?OrgCode=dsb";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
+
+        Assert.NotNull(resources);
+        Assert.NotEmpty(resources);
+        Assert.All(resources, r => Assert.Equal("dsb", r.HasCompetentAuthority?.Orgcode, ignoreCase: true));
+    }
+
+    [Fact]
+    public async Task SearchResources_ByOrgCode_NoMatch()
+    {
+        await LoadTestData();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?OrgCode=nonexistentorg";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
+
+        Assert.NotNull(resources);
+        Assert.Empty(resources);
+    }
+
+    [Fact]
+    public async Task SearchResources_ByOrganizationId_Ok()
+    {
+        await LoadTestData();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?OrganizationId=974760983";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
+
+        Assert.NotNull(resources);
+        Assert.NotEmpty(resources);
+        Assert.All(resources, r => Assert.Equal("974760983", r.HasCompetentAuthority?.Organization));
+    }
+
+    [Fact]
+    public async Task SearchResources_ByOrganizationId_NoMatch()
+    {
+        await LoadTestData();
+
+        var client = CreateClient();
+        string requestUri = "resourceregistry/api/v1/Resource/Search?OrganizationId=000000000";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+
+        string responseContent = await response.Content.ReadAsStringAsync();
+        List<ServiceResource>? resources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
+
+        Assert.NotNull(resources);
+        Assert.Empty(resources);
     }
 
     /// <summary>
@@ -509,7 +782,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? matchingResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? matchingResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(matchingResources);
         Assert.Single(matchingResources);
@@ -530,7 +803,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         };
         HttpResponseMessage responseAllResources = await client.SendAsync(httpRequestMessageAllResources);
         string responseContentAllResources = await responseAllResources.Content.ReadAsStringAsync();
-        List<ServiceResource>? allResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContentAllResources, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? allResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContentAllResources, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(allResources);
         Assert.True(allResources.Count > 1, "Expected multiple resources in test data");
@@ -554,7 +827,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage responseSearch = await client.SendAsync(httpRequestMessageSearch);
 
         string responseContentSearch = await responseSearch.Content.ReadAsStringAsync();
-        List<ServiceResource>? matchingResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContentSearch, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? matchingResources = JsonSerializer.Deserialize<List<ServiceResource>>(responseContentSearch, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(matchingResources);
         Assert.Single(matchingResources);
@@ -571,7 +844,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+        ServiceResource? resource = JsonSerializer.Deserialize<ServiceResource>(responseContent, _jsonOptions) as ServiceResource;
 
         Assert.NotNull(resource);
         Assert.Equal("skd-migrert-4628-1", resource.Identifier);
@@ -585,7 +858,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         };
         HttpResponseMessage responseWithVersion = await client.SendAsync(httpRequestMessageWithVersion);
         string responseContentWithVersion = await responseWithVersion.Content.ReadAsStringAsync();
-        ServiceResource? resourceWithVersion = JsonSerializer.Deserialize<ServiceResource>(responseContentWithVersion, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;  
+        ServiceResource? resourceWithVersion = JsonSerializer.Deserialize<ServiceResource>(responseContentWithVersion, _jsonOptions) as ServiceResource;  
         Assert.NotNull(resourceWithVersion);
         Assert.Equal("skd-migrert-4628-1", resourceWithVersion.Identifier);
         Assert.Equal(oldVersion.VersionId, resourceWithVersion.VersionId);
@@ -652,7 +925,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, responseGet.StatusCode);
 
-        ServiceResource? createdResource = JsonSerializer.Deserialize<ServiceResource>(await responseGet.Content.ReadAsStringAsync(), new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+        ServiceResource? createdResource = JsonSerializer.Deserialize<ServiceResource>(await responseGet.Content.ReadAsStringAsync(), _jsonOptions) as ServiceResource;
 
         Assert.NotNull(createdResource);
 
@@ -696,7 +969,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
 
         Assert.Equal(HttpStatusCode.OK, responseGetUpdated.StatusCode);
 
-        ServiceResource? updatedResource = JsonSerializer.Deserialize<ServiceResource>(await responseGetUpdated.Content.ReadAsStringAsync(), new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as ServiceResource;
+        ServiceResource? updatedResource = JsonSerializer.Deserialize<ServiceResource>(await responseGetUpdated.Content.ReadAsStringAsync(), _jsonOptions) as ServiceResource;
 
         Assert.NotNull(updatedResource);
 
@@ -717,7 +990,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, new System.Text.Json.JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }) as List<ServiceResource>;
+        List<ServiceResource>? resource = JsonSerializer.Deserialize<List<ServiceResource>>(responseContent, _jsonOptions) as List<ServiceResource>;
 
         Assert.NotNull(resource);
         Assert.Equal(6, resource.Count);
@@ -1066,6 +1339,19 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     }
 
     #region Utils
+    private static ServiceResource CreateTestResource(string identifier, string orgCode = "ttd")
+    {
+        return new ServiceResource
+        {
+            Identifier = identifier,
+            HasCompetentAuthority = new CompetentAuthority
+            {
+                Organization = "974761076",
+                Orgcode = orgCode
+            }
+        };
+    }
+
     private static ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)
     {
         AttributeMatchV2 resourceMatch = new AttributeMatchV2

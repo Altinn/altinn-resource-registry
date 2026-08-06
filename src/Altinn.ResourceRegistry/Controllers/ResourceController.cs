@@ -89,11 +89,17 @@ namespace Altinn.ResourceRegistry.Controllers
 
             if (resource == null && id.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
             {
-                List<ServiceResource> resourceList = await _resourceRegistry.GetResourceList(includeApps: true, includeExpired: true, includeMigratedApps: true, includeAllVersions:false, cancellationToken);
-                ServiceResource appResource = resourceList.FirstOrDefault(r => r.Identifier == id);
-                if (appResource != null)
+                // App not registered as a resource: resolve it directly from application storage instead of
+                // the cached resource list, so a freshly published app is returned immediately rather than
+                // 404 until the list cache expires. Only 404 when the app is missing from Storage as well.
+                string[] parts = id.Split('_', 3);
+                if (parts.Length == 3)
                 {
-                    return Ok(appResource);
+                    ServiceResource appResource = await _resourceRegistry.GetAppResource(parts[1], parts[2], cancellationToken);
+                    if (appResource != null)
+                    {
+                        return Ok(appResource);
+                    }
                 }
             }
 
@@ -414,8 +420,13 @@ namespace Altinn.ResourceRegistry.Controllers
 
             if (resource == null && id.StartsWith(ResourceConstants.APPLICATION_RESOURCE_PREFIX))
             {
-                List<ServiceResource> resourceList = await _resourceRegistry.GetResourceList(includeApps: true, includeExpired: true, includeMigratedApps: true, includeAllVersions: false, cancellationToken);
-                resource = resourceList.FirstOrDefault(r => r.Identifier == id);
+                // Resolve the app directly from application storage rather than the cached resource list,
+                // so policy can be written for an app that was just published.
+                string[] parts = id.Split('_', 3);
+                if (parts.Length == 3)
+                {
+                    resource = await _resourceRegistry.GetAppResource(parts[1], parts[2], cancellationToken);
+                }
             }
 
             if (resource == null)
@@ -565,6 +576,56 @@ namespace Altinn.ResourceRegistry.Controllers
             });
 
             return Paginated.Create(updatedResourceSubjects, nextUrl);
+        }
+
+        /// <summary>
+        /// Gets a paginated feed of resources that have changed, ordered by change. Only resources that have
+        /// had a policy uploaded at least once (the policy may be empty) are included, and each resource
+        /// appears at most once, at the position of its latest change. A change is any create or update of
+        /// the resource metadata or an update of the resource policy.
+        /// </summary>
+        /// <param name="token">Opaque continuation token from the previous page's next-link. Omit to start from the beginning</param>
+        /// <param name="limit">Maximum number of resources returned (1-1000, default: 1000)</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/></param>
+        /// <returns>A paginated list of changed resources</returns>
+        [HttpGet("changes", Name = "changes")]
+        [Produces("application/json")]
+        public async Task<ActionResult<Paginated<ResourceChange>>> ResourceChanges([FromQuery(Name = "token")] Opaque<long> token = null, [FromQuery] int limit = 1000, CancellationToken cancellationToken = default)
+        {
+            const int MinLimit = 1;
+            const int MaxLimit = 1000;
+
+            ValidationProblemBuilder errors = default;
+            if (limit is < MinLimit or > MaxLimit)
+            {
+                errors.Add(ValidationErrors.ValueOutsideRange, "/$QUERY/limit", $"Limit must be between {MinLimit} and {MaxLimit}, was {limit}.");
+            }
+
+            if (errors.TryToActionResult(out var errorResult))
+            {
+                return errorResult;
+            }
+
+            long skipPastChangeId = token?.Value ?? 0;
+
+            // Use limit + 1 in order to determine if there are more items to fetch
+            List<ResourceChange> changedResources = await _resourceRegistry.FindChangedResources(skipPastChangeId, limit + 1, cancellationToken);
+
+            if (changedResources.Count < limit + 1)
+            {
+                return Paginated.Create(changedResources, null);
+            }
+
+            changedResources.RemoveRange(limit, changedResources.Count - limit);
+            ResourceChange last = changedResources[^1];
+
+            string nextUrl = Url.Link("changes", new
+            {
+                token = Opaque.Create(last.ChangeId),
+                limit
+            });
+
+            return Paginated.Create(changedResources, nextUrl);
         }
     }
 

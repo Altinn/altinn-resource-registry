@@ -30,11 +30,18 @@ public class ConditionalOperationFilter : IOperationFilter
         foreach (var description in descriptions)
         {
             add = true;
-            for (var i = 0; i < operation.Parameters.Count; i++)
+
+            var parameters = operation.Parameters;
+            if (parameters is null)
             {
-                if (operation.Parameters[i].Name == description.Name)
+                continue;
+            }
+
+            for (var i = 0; i < parameters.Count; i++)
+            {
+                if (parameters[i].Name == description.Name)
                 {
-                    operation.Parameters.RemoveAt(i);
+                    parameters.RemoveAt(i);
                     break;
                 }
             }
@@ -42,7 +49,8 @@ public class ConditionalOperationFilter : IOperationFilter
 
         if (add)
         {
-            AddRequestConditionsHeaders(operation.Parameters);
+            var parameters = operation.Parameters ??= new List<IOpenApiParameter>();
+            AddRequestConditionsHeaders(parameters);
         }
     }
 
@@ -55,10 +63,16 @@ public class ConditionalOperationFilter : IOperationFilter
             return;
         }
 
-        AddResponseVersionHeaders(operation.Responses, StatusCodes.Status200OK);
-        AddResponseVersionHeaders(operation.Responses, StatusCodes.Status304NotModified);
+        var responses = operation.Responses;
+        if (responses is null)
+        {
+            return;
+        }
 
-        if (operation.Responses.TryGetValue(StatusCodes.Status412PreconditionFailed.ToString(), out var precondFailedResponse)
+        AddResponseVersionHeaders(responses, StatusCodes.Status200OK);
+        AddResponseVersionHeaders(responses, StatusCodes.Status304NotModified);
+
+        if (responses.TryGetValue(StatusCodes.Status412PreconditionFailed.ToString(), out var precondFailedResponse)
             && precondFailedResponse is OpenApiResponse precondFailedOpenApiResponse)
         {
             precondFailedOpenApiResponse.Description = "Precondition Failed";

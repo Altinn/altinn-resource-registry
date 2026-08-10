@@ -31,7 +31,7 @@ public sealed partial record class JsonPatchOperation
             };
         }
 
-        private static IOpenApiSchema GetOrRegister(SchemaFilterContext context, Type type)
+        private static OpenApiSchemaReference GetOrRegister(SchemaFilterContext context, Type type)
         {
             if (!context.SchemaRepository.TryLookupByType(type, out var schema))
             {

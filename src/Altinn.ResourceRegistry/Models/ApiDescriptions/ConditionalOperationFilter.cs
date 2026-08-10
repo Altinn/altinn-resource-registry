@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Altinn.ResourceRegistry.Models.ApiDescriptions;
@@ -58,26 +58,27 @@ public class ConditionalOperationFilter : IOperationFilter
         AddResponseVersionHeaders(operation.Responses, StatusCodes.Status200OK);
         AddResponseVersionHeaders(operation.Responses, StatusCodes.Status304NotModified);
 
-        if (operation.Responses.TryGetValue(StatusCodes.Status412PreconditionFailed.ToString(), out var precondFailedResponse))
+        if (operation.Responses.TryGetValue(StatusCodes.Status412PreconditionFailed.ToString(), out var precondFailedResponse)
+            && precondFailedResponse is OpenApiResponse precondFailedOpenApiResponse)
         {
-            precondFailedResponse.Description = "Precondition Failed";
+            precondFailedOpenApiResponse.Description = "Precondition Failed";
         }
     }
 
     private static void AddResponseVersionHeaders(OpenApiResponses responses, int statusCode)
     {
-        if (!responses.TryGetValue(statusCode.ToString(), out var response))
+        if (!responses.TryGetValue(statusCode.ToString(), out var response) || response is not OpenApiResponse openApiResponse)
         {
             return;
         }
 
-        var headers = response.Headers;
+        var headers = openApiResponse.Headers ??= new Dictionary<string, IOpenApiHeader>();
         headers.TryAdd("ETag", new OpenApiHeader()
         {
             Description = "The version tag of the resource",
             Schema = new OpenApiSchema()
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
             },
         });
 
@@ -86,12 +87,12 @@ public class ConditionalOperationFilter : IOperationFilter
             Description = "The last modified date of the resource",
             Schema = new OpenApiSchema()
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
             },
         });
     }
 
-    private static void AddRequestConditionsHeaders(IList<OpenApiParameter> parameters)
+    private static void AddRequestConditionsHeaders(IList<IOpenApiParameter> parameters)
     {
         parameters.Add(new OpenApiParameter()
         {
@@ -100,7 +101,7 @@ public class ConditionalOperationFilter : IOperationFilter
             Description = "If-Match header",
             Schema = new OpenApiSchema()
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
             },
         });
 
@@ -111,7 +112,7 @@ public class ConditionalOperationFilter : IOperationFilter
             Description = "If-None-Match header",
             Schema = new OpenApiSchema()
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
             },
         });
 
@@ -122,7 +123,7 @@ public class ConditionalOperationFilter : IOperationFilter
             Description = "If-Modified-Since header",
             Schema = new OpenApiSchema()
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
             },
         });
 
@@ -133,7 +134,7 @@ public class ConditionalOperationFilter : IOperationFilter
             Description = "If-Unmodified-Since header",
             Schema = new OpenApiSchema()
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
             },
         });
     }

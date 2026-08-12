@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "acn_x4256d_123456",
+  "version": "1.0",
+  "title": {
+    "en": "EN_SamtykkeLink5_Ed1 ",
+    "nb": "SamtykkeLink5_Ed1",
+    "nn": "NN_SamtykkeLink5_Ed1 "
+  },
+  "description": {
+    "en": "EN_SamtykkeLink5_Ed1 ",
+    "nb": "SamtykkeLink5_Ed1",
+    "nn": "NN_SamtykkeLink5_Ed1 "
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "x4256d",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "123456",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5821",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "999999990",
+    "orgcode": "ACN"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": null,
+  "consentText": {
+    "en": "EN_tekst1 ",
+    "nb": "NO_tekst1",
+    "nn": "NN_tekst1 "
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

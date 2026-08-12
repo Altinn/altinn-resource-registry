@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "asf_4574_5",
+  "version": "1.0",
+  "title": {
+    "nb": "Kontoopplysninger",
+    "en": "Kontoopplysninger",
+    "nn": "Kontoopplysninger"
+  },
+  "description": {
+    "nb": "Kontoopplysninger",
+    "en": "Kontoopplysninger",
+    "nn": "Kontoopplysninger"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4574",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "105722",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Informasjon om kontoer og bankrelasjoner, inkludert kontonumre og navn på bank.",
+    "en": "Informasjon om kontoer og bankrelasjoner, inkludert kontonumre og navn på bank.",
+    "nn": "Informasjon om kontoer og bankrelasjoner, inkludert kontonumre og navn på bank."
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

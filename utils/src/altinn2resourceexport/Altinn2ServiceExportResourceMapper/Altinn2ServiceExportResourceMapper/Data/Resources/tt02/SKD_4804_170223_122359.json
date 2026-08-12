@@ -1,0 +1,76 @@
+﻿{
+  "identifier": "skd_4804_170223",
+  "version": "1.0",
+  "title": {
+    "nb": "Inntektsmottaker",
+    "en": "Inntektsmottaker",
+    "nn": "Inntektsmottaker"
+  },
+  "description": {
+    "nb": "Inntektsmottaker",
+    "en": "Inntektsmottaker",
+    "nn": "Inntektsmottaker"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4804",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "170223",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "122359",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974761076",
+    "orgcode": "SKD"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Opplysninger  for perioden fra {fraogmed} til {tilogmed} <br><br> Opplysningene er rapportert av arbeidsgiver eller andre som er  opplysningspliktige. For å se alt som er innrapportert gå til  <a href=\"https://skatt-at.sits.no/web/innsynamelding/\" target=\"_blank\">Innsyn A-melding</a> <br><br> Utleveres: <br> •Utbetalt lønn<br> •Skattefradrag og forskuddstrekk<br> •Utbetalte ytelser fra det offentlige, som foreldrepenger, osv. <br> •Utbetalt pensjon eller trygd.<br> •Næringsinntekt når rapporteringspliktig<br> Utleveres ikke:<br> •opplysninger om selve arbeidsforholdet (stillingsprosent osv.) <br>",
+    "en": "Opplysninger  for perioden fra {fraogmed} til {tilogmed} <br><br> Opplysningene er rapportert av arbeidsgiver eller andre som er  opplysningspliktige. For å se alt som er innrapportert gå til  <a href=\"https://skatt-at.sits.no/web/innsynamelding/\" target=\"_blank\">Innsyn A-melding</a> <br><br> Utleveres: <br> •Utbetalt lønn<br> •Skattefradrag og forskuddstrekk<br> •Utbetalte ytelser fra det offentlige, som foreldrepenger, osv. <br> •Utbetalt pensjon eller trygd.<br> •Næringsinntekt når rapporteringspliktig<br> Utleveres ikke:<br> •opplysninger om selve arbeidsforholdet (stillingsprosent osv.) <br>",
+    "nn": "Opplysninger  for perioden fra {fraogmed} til {tilogmed} <br><br> Opplysningene er rapportert av arbeidsgiver eller andre som er  opplysningspliktige. For å se alt som er innrapportert gå til  <a href=\"https://skatt-at.sits.no/web/innsynamelding/\" target=\"_blank\">Innsyn A-melding</a> <br><br> Utleveres: <br> •Utbetalt lønn<br> •Skattefradrag og forskuddstrekk<br> •Utbetalte ytelser fra det offentlige, som foreldrepenger, osv. <br> •Utbetalt pensjon eller trygd.<br> •Næringsinntekt når rapporteringspliktig<br> Utleveres ikke:<br> •opplysninger om selve arbeidsforholdet (stillingsprosent osv.) <br>"
+  },
+  "consentMetadata": {
+    "fraogmed": {
+      "optional": false
+    },
+    "tilogmed": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

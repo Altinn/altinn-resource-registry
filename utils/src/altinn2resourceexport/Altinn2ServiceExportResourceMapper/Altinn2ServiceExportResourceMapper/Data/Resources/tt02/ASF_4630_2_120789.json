@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "asf_4630_2",
+  "version": "1.0",
+  "title": {
+    "nb": "Inntektsopplysninger",
+    "en": "Inntektsopplysninger",
+    "nn": "Inntektsopplysninger"
+  },
+  "description": {
+    "nb": "Inntektsopplysninger",
+    "en": "Inntektsopplysninger",
+    "nn": "Inntektsopplysninger"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4630",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "2",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "120789",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Opplysningene som utleveres er rapportert til Skatteetaten fra din arbeidsgiver eller andre opplysningspliktige. Dette vil være informasjon om inntekter som lønn, pensjon, trygd og andre ytelser fra det offentlige. Det kan også være næringsinntekt. Det gis i tillegg opplysninger om skattefradrag og forskuddstrekk.                                                                                                                                                                                                                                                 Opplysningene gjelder for perioden fra 11/2016 til 1/2017.                                                                                                                                                                                                                                                         Du oppfordres til å benytte innsynsløsningen for å kontrollere om opplysningene er korrekte. Dersom du finner feil i de rapporterte opplysningene, må du kontakte arbeidsgiver for korrigering og informere banken der du søker lån.",
+    "en": "Opplysningene som utleveres er rapportert til Skatteetaten fra din arbeidsgiver eller andre opplysningspliktige. Dette vil være informasjon om inntekter som lønn, pensjon, trygd og andre ytelser fra det offentlige. Det kan også være næringsinntekt. Det gis i tillegg opplysninger om skattefradrag og forskuddstrekk.                                                                                                                                                                                                                                                 Opplysningene gjelder for perioden fra 11/2016 til 1/2017.                                                                                                                                                                                                                                                         Du oppfordres til å benytte innsynsløsningen for å kontrollere om opplysningene er korrekte. Dersom du finner feil i de rapporterte opplysningene, må du kontakte arbeidsgiver for korrigering og informere banken der du søker lån.",
+    "nn": "Opplysningene som utleveres er rapportert til Skatteetaten fra din arbeidsgiver eller andre opplysningspliktige. Dette vil være informasjon om inntekter som lønn, pensjon, trygd og andre ytelser fra det offentlige. Det kan også være næringsinntekt. Det gis i tillegg opplysninger om skattefradrag og forskuddstrekk.                                                                                                                                                                                                                                                 Opplysningene gjelder for perioden fra 11/2016 til 1/2017.                                                                                                                                                                                                                                                         Du oppfordres til å benytte innsynsløsningen for å kontrollere om opplysningene er korrekte. Dersom du finner feil i de rapporterte opplysningene, må du kontakte arbeidsgiver for korrigering og informere banken der du søker lån."
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

@@ -1,0 +1,73 @@
+﻿{
+  "identifier": "slk_5498_1",
+  "version": "1.0",
+  "title": {
+    "en": "Studiegjeld fra Lånekassen",
+    "nb": "Studiegjeld fra Lånekassen",
+    "nn": "Studiegjeld fra Lånekassen"
+  },
+  "description": {
+    "en": "Studiegjeld fra Lånekassen",
+    "nb": "Studiegjeld fra Lånekassen",
+    "nn": "Studiegjeld fra Lånekassen"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5498",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "186276",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "960885406",
+    "orgcode": "SLK"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "sblanesoknad",
+  "consentText": {
+    "nb": "<p>Ditt samtykke fritar L&aring;nekassen fra sin taushetsplikt overfor {navn} og gir L&aring;nekassen tillatelse til &aring; oversende opplysninger om ditt samlede utest&aring;ende studiel&aring;n og ogs&aring; gebyrer og omkostninger som er knyttet til l&aring;net.</p>  <p>{navn} har ikke rett til &aring; benytte opplysningene til noe annet form&aring;l i sin virksomhet enn &aring; gi deg oversikt over studiel&aring;net ditt i nettbank, mobilbank eller lignende applikasjoner. Opplysningene vil ikke v&aelig;re tilgjengelig for {navn} sine ansatte.</p>  <p>{navn} vil hente opplysningene fra L&aring;nekassen hver gang du logger inn og slette opplysningene igjen n&aring;r du logger ut.</p>  <p>Du kan n&aring;r som helst trekke dette samtykket tilbake.</p>  <p>{navn} vil v&aelig;re ansvarlig for behandlingen av opplysninger om din studiegjeld som skjer hos dem. L&aring;nekassen er ansvarlig for at opplysningene sendes til {navn} p&aring; en trygg m&aring;te.</p>",
+    "en": "<p>Ditt samtykke fritar L&aring;nekassen fra sin taushetsplikt overfor {navn} og gir L&aring;nekassen tillatelse til &aring; oversende opplysninger om ditt samlede utest&aring;ende studiel&aring;n og ogs&aring; gebyrer og omkostninger som er knyttet til l&aring;net.</p>  <p>{navn} har ikke rett til &aring; benytte opplysningene til noe annet form&aring;l i sin virksomhet enn &aring; gi deg oversikt over studiel&aring;net ditt i nettbank, mobilbank eller lignende applikasjoner. Opplysningene vil ikke v&aelig;re tilgjengelig for {navn} sine ansatte.</p>  <p>{navn} vil hente opplysningene fra L&aring;nekassen hver gang du logger inn og slette opplysningene igjen n&aring;r du logger ut.</p>  <p>Du kan n&aring;r som helst trekke dette samtykket tilbake.</p>  <p>{navn} vil v&aelig;re ansvarlig for behandlingen av opplysninger om din studiegjeld som skjer hos dem. L&aring;nekassen er ansvarlig for at opplysningene sendes til {navn} p&aring; en trygg m&aring;te.</p>",
+    "nn": "<p>Ditt samtykke fritar L&aring;nekassen fra sin taushetsplikt overfor {navn} og gir L&aring;nekassen tillatelse til &aring; oversende opplysninger om ditt samlede utest&aring;ende studiel&aring;n og ogs&aring; gebyrer og omkostninger som er knyttet til l&aring;net.</p>  <p>{navn} har ikke rett til &aring; benytte opplysningene til noe annet form&aring;l i sin virksomhet enn &aring; gi deg oversikt over studiel&aring;net ditt i nettbank, mobilbank eller lignende applikasjoner. Opplysningene vil ikke v&aelig;re tilgjengelig for {navn} sine ansatte.</p>  <p>{navn} vil hente opplysningene fra L&aring;nekassen hver gang du logger inn og slette opplysningene igjen n&aring;r du logger ut.</p>  <p>Du kan n&aring;r som helst trekke dette samtykket tilbake.</p>  <p>{navn} vil v&aelig;re ansvarlig for behandlingen av opplysninger om din studiegjeld som skjer hos dem. L&aring;nekassen er ansvarlig for at opplysningene sendes til {navn} p&aring; en trygg m&aring;te.</p>"
+  },
+  "consentMetadata": {
+    "navn": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

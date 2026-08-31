@@ -1,0 +1,73 @@
+﻿{
+  "identifier": "ttd_5550_3",
+  "version": "1.0",
+  "title": {
+    "nb": "Tilgang til å hente dine data med overstyrt melding",
+    "en": "Tilgang til å hente dine data med overstyrt melding",
+    "nn": "Tilgang til å hente dine data med overstyrt melding"
+  },
+  "description": {
+    "nb": "Tilgang til å hente dine data med overstyrt melding",
+    "en": "Tilgang til å hente dine data med overstyrt melding",
+    "nn": "Tilgang til å hente dine data med overstyrt melding"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5550",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "3",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "342",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "",
+    "orgcode": "TTD"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Dette er en tekst som forklarer hva tjenesten går ut på.<br><br>  Her <b>kan det være HTML</b> og plassholdere fra samtykkeforespørselen, for eksempel er dette ordet, \"{{somevalue}}\".",
+    "en": "Dette er en tekst som forklarer hva tjenesten går ut på.<br><br>  Her <b>kan det være HTML</b> og plassholdere fra samtykkeforespørselen, for eksempel er dette ordet, \"{{somevalue}}\".",
+    "nn": "Dette er en tekst som forklarer hva tjenesten går ut på.<br><br>  Her <b>kan det være HTML</b> og plassholdere fra samtykkeforespørselen, for eksempel er dette ordet, \"{{somevalue}}\"."
+  },
+  "consentMetadata": {
+    "{somevalue": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

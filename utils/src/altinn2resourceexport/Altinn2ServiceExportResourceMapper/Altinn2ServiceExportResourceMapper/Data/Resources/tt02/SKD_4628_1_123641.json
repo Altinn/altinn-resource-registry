@@ -1,0 +1,73 @@
+﻿{
+  "identifier": "skd_4628_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Summert skattegrunnlag fra Skattetaten",
+    "en": "Summert skattegrunnlag fra Skattetaten",
+    "nn": "Summert skattegrunnlag fra Skattetaten"
+  },
+  "description": {
+    "nb": "Summert skattegrunnlag fra Skattetaten",
+    "en": "Summert skattegrunnlag fra Skattetaten",
+    "nn": "Summert skattegrunnlag fra Skattetaten"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4628",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "123641",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974761076",
+    "orgcode": "SKD"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: <br> • Inntekt <br> • Skattefradrag <br> • Formue (inkl bolig, bil og andre verdier) <br> • Gjeld <br>",
+    "en": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: <br> • Inntekt <br> • Skattefradrag <br> • Formue (inkl bolig, bil og andre verdier) <br> • Gjeld <br>",
+    "nn": "Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen){inntektsaar}: <br> • Inntekt <br> • Skattefradrag <br> • Formue (inkl bolig, bil og andre verdier) <br> • Gjeld <br>"
+  },
+  "consentMetadata": {
+    "inntektsaar": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

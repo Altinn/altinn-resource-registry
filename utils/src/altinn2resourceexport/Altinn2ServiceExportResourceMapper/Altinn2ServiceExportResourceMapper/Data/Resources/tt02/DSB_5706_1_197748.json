@@ -1,0 +1,73 @@
+﻿{
+  "identifier": "dsb_5706_1",
+  "version": "1.0",
+  "title": {
+    "nb": "Mottaker av eksplosiver",
+    "en": "Mottaker av eksplosiver",
+    "nn": "Mottaker av eksplosiver"
+  },
+  "description": {
+    "nb": "Mottaker av eksplosiver",
+    "en": "Mottaker av eksplosiver",
+    "nn": "Mottaker av eksplosiver"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5706",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "197748",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974760983",
+    "orgcode": "DSB"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Jeg samtykker til å være oppført som mottaker av eksplosiver, på {virksomhet} sin søknad om tillatelse til erverv av eksplosiver. Jeg er ansatt i denne virksomheten. Jeg er kjent med ansvaret og pliktene etter eksplosivforskriften.",
+    "en": "Jeg samtykker til å være oppført som mottaker av eksplosiver, på {virksomhet} sin søknad om tillatelse til erverv av eksplosiver. Jeg er ansatt i denne virksomheten. Jeg er kjent med ansvaret og pliktene etter eksplosivforskriften.",
+    "nn": "Jeg samtykker til å være oppført som mottaker av eksplosiver, på {virksomhet} sin søknad om tillatelse til erverv av eksplosiver. Jeg er ansatt i denne virksomheten. Jeg er kjent med ansvaret og pliktene etter eksplosivforskriften."
+  },
+  "consentMetadata": {
+    "virksomhet": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

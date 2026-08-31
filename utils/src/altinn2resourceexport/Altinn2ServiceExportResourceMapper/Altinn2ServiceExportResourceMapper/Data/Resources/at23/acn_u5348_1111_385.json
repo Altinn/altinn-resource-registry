@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "acn_u5348_1111",
+  "version": "1.0",
+  "title": {
+    "nb": "Link_Access_UTINN",
+    "en": "Link_Access_UTINN",
+    "nn": "Link_Access_UTINN"
+  },
+  "description": {
+    "nb": "Link_Access_UTINN",
+    "en": "Link_Access_UTINN",
+    "nn": "Link_Access_UTINN"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "u5348",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1111",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "385",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "999999990",
+    "orgcode": "ACN"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "test samtykke for lenketjeneste med Access operasjon",
+    "en": "test samtykke for lenketjeneste med Access operasjon",
+    "nn": "test samtykke for lenketjeneste med Access operasjon"
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

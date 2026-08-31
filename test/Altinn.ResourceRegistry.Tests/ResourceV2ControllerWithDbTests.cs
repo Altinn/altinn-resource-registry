@@ -243,6 +243,73 @@ public class ResourceV2ControllerWithDbTests(DbFixture dbFixture, WebApplication
         }
     }
 
+    [Fact]
+    public async Task GetSubjectRights_BrukerstyrtSignering_EndUserRights()
+    {
+        await LoadTestDataWithUpdates();
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v2/resource/app_ttd_signering-brukerstyrt/policy/subjectrights";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        string content = await response.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        List<SubjectRightsDto>? policyRights = await response.Content.ReadFromJsonAsync<List<SubjectRightsDto>>();
+        Assert.NotNull(policyRights);
+        Assert.Equal(2, policyRights.Count); // Should only contain end-user rights
+    }
+
+    [Fact]
+    public async Task GetSubjectRights_BrukerstyrtSignering_EndUserAndServiceOwnerRights()
+    {
+        await LoadTestDataWithUpdates();
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v2/resource/app_ttd_signering-brukerstyrt/policy/subjectrights?includeServiceOwnerRights=true";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        string content = await response.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        List<SubjectRightsDto>? policyRights = await response.Content.ReadFromJsonAsync<List<SubjectRightsDto>>();
+        Assert.NotNull(policyRights);
+        Assert.Equal(4, policyRights.Count); // Should only contain end-user rights
+    }
+
+
+    [Fact]
+    public async Task GetSubjectRights_BrukerstyrtSignering_EndUserAndServiceOwnerAndAppRights()
+    {
+        await LoadTestDataWithUpdates();
+        using var client = CreateAuthenticatedClient();
+
+        string requestUri = "resourceregistry/api/v2/resource/app_ttd_signering-brukerstyrt/policy/subjectrights?includeServiceOwnerRights=true&includeAppRights=true";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri)
+        {
+        };
+
+        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        string content = await response.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        List<SubjectRightsDto>? policyRights = await response.Content.ReadFromJsonAsync<List<SubjectRightsDto>>();
+        Assert.NotNull(policyRights);
+        Assert.Equal(5, policyRights.Count); // Should only contain end-user rights
+    }
+
 
     #region Utils
     private static ResourceSubjects CreateResourceSubjects(string resourceurn, List<string> subjecturns, string owner)

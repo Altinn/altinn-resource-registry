@@ -195,12 +195,17 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                     last_changed = now()
                 WHERE ri.identifier = @identifier
                   AND EXISTS (SELECT 1 FROM del)
+            ), bump_subjects AS (
+                UPDATE resourceregistry.resourcesubjects rs
+                SET deleted = true
+                WHERE rs.resource_value = @identifier
+                  AND EXISTS (SELECT 1 FROM del)
             )
             SELECT identifier, created, modified, serviceresourcejson, version_id
             FROM del
             ORDER BY version_id DESC
             LIMIT 1
-            ";
+";
 
         try
         {

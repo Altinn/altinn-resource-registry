@@ -704,7 +704,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         response = await client.SendAsync(httpRequestMessage);
         string responseContent = await response.Content.ReadAsStringAsync();
 
-        Assert.Equal("{\r\n  \"links\": {},\r\n  \"data\": []\r\n}", responseContent);
+        Assert.Equal("{\"links\":{},\"data\":[]}", responseContent.Replace("\n", "").Replace("\r", "").Replace(" ", ""));
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
     }
 

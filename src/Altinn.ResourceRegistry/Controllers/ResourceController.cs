@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Altinn.ResourceRegistry.Controllers
 {
@@ -28,6 +29,7 @@ namespace Altinn.ResourceRegistry.Controllers
         private readonly IResourceRegistry _resourceRegistry;
         private readonly ILogger<ResourceController> _logger;
         private readonly AltinnServiceDescriptor _serviceDescriptor;
+        private readonly IMemoryCache _memoryCache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceController"/> controller.
@@ -35,11 +37,13 @@ namespace Altinn.ResourceRegistry.Controllers
         public ResourceController(
             IResourceRegistry resourceRegistry,
             ILogger<ResourceController> logger,
-            AltinnServiceDescriptor serviceDescriptor)
+            AltinnServiceDescriptor serviceDescriptor,
+            IMemoryCache memoryCache)
         {
             _resourceRegistry = resourceRegistry;
             _logger = logger;
             _serviceDescriptor = serviceDescriptor;
+            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -56,7 +60,16 @@ namespace Altinn.ResourceRegistry.Controllers
             bool includeMigratedApps = false,
             CancellationToken cancellationToken = default)
         {
-            return await _resourceRegistry.GetResourceList(includeApps, includeExpired: false, includeMigratedApps, includeAllVersions: false, cancellationToken);
+            string cacheKey = $"ResourceList_{includeApps}_{includeMigratedApps}";
+            if (_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> cachedResourceList))
+            {
+                return cachedResourceList;
+            }
+
+            List<ServiceResource> resourceList = await _resourceRegistry.GetResourceList(includeApps, includeExpired: false, includeMigratedApps, includeAllVersions: false, cancellationToken);
+            _memoryCache.Set(cacheKey, resourceList, TimeSpan.FromMinutes(2));
+
+            return resourceList;
         }
 
         /// <summary>
@@ -528,7 +541,17 @@ namespace Altinn.ResourceRegistry.Controllers
         [Produces("application/json")]
         public async Task<List<ServiceResource>> Search([FromQuery] ResourceSearch search, CancellationToken cancellationToken)
         {
-            return await _resourceRegistry.GetSearchResults(search, cancellationToken);
+            string cacheKey = $"ResourceSearch_{string.Join("_", typeof(ResourceSearch).GetProperties().OrderBy(p => p.Name).Select(p => p.GetValue(search)?.ToString() ?? string.Empty))}";
+            if (_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> cachedResourceList))
+            {
+                return cachedResourceList;
+            }
+
+            List<ServiceResource> searchResults = await _resourceRegistry.GetSearchResults(search, cancellationToken);
+
+            _memoryCache.Set(cacheKey, searchResults, TimeSpan.FromMinutes(2));
+
+            return searchResults;
         }
 
         /// <summary>

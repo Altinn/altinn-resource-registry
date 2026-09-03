@@ -541,7 +541,7 @@ namespace Altinn.ResourceRegistry.Controllers
         [Produces("application/json")]
         public async Task<List<ServiceResource>> Search([FromQuery] ResourceSearch search, CancellationToken cancellationToken)
         {
-            string cacheKey = $"ResourceSearch_{string.Join("_", typeof(ResourceSearch).GetProperties().OrderBy(p => p.Name).Select(p => p.GetValue(search)?.ToString() ?? string.Empty))}";
+            string cacheKey = search.GetCacheKey();
             if (_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> cachedResourceList))
             {
                 return cachedResourceList;

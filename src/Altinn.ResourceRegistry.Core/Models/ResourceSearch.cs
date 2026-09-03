@@ -47,5 +47,23 @@ namespace Altinn.ResourceRegistry.Core.Models
         /// To search for a specific organization number
         /// </summary>
         public string? OrganizationId { get; set; }
+
+        /// <summary>
+        /// Generates a cache key based on all properties in the class.
+        /// </summary>
+        /// <returns>A string cache key representing the current search parameters.</returns>
+        public string GetCacheKey()
+        {
+            return string.Join(
+                "|",
+                $"Id={Id}",
+                $"Title={Title}",
+                $"Description={Description}",
+                $"ResourceType={ResourceType}",
+                $"Keyword={Keyword}",
+                $"Reference={Reference}",
+                $"OrgCode={OrgCode}",
+                $"OrganizationId={OrganizationId}");
+        }
     }
 }

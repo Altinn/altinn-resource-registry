@@ -41,7 +41,7 @@ namespace Altinn.ResourceRegistry.Controllers
             IResourceRegistry resourceRegistry,
             ILogger<ResourceController> logger,
             AltinnServiceDescriptor serviceDescriptor,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
             IServiceOwnerService serviceOwnerService)
         {
             _resourceRegistry = resourceRegistry;

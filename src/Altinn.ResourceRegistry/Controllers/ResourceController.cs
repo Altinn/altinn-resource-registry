@@ -6,8 +6,10 @@ using Altinn.ResourceRegistry.Core.Errors;
 using Altinn.ResourceRegistry.Core.Extensions;
 using Altinn.ResourceRegistry.Core.Helpers;
 using Altinn.ResourceRegistry.Core.Models;
+using Altinn.ResourceRegistry.Core.ServiceOwners;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Altinn.ResourceRegistry.Extensions;
+using Altinn.ResourceRegistry.Filters;
 using Altinn.ResourceRegistry.Models;
 using Altinn.ResourceRegistry.Utils;
 using Azure;
@@ -30,6 +32,7 @@ namespace Altinn.ResourceRegistry.Controllers
         private readonly ILogger<ResourceController> _logger;
         private readonly AltinnServiceDescriptor _serviceDescriptor;
         private readonly IMemoryCache _memoryCache;
+        private readonly IServiceOwnerService _serviceOwnerService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceController"/> controller.
@@ -39,11 +42,13 @@ namespace Altinn.ResourceRegistry.Controllers
             ILogger<ResourceController> logger,
             AltinnServiceDescriptor serviceDescriptor,
             IMemoryCache memoryCache)
+            IServiceOwnerService serviceOwnerService)
         {
             _resourceRegistry = resourceRegistry;
             _logger = logger;
             _serviceDescriptor = serviceDescriptor;
             _memoryCache = memoryCache;
+            _serviceOwnerService = serviceOwnerService;
         }
 
         /// <summary>
@@ -143,7 +148,7 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             // Validate Resource
-            if (!ServiceResourceHelper.ValidateResource(serviceResource, true, out Dictionary<string, List<string>> message))
+            if (!ServiceResourceHelper.ValidateResource(serviceResource, await GetServiceOwnerOrgCode(serviceResource, cancellationToken), true, out Dictionary<string, List<string>> message))
             {
                 foreach (KeyValuePair<string, List<string>> kvp in message)
                 {
@@ -223,8 +228,7 @@ namespace Altinn.ResourceRegistry.Controllers
             }
 
             // Validate Resource
-            // Validate Resource
-            if (!ServiceResourceHelper.ValidateResource(serviceResource, false, out Dictionary<string, List<string>> message))
+            if (!ServiceResourceHelper.ValidateResource(serviceResource, await GetServiceOwnerOrgCode(serviceResource, cancellationToken), false, out Dictionary<string, List<string>> message))
             {
                 foreach (KeyValuePair<string, List<string>> kvp in message)
                 {
@@ -650,26 +654,17 @@ namespace Altinn.ResourceRegistry.Controllers
 
             return Paginated.Create(changedResources, nextUrl);
         }
-    }
 
-    /// <summary>
-    /// ToDo: move to a separate class
-    /// </summary>
-    public class SuppressModelStateInvalidFilterAttribute : Attribute, IActionModelConvention
-    {
-        private const string FilterTypeName = "ModelStateInvalidFilterFactory";
-
-        /// <inheritdoc/>
-        public void Apply(ActionModel action)
+        private async Task<string> GetServiceOwnerOrgCode(ServiceResource serviceResource, CancellationToken cancellationToken)
         {
-            for (var i = 0; i < action.Filters.Count; i++)
+            if (string.IsNullOrEmpty(serviceResource.HasCompetentAuthority?.Organization))
             {
-                if (action.Filters[i].GetType().Name == FilterTypeName)
-                {
-                    action.Filters.RemoveAt(i);
-                    break;
-                }
+                return null;
             }
+
+            var org = Core.Register.OrganizationNumber.Parse(serviceResource.HasCompetentAuthority.Organization);
+            ServiceOwnerLookup serviceOwners = await _serviceOwnerService.GetServiceOwners(cancellationToken);
+            return serviceOwners.TryFind(org, out var owners) && owners.Length > 0 ? owners[0].OrgCode : null;
         }
     }
 

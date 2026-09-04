@@ -634,7 +634,12 @@ namespace Altinn.ResourceRegistry.Controllers
 
         private async Task<string> GetServiceOwnerOrgCode(ServiceResource serviceResource, CancellationToken cancellationToken)
         {
-            var org = Core.Register.OrganizationNumber.Parse(serviceResource.HasCompetentAuthority?.Organization ?? string.Empty);
+            if (string.IsNullOrEmpty(serviceResource.HasCompetentAuthority?.Organization))
+            {
+                return null;
+            }
+
+            var org = Core.Register.OrganizationNumber.Parse(serviceResource.HasCompetentAuthority.Organization);
             ServiceOwnerLookup serviceOwners = await _serviceOwnerService.GetServiceOwners(cancellationToken);
             return serviceOwners.TryFind(org, out var owners) && owners.Length > 0 ? owners[0].OrgCode : null;
         }

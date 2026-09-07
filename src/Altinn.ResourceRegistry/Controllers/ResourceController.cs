@@ -33,6 +33,8 @@ namespace Altinn.ResourceRegistry.Controllers
         private readonly AltinnServiceDescriptor _serviceDescriptor;
         private readonly IServiceOwnerService _serviceOwnerService;
 
+        private const int TWO_MINUTES = 120;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceController"/> controller.
         /// </summary>
@@ -57,7 +59,7 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <returns></returns>
         [HttpGet("resourcelist")]
         [Produces("application/json")]
-        [ResponseCache(Duration = 120, VaryByQueryKeys = new[] { "includeApps", "includeMigratedApps" })]
+        [ResponseCache(Duration = TWO_MINUTES, VaryByQueryKeys = new[] { "includeApps", "includeMigratedApps" })]
         public async Task<List<ServiceResource>> ResourceList(
             bool includeApps = true,
             bool includeMigratedApps = false,
@@ -534,7 +536,10 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <returns>A list of service resources found to match the search criterias</returns>
         [HttpGet("Search")]
         [Produces("application/json")]
-        [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new[] { "*" })]
+        [ResponseCache(
+            Duration = TWO_MINUTES, 
+            Location = ResponseCacheLocation.Any, 
+            VaryByQueryKeys = new[] { nameof(ResourceSearch.Id), nameof(ResourceSearch.Title), nameof(ResourceSearch.Description), nameof(ResourceSearch.ResourceType), nameof(ResourceSearch.Keyword), nameof(ResourceSearch.Reference), nameof(ResourceSearch.OrgCode), nameof(ResourceSearch.OrganizationId) })]
         public async Task<List<ServiceResource>> Search([FromQuery] ResourceSearch search, CancellationToken cancellationToken)
         {
             return await _resourceRegistry.GetSearchResults(search, cancellationToken);

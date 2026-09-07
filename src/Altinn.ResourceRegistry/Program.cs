@@ -6,6 +6,7 @@ WebApplication app = ResourceRegistryHost.Create(args);
 app.UseMiddleware<RequestForwarderLogMiddleware>("before forwarder middleware");
 app.AddDefaultAltinnMiddleware(errorHandlingPath: "/resourceregistry/api/v1/error");
 app.UseMiddleware<RequestForwarderLogMiddleware>("after forwarder middleware");
+app.UseResponseCaching();
 
 if (app.Environment.IsDevelopment())
 {

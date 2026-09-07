@@ -31,7 +31,6 @@ namespace Altinn.ResourceRegistry.Controllers
         private readonly IResourceRegistry _resourceRegistry;
         private readonly ILogger<ResourceController> _logger;
         private readonly AltinnServiceDescriptor _serviceDescriptor;
-        private readonly IMemoryCache _memoryCache;
         private readonly IServiceOwnerService _serviceOwnerService;
 
         /// <summary>
@@ -41,13 +40,11 @@ namespace Altinn.ResourceRegistry.Controllers
             IResourceRegistry resourceRegistry,
             ILogger<ResourceController> logger,
             AltinnServiceDescriptor serviceDescriptor,
-            IMemoryCache memoryCache,
             IServiceOwnerService serviceOwnerService)
         {
             _resourceRegistry = resourceRegistry;
             _logger = logger;
             _serviceDescriptor = serviceDescriptor;
-            _memoryCache = memoryCache;
             _serviceOwnerService = serviceOwnerService;
         }
 
@@ -60,19 +57,13 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <returns></returns>
         [HttpGet("resourcelist")]
         [Produces("application/json")]
+        [ResponseCache(Duration = 120, VaryByQueryKeys = new[] { "includeApps", "includeMigratedApps" })]
         public async Task<List<ServiceResource>> ResourceList(
             bool includeApps = true,
             bool includeMigratedApps = false,
             CancellationToken cancellationToken = default)
         {
-            string cacheKey = $"ResourceList_{includeApps}_{includeMigratedApps}";
-            if (_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> cachedResourceList))
-            {
-                return cachedResourceList;
-            }
-
             List<ServiceResource> resourceList = await _resourceRegistry.GetResourceList(includeApps, includeExpired: false, includeMigratedApps, includeAllVersions: false, cancellationToken);
-            _memoryCache.Set(cacheKey, resourceList, TimeSpan.FromMinutes(2));
 
             return resourceList;
         }
@@ -543,19 +534,10 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <returns>A list of service resources found to match the search criterias</returns>
         [HttpGet("Search")]
         [Produces("application/json")]
+        [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new[] { "*" })]
         public async Task<List<ServiceResource>> Search([FromQuery] ResourceSearch search, CancellationToken cancellationToken)
         {
-            string cacheKey = search.GetCacheKey();
-            if (_memoryCache.TryGetValue(cacheKey, out List<ServiceResource> cachedResourceList))
-            {
-                return cachedResourceList;
-            }
-
-            List<ServiceResource> searchResults = await _resourceRegistry.GetSearchResults(search, cancellationToken);
-
-            _memoryCache.Set(cacheKey, searchResults, TimeSpan.FromMinutes(2));
-
-            return searchResults;
+            return await _resourceRegistry.GetSearchResults(search, cancellationToken);
         }
 
         /// <summary>

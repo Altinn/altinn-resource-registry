@@ -49,6 +49,8 @@ internal static class ResourceRegistryHost
         MapPostgreSqlConfiguration(builder);
         services.AddMemoryCache();
 
+        services.AddResponseCaching();
+
         services.Configure<KeyVaultSettings>(config.GetSection("kvSetting"));
         services.AddResourceRegistryCoreServices();
         builder.AddResourceRegistryPersistence();

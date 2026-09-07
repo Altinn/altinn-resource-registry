@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Altinn.ResourceRegistry.Controllers
 {
@@ -31,6 +32,8 @@ namespace Altinn.ResourceRegistry.Controllers
         private readonly ILogger<ResourceController> _logger;
         private readonly AltinnServiceDescriptor _serviceDescriptor;
         private readonly IServiceOwnerService _serviceOwnerService;
+
+        private const int TWO_MINUTES = 120;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceController"/> controller.
@@ -56,12 +59,15 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <returns></returns>
         [HttpGet("resourcelist")]
         [Produces("application/json")]
+        [ResponseCache(Duration = TWO_MINUTES, VaryByQueryKeys = new[] { "includeApps", "includeMigratedApps" })]
         public async Task<List<ServiceResource>> ResourceList(
             bool includeApps = true,
             bool includeMigratedApps = false,
             CancellationToken cancellationToken = default)
         {
-            return await _resourceRegistry.GetResourceList(includeApps, includeExpired: false, includeMigratedApps, includeAllVersions: false, cancellationToken);
+            List<ServiceResource> resourceList = await _resourceRegistry.GetResourceList(includeApps, includeExpired: false, includeMigratedApps, includeAllVersions: false, cancellationToken);
+
+            return resourceList;
         }
 
         /// <summary>
@@ -530,6 +536,10 @@ namespace Altinn.ResourceRegistry.Controllers
         /// <returns>A list of service resources found to match the search criterias</returns>
         [HttpGet("Search")]
         [Produces("application/json")]
+        [ResponseCache(
+            Duration = TWO_MINUTES, 
+            Location = ResponseCacheLocation.Any, 
+            VaryByQueryKeys = new[] { nameof(ResourceSearch.Id), nameof(ResourceSearch.Title), nameof(ResourceSearch.Description), nameof(ResourceSearch.ResourceType), nameof(ResourceSearch.Keyword), nameof(ResourceSearch.Reference), nameof(ResourceSearch.OrgCode), nameof(ResourceSearch.OrganizationId) })]
         public async Task<List<ServiceResource>> Search([FromQuery] ResourceSearch search, CancellationToken cancellationToken)
         {
             return await _resourceRegistry.GetSearchResults(search, cancellationToken);

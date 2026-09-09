@@ -168,7 +168,9 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     [Fact]
     public async Task GetUpdatedResourceSubjects_Paginates()
     {
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002"], "ttd"));
+        await CreateResource_Ok();
+
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002"], "skd"));
 
         using var client = CreateClient();
         string requestUri = "resourceregistry/api/v1/resource/updated/?limit=1";
@@ -382,6 +384,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     [Fact]
     public async Task SetResourceSubjects_OK()
     {
+        await CreateResource_Ok();
+
         using var client = CreateClient();
         string requestUri = "resourceregistry/api/v1/resource/updated/";
         HttpResponseMessage response;
@@ -398,7 +402,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         }
 
         // 1: First add some resources
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002", "urn:altinn:rolecode:r003"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002", "urn:altinn:rolecode:r003"], "skd"));
 
         response = await client.GetAsync(requestUri);
         subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
@@ -413,7 +417,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         var role003Timestamp = UpdatedAtFor("r003");
 
         // 2: Now update the resource to delete subject r002, and add subject r004
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r003", "urn:altinn:rolecode:r004"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r003", "urn:altinn:rolecode:r004"], "skd"));
 
         response = await client.GetAsync(requestUri);
         subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
@@ -430,7 +434,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         role002Timestamp = UpdatedAtFor("r002");
 
         // 3: Now update the resource to have no subjects
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", [], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", [], "skd"));
 
         response = await client.GetAsync(requestUri);
         subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
@@ -444,7 +448,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.True(UpdatedAtFor("r001") == UpdatedAtFor("r003") &&  UpdatedAtFor("r003") == UpdatedAtFor("r004"));
 
         // 4. Reenable the resource with r001 and r003
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r003"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r003"], "skd"));
 
         response = await client.GetAsync(requestUri);
         subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();

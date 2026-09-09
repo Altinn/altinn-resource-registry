@@ -168,7 +168,9 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     [Fact]
     public async Task GetUpdatedResourceSubjects_Paginates()
     {
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002"], "ttd"));
+        await CreateResource_Ok();
+
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002"], "skd"));
 
         using var client = CreateClient();
         string requestUri = "resourceregistry/api/v1/resource/updated/?limit=1";
@@ -382,6 +384,8 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
     [Fact]
     public async Task SetResourceSubjects_OK()
     {
+        await CreateResource_Ok();
+
         using var client = CreateClient();
         string requestUri = "resourceregistry/api/v1/resource/updated/";
         HttpResponseMessage response;
@@ -398,7 +402,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         }
 
         // 1: First add some resources
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002", "urn:altinn:rolecode:r003"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r002", "urn:altinn:rolecode:r003"], "skd"));
 
         response = await client.GetAsync(requestUri);
         subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
@@ -413,7 +417,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         var role003Timestamp = UpdatedAtFor("r003");
 
         // 2: Now update the resource to delete subject r002, and add subject r004
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r003", "urn:altinn:rolecode:r004"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r003", "urn:altinn:rolecode:r004"], "skd"));
 
         response = await client.GetAsync(requestUri);
         subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
@@ -430,7 +434,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         role002Timestamp = UpdatedAtFor("r002");
 
         // 3: Now update the resource to have no subjects
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", [], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", [], "skd"));
 
         response = await client.GetAsync(requestUri);
         subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
@@ -444,7 +448,7 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         Assert.True(UpdatedAtFor("r001") == UpdatedAtFor("r003") &&  UpdatedAtFor("r003") == UpdatedAtFor("r004"));
 
         // 4. Reenable the resource with r001 and r003
-        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:foo", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r003"], "ttd"));
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", ["urn:altinn:rolecode:r001", "urn:altinn:rolecode:r003"], "skd"));
 
         response = await client.GetAsync(requestUri);
         subjectResources = await response.Content.ReadFromJsonAsync<Paginated<UpdatedResourceSubject>>();
@@ -652,6 +656,60 @@ public class ResourceControllerWithDbTests(DbFixture dbFixture, WebApplicationFi
         HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DeleteResource_Ok()
+    {
+        var client = CreateClient();
+        string token = PrincipalUtil.GetOrgToken("skd", "974761076", "altinn:resourceregistry/resource.write");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        ServiceResource resource = new ServiceResource()
+        {
+            Identifier = "superdupertjenestene",
+            Title = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            Description = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            RightDescription = new Dictionary<string, string> { { "en", "English" }, { "nb", "Bokmal" }, { "nn", "Nynorsk" } },
+            Status = "Completed",
+            ContactPoints = new List<ContactPoint>() { new ContactPoint() { Category = "Support", ContactPage = "support.skd.no", Email = "support@skd.no", Telephone = "+4790012345" } },
+            HasCompetentAuthority = new Altinn.ResourceRegistry.Core.Models.CompetentAuthority()
+            {
+                Organization = "974761076",
+                Orgcode = "skd",
+            },
+            ResourceType = ResourceType.GenericAccessResource,
+        };
+
+        string requestUri = "resourceregistry/api/v1/Resource/";
+
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
+        {
+            Content = new StringContent(JsonSerializer.Serialize(resource), Encoding.UTF8, "application/json")
+        };
+
+        httpRequestMessage.Headers.Add("Accept", "application/json");
+        httpRequestMessage.Headers.Add("ContentType", "application/json");
+
+        HttpResponseMessage response = await client.SendAsync(httpRequestMessage);
+        await Repository.SetResourceSubjects(CreateResourceSubjects("urn:altinn:resource:superdupertjenestene", ["urn:altinn:rolecode:r001"], "skd"), logPolicyChange: true);
+
+        HttpRequestMessage httpRequestDelete = new HttpRequestMessage(HttpMethod.Delete, "resourceregistry/api/v1/Resource/superdupertjenestene");
+        HttpResponseMessage deleteResponse = await client.SendAsync(httpRequestDelete);
+
+        List<string> subjects = new List<string>();
+        subjects.Add("urn:altinn:rolecode:r001");
+
+        httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "resourceregistry/api/v1/Resource/bysubjects")
+        {
+            Content = new StringContent(JsonSerializer.Serialize(subjects), Encoding.UTF8, "application/json")
+        };
+
+        response = await client.SendAsync(httpRequestMessage);
+        string responseContent = await response.Content.ReadAsStringAsync();
+
+        Assert.Equal("{\"links\":{},\"data\":[]}", responseContent.Replace("\n", "").Replace("\r", "").Replace(" ", ""));
+        Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
     }
 
     [Fact]

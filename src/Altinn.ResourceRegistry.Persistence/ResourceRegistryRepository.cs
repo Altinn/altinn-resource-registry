@@ -195,12 +195,17 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
                     last_changed = now()
                 WHERE ri.identifier = @identifier
                   AND EXISTS (SELECT 1 FROM del)
+            ), bump_subjects AS (
+                UPDATE resourceregistry.resourcesubjects rs
+                SET deleted = true
+                WHERE rs.resource_value = @identifier
+                  AND EXISTS (SELECT 1 FROM del)
             )
             SELECT identifier, created, modified, serviceresourcejson, version_id
             FROM del
             ORDER BY version_id DESC
             LIMIT 1
-            ";
+";
 
         try
         {
@@ -462,10 +467,11 @@ internal class ResourceRegistryRepository : IResourceRegistryRepository
     /// <inheritdoc/>
     public async Task<List<UpdatedResourceSubject>> FindUpdatedResourceSubjects(DateTimeOffset lastUpdated, int limit, (Uri ResourceUrn, Uri SubjectUrn)? skipPast = null, CancellationToken cancellationToken = default)
     {
+        // join with resourceregistry.resources to filter out resource subjects for resources that have been deleted, since the feed should not expose deleted resources.
         const string selectUpdatedPairs = /*strpsql*/
             """
             SELECT resource_urn, subject_urn, updated_at, deleted
-            FROM resourceregistry.resourcesubjects 
+            FROM resourceregistry.resourcesubjects as rs join resourceregistry.resources as r on rs.resource_value = r.identifier 
             WHERE (updated_at, resource_urn, subject_urn) > (@updated_at, @resource_urn, @subject_urn) 
             ORDER BY updated_at, resource_urn, subject_urn LIMIT @limit
             """;

@@ -1,0 +1,76 @@
+﻿{
+  "identifier": "skd_4804_170223",
+  "version": "1.0",
+  "title": {
+    "nb": "Inntektsopplysninger",
+    "en": "Inntektsopplysninger",
+    "nn": "Inntektsopplysninger"
+  },
+  "description": {
+    "nb": "Inntektsopplysninger",
+    "en": "Inntektsopplysninger",
+    "nn": "Inntektsopplysninger"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4804",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "170223",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "124430",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974761076",
+    "orgcode": "SKD"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt lønn eller ytelser, i perioden {fraogmed} til {tilogmed}:<br> • Utbetalt lønn, næringsinntekt <br> • Pensjon, trygd eller ytelser fra det offentlige<br> • Skattefradrag og forskuddstrekk<br> <br> Du kan selv se hvilke opplysninger Skatteetaten har om deg på <a href=\"https://skatt-at.sits.no/web/innsynamelding/\" target=\"_blank\">innsyn A-melding</a>",
+    "en": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt lønn eller ytelser, i perioden {fraogmed} til {tilogmed}:<br> • Utbetalt lønn, næringsinntekt <br> • Pensjon, trygd eller ytelser fra det offentlige<br> • Skattefradrag og forskuddstrekk<br> <br> Du kan selv se hvilke opplysninger Skatteetaten har om deg på <a href=\"https://skatt-at.sits.no/web/innsynamelding/\" target=\"_blank\">innsyn A-melding</a>",
+    "nn": "Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt lønn eller ytelser, i perioden {fraogmed} til {tilogmed}:<br> • Utbetalt lønn, næringsinntekt <br> • Pensjon, trygd eller ytelser fra det offentlige<br> • Skattefradrag og forskuddstrekk<br> <br> Du kan selv se hvilke opplysninger Skatteetaten har om deg på <a href=\"https://skatt-at.sits.no/web/innsynamelding/\" target=\"_blank\">innsyn A-melding</a>"
+  },
+  "consentMetadata": {
+    "fraogmed": {
+      "optional": false
+    },
+    "tilogmed": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

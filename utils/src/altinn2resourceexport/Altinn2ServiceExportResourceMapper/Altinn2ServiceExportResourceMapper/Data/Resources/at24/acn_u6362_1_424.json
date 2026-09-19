@@ -1,0 +1,69 @@
+﻿{
+  "identifier": "acn_u6362_1",
+  "version": "1.0",
+  "title": {
+    "en": "Link_Service_SRR",
+    "nb": "Link_Service_SRR",
+    "nn": "Link_Service_SRR"
+  },
+  "description": {
+    "en": "Link_Service_SRR",
+    "nb": "Link_Service_SRR",
+    "nn": "Link_Service_SRR"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "u6362",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "424",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "999999990",
+    "orgcode": "ACN"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "test",
+    "en": "test",
+    "nn": "test"
+  },
+  "consentMetadata": {},
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

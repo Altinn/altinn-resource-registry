@@ -1,0 +1,56 @@
+﻿ACN,3181,120803,398,0,NULL,1044,LookUp Security Level 3 120803,1
+ACN,3181,120803,398,0,NULL,1044,samtykke service no2,18
+ACN,3181,120803,417,0,NULL,1044,LookUp Security Level 3 120803,1
+ACN,3181,120803,417,0,NULL,1044,samtykke test   Samtykkeløsningen gir sluttbrukere mulighet til å gi samtykke til innsyn i sine data eller data for organisasjoner sluttbruker har rettighet for.  Samtykke kan gis av sluttbruker når denne er i en prosess eller når andre kan bruke hans data i en prosess. Sluttbruker blir i prosessen presentert for samtykkesiden i Altinn hvor han kan velge å gi samtykke.  Et samtykke skal for sluttbruker være:  Informert - du har fått informasjon som gjør at du kan forstå hva du samtykker til Frivillig - du skal kunne velge å ikke samtykke Uttrykkelig - du skal gjøre en aktiv handling for å gi samtykke Sluttbruker vil i Altinn ha oversikt over hvem som har fått samtykke og en aktivitetslogg viser all aktivitet over samtykker som sluttbruker har gitt eller slettet og samtykker som har opphørt på grunn av at gyldig dato er passert.,18
+ACN,4485,1793,548,0,ebevis,1033,Ebevis_Samtykkemal_Test,1
+ACN,4485,1793,548,0,ebevis,1033,Ebevis test english text,18
+ACN,4485,1793,548,0,ebevis,1044,Ebevis samtykke test- samtykkemal,18
+ACN,4485,1793,548,0,ebevis,1044,Ebevis_Samtykkemal_Test,1
+ACN,4485,1793,548,0,ebevis,2068,Ebevis_Samtykkemal_Test,1
+ACN,4485,1793,548,0,ebevis,2068,Ebevis test Nynorsk text,18
+ACN,4485,2345,421,0,simpleconsent,1033,Enkeltsamtykke test english text,1
+ACN,4485,2345,421,0,simpleconsent,1033,Enkeltsamtykke test english text,18
+ACN,4485,2345,421,0,simpleconsent,1044,Enkelt samtykke test,18
+ACN,4485,2345,421,0,simpleconsent,1044,Enkeltsamtykkemal test,1
+ACN,4485,2345,421,0,simpleconsent,2068,Enkeltsamtykke test Nynorsk text,1
+ACN,4485,2345,421,0,simpleconsent,2068,Enkeltsamtykke test Nynorsk text,18
+ACN,4485,2345,482,0,simpleconsent,1033,Enkeltsamtykke test english text,18
+ACN,4485,2345,482,0,simpleconsent,1033,Enkeltsamtykke test english text,1
+ACN,4485,2345,482,0,simpleconsent,1044,Enkeltsamtykkemal test,1
+ACN,4485,2345,482,0,simpleconsent,1044,Enkelt samtykke test,18
+ACN,4485,2345,482,0,simpleconsent,2068,Enkeltsamtykke test Nynorsk text,18
+ACN,4485,2345,482,0,simpleconsent,2068,Enkeltsamtykke test Nynorsk text,1
+SKD,4628,1,509,1,NULL,1033,Tax basis,1
+SKD,4628,1,509,1,NULL,1033,Information reported in connection with the {inntektsaar} tax return:<br> •	Income<br> •	Tax deduction<br> •	Wealth (including housing, car and other assets)<br> •	Debt<br>,18
+SKD,4628,1,509,1,NULL,1044,Opplysninger rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}: <br> • Inntekt <br> • Skattefradrag <br> • Formue (inkl. bolig, bil og andre verdier) <br> • Gjeld <br>,18
+SKD,4628,1,509,1,NULL,1044,Skattegrunnlag,1
+SKD,4628,1,509,1,NULL,2068,Skattegrunnlag,1
+SKD,4628,1,509,1,NULL,2068,Opplysningar rapporterte i samband med skattemeldinga (sjølvmeldinga) {inntektsaar}:<br> •	Inntekt<br> •	Skattefrådrag<br> •	Formue (inkl. bustad, bil og andre verdiar)<br> •	Gjeld<br>,18
+ASF,4629,1,298,NULL,NULL,1033,Data from Skatteetaten - English version,1
+ASF,4629,1,298,NULL,NULL,1033,The information is reported in connection with tax release (tax return) {inntektsaar},18
+ASF,4629,1,298,NULL,NULL,1044,"Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul><br/> Test lenke <a href=""http://www.altinn.no"" target=""_blank"">Altinn.</a>",18
+ASF,4629,1,298,NULL,NULL,1044,Ligningsdata fra Skatteetaten TEST,1
+ASF,4629,1,298,NULL,NULL,2068,Likningsdata frå Skatteetaten - Nynorsk versjon,1
+ASF,4629,1,298,NULL,NULL,2068,Opplysningane som vert utlevert er rapportert i samband med skattemeldinga (selvangivelsen) {inntektsaar},18
+ASF,4629,1,434,0,NULL,1033,Data from Skatteetaten - English version,1
+ASF,4629,1,434,0,NULL,1033,The information is reported in connection with tax release (tax return) {inntektsaar},18
+ASF,4629,1,434,0,NULL,1044,"Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul><br/> Test lenke <a href=""http://www.altinn.no"" target=""_blank"">Altinn.</a>",18
+ASF,4629,1,434,0,NULL,1044,Ligningsdata fra Skatteetaten TEST,1
+ASF,4629,1,434,0,NULL,2068,Likningsdata frå Skatteetaten - Nynorsk versjon,1
+ASF,4629,1,434,0,NULL,2068,Opplysningane som vert utlevert er rapportert i samband med skattemeldinga (selvangivelsen) {inntektsaar},18
+SKD,4804,170223,511,1,NULL,1033,Income information,1
+SKD,4804,170223,511,1,NULL,1033,"Information reported by employers or others who have paid salary or benefits during the period {fraOgMed} to {tilOgMed}:<br> •	Paid salary, business Income<br> •	Pension<br> •	National Insurance or benefits<br> •	Tax deduction and withholding tax<br> <br> Here, you can see the income information that the Norwegian Tax Administration has about you: <a href=""http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold"" target=""_blank"">My income and employment.</a> ",18
+SKD,4804,170223,511,1,NULL,1044,"Opplysninger rapportert av arbeidsgiver eller andre som har utbetalt lønn eller ytelser, i perioden {fraOgMed} til {tilOgMed}:<br> • Utbetalt lønn, næringsinntekt <br> • Pensjon <br> • Trygd eller ytelser<br> • Skattefradrag og forskuddstrekk<br> <br> Her kan du se inntektsopplysningene Skatteetaten har om deg: <a href=""http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold"" target=""_blank"">Mine inntekter og arbeidsforhold</a>.",18
+SKD,4804,170223,511,1,NULL,1044,Inntektsopplysninger,1
+SKD,4804,170223,511,1,NULL,2068,Inntektsopplysningar,1
+SKD,4804,170223,511,1,NULL,2068,"Opplysningar rapporterte av arbeidsgivar eller andre som har utbetalt lønn eller ytingar, i perioden {fraOgMed} til {tilOgMed}:<br> •	Utbetalt lønn, næringsinntekt<br> •	Pensjon<br> •	Trygd eller ytingar<br> •	Skattefrådrag og forskotstrekk<br> <br> Her kan du sjå inntektsopplysningane Skatteetaten har om deg: <a href=""http://skatteetaten.no/no/Skjemaer/mine-inntekter-og-arbeidsforhold"" target=""_blank"">Mine inntekter og arbeidsforhold.</a>",18
+ACN,5565,1111,544,0,poa,1044,ACN Fullmakt service Automation_Test,1
+ACN,5565,1111,544,0,poa,1044,"ACN Fullmakt service for automation testing  Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul><br/> Test lenke <a href=""http://www.altinn.no"" target=""_blank"">Altinn.</a>",18
+DIFI,5576,1111,404,0,default,1044,DIGDIR samtykke test,1
+DIFI,5576,1111,404,0,default,1044,"Da er det bare å samtykke ",18
+ACN,5607,2,400,0,sblanesoknad,1044,consent with overridden rm template,1
+ACN,5607,2,400,0,sblanesoknad,1044,Test consent template With overridden rm for multiple services,18
+DIGDIR,5618,1010,406,0,default,1044,Samtykke test for DIGDIR,1
+DIGDIR,5618,1010,406,0,default,1044,Det er bare å gi samtykke,18
+DIGDIR,5618,1010,440,0,default,1044,Samtykke test for DIGDIR,1
+DIGDIR,5618,1010,440,0,default,1044,Det er bare å gi samtykke,18

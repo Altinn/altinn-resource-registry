@@ -1,0 +1,73 @@
+﻿{
+  "identifier": "asf_4629_2",
+  "version": "1.0",
+  "title": {
+    "nb": "Skattegrunnlag ",
+    "en": "Skattegrunnlag ",
+    "nn": "Skattegrunnlag "
+  },
+  "description": {
+    "nb": "Skattegrunnlag ",
+    "en": "Skattegrunnlag ",
+    "nn": "Skattegrunnlag "
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "4629",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "2",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "121999",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "974706121",
+    "orgcode": "ASF"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul>",
+    "en": "Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul>",
+    "nn": "Opplysningene som utleveres er rapportert i forbindelse med skattemeldingen (selvangivelsen) {inntektsaar}.<br /><br/> <ul> <li> Inntekt<br /> <li> Skattefradrag<br /> <li> Formue (inkl bolig, bil mm)<br /> <li> Gjeld<br /> </ul>"
+  },
+  "consentMetadata": {
+    "inntektsaar": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

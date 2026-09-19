@@ -1,0 +1,73 @@
+﻿{
+  "identifier": "slk_5498_1",
+  "version": "1.0",
+  "title": {
+    "en": "Student loan from the State Educational Loan Fund ",
+    "nb": "Studiegjeld fra Lånekassen",
+    "nn": "Studiegjeld frå Lånekassen"
+  },
+  "description": {
+    "en": "Student loan from the State Educational Loan Fund ",
+    "nb": "Studiegjeld fra Lånekassen",
+    "nn": "Studiegjeld frå Lånekassen"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5498",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "194357",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "960885406",
+    "orgcode": "SLK"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "en": "<p>Your consent exempts the State Educational Loan Fund from its duty of confidentiality and permits the Loan Fund to share information about your outstanding student loan, including fees and costs associated with the loan, with {navn}.</p> <p>{navn} shall not use the information for any other purpose than to provide you an overview of your student loan in its mobile and online banking services. The information will not be available to {navn} employees.</p> <p>{navn} will retrieve the information from the Loan Fund every time you sign into your mobile/online banking service and delete the information when you sign out.</p> <p>You may withdraw this consent at any time.</p> <p>{navn} will be responsible for processing this information in their mobile and online banking service. The Loan Fund is responsible for securely submitting information to {navn}.</p> ",
+    "nb": "<p>Ditt samtykke fritar L&aring;nekassen fra sin taushetsplikt overfor {navn} og gir L&aring;nekassen tillatelse til &aring; oversende opplysninger om ditt samlede utest&aring;ende studiel&aring;n og ogs&aring; gebyrer og omkostninger som er knyttet til l&aring;net.</p>  <p>{navn} har ikke rett til &aring; benytte opplysningene til noe annet form&aring;l i sin virksomhet enn &aring; gi deg oversikt over studiel&aring;net ditt i nettbank, mobilbank eller lignende applikasjoner. </p>  <p>{navn} vil hente opplysningene fra L&aring;nekassen hver gang du logger inn og slette opplysningene igjen n&aring;r du logger ut.</p>  <p>Du kan n&aring;r som helst trekke dette samtykket tilbake.</p>  <p>{navn} vil v&aelig;re ansvarlig for behandlingen av opplysninger om din studiegjeld som skjer hos dem. L&aring;nekassen er ansvarlig for at opplysningene sendes til {navn} p&aring; en trygg m&aring;te.</p>",
+    "nn": "<p>Ditt samtykke fritar L&aring;nekassen fr&aring; si teieplikt overfor {navn} og gir L&aring;nekassen l&oslash;yve til &aring; oversende opplysningar om ditt samla utest&aring;ande studiel&aring;n og ogs&aring; gebyr og omkostningar som er knytt til l&aring;net.</p> <p>{navn} har ikkje rett til &aring; bruke opplysningane til noko anna form&aring;l i si verksemd enn &aring; gi deg oversikt over studiel&aring;net ditt i nettbank, mobilbank eller liknande applikasjonar. Opplysningane vil ikkje vere tilgjengelege for {navn} sine tilsette.</p> <p>{navn} vil hente opplysningane fr&aring; L&aring;nekassen kvar gong du loggar inn og slette opplysningane igjen n&aring;r du loggar ut.</p> <p>Du kan n&aring;r som helst trekke dette samtykket tilbake.</p> <p>{navn} vil vere ansvarlege for behandlinga av opplysningar om studiegjelda di som skjer hos dei. L&aring;nekassen er ansvarleg for at opplysningane blir sende til {navn} p&aring; ein trygg m&aring;te.</p>"
+  },
+  "consentMetadata": {
+    "navn": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

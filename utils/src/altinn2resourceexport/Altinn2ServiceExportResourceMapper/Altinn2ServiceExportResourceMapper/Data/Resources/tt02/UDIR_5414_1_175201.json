@@ -1,0 +1,79 @@
+﻿{
+  "identifier": "udir_5414_1",
+  "version": "1.0",
+  "title": {
+    "nb": "DigiLær - Samtykke",
+    "en": "DigiLær - Samtykke",
+    "nn": "DigiLær - Samtykke"
+  },
+  "description": {
+    "nb": "DigiLær - Samtykke",
+    "en": "DigiLær - Samtykke",
+    "nn": "DigiLær - Samtykke"
+  },
+  "rightDescription": null,
+  "homepage": null,
+  "status": "Discontinued",
+  "spatial": null,
+  "contactPoints": [
+    {
+      "category": "Support",
+      "email": "servicedesk@altinn.no",
+      "telephone": null,
+      "contactPage": null
+    }
+  ],
+  "produces": null,
+  "isPartOf": null,
+  "thematicAreas": null,
+  "resourceReferences": [
+    {
+      "referenceSource": "Altinn2",
+      "reference": "5414",
+      "referenceType": "ServiceCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "1",
+      "referenceType": "ServiceEditionCode"
+    },
+    {
+      "referenceSource": "Altinn2",
+      "reference": "175201",
+      "referenceType": "ServiceEditionVersion"
+    }
+  ],
+  "delegable": false,
+  "visible": false,
+  "hasCompetentAuthority": {
+    "name": {},
+    "organization": "970018131",
+    "orgcode": "UDIR"
+  },
+  "keywords": null,
+  "accessListMode": "Disabled",
+  "selfIdentifiedUserEnabled": false,
+  "enterpriseUserEnabled": false,
+  "resourceType": "Consent",
+  "availableForType": null,
+  "authorizationReference": null,
+  "consentTemplate": "default",
+  "consentText": {
+    "nb": "<p>&gt;&gt;&gt; Denne teksten settes i TUL, maks 1000 tegn inkludert formattering &gt;&gt;&gt;</p> <p>Dette er en samtykkeerkl&aelig;ring. Dersom du samtykker, er denne samtykkeerkl&aelig;ringen det rettslige grunnlaget for at vi kan behandle dine barns ({elevfornavn} {elevetternavn}) personopplysninger, jf. personvernforordningen art. 6 nr. 1 bokstav a og art. 9 nr. 2 bokstav a. Ved at du samtykker f&aring;r Digil&aelig;r.no rett til &aring; samle inn og analysere opplysninger om elevens bruk av plattformen og plattformens l&aelig;ringsressurser.</p> <p>Kan her bruke flere metadata fra innsendt skjema, f.eks.:<br />ARreferanse: {arreferanse}</p> <p>&lt;&lt;&lt; Denne teksten settes i TUL,&nbsp;maks 1000 tegn inkludert formattering &lt;&lt;&lt;</p> ",
+    "en": "<p>&gt;&gt;&gt; Denne teksten settes i TUL, maks 1000 tegn inkludert formattering &gt;&gt;&gt;</p> <p>Dette er en samtykkeerkl&aelig;ring. Dersom du samtykker, er denne samtykkeerkl&aelig;ringen det rettslige grunnlaget for at vi kan behandle dine barns ({elevfornavn} {elevetternavn}) personopplysninger, jf. personvernforordningen art. 6 nr. 1 bokstav a og art. 9 nr. 2 bokstav a. Ved at du samtykker f&aring;r Digil&aelig;r.no rett til &aring; samle inn og analysere opplysninger om elevens bruk av plattformen og plattformens l&aelig;ringsressurser.</p> <p>Kan her bruke flere metadata fra innsendt skjema, f.eks.:<br />ARreferanse: {arreferanse}</p> <p>&lt;&lt;&lt; Denne teksten settes i TUL,&nbsp;maks 1000 tegn inkludert formattering &lt;&lt;&lt;</p> ",
+    "nn": "<p>&gt;&gt;&gt; Denne teksten settes i TUL, maks 1000 tegn inkludert formattering &gt;&gt;&gt;</p> <p>Dette er en samtykkeerkl&aelig;ring. Dersom du samtykker, er denne samtykkeerkl&aelig;ringen det rettslige grunnlaget for at vi kan behandle dine barns ({elevfornavn} {elevetternavn}) personopplysninger, jf. personvernforordningen art. 6 nr. 1 bokstav a og art. 9 nr. 2 bokstav a. Ved at du samtykker f&aring;r Digil&aelig;r.no rett til &aring; samle inn og analysere opplysninger om elevens bruk av plattformen og plattformens l&aelig;ringsressurser.</p> <p>Kan her bruke flere metadata fra innsendt skjema, f.eks.:<br />ARreferanse: {arreferanse}</p> <p>&lt;&lt;&lt; Denne teksten settes i TUL,&nbsp;maks 1000 tegn inkludert formattering &lt;&lt;&lt;</p> "
+  },
+  "consentMetadata": {
+    "elevfornavn": {
+      "optional": false
+    },
+    "elevetternavn": {
+      "optional": false
+    },
+    "arreferanse": {
+      "optional": false
+    }
+  },
+  "isOneTimeConsent": false,
+  "versionId": 0
+}

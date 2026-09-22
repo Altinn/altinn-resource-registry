@@ -14,6 +14,7 @@ using Altinn.ResourceRegistry.Core.ServiceOwners;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
 using Azure;
 using Azure.Storage.Blobs.Models;
+using Microsoft.Extensions.Caching.Hybrid;
 using Nerdbank.Streams;
 
 namespace Altinn.ResourceRegistry.Core.Services
@@ -27,6 +28,9 @@ namespace Altinn.ResourceRegistry.Core.Services
         private readonly IPolicyRepository _policyRepository;
         private readonly IApplications _applicationsClient;
         private readonly IServiceOwnerService _serviceOwnerService;
+        private readonly HybridCache _cache;
+
+        private static readonly TimeSpan ResourceListCacheDuration = TimeSpan.FromSeconds(120);
 
         /// <summary>
         /// Creates a new instance of the <see cref="ResourceRegistryService"/> service.
@@ -36,12 +40,14 @@ namespace Altinn.ResourceRegistry.Core.Services
             IResourceRegistryRepository repository,
             IPolicyRepository policyRepository,
             IApplications applicationsClient,
-            IServiceOwnerService serviceOwnerService)
+            IServiceOwnerService serviceOwnerService,
+            HybridCache cache)
         {
             _repository = repository;
             _policyRepository = policyRepository;
             _applicationsClient = applicationsClient;
             _serviceOwnerService = serviceOwnerService;
+            _cache = cache;
         }
 
         /// <inheritdoc/>
@@ -194,6 +200,18 @@ namespace Altinn.ResourceRegistry.Core.Services
 
         /// <inheritdoc />
         public async Task<List<ServiceResource>> GetResourceList(bool includeApps, bool includeExpired, bool includeMigratedApps, bool includeAllVersions = false, CancellationToken cancellationToken = default)
+        {
+            string cacheKey = $"resourcelist:{includeApps}:{includeExpired}:{includeMigratedApps}:{includeAllVersions}";
+
+            return await _cache.GetOrCreateAsync(
+                cacheKey,
+                factory: ct => new ValueTask<List<ServiceResource>>(
+                    GetResourceListUncached(includeApps, includeExpired, includeMigratedApps, includeAllVersions, ct)),
+                options: new HybridCacheEntryOptions { Expiration = ResourceListCacheDuration },
+                cancellationToken: cancellationToken);
+        }
+
+        private async Task<List<ServiceResource>> GetResourceListUncached(bool includeApps, bool includeExpired, bool includeMigratedApps, bool includeAllVersions, CancellationToken cancellationToken)
         {
             var tasks = new List<Task<List<ServiceResource>>>(2)
             {

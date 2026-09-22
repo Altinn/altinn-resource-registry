@@ -1,19 +1,20 @@
-using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
-using Altinn.ResourceRegistry.Tests.Utils;
-using Microsoft.AspNetCore.Mvc;
+using Altinn.ResourceRegistry.Controllers;
+using Altinn.ResourceRegistry.Core;
 using Altinn.ResourceRegistry.Core.Enums;
 using Altinn.ResourceRegistry.Core.Models;
-using Altinn.ResourceRegistry.Models;
-using System.Net.Http.Json;
-using Altinn.ResourceRegistry.Controllers;
-using Altinn.ResourceRegistry.TestUtils;
-using Microsoft.Extensions.DependencyInjection;
-using Altinn.ResourceRegistry.Core;
-using Altinn.ResourceRegistry.Tests.Mocks;
 using Altinn.ResourceRegistry.Core.Services.Interfaces;
+using Altinn.ResourceRegistry.Models;
+using Altinn.ResourceRegistry.Tests.Mocks;
+using Altinn.ResourceRegistry.Tests.Utils;
+using Altinn.ResourceRegistry.TestUtils;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 
 namespace Altinn.ResourceRegistry.Tests
 {
@@ -45,6 +46,26 @@ namespace Altinn.ResourceRegistry.Tests
 
             Assert.NotNull(resource);
             Assert.Equal("altinn_access_management", resource.Identifier);
+        }
+
+        [Fact]
+        public async Task ResourceList_SetsClientCacheControlHeader()
+        {
+            // ResourceList is decorated with
+            // [ResponseCache(Duration = 120, Location = ResponseCacheLocation.Client, VaryByQueryKeys = ...)].
+            // With Location = Client this must produce a "Cache-Control: private, max-age=120" response header,
+            // which is the observable caching behaviour over HTTP.
+            var client = CreateClient();
+
+            HttpResponseMessage response = await client.GetAsync("resourceregistry/api/v1/resource/resourcelist");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var cacheControl = response.Headers.CacheControl;
+            Assert.NotNull(cacheControl);
+            Assert.True(cacheControl!.Private, "Cache-Control should be 'private' when ResponseCacheLocation.Client is used.");
+            Assert.False(cacheControl.Public);
+            Assert.Equal(TimeSpan.FromSeconds(120), cacheControl.MaxAge);
         }
 
         [Fact]

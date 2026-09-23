@@ -16,8 +16,4 @@
     </AdditionalFiles>
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <CodeAnalysisRuleSet>$([MSBuild]::GetPathOfFileAbove('Altinn3.ruleset', '$(MSBuildThisFileDirectory)'))</CodeAnalysisRuleSet>
-  </PropertyGroup>
-
 </Project>

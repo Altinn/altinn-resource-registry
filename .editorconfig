@@ -25,8 +25,9 @@ dotnet_diagnostic.FAA0002.severity = none
 dotnet_diagnostic.FAA0001.severity = none
 
 # StyleCop severities (migrated from src/Altinn3.ruleset so that dotnet format and the compiler agree)
-dotnet_diagnostic.SA0001.severity = error
-dotnet_diagnostic.SA0002.severity = none
+# SA0001 and SA0002 have no source location, so .editorconfig cannot set their severity.
+# SA0001 stays an error via WarningsAsErrors in src/apps/Altinn.ResourceRegistry/src/Directory.Build.props;
+# SA0002 (invalid stylecop.json) keeps its default severity, warning.
 dotnet_diagnostic.SA1000.severity = warning
 dotnet_diagnostic.SA1002.severity = warning
 dotnet_diagnostic.SA1003.severity = warning
